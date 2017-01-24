@@ -100,15 +100,41 @@ public class mainMenu extends Application {
     	Button btn6 = new Button("Back to Main Menu");
         btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
         
+        Button btn7 = new Button("Video Options");
+        btn7.setOnAction( e -> { System.out.println("Opening Video Options"); extraWindow(primaryStage, scene1); primaryStage.setTitle("Square-Off: Video Options"); } );
+        
+        Button btn8 = new Button("Audio Options");
+        btn8.setOnAction( e -> { System.out.println("Opening Audio Options"); extraWindow(primaryStage, scene1); primaryStage.setTitle("Square-Off: Audio Options"); } );
+        
         GridPane grid4 = new GridPane();
         grid4.setVgap(12);
         
-        grid4.add(btn6, 0, 30);
+        grid4.add(btn7, 0, 29);
+        grid4.add(btn8, 0, 30);
+        grid4.add(btn6, 0, 31);
         grid4.setAlignment(Pos.CENTER);
         
         
         Scene scene4 = new Scene(grid4, 960, 540);
         primaryStage.setScene(scene4);
+        primaryStage.show();
+    }
+    
+    public static void extraWindow(Stage primaryStage, Scene scene1) {
+    	primaryStage.setTitle("Square-Off: Temporary");
+    	
+    	Button btn9 = new Button("Back to Main Menu");
+        btn9.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+        
+        GridPane grid5 = new GridPane();
+        grid5.setVgap(12);
+        
+        grid5.add(btn9, 0, 30);
+        grid5.setAlignment(Pos.CENTER);
+        
+        
+        Scene scene5 = new Scene(grid5, 960, 540);
+        primaryStage.setScene(scene5);
         primaryStage.show();
     }
     
