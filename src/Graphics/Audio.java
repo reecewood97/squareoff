@@ -17,7 +17,7 @@ public class Audio
 		    
 			try {
 		       
-				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Audio/back.wav").getAbsoluteFile());
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/back.wav").getAbsoluteFile());
 		        Clip music = AudioSystem.getClip();
 		        music.open(audioInputStream);
 		        music.start();
@@ -39,7 +39,7 @@ public class Audio
 		
 		try {
 	      
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Audio/EXPLOSION.wav").getAbsoluteFile());
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/EXPLOSION.wav").getAbsoluteFile());
 	        Clip explosion = AudioSystem.getClip();
 	        explosion.open(audioInputStream);
 	        explosion.start();
@@ -57,7 +57,7 @@ public class Audio
 		
 		try {
 			
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Audio/CLICK.wav").getAbsoluteFile());
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/CLICK.wav").getAbsoluteFile());
 	        Clip click = AudioSystem.getClip();
 	        click.open(audioInputStream);
 	        click.start();

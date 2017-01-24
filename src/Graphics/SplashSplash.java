@@ -23,7 +23,7 @@ public class SplashSplash extends JWindow {
 		int y = (screen.height-height)/2;
 		setBounds(x,y,width,height);
 	
-		JLabel label = new JLabel(new ImageIcon("Images/Picture1.png"));
+		JLabel label = new JLabel(new ImageIcon("Files/Images/Picture1.png"));
 		contents.add(label, BorderLayout.CENTER);
 		
 		setVisible(true);

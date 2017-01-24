@@ -10,12 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class UI extends JFrame {
+public class Screen extends JFrame {
    
     int framewidth = 1500;
     int frameHeight = 700;
     
-    public UI(){
+    public Screen(){
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setVisible(true);
@@ -48,6 +48,7 @@ public class UI extends JFrame {
         
     }
     
+    /*
     public void paintBlocks(List<Block> blocks, Graphics2D g2d){
     	
     	for(Block block : blocks){
@@ -86,10 +87,10 @@ public class UI extends JFrame {
     	}
     	
     }
-
+	*/
     public void run() throws InterruptedException {
        
-    	new UI();
+    	new Screen();
     	
         
     }

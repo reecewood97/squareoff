@@ -21,7 +21,7 @@ public class Main {
 		audio.backgroundMusic();
 		SplashSplash splashscreen = new SplashSplash(10000);
 		splashscreen.showSplash();
-		UI newui = new UI();
+		Screen newui = new Screen();
 		newui.run();
 		
 			
