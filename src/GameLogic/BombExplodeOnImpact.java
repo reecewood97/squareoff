@@ -1,5 +1,9 @@
 package GameLogic;
 
-public class BombExplodeOnImpact {
+public class BombExplodeOnImpact extends PhysObject {
+	
+	public BombExplodeOnImpact() {
+		super();
+	}
 
 }

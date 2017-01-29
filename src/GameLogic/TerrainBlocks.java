@@ -7,33 +7,36 @@ public class TerrainBlocks extends PhysObject {
 	private int colour;
 	private int type;
 	
-	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos){
-		super();
+	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos, int height, int width){
+		super(false, pos, height, width);
 		this.health = health;
-	 /*
-	 * * Red = 1
-	 *  * Green = 2
-	 *  * Yellow = 3 
-	 *  * Blue = 4
-	 *  * etc
-	 *  */
-	 this.colour = colour;
-	 this.type = type;
-	 this.setPos(pos);
+		this.colour = colour;
+		this.type = type;
+		 /*
+		 * * Red = 1
+		 *  * Green = 2
+		 *  * Yellow = 3 
+		 *  * Blue = 4
+		 *  * etc
+		 *  */
 	 }
 	public int getHealth(){	
 		return health;
-		}
+	}
 	
 	public int getColour(){
 		return colour;
-		} 
+	} 
 	
 	public int getType(){
 		return type;
-		}
+	}
 	
 	public Point2D.Double getPos(){	
 		return this.getPos(); 
-		}
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
 }
