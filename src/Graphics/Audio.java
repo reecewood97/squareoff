@@ -8,7 +8,33 @@ import javax.sound.sampled.Clip;
 
 public class Audio
 {
+	
+	private boolean sound;
+	
+	
+	@SuppressWarnings("static-access")
 	public Audio(){
+		
+		this.sound = true;
+		
+		try {
+		       
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/back.wav").getAbsoluteFile());
+	        Clip music = AudioSystem.getClip();
+	        music.open(audioInputStream);
+	        music.start();
+	        
+	        while(sound){
+	        	music.loop(music.LOOP_CONTINUOUSLY);
+	        }
+	        
+	    }
+		catch(Exception ex) {
+	    
+			System.out.println("Error playing sound");
+	        ex.printStackTrace();
+	    }
+	
 	}
 	
 	@SuppressWarnings("static-access")
@@ -69,6 +95,16 @@ public class Audio
 	        ex.printStackTrace();
 		}
 	}
+	
+	public void enableSound(){
+		
+		sound = true;
+	}
+	
+	public void disableSound(){
+		sound = false;
+	}
+	
 	
   
 }

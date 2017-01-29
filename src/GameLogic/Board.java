@@ -9,6 +9,7 @@ public class Board {
 	private ArrayList<PhysObject> objects;
 	private ArrayList<PhysObject> changed;
 	private ArrayList<Square> squares;
+	private ArrayList<TerrainBlocks> blocks;
 	private boolean freeState;
 	
 	public Board(){
@@ -17,6 +18,7 @@ public class Board {
 		this.objects = new ArrayList<PhysObject>();
 		this.changed = new ArrayList<PhysObject>();
 		this.squares = new ArrayList<Square>();
+		this.blocks = new ArrayList<TerrainBlocks>();
 		this.freeState = false;
 	}
 	
@@ -87,5 +89,14 @@ public class Board {
 	
 	public ArrayList<PhysObject> getChanged() {
 		return changed;
+	}
+	
+	public ArrayList<TerrainBlocks> getBlocks(){
+		return blocks;
+		
+	}
+	
+	public ArrayList<Square> getSquares(){
+		return squares;
 	}
 }

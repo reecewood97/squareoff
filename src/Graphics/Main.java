@@ -1,11 +1,6 @@
 package Graphics;
 
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-
+import GameLogic.Board;
 
 public class Main {
 	
@@ -14,20 +9,19 @@ public class Main {
 	}
 	
 	
-	public static void main(String[] args) throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void main(String[] args) {
 	   
 		
 		Audio audio = new Audio();
-		audio.backgroundMusic();
-		SplashSplash splashscreen = new SplashSplash(10000);
+		//audio.backgroundMusic();
+		SplashSplash splashscreen = new SplashSplash(100);
 		splashscreen.showSplash();
-		Screen newui = new Screen();
-		newui.run();
+		Screen newui = new Screen(new Board());
 		
 			
-			Audio audio2 = new Audio();
-			audio2.explosion();
-			audio2.click();
+		//Audio audio2 = new Audio();
+			//audio2.explosion();
+			//audio2.click();
 			
 		
 		
