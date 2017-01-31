@@ -8,9 +8,8 @@ public class TerrainBlocks extends PhysObject {
 	private int type;
 	private boolean visible;
 	
-	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos, int height, int width,
-			boolean visible){
-		super(false, pos, height, width);
+	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos, boolean visible){
+		super(false, pos, 5, 5);
 		this.health = health;
 		this.colour = colour;
 		this.type = type;

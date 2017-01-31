@@ -6,22 +6,20 @@ public class Square extends PhysObject {
 	//This class is to represent player characters.
 	//Colour represents team.
 	
-	private int ID;
+	private int playerID;
 	private int colour;
 	private Point2D.Double pos;
-	private int player;
 	
-	public Square(int ID, int colour, Point2D.Double pos, int player) {
+	public Square(int playerID, int colour, Point2D.Double pos) {
 		super(true, pos, 10, 10);
-		this.ID = ID;
+		this.playerID = playerID;
 		this.colour = colour;
 		this.pos = pos;
-		this.player = player;
 		//this.addAttribute("player"); Maybe this would be useful, maybe not
 	}
 	
-	public int getID() {
-		return ID;
+	public int getPlayerID() {
+		return playerID;
 	}
 	
 	public int getColour() {
@@ -30,10 +28,6 @@ public class Square extends PhysObject {
 	
 	public Point2D.Double getPos(){
 		return pos;
-	}
-	
-	public int getPlayer(){
-		return player;
 	}
 
 }

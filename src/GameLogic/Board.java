@@ -1,6 +1,7 @@
 package GameLogic;
 
 import java.util.ArrayList;
+import java.awt.geom.Point2D;
 
 public class Board {
 	
@@ -20,6 +21,34 @@ public class Board {
 		this.squares = new ArrayList<Square>();
 		this.blocks = new ArrayList<TerrainBlocks>();
 		this.freeState = false;
+		
+		//Initialise the placements of the 4 teams.
+		Point2D.Double redpos = new Point2D.Double(300, 901);
+		Square red = new Square(0 , 0, redpos);
+		Point2D.Double blupos = new Point2D.Double(300, 901);
+		Square blu = new Square(0 , 0, blupos);
+		Point2D.Double yelpos = new Point2D.Double(300, 901);
+		Square yel = new Square(0 , 0, yelpos);
+		Point2D.Double grnpos = new Point2D.Double(300, 901);
+		Square grn = new Square(0 , 0, grnpos);
+		squares.add(red);
+		objects.add(red);
+		squares.add(blu);
+		objects.add(blu);
+		squares.add(yel);
+		objects.add(yel);
+		squares.add(grn);
+		objects.add(grn);
+				
+		//Draw blocks at bottom of map
+		for(int i = 0; i < 1500; i+=5) {
+			TerrainBlocks block = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,900), true);
+			objects.add(block);
+			TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,895), true);
+			objects.add(block2);
+			TerrainBlocks block3 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,890), true);
+			objects.add(block3);
+			}
 	}
 	
 	public void setActivePlayer(int newPlayer, int newID) {
