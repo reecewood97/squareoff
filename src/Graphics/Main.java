@@ -17,11 +17,7 @@ public class Main {
 		SplashSplash splashscreen = new SplashSplash(100);
 		splashscreen.showSplash();
 		Screen newui = new Screen(new Board());
-		
-			
-		//Audio audio2 = new Audio();
-			//audio2.explosion();
-			//audio2.click();
+
 			
 		
 		
