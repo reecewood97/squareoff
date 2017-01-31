@@ -17,23 +17,7 @@ public class Audio
 		
 		this.sound = true;
 		
-		try {
-		       
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/back.wav").getAbsoluteFile());
-	        Clip music = AudioSystem.getClip();
-	        music.open(audioInputStream);
-	        music.start();
-	        
-	        while(sound){
-	        	music.loop(music.LOOP_CONTINUOUSLY);
-	        }
-	        
-	    }
-		catch(Exception ex) {
-	    
-			System.out.println("Error playing sound");
-	        ex.printStackTrace();
-	    }
+		backgroundMusic();
 	
 	}
 	
@@ -41,22 +25,8 @@ public class Audio
 	public void backgroundMusic() {
 	
 		    
-			try {
-		       
-				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/back.wav").getAbsoluteFile());
-		        Clip music = AudioSystem.getClip();
-		        music.open(audioInputStream);
-		        music.start();
-				music.loop(music.LOOP_CONTINUOUSLY);
-		        
-		        
-		    }
-			catch(Exception ex) {
-		    
-				System.out.println("Error playing sound");
-		        ex.printStackTrace();
-		    }
-		
+		BackgroundMusic music = new BackgroundMusic();
+		music.start();
 		
 		
 	}

@@ -1,4 +1,4 @@
-package f2game;
+package UserInterface;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
