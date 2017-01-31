@@ -7,6 +7,7 @@ public class PhysObject {
 	// This class is meant to be extended by each other physics object
 	
 	private boolean gravity;
+	private double grav;
 	private boolean changed;
 	private Point2D.Double pos;
 	private double xvel;
@@ -18,6 +19,7 @@ public class PhysObject {
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
 		this.gravity = false;
+		this.grav = 2;
 		this.changed = false;
 		this.pos = new Point2D.Double(0, 0);
 		this.xvel = 0;
@@ -31,6 +33,7 @@ public class PhysObject {
 		//Probably best to use this constructor
 		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
+		this.grav = 2;
 		this.changed = false;
 		this.pos = pos;
 		this.xvel = 0;
@@ -40,8 +43,12 @@ public class PhysObject {
 		this.height = height;
 	}
 	
-	public boolean getGrav() {
+	public boolean getGravity() {
 		return gravity;
+	}
+	
+	public double getGrav() {
+		return grav;
 	}
 	
 	public boolean getChanged() {
@@ -72,8 +79,12 @@ public class PhysObject {
 		return width;
 	}
 	
-	public void setGrav(boolean gravity) {
+	public void setGravity(boolean gravity) {
 		this.gravity = gravity;
+	}
+	
+	public void setGrav(double grav) {
+		this.grav = grav;
 	}
 	
 	public void setChanged(boolean changed) {

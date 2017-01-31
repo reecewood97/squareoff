@@ -38,11 +38,14 @@ public class TerrainBlocks extends PhysObject {
 		return this.getPos(); 
 	}
 	
-	public void setHealth(int newHealth) {
-		this.health = newHealth;
-	}
-	
 	public boolean isVisible(){
 		return visible;
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+		if(newHealth < 1) {
+			visible = false;
+		}
 	}
 }

@@ -22,14 +22,15 @@ public class Board {
 		this.blocks = new ArrayList<TerrainBlocks>();
 		this.freeState = false;
 		
+		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(300, 901);
+		Point2D.Double redpos = new Point2D.Double(300, 400);
 		Square red = new Square(0 , 0, redpos);
-		Point2D.Double blupos = new Point2D.Double(300, 901);
+		Point2D.Double blupos = new Point2D.Double(300, 150);
 		Square blu = new Square(0 , 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(300, 901);
+		Point2D.Double yelpos = new Point2D.Double(700, 400);
 		Square yel = new Square(0 , 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(300, 901);
+		Point2D.Double grnpos = new Point2D.Double(700, 150);
 		Square grn = new Square(0 , 0, grnpos);
 		squares.add(red);
 		objects.add(red);
@@ -57,14 +58,16 @@ public class Board {
 	}
 	
 	public PhysObject getActivePlayer() {
-		return objects.get(1); //TODO
+		int x = 4*player + squareID;
+		return objects.get(x);
 	}
 	
 	private void freeSim() {
-		//TODO 
+		//TODO
 	}
 	
 	public void updateFrame(Move move) {
+		changed = new ArrayList<PhysObject>();
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim();  // just simulate another frame.
 		}
@@ -72,23 +75,26 @@ public class Board {
 			PhysObject activePlayer = getActivePlayer();
 			if (true /*TODO active player on floor*/) {
 				if(move.getJump()) {
-					//set up veloctiy
+					activePlayer.setYvel(20);
 				}
 				switch(move.getDirection()) {
-					case "Left" : //move left
-					case "Right": //move right
+				// TODO check wall collisions
+					case "Left" : activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()-2));
+					case "Right": activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()+2));
 					case "None" : //do nothing
-					default     : System.out.println("Physics engine has detected an invalid move direction.");
+					default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
 			}
 			else {
 				switch(move.getDirection()) {
-					case "Left" : //velocity more left
-					case "Right": //velocity more right
+					case "Left" : activePlayer.setXvel(activePlayer.getXvel()-2);
+					case "Right": activePlayer.setXvel(activePlayer.getXvel()+2);
 					case "None" : //do nothing
-					default     : System.out.println("Physics engine has detected an invalid move direction.");
+					default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
-				//change yvel to account for gravity
+				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 		}
 	}
