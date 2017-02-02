@@ -32,7 +32,7 @@ public class ClientReceiver extends Thread {
 		}
 	}
 
-	public void close() {
+	public void close() throws IOException {
 		running = false;
 	}
 }

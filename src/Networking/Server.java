@@ -43,7 +43,8 @@ public class Server extends Thread {
 		}
 	}
 	
-	public void close() {
+	public void close() throws IOException {
 		running = false;
+		socket.close();
 	}
 }

@@ -26,6 +26,7 @@ public class ClientSender extends Thread {
 					server.print(s);	
 				}
 				server.println();
+				server.flush();
 				
 				sleep(40);
 			}

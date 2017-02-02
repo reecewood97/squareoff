@@ -31,4 +31,8 @@ public class ServerSender extends Thread {
 			//TODO
 		}
 	}
+	
+	public void close() {
+		running = false;
+	}
 }
