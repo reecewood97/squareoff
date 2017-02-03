@@ -94,7 +94,7 @@ public class AI {
 		ArrayList<Square> squares = board.getSquares();
 		int numOfPlayers = squares.size();
 		for (int i = 0; i < numOfPlayers; i++) {
-			if (squares.get(i).getID() == myID) {
+			if (squares.get(i).getPlayerID() == myID) {
 				setPos(squares.get(i).getPos());
 			}
 		}
@@ -114,7 +114,7 @@ public class AI {
 		double finalDis = 0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square currentSquare = squares.get(i);
-			if (currentSquare.getID() != myID) {
+			if (currentSquare.getPlayerID() != myID) {
 				int enemyX = (int) currentSquare.getPos().getX();
 				int enemyY = (int) currentSquare.getPos().getY();
 				int myX = (int) getPos().getX();
