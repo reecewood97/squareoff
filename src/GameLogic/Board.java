@@ -1,7 +1,9 @@
 package GameLogic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.geom.Point2D;
+import java.lang.Math;
 
 public class Board {
 	
@@ -65,6 +67,40 @@ public class Board {
 		return objects.get(x);
 	}
 	
+	private TerrainBlocks onFloor(Square guy) {
+		Iterator<TerrainBlocks> it = blocks.iterator();
+		while(it.hasNext()) {
+			TerrainBlocks nextblock = it.next();
+			if(onFloorOne(guy, nextblock)) {
+				return nextblock;
+			}
+		}
+		return null;
+	}
+	
+	private boolean onFloorOne(Square guy, TerrainBlocks block) {
+		double guyleft = guy.getPos().getX();
+		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guydown = guy.getPos().getY();
+		double blockleft = block.getPos().getX();
+		double blockright = block.getPos().getX()+block.getWidth();
+		double blockup = block.getPos().getY();
+		
+		if((blockleft<guyleft && guyleft<blockright) || 
+				(blockleft<guyright && guyright<blockright)) {
+			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
+			if(Math.abs(blockup-guydown)<2){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	
 	private void freeSim() {
 		//TODO
 	}
@@ -75,9 +111,13 @@ public class Board {
 			freeSim();  // just simulate another frame.
 		}
 		else {
-			PhysObject activePlayer = getActivePlayer();
-			if (true /*TODO active player on floor*/) {
-				if(move.getJump()) {
+			Square activePlayer = (Square)getActivePlayer();
+			TerrainBlocks floor = onFloor(activePlayer);
+			if (floor!=null) { //if the player is standing on a block
+				activePlayer.setYvel(0);
+				activePlayer.setPos(new Point2D.Double
+				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
+					if(move.getJump()) {
 					activePlayer.setYvel(20);
 				}
 				switch(move.getDirection()) {
