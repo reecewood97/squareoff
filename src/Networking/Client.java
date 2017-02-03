@@ -1,8 +1,14 @@
 package Networking;
 
 import java.net.*;
+import GameLogic.Board;
 import java.io.*;
 
+/**
+ * The class client class that can connect to a specified server.
+ * @author djs568
+ *
+ */
 public class Client {
 	
 	private Socket socket;
@@ -10,14 +16,26 @@ public class Client {
 	private BufferedReader fromServer;
 	private ClientSender sender;
 	private ClientReceiver receiver;
+	private Board board;
 	
+	/**
+	 * Constructor.
+	 */
 	public Client() {
 		socket = null;
 		toServer = null;
 		fromServer = null;
+		board = new Board();
 	}
 	
+	/**
+	 * Connects the client to a specified server.
+	 * @param ip The IP address of the server to be connected to.
+	 * @param port The port connected to of the server.
+	 * @throws UnknownHostException If the host could not be found.
+	 */
 	public void connect(String ip, int port) throws UnknownHostException {
+		//Creates a socket connecting to the server and then creates methods to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
 			toServer = new PrintStream(socket.getOutputStream());
@@ -27,15 +45,23 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
-			
+		
+		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer);
-		receiver = new ClientReceiver(fromServer);
+		receiver = new ClientReceiver(fromServer, board);
 			
 		sender.start();
 		receiver.start();
 	}
 	
+	/**
+	 * Disconnects the client from a server if it is connected.
+	 */
 	public void disconnect() {
+		//Do nothing if the client is not connected.
+		if(socket == null ||socket.isClosed()) return;
+		
+		//Close the socket and stop the threads.
 		try {
 			socket.close();
 			sender.close();

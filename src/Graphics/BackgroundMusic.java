@@ -23,7 +23,7 @@ public class BackgroundMusic extends Thread{
 	        music.open(audioInputStream);
 	        music.start();
 	 
-	        music.loop(music.LOOP_CONTINUOUSLY);
+	        music.loop(Clip.LOOP_CONTINUOUSLY);
 	        
 	        
 	    }
@@ -31,6 +31,7 @@ public class BackgroundMusic extends Thread{
 	    
 			System.out.println("Error playing sound");
 	        ex.printStackTrace();
+	        System.out.println(ex.getMessage());
 	    }
 	
 		
