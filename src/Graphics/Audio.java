@@ -11,7 +11,6 @@ public class Audio
 	
 	private boolean sound;
 	
-	
 	@SuppressWarnings("static-access")
 	public Audio(){
 		

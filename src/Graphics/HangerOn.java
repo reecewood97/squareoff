@@ -1,10 +1,11 @@
-
-/*This is a buddy for the UI - create an istance of this class wherever you make the frame for the game board  
+/*
+This is a buddy for the UI - create an istance of this class wherever you make the frame for the game board  
  * * then you just call hangOn2() with the frame as the argument - you get the frame back with listeners nicely  
  * * attached with the methods that David will need.  
  * 
  * *  * Only worry I have is that the frame wont ever be in focus- in which case we may need to make the methods  
  * * more generic to just return whatever kind of component is needed.*/
+
 package Graphics;
 
 import java.awt.Component; 

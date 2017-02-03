@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
+
 @SuppressWarnings("serial")
 public class ScreenBoard extends JPanel{
 

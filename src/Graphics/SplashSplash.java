@@ -3,6 +3,7 @@ package Graphics;
 import java.awt.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class SplashSplash extends JWindow {
 
 	private int duration;
@@ -27,13 +28,19 @@ public class SplashSplash extends JWindow {
 		contents.add(label, BorderLayout.CENTER);
 		
 		setVisible(true);
-
+		
 		try { 
 			Thread.sleep(duration); 
 		} 
-		catch (Exception e) {}
+		catch (Exception e) {
 	
+			
+			e.printStackTrace();
+		}
+		finally
+		{
+			
 			setVisible(false);
 		}
-		
+	}
 }
