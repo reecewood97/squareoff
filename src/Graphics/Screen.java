@@ -35,8 +35,8 @@ public class Screen extends JFrame {
     	add(board, BorderLayout.CENTER);
     	add(controls, BorderLayout.NORTH);
  
-    	HangerOn listeners = new HangerOn();
-    	board = listeners.hangOn2(board);
+    	//HangerOn listeners = new HangerOn();
+    	//board = listeners.hangOn2(board);
     }
     
     
