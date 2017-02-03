@@ -19,13 +19,8 @@ public class ScreenBoard extends JPanel{
 	public ScreenBoard(Board board){
 		
 		super();
-		
-			
-		this.setBackground(Color.cyan);
 		this.board = board;
-		
 	
-		
 	}
 	
 	@Override
@@ -59,19 +54,15 @@ public class ScreenBoard extends JPanel{
 	
 	public void paintBlocks(ArrayList<TerrainBlocks> blocks, Graphics2D g2d){
     	
-		System.out.println("painting blocks");
-    	
-		System.out.println(blocks.size());
-		
 		for(TerrainBlocks block : blocks){
 			
-			System.out.println("length of blocks is " + blocks.size());
+			//System.out.println("length of blocks is " + blocks.size());
     		int x = (int) block.getPos().getX();
-    		System.out.println("bx is: " + x);
+    		//System.out.println("bx is: " + x);
     		
     		int y = (int) block.getPos().getY();
     		y = 700 - y;
-    		System.out.println("by is: " + y);
+    		//System.out.println("by is: " + y);
     		
     		int blocktype = block.getType();
     		boolean visible = block.isVisible();
@@ -95,11 +86,11 @@ public class ScreenBoard extends JPanel{
     	
     	for(Square square : squares){
     		int x = (int) square.getPos().getX();
-    		System.out.println("x is: " + x);
+    		//System.out.println("x is: " + x);
     		
     		int y = (int) square.getPos().getY();
     		y = 700 - y;
-    		System.out.println("y is: " + y);
+    		//System.out.println("y is: " + y);
     		
     		int playernum = square.getPlayerID();
     		if (playernum == 1){

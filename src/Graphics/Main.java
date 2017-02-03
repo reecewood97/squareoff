@@ -4,11 +4,6 @@ import GameLogic.Board;
 
 public class Main {
 	
-	public Main() {
-	
-	}
-	
-	
 	public static void main(String[] args) {
 	   
 		
@@ -19,9 +14,6 @@ public class Main {
 		@SuppressWarnings("unused")
 		Screen newui = new Screen(new Board());
 
-			
-		
-		
 	}
 	
 }

@@ -11,7 +11,6 @@ public class Audio
 	
 	private boolean sound;
 	
-	@SuppressWarnings("static-access")
 	public Audio(){
 		
 		this.sound = true;
@@ -20,7 +19,6 @@ public class Audio
 	
 	}
 	
-	@SuppressWarnings("static-access")
 	public void backgroundMusic() {
 	
 		    

@@ -8,12 +8,6 @@ import javax.sound.sampled.Clip;
 
 public class BackgroundMusic extends Thread{
 
-	public BackgroundMusic(){
-		
-		
-		
-	}
-	
 	public void run(){
 		
 		try {
