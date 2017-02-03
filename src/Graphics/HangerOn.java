@@ -18,6 +18,8 @@ import java.util.ArrayList;
 public class HangerOn implements KeyListener,MouseListener { 
 	 ArrayList<String> q = new ArrayList<String>(); 		
 	 
+	 ScreenBoard panel;
+	 
 	 public String getMoveStr(){
 		 if (q.size() == 0 )
 			 return "null";
@@ -31,7 +33,8 @@ public class HangerOn implements KeyListener,MouseListener {
 		 int keyCode = e.getKeyCode();
 		 keyString = KeyEvent.getKeyText(keyCode);
 		 q.add(keyString);
-		 //System.out.println(q);
+		 System.out.println(keyString  );
+		 panel.grabFocus();
 		 } 
 	 @Override
 	 public void keyReleased(KeyEvent e) {	 }
@@ -39,8 +42,11 @@ public class HangerOn implements KeyListener,MouseListener {
 	 public void keyTyped(KeyEvent e) { 	} 	
 	 
 	 public ScreenBoard hangOn2(ScreenBoard panel) {
+		 this.panel = panel;
 		 panel.addKeyListener(this);
 		 panel.addMouseListener(this);
+		 panel.setFocusable(true);
+		 panel.grabFocus();
 		 return panel;
 	 } 
 	 
@@ -50,6 +56,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 String clickedEvent = "clicked " + e.getPoint();
 		 q.add(clickedEvent);
 		 System.out.println("works!");
+		 panel.grabFocus();
 	 }
 	 @Override
 	 public void mouseEntered(MouseEvent e) { 		
