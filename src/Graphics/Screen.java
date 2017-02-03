@@ -28,15 +28,16 @@ public class Screen extends JFrame {
     	controls.setBackground(Color.CYAN);
     	//controls.setBorder(BorderFactory.createLineBorder(Color.CYAN));
     	
+    	
     	ScreenBoard board = new ScreenBoard(newboard);
-    	//HangerOn listeners = new HangerOn();
-    	//board = listeners.hangOn2(board);
-    
     	setLayout(new BorderLayout());
     	add(board, BorderLayout.CENTER);
     	add(controls, BorderLayout.NORTH);
- 
-    	   	
+    	HangerOn listeners = new HangerOn();
+    	board = listeners.hangOn2(board);
+
+
+    	
     }
     
     

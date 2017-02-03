@@ -12,7 +12,7 @@ public class UserInput {
 	 * @return The user inputs.
 	 */
 	public ArrayList<String> getInputStrings() {
-		return null;
+		return new ArrayList<String>();
 	}	
 }
 

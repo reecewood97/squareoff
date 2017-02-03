@@ -31,9 +31,9 @@ public class SplashSplash extends JWindow {
 		try { 
 			Thread.sleep(duration); 
 		} 
-		catch (Exception e) {}
+		catch (Exception e) {}finally{
 	
-			setVisible(false);
+			setVisible(false);}
 		}
-		
-}
+	}
+

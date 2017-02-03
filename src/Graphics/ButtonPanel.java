@@ -41,6 +41,5 @@ public class ButtonPanel extends JPanel{
 		//add(help);
 		add(sound);
 		//add(exit);
-		
 	}
 }
