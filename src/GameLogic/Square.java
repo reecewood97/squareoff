@@ -15,7 +15,6 @@ public class Square extends PhysObject {
 		this.playerID = playerID;
 		this.colour = colour;
 		this.pos = pos;
-		//this.addAttribute("player"); Maybe this would be useful, maybe not
 	}
 	
 	public int getPlayerID() {

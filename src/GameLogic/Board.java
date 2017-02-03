@@ -24,14 +24,14 @@ public class Board {
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(300, 400);
-		Square red = new Square(0 , 0, redpos);
-		Point2D.Double blupos = new Point2D.Double(300, 150);
-		Square blu = new Square(0 , 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(700, 400);
-		Square yel = new Square(0 , 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(700, 150);
-		Square grn = new Square(0 , 0, grnpos);
+		Point2D.Double redpos = new Point2D.Double(300, 220);
+		Square red = new Square(1 , 0, redpos);
+		Point2D.Double blupos = new Point2D.Double(300, 220);
+		Square blu = new Square(2 , 0, blupos);
+		Point2D.Double yelpos = new Point2D.Double(700, 220);
+		Square yel = new Square(3 , 0, yelpos);
+		Point2D.Double grnpos = new Point2D.Double(700, 220);
+		Square grn = new Square(4 , 0, grnpos);
 		squares.add(red);
 		objects.add(red);
 		squares.add(blu);
@@ -42,13 +42,16 @@ public class Board {
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
-		for(int i = 0; i < 1500; i+=5) {
-			TerrainBlocks block = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,900), true);
+		for(int i = 150; i < 1450; i+=100) {
+			TerrainBlocks block = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,250), true);
+			blocks.add(block);
 			objects.add(block);
-			TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,895), true);
-			objects.add(block2);
-			TerrainBlocks block3 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,890), true);
-			objects.add(block3);
+			//TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,195), true);
+			//objects.add(block2);
+			//blocks.add(block2);
+			//TerrainBlocks block3 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,190), true);
+			//objects.add(block3);
+			//blocks.add(block3);
 			}
 	}
 	

@@ -7,6 +7,7 @@ public class TerrainBlocks extends PhysObject {
 	private int colour;
 	private int type;
 	private boolean visible;
+	private Point2D.Double pos;
 	
 	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos, boolean visible){
 		super(false, pos, 5, 5);
@@ -14,13 +15,8 @@ public class TerrainBlocks extends PhysObject {
 		this.colour = colour;
 		this.type = type;
 		this.visible = visible;
-		 /*
-		 * * Red = 1
-		 *  * Green = 2
-		 *  * Yellow = 3 
-		 *  * Blue = 4
-		 *  * etc
-		 *  */
+		this.pos = pos;
+		 
 	 }
 	public int getHealth(){	
 		return health;
@@ -35,7 +31,7 @@ public class TerrainBlocks extends PhysObject {
 	}
 	
 	public Point2D.Double getPos(){	
-		return this.getPos(); 
+		return pos; 
 	}
 	
 	public boolean isVisible(){
