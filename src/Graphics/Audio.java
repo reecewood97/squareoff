@@ -10,22 +10,27 @@ public class Audio
 {
 	
 	private boolean sound;
+	private BackgroundMusic music = new BackgroundMusic();
 	
 	public Audio(){
 		
 		this.sound = true;
 		
-		backgroundMusic();
-	
 	}
 	
-	public void backgroundMusic() {
+	public BackgroundMusic getBackgroundMusic() {
+		
+		return music;
+	}
 	
-		    
-		BackgroundMusic music = new BackgroundMusic();
+	public void startBackgroundMusic(){
+		
 		music.start();
+	}
+	
+	public void endBackgroundMusic(){
 		
-		
+		music.end();
 	}
 	
 	public void explosion(){
@@ -45,6 +50,7 @@ public class Audio
 	    }
 		
 	}
+	
 	
 	public void click(){
 		

@@ -32,10 +32,6 @@ public class ScreenBoard extends JPanel{
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
        
-        
-        g2d.setColor(Color.yellow);
-        g2d.fillOval(40, 40,  40, 40);
-        
         g2d.setColor(Color.blue);
         g2d.fillRect(0,500,1500,200);
         
@@ -109,6 +105,8 @@ public class ScreenBoard extends JPanel{
     		}
     		
     		g2d.fillRect(x,y,30,30);
+    	
+    		
     	}
     	
     }

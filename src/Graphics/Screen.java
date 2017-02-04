@@ -13,14 +13,17 @@ public class Screen extends JFrame {
    
     int framewidth = 1500;
     int frameHeight = 700;
+   // private Audio audio;
     
     public Screen(Board newboard){
+    	
+    	//this.audio = audio;
     	
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
     	
-    	ButtonPanel controls = new ButtonPanel();
+    	ButtonPanel controls = new ButtonPanel(this);
     	controls.setBackground(Color.CYAN);
     	    	
     	ScreenBoard board = new ScreenBoard(newboard);
@@ -49,5 +52,6 @@ public class Screen extends JFrame {
        
     }
     
+       
     
 }
