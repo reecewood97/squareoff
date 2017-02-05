@@ -2,14 +2,14 @@ package GameLogic;
 
 import java.awt.geom.Point2D;
 
-public class TerrainBlocks extends PhysObject {
+public class TerrainBlock extends PhysObject {
 	private int health;
 	private int colour;
 	private int type;
 	private boolean visible;
 	private Point2D.Double pos;
 	
-	public TerrainBlocks(int health, int colour, int type, Point2D.Double pos, boolean visible){
+	public TerrainBlock(int health, int colour, int type, Point2D.Double pos, boolean visible){
 		super(false, pos, 5, 5);
 		this.health = health;
 		this.colour = colour;
