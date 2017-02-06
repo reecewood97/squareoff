@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import GameLogic.Board;
 import GameLogic.Square;
-import GameLogic.TerrainBlocks;
+import GameLogic.TerrainBlock;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -52,9 +52,9 @@ public class ScreenBoard extends JPanel{
         
     }
 	
-	public void paintBlocks(ArrayList<TerrainBlocks> blocks, Graphics2D g2d){
+	public void paintBlocks(ArrayList<TerrainBlock> blocks, Graphics2D g2d){
     	
-		for(TerrainBlocks block : blocks){
+		for(TerrainBlock block : blocks){
 			
 			//System.out.println("length of blocks is " + blocks.size());
     		int x = (int) block.getPos().getX();
