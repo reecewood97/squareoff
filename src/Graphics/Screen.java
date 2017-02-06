@@ -23,11 +23,13 @@ public class Screen extends JFrame {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
     	
+    	Color lightblue = new Color(135,206,250);
+    	
     	ButtonPanel controls = new ButtonPanel(this);
-    	controls.setBackground(Color.CYAN);
+    	controls.setBackground(lightblue);
     	    	
     	ScreenBoard board = new ScreenBoard(newboard);
-    	board.setBackground(Color.CYAN);
+    	board.setBackground(lightblue);
     	
     	setLayout(new BorderLayout());
     	add(board, BorderLayout.CENTER);

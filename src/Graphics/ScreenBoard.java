@@ -1,5 +1,6 @@
 package Graphics;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import GameLogic.Board;
 import GameLogic.Square;
@@ -7,8 +8,11 @@ import GameLogic.TerrainBlocks;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @SuppressWarnings("serial")
@@ -61,19 +65,36 @@ public class ScreenBoard extends JPanel{
     		//System.out.println("by is: " + y);
     		
     		int blocktype = block.getType();
+    		int blockhealth = block.getHealth();
     		boolean visible = block.isVisible();
     		
     		if(visible){
     			
     			if (blocktype == 1){
-    				g2d.setColor(Color.BLACK);
+    				g2d.setColor(new Color(139,69,19));
     			}
     			else{
     			
-    				g2d.setColor(Color.ORANGE);
+    				g2d.setColor(new Color(105,105,105));
     			}
     		
-    			g2d.fillRect(x,y,60,30);
+    			if((blockhealth==1) && (blocktype == 0)){
+    				g2d.fillRect(x,y,60,30);
+    			}
+    			else if((blockhealth==1) && (blocktype == 1)){
+    				
+    				g2d.fillRect(x, y, 60, 30);
+    				g2d.setColor(new Color(135,206,250));
+    				
+    				for(int i = 0; i <30; i++){
+    					
+    					int randomx = ThreadLocalRandom.current().nextInt(x, x+60);
+    					int randomy = ThreadLocalRandom.current().nextInt(y, y+30);
+    					g2d.fillRect(randomx, randomy, 5, 5);
+    					
+    				}
+    			
+    			}
     		}
     	}
     }
