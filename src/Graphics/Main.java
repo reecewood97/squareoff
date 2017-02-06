@@ -8,8 +8,8 @@ public class Main {
 	   
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
-		@SuppressWarnings("unused")
-		Screen newui = new Screen(new Board());
+		//@SuppressWarnings("unused")
+		//Screen newui = new Screen(new Board());
 
 	}
 	

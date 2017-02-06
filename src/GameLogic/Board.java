@@ -27,13 +27,13 @@ public class Board {
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
 		Point2D.Double redpos = new Point2D.Double(300, 220);
-		Square red = new Square(1 , 0, redpos);
+		Square red = new Square(1 ,0, 0, redpos);
 		Point2D.Double blupos = new Point2D.Double(300, 220);
-		Square blu = new Square(2 , 0, blupos);
+		Square blu = new Square(2 ,0, 0, blupos);
 		Point2D.Double yelpos = new Point2D.Double(700, 220);
-		Square yel = new Square(3 , 0, yelpos);
+		Square yel = new Square(3 ,0, 0, yelpos);
 		Point2D.Double grnpos = new Point2D.Double(700, 220);
-		Square grn = new Square(4 , 0, grnpos);
+		Square grn = new Square(4 ,0, 0, grnpos);
 		squares.add(red);
 		objects.add(red);
 		squares.add(blu);
@@ -219,14 +219,31 @@ public class Board {
 	 * @param update The update string.
 	 */
 	public void update(String update) {
-		
+		//This would be way easier if we handed whole new boards over to be fair - bit worried about phys objects is all.
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public void input(String input) {
+	public String input(String input) {
+		if(input.contains("Pressed")){
+			Square active = (Square)getActivePlayer();
+			String inputKey = input.substring(8,8);
+			
+			switch(inputKey){
+			case "W" : //jump?
+				break;
+			case "A" : active.setXvel(active.getXvel()-1);
+				break;
+			case "S" : //duck?
+				break;
+			case "D" : active.setXvel(active.getXvel()+1);
+				break;
+			}
+		}
+
+		return null;
 	}
 	
 	/**

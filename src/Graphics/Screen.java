@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import GameLogic.Board;
+import GameLogic.UserInput;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame {
@@ -15,7 +16,7 @@ public class Screen extends JFrame {
     int frameHeight = 700;
    // private Audio audio;
     
-    public Screen(Board newboard){
+    public Screen(Board newboard,UserInput q){
     	
     	//this.audio = audio;
     	
@@ -35,7 +36,7 @@ public class Screen extends JFrame {
     	add(board, BorderLayout.CENTER);
     	add(controls, BorderLayout.NORTH);
  
-    	HangerOn listeners = new HangerOn();
+    	HangerOn listeners = new HangerOn(q);
     	board = listeners.hangOn2(board);
     	   	
     	setVisible(true);

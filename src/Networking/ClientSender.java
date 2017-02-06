@@ -20,9 +20,10 @@ public class ClientSender extends Thread {
 	 * Constructor.
 	 * @param server The PrintStream used to send messages to a server.
 	 */
-	public ClientSender(PrintStream server) {
+	public ClientSender(PrintStream server,UserInput q) {
 		this.server = server;
 		input = new UserInput();
+		this.input = q;
 	}
 	
 	/**
@@ -33,10 +34,11 @@ public class ClientSender extends Thread {
 		
 		try {
 			while(running) {
-				ArrayList<String> nextInputs = input.getInputStrings();
-				for(String s: nextInputs) {
-					server.print(s);	
-				}
+				String nextInput = input.getInputStrings(); // I'm pretty sure we're safer having a q here so we don't get odd  null points.
+				//for(String s: nextInputs) {
+				//	server.print(s);	
+				//}
+				server.print(nextInput);
 				server.println();
 				server.flush();
 				

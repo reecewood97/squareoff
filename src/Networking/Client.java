@@ -2,6 +2,10 @@ package Networking;
 
 import java.net.*;
 import GameLogic.Board;
+import GameLogic.UserInput;
+import Graphics.Screen;
+import Graphics.SplashSplash;
+
 import java.io.*;
 
 /**
@@ -17,6 +21,7 @@ public class Client {
 	private ClientSender sender;
 	private ClientReceiver receiver;
 	private Board board;
+	private UserInput q;
 	
 	/**
 	 * Constructor.
@@ -25,6 +30,7 @@ public class Client {
 		socket = null;
 		toServer = null;
 		fromServer = null;
+		q = new UserInput();
 		board = new Board();
 	}
 	
@@ -47,8 +53,13 @@ public class Client {
 		}
 		
 		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer);
+		sender = new ClientSender(toServer,q);
 		receiver = new ClientReceiver(fromServer, board);
+		
+		SplashSplash splashscreen = new SplashSplash(1000);
+		splashscreen.showSplash();
+		@SuppressWarnings("unused")
+		Screen newui = new Screen(board,q);
 			
 		sender.start();
 		receiver.start();
