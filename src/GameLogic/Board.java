@@ -72,32 +72,34 @@ public class Board {
 		while(it.hasNext()) {
 			TerrainBlock nextblock = it.next();
 			if(wallDistLOne(guy, nextblock)<2) {
-				return nextblock;
+				return wallDistLOne(guy, nextblock);
 			}
 		}
 		return 10;
 	}
 	
-	private boolean wallDistLOne(Square guy, TerrainBlock block) {
+	private double wallDistLOne(Square guy, TerrainBlock block) {
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
+		double guyup = guy.getPos().getY()+guy.getHeight();
 		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
-		double blockup = block.getPos().getY();
+		double blockdown = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
 			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockup-guydown)<2){
-				return true;
+			if(Math.abs(blockright-guyleft)<2){
+				return Math.abs(blockright-guyleft);
 			}
 			else {
-				return false;
+				return 10; //Out of range
 			}
 		}
 		else {
-			return false;
+			return 10; //Out of range
 		}
 	}
 	
@@ -105,32 +107,34 @@ public class Board {
 		Iterator<TerrainBlock> it = blocks.iterator();
 		while(it.hasNext()) {
 			TerrainBlock nextblock = it.next();
-			if(wallDistROne(guy, nextblock)) {
-				return nextblock;
+			if(wallDistROne(guy, nextblock)<2) {
+				return wallDistROne(guy, nextblock);
 			}
 		}
 		return 10;
 	}
 	
-	private boolean onFloorOne(Square guy, TerrainBlock block) {
+	private double wallDistROne(Square guy, TerrainBlock block) {
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guyup = guy.getPos().getY()+guy.getHeight();
 		double guydown = guy.getPos().getY();
 		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
-		double blockup = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
+		double blockdown = block.getPos().getY();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
-			if(Math.abs(blockup-guydown)<2){
-				return true;
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
+			if(Math.abs(blockleft-guyright)<2){
+				return Math.abs(blockleft-guyright);
 			}
 			else {
-				return false;
+				return 10;
 			}
 		}
 		else {
-			return false;
+			return 10;
 		}
 	}
 	
