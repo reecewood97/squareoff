@@ -79,6 +79,7 @@ public class Board {
 		return objects.get(x);
 	}
 	
+	/*
 	public ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -93,7 +94,7 @@ public class Board {
 		return blocks;
 	}
 	
-	
+	*/
 	
 	private double wallDistL(Square guy) {
 		Iterator<TerrainBlock> it = blocks.iterator();
