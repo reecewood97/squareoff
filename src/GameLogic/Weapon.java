@@ -12,12 +12,12 @@ public class Weapon extends PhysObject {
 		
 
 	}
-	
+	/*
 	public void setPos(Double x, Double y){
 		
 		pos = (x,y);
 	}
-	
+	*/
 	
 
 }

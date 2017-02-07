@@ -53,9 +53,9 @@ public class ScreenBoard extends JPanel{
         
     }
 	
-	public void paintBlocks(ArrayList<TerrainBlock> blocks, Graphics2D g2d){
+	public void paintBlocks(ArrayList<PhysObject> blocks, Graphics2D g2d){
     	
-		for(TerrainBlock block : blocks){
+		for(PhysObject block : blocks){
 			
 			
     		int x = (int) block.getPos().getX();
@@ -65,9 +65,9 @@ public class ScreenBoard extends JPanel{
     		y = 700 - y;
     		//System.out.println("by is: " + y);
     		
-    		int blocktype = block.getType();
-    		int blockhealth = block.getHealth();
-    		boolean visible = block.isVisible();
+    		int blocktype = ((TerrainBlock) block).getType();
+    		int blockhealth = ((TerrainBlock) block).getHealth();
+    		boolean visible = ((TerrainBlock) block).isVisible();
     		
     		if(visible){
     			
@@ -100,9 +100,12 @@ public class ScreenBoard extends JPanel{
     	}
     }
     
-    public void paintSquares(ArrayList<Square> squares, Graphics2D g2d){
+    public void paintSquares(ArrayList<PhysObject> squares, Graphics2D g2d){
     	
-    	for(Square square : squares){
+    	for(PhysObject square : squares){
+    		
+    		//square = (Square) square;
+    		
     		int x = (int) square.getPos().getX();
     		//System.out.println("x is: " + x);
     		
@@ -110,7 +113,8 @@ public class ScreenBoard extends JPanel{
     		y = 700 - y;
     		//System.out.println("y is: " + y);
     		
-    		int playernum = square.getPlayerID();
+    		int playernum = ((Square) square).getPlayerID();
+    		
     		if (playernum == 1){
     			g2d.setColor(Color.RED);
     		}
