@@ -14,6 +14,7 @@ public class Board {
 	private ArrayList<Square> squares;
 	private ArrayList<TerrainBlock> blocks;
 	private boolean freeState;
+	private int winner;
 	
 	public Board(){
 		this.player = 0;
@@ -23,6 +24,7 @@ public class Board {
 		this.squares = new ArrayList<Square>();
 		this.blocks = new ArrayList<TerrainBlock>();
 		this.freeState = false;
+		this.winner = 0;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
@@ -57,6 +59,16 @@ public class Board {
 			}
 	}
 	
+	public void setWinner(int player){
+		
+		this.winner = player;
+		
+	}
+	
+	public int getWinner(){
+		return winner;
+	}
+	
 	public void setActivePlayer(int newPlayer, int newID) {
 		this.player = newPlayer;
 		this.squareID = newID;
@@ -66,6 +78,22 @@ public class Board {
 		int x = 4*player + squareID;
 		return objects.get(x);
 	}
+	
+	public ArrayList<PhysObject> getBlocks(){
+		
+		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("TerrainBlock")){
+				
+				blocks.add(obj);
+			}
+		}
+		
+		return blocks;
+	}
+	
+	
 	
 	private double wallDistL(Square guy) {
 		Iterator<TerrainBlock> it = blocks.iterator();
@@ -241,12 +269,12 @@ public class Board {
 		return changed;
 	}
 	
-	public ArrayList<TerrainBlock> getBlocks(){
-		return blocks;
-		
-	}
 	
 	public ArrayList<Square> getSquares(){
 		return squares;
+	}
+	
+	public ArrayList<PhysObject> getObjects(){
+		return objects;
 	}
 }

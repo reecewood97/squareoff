@@ -3,6 +3,7 @@ package Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import GameLogic.Board;
+import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
 import java.awt.Color;
@@ -56,7 +57,7 @@ public class ScreenBoard extends JPanel{
     	
 		for(TerrainBlock block : blocks){
 			
-			//System.out.println("length of blocks is " + blocks.size());
+			
     		int x = (int) block.getPos().getX();
     		//System.out.println("bx is: " + x);
     		
@@ -79,16 +80,16 @@ public class ScreenBoard extends JPanel{
     			}
     		
     			if((blockhealth==1) && (blocktype == 0)){
-    				g2d.fillRect(x,y,60,30);
+    				g2d.fillRect(x,y,40,30);
     			}
     			else if((blockhealth==1) && (blocktype == 1)){
     				
-    				g2d.fillRect(x, y, 60, 30);
+    				g2d.fillRect(x, y, 40, 30);
     				g2d.setColor(new Color(135,206,250));
     				
     				for(int i = 0; i <30; i++){
     					
-    					int randomx = ThreadLocalRandom.current().nextInt(x, x+60);
+    					int randomx = ThreadLocalRandom.current().nextInt(x, x+40);
     					int randomy = ThreadLocalRandom.current().nextInt(y, y+30);
     					g2d.fillRect(randomx, randomy, 5, 5);
     					
@@ -131,6 +132,22 @@ public class ScreenBoard extends JPanel{
     	}
     	
     }
-	
+   
+    /* 
+    public void paintWeapon(ArrayList<PhysObject> objs, Graphics2D g2d){
+    	
+    	for(PhysObject obj: objs){
+    		
+    		if(obj.getType() == BombExplodeOnImpact){
+    		
+    			g2d.setColor(Color.BLACK);
+    			g2d.fillOval((int) obj.getPos().getX(), (int) obj.getPos().getY(), obj.getWidth(), 
+    					obj.getHeight());
+    		}
+    	}
+    	
+    	
+    }
+	*/
 	
 }
