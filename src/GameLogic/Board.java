@@ -10,7 +10,6 @@ public class Board {
 	private int player;
 	private int squareID;
 	private ArrayList<PhysObject> objects;
-	private ArrayList<PhysObject> changed;
 	private ArrayList<Square> squares;
 	private ArrayList<TerrainBlock> blocks;
 	private boolean freeState;
@@ -19,7 +18,6 @@ public class Board {
 		this.player = 0;
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
-		this.changed = new ArrayList<PhysObject>();
 		this.squares = new ArrayList<Square>();
 		this.blocks = new ArrayList<TerrainBlock>();
 		this.freeState = false;
@@ -75,7 +73,7 @@ public class Board {
 				return wallDistLOne(guy, nextblock);
 			}
 		}
-		return 10;
+		return 10; //Out of range
 	}
 	
 	private double wallDistLOne(Square guy, TerrainBlock block) {
@@ -111,7 +109,7 @@ public class Board {
 				return wallDistROne(guy, nextblock);
 			}
 		}
-		return 10;
+		return 10; //Out of range
 	}
 	
 	private double wallDistROne(Square guy, TerrainBlock block) {
@@ -130,11 +128,11 @@ public class Board {
 				return Math.abs(blockleft-guyright);
 			}
 			else {
-				return 10;
+				return 10; //Out of range
 			}
 		}
 		else {
-			return 10;
+			return 10; //Out of range
 		}
 	}
 	
@@ -177,7 +175,6 @@ public class Board {
 	}
 	
 	public void updateFrame(Move move) {
-		changed = new ArrayList<PhysObject>();
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim();  // just simulate another frame.
 		}
@@ -192,24 +189,46 @@ public class Board {
 					activePlayer.setYvel(20);
 				}
 				switch(move.getDirection()) {
-				// TODO check wall collisions
-					case "Left" : activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-					case "Right": activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
+					case "Left" : if (wallDistL(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+					}
+					case "Right": if (wallDistR(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
+					}
 					case "None" : //do nothing
 					default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
 			}
 			else {
 				switch(move.getDirection()) {
-				// TODO check wall collisions
-					case "Left" : activePlayer.setPos
+				case "Left" : if (wallDistL(activePlayer)<2){
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+					activePlayer.getPos().getY()));
+				} else {
+					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-					case "Right": activePlayer.setPos
+				}
+				case "Right": if (wallDistR(activePlayer)<2){
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
+					activePlayer.getPos().getY()));
+				} else {
+					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
-					case "None" : //do nothing
-					default     : System.out.println("Physics engine has detected an invalid move string.");
+				}
+				case "None" : //do nothing
+				default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
 				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
 				activePlayer.getPos().getY()+activePlayer.getYvel()));
@@ -256,10 +275,6 @@ public class Board {
 	 */
 	public ArrayList<PhysObject> getUpdate() {
 		return objects;
-	}
-	
-	public ArrayList<PhysObject> getChanged() {
-		return changed;
 	}
 	
 	public ArrayList<TerrainBlock> getBlocks(){
