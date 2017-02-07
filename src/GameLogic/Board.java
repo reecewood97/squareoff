@@ -29,13 +29,13 @@ public class Board {
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
 		Point2D.Double redpos = new Point2D.Double(300, 220);
-		Square red = new Square(1 , 0, redpos);
+		Square red = new Square(1 ,0, 0, redpos);
 		Point2D.Double blupos = new Point2D.Double(300, 220);
-		Square blu = new Square(2 , 0, blupos);
+		Square blu = new Square(2 ,0, 0, blupos);
 		Point2D.Double yelpos = new Point2D.Double(700, 220);
-		Square yel = new Square(3 , 0, yelpos);
+		Square yel = new Square(3 ,0, 0, yelpos);
 		Point2D.Double grnpos = new Point2D.Double(700, 220);
-		Square grn = new Square(4 , 0, grnpos);
+		Square grn = new Square(4 ,0, 0, grnpos);
 		squares.add(red);
 		objects.add(red);
 		squares.add(blu);
@@ -101,32 +101,34 @@ public class Board {
 		while(it.hasNext()) {
 			TerrainBlock nextblock = it.next();
 			if(wallDistLOne(guy, nextblock)<2) {
-				return nextblock;
+				return wallDistLOne(guy, nextblock);
 			}
 		}
 		return 10;
 	}
 	
-	private boolean wallDistLOne(Square guy, TerrainBlock block) {
+	private double wallDistLOne(Square guy, TerrainBlock block) {
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
+		double guyup = guy.getPos().getY()+guy.getHeight();
 		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
-		double blockup = block.getPos().getY();
+		double blockdown = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
 			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockup-guydown)<2){
-				return true;
+			if(Math.abs(blockright-guyleft)<2){
+				return Math.abs(blockright-guyleft);
 			}
 			else {
-				return false;
+				return 10; //Out of range
 			}
 		}
 		else {
-			return false;
+			return 10; //Out of range
 		}
 	}
 	
@@ -134,32 +136,34 @@ public class Board {
 		Iterator<TerrainBlock> it = blocks.iterator();
 		while(it.hasNext()) {
 			TerrainBlock nextblock = it.next();
-			if(wallDistROne(guy, nextblock)) {
-				return nextblock;
+			if(wallDistROne(guy, nextblock)<2) {
+				return wallDistROne(guy, nextblock);
 			}
 		}
 		return 10;
 	}
 	
-	private boolean onFloorOne(Square guy, TerrainBlock block) {
+	private double wallDistROne(Square guy, TerrainBlock block) {
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guyup = guy.getPos().getY()+guy.getHeight();
 		double guydown = guy.getPos().getY();
 		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
-		double blockup = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
+		double blockdown = block.getPos().getY();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
-			if(Math.abs(blockup-guydown)<2){
-				return true;
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
+			if(Math.abs(blockleft-guyright)<2){
+				return Math.abs(blockleft-guyright);
 			}
 			else {
-				return false;
+				return 10;
 			}
 		}
 		else {
-			return false;
+			return 10;
 		}
 	}
 	
@@ -248,14 +252,31 @@ public class Board {
 	 * @param update The update string.
 	 */
 	public void update(String update) {
-		
+		//This would be way easier if we handed whole new boards over to be fair - bit worried about phys objects is all.
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public void input(String input) {
+	public String input(String input) {
+		if(input.contains("Pressed")){
+			Square active = (Square)getActivePlayer();
+			String inputKey = input.substring(8,8);
+			
+			switch(inputKey){
+			case "W" : //jump?
+				break;
+			case "A" : active.setXvel(active.getXvel()-1);
+				break;
+			case "S" : //duck?
+				break;
+			case "D" : active.setXvel(active.getXvel()+1);
+				break;
+			}
+		}
+
+		return null;
 	}
 	
 	/**

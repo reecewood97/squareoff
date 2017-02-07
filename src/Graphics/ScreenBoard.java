@@ -48,7 +48,7 @@ public class ScreenBoard extends JPanel{
         	w = w+30;
         }
        
-        paintBlocks(board.getBlocks(), g2d);
+       // paintBlocks(board.getBlocks(), g2d);
         paintSquares(board.getSquares(),g2d);
         
     }

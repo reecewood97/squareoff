@@ -6,37 +6,47 @@ This is a buddy for the UI - create an istance of this class wherever you make t
  * *  * Only worry I have is that the frame wont ever be in focus- in which case we may need to make the methods  
  * * more generic to just return whatever kind of component is needed.*/
 package Graphics;
-import java.awt.Component; 
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener; 
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import GameLogic.UserInput;
+
 public class HangerOn implements KeyListener,MouseListener { 
-	 ArrayList<String> q = new ArrayList<String>(); 		
+	private UserInput q;
+	public HangerOn(UserInput q){
+		this.q =q;
+	}
+	
+	 //ArrayBlockingQueue<String> q = new ArrayBlockingQueue<String>(100);		
 	 
 	 ScreenBoard panel;
 	 
-	 public String getMoveStr(){
-		 if (q.size() == 0 )
-			 return "null";
-		 String ret = q.get(0);
-		 q.remove(0); 		
-		 return ret;
-		 }
+//	 public String getMoveStr() throws InterruptedException{
+//		 String ret = q.take();	
+//		 return ret;
+//		 }
+	 
 	 @Override
 	 public void keyPressed(KeyEvent e) {
 		 String keyString;
 		 int keyCode = e.getKeyCode();
-		 keyString = KeyEvent.getKeyText(keyCode);
-		 q.add(keyString);
-		 System.out.println(keyString  );
+		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode);
+		 q.addInput(keyString);
 		 panel.grabFocus();
 		 } 
+	 
 	 @Override
-	 public void keyReleased(KeyEvent e) {	 }
+	 public void keyReleased(KeyEvent e) { 
+	 }
+	 
 	 @Override
-	 public void keyTyped(KeyEvent e) { 	} 	
+	 public void keyTyped(KeyEvent e) {
+	 } 	
 	 
 	 public ScreenBoard hangOn2(ScreenBoard panel) {
 		 this.panel = panel;
@@ -50,9 +60,9 @@ public class HangerOn implements KeyListener,MouseListener {
 	 
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
-		 String clickedEvent = "clicked " + e.getPoint();
-		 q.add(clickedEvent);
-		 System.out.println("works!");
+		 String clickedEvent = "Clicked " + e.getPoint();
+		 q.addInput(clickedEvent);
+		 //System.out.println("works!");
 		 panel.grabFocus();
 	 }
 	 @Override
@@ -69,7 +79,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	 }
 	 @Override
 	 public void mouseReleased(MouseEvent e) { 		
-	 String releasedEvent = "released " + e.getPoint();
-	 q.add(releasedEvent);
+	 //String releasedEvent = "Released " + e.getPoint();
+	 //q.offer(releasedEvent);
 	 }
  }

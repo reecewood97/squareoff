@@ -8,11 +8,13 @@ public class Square extends PhysObject {
 	
 	private int playerID;
 	private int colour;
+	private int squareID;
 	
-	public Square(int playerID, int colour, Point2D.Double pos) {
+	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 10, 10);
 		this.playerID = playerID;
 		this.colour = colour;
+		this.squareID = squareID;
 	}
 	
 	public int getPlayerID() {
@@ -21,6 +23,10 @@ public class Square extends PhysObject {
 	
 	public int getColour() {
 		return colour;
+	}
+	
+	public int getSquareID() {
+		return squareID;
 	}
 
 }
