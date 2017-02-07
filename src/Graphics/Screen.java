@@ -28,16 +28,32 @@ public class Screen extends JFrame {
     	
     	ButtonPanel controls = new ButtonPanel(this);
     	controls.setBackground(lightblue);
-    	    	
-    	ScreenBoard board = new ScreenBoard(newboard);
-    	board.setBackground(lightblue);
     	
-    	setLayout(new BorderLayout());
-    	add(board, BorderLayout.CENTER);
-    	add(controls, BorderLayout.NORTH);
+    	
+    	
+    	
+    	if(newboard.getWinner() == 0){
+    		
+    		ScreenBoard sboard = new ScreenBoard(newboard);
+    		sboard.setBackground(lightblue);
+    		setLayout(new BorderLayout());
+    		add(sboard, BorderLayout.CENTER);
+    		add(controls, BorderLayout.NORTH);
  
-    	HangerOn listeners = new HangerOn(q);
-    	board = listeners.hangOn2(board);
+    		HangerOn listeners = new HangerOn(q);
+    		sboard = listeners.hangOn2(sboard);
+    	}
+    	else{
+    		
+    		WinnerBoard wboard = new WinnerBoard(newboard.getWinner());
+    		wboard.setBackground(Color.BLACK);
+    		controls.setBackground(Color.BLACK);
+    		setLayout(new BorderLayout());
+    		add(wboard, BorderLayout.CENTER);
+    		add(controls, BorderLayout.NORTH);
+    		
+    	}
+    	
     	   	
     	setVisible(true);
     }

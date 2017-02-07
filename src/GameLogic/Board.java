@@ -10,17 +10,15 @@ public class Board {
 	private int player;
 	private int squareID;
 	private ArrayList<PhysObject> objects;
-	private ArrayList<Square> squares;
-	private ArrayList<TerrainBlock> blocks;
 	private boolean freeState;
+	private int winner;
 	
 	public Board(){
 		this.player = 0;
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
-		this.squares = new ArrayList<Square>();
-		this.blocks = new ArrayList<TerrainBlock>();
 		this.freeState = false;
+		this.winner = 0;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
@@ -32,19 +30,14 @@ public class Board {
 		Square yel = new Square(3 ,0, 0, yelpos);
 		Point2D.Double grnpos = new Point2D.Double(700, 220);
 		Square grn = new Square(4 ,0, 0, grnpos);
-		squares.add(red);
 		objects.add(red);
-		squares.add(blu);
 		objects.add(blu);
-		squares.add(yel);
 		objects.add(yel);
-		squares.add(grn);
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
 		for(int i = 150; i < 1450; i+=100) {
 			TerrainBlock block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,250), true);
-			blocks.add(block);
 			objects.add(block);
 			//TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,195), true);
 			//objects.add(block2);
@@ -53,6 +46,16 @@ public class Board {
 			//objects.add(block3);
 			//blocks.add(block3);
 			}
+	}
+	
+	public void setWinner(int player){
+		
+		this.winner = player;
+		
+	}
+	
+	public int getWinner(){
+		return winner;
 	}
 	
 	public void setActivePlayer(int newPlayer, int newID) {
@@ -65,10 +68,39 @@ public class Board {
 		return objects.get(x);
 	}
 	
+	
+	public ArrayList<PhysObject> getBlocks(){
+		
+		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("TerrainBlock")){
+				
+				blocks.add(obj);
+			}
+		}
+		
+		return blocks;
+	}
+	
+	public ArrayList<PhysObject> getSquares(){
+		
+		ArrayList<PhysObject> squares = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("Square")){
+				
+				squares.add(obj);
+			}
+		}
+		
+		return squares;
+	}
+
 	private double wallDistL(Square guy) {
-		Iterator<TerrainBlock> it = blocks.iterator();
+		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
-			TerrainBlock nextblock = it.next();
+			PhysObject nextblock = it.next();
 			if(wallDistLOne(guy, nextblock)<2) {
 				return wallDistLOne(guy, nextblock);
 			}
@@ -76,12 +108,10 @@ public class Board {
 		return 10; //Out of range
 	}
 	
-	private double wallDistLOne(Square guy, TerrainBlock block) {
+	private double wallDistLOne(Square guy, PhysObject block) {
 		double guyleft = guy.getPos().getX();
-		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
 		double guyup = guy.getPos().getY()+guy.getHeight();
-		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
 		double blockdown = block.getPos().getY();
 		double blockup = block.getPos().getY()+block.getHeight();
@@ -102,9 +132,9 @@ public class Board {
 	}
 	
 	private double wallDistR(Square guy) {
-		Iterator<TerrainBlock> it = blocks.iterator();
+		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
-			TerrainBlock nextblock = it.next();
+			PhysObject nextblock = it.next();
 			if(wallDistROne(guy, nextblock)<2) {
 				return wallDistROne(guy, nextblock);
 			}
@@ -112,13 +142,11 @@ public class Board {
 		return 10; //Out of range
 	}
 	
-	private double wallDistROne(Square guy, TerrainBlock block) {
-		double guyleft = guy.getPos().getX();
+	private double wallDistROne(Square guy, PhysObject block) {
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyup = guy.getPos().getY()+guy.getHeight();
 		double guydown = guy.getPos().getY();
 		double blockleft = block.getPos().getX();
-		double blockright = block.getPos().getX()+block.getWidth();
 		double blockup = block.getPos().getY()+block.getHeight();
 		double blockdown = block.getPos().getY();
 		
@@ -136,10 +164,10 @@ public class Board {
 		}
 	}
 	
-	private TerrainBlock onFloor(Square guy) {
-		Iterator<TerrainBlock> it = blocks.iterator();
+	private PhysObject onFloor(Square guy) {
+		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
-			TerrainBlock nextblock = it.next();
+			PhysObject nextblock = it.next();
 			if(onFloorOne(guy, nextblock)) {
 				return nextblock;
 			}
@@ -147,7 +175,7 @@ public class Board {
 		return null;
 	}
 	
-	private boolean onFloorOne(Square guy, TerrainBlock block) {
+	private boolean onFloorOne(Square guy, PhysObject block) {
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
@@ -180,7 +208,7 @@ public class Board {
 		}
 		else {
 			Square activePlayer = (Square)getActivePlayer();
-			TerrainBlock floor = onFloor(activePlayer);
+			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
 				activePlayer.setYvel(0);
 				activePlayer.setPos(new Point2D.Double
@@ -277,12 +305,7 @@ public class Board {
 		return objects;
 	}
 	
-	public ArrayList<TerrainBlock> getBlocks(){
-		return blocks;
-		
-	}
-	
-	public ArrayList<Square> getSquares(){
-		return squares;
+	public ArrayList<PhysObject> getObjects(){
+		return objects;
 	}
 }

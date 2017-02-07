@@ -15,6 +15,7 @@ public class PhysObject {
 	private ArrayList<String> attributes;
 	private int width;
 	private int height;
+	private String name;
 	
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
@@ -116,6 +117,15 @@ public class PhysObject {
 	public void setWidth(int newWidth) {
 		this.width = newWidth;
 		this.changed = true;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public void setName(String newname){
+		this.name = newname;
+		
 	}
 	
 }
