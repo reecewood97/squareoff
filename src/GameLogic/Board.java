@@ -18,34 +18,32 @@ public class Board {
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.winner = 0;
+		this.winner = -1;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(300, 220);
-		Square red = new Square(1 ,0, 0, redpos);
-		Point2D.Double blupos = new Point2D.Double(300, 220);
-		Square blu = new Square(2 ,0, 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(700, 220);
-		Square yel = new Square(3 ,0, 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(700, 220);
-		Square grn = new Square(4 ,0, 0, grnpos);
+		Point2D.Double redpos = new Point2D.Double(200, 380);
+		PhysObject red = new Square(1 ,0, 0, redpos);
+		Point2D.Double blupos = new Point2D.Double(300, 380);
+		PhysObject blu = new Square(2 ,0, 0, blupos);
+		Point2D.Double yelpos = new Point2D.Double(400, 380);
+		PhysObject yel = new Square(3 ,0, 0, yelpos);
+		Point2D.Double grnpos = new Point2D.Double(500, 380);
+		PhysObject grn = new Square(4 ,0, 0, grnpos);
 		objects.add(red);
 		objects.add(blu);
 		objects.add(yel);
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
-		for(int i = 150; i < 1450; i+=100) {
-			TerrainBlock block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,250), true);
+		for(int i = 150; i < 1450; i+=40) {
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,350), true);
 			objects.add(block);
-			//TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,195), true);
-			//objects.add(block2);
-			//blocks.add(block2);
-			//TerrainBlocks block3 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,190), true);
-			//objects.add(block3);
-			//blocks.add(block3);
-			}
+		}
+		
+		Point2D.Double weaponpos = new Point2D.Double(100, 100);
+		PhysObject weapon = new Weapon(weaponpos);
+		objects.add(weapon);
 	}
 	
 	public void setWinner(int player){
@@ -58,6 +56,10 @@ public class Board {
 		return winner;
 	}
 	
+	public void notifyQuit(){
+		
+	}
+	
 	public void setActivePlayer(int newPlayer, int newID) {
 		this.player = newPlayer;
 		this.squareID = newID;
@@ -66,6 +68,19 @@ public class Board {
 	public PhysObject getActivePlayer() {
 		int x = 4*player + squareID;
 		return objects.get(x);
+	}
+	
+	public ArrayList<PhysObject> getWeapons(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("ExplodeOnImpact")){
+				
+				weapons.add(obj);
+			}
+		}
+		
+		return weapons;
 	}
 	
 	

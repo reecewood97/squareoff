@@ -3,7 +3,7 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
+import UserInterface.mainMenu;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.sun.prism.paint.Color;
+
+import GameLogic.Board;
 
 @SuppressWarnings("serial")
 public class ButtonPanel extends JPanel{
@@ -22,7 +24,7 @@ public class ButtonPanel extends JPanel{
 	private Screen screen;
 	
 	//@SuppressWarnings("deprecation")
-	public ButtonPanel(Screen screen) {
+	public ButtonPanel(Screen screen, Board board) {
 		
 		super();
 		
@@ -33,7 +35,7 @@ public class ButtonPanel extends JPanel{
 		//back to main menu
         ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
         JButton exit = new JButton(image2);
-		exit.addActionListener(e -> openMainMenu(screen));
+		exit.addActionListener(e -> openMainMenu(screen,board));
 		exit.setBorderPainted(false); 
         exit.setContentAreaFilled(false); 
         exit.setFocusPainted(false); 
@@ -60,9 +62,13 @@ public class ButtonPanel extends JPanel{
 	
 	
 
-	public void openMainMenu(Screen screen){
+	public void openMainMenu(Screen screen, Board board){
 		
+		String[] arguments = new String[1];
+		board.notifyQuit();
 		screen.setVisible(false);
+		mainMenu mainmenu = new mainMenu();
+		mainmenu.launchMenu();
 		
 	}
 	public void ToggleBackgroundMusic(JButton button){

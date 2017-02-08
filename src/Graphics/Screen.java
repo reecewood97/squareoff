@@ -14,11 +14,8 @@ public class Screen extends JFrame {
    
     int framewidth = 1500;
     int frameHeight = 700;
-   // private Audio audio;
     
     public Screen(Board newboard,UserInput q){
-    	
-    	//this.audio = audio;
     	
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,19 +23,19 @@ public class Screen extends JFrame {
     	
     	Color lightblue = new Color(135,206,250);
     	
-    	ButtonPanel controls = new ButtonPanel(this);
+    	ButtonPanel controls = new ButtonPanel(this,newboard);
     	controls.setBackground(lightblue);
     	
-    	
-    	
-    	
-    	if(newboard.getWinner() == 0){
+    	System.out.println("sup");
+    	if(newboard.getWinner() == -1){
     		
     		ScreenBoard sboard = new ScreenBoard(newboard);
     		sboard.setBackground(lightblue);
     		setLayout(new BorderLayout());
     		add(sboard, BorderLayout.CENTER);
     		add(controls, BorderLayout.NORTH);
+    		
+    		System.out.println("sup");
  
     		HangerOn listeners = new HangerOn(q);
     		sboard = listeners.hangOn2(sboard);
@@ -54,7 +51,7 @@ public class Screen extends JFrame {
     		
     	}
     	
-    	   	
+    	System.out.println("sup2");
     	setVisible(true);
     }
     
@@ -64,6 +61,7 @@ public class Screen extends JFrame {
         
     	super.paint(g);
         
+    	System.out.println("sup3");
     	Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);

@@ -4,20 +4,23 @@ import java.awt.geom.Point2D;
 
 public class Weapon extends PhysObject {
 	
+	private boolean inUse;
 	
-	private Point2D.Double pos;
-	
-	public Weapon() {
+	public Weapon(Point2D.Double pos) {
 		super();
-		
-
+		this.setName("ExplodeOnImpact");
+		inUse = false;
+	
 	}
-	/*
-	public void setPos(Double x, Double y){
+	
+	public boolean getInUse(){
 		
-		pos = (x,y);
+		return inUse;
 	}
-	*/
+	
+	public void setInUse(Boolean bool){
+		inUse = bool;
+	}
 	
 
 }

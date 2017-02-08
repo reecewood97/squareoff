@@ -1,6 +1,7 @@
 package Graphics;
 
 import GameLogic.Board;
+import GameLogic.UserInput;
 
 public class Main {
 	
@@ -9,7 +10,7 @@ public class Main {
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
 		//@SuppressWarnings("unused")
-		//Screen newui = new Screen(new Board());
+		Screen newui = new Screen(new Board(),new UserInput());
 
 	}
 	
