@@ -19,8 +19,9 @@ public class ServerSender extends Thread {
 		
 		try {
 			while(running) {
-				serverOutput.println(board.getUpdate());
-				board.input("");
+				System.out.println(board.getUpdate());
+				serverOutput.println(board.getUpdate()); //I actually need to pull down from the queue and give the results of the moves.
+				//board.input("");
 				sleep(40);
 			}
 			

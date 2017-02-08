@@ -21,8 +21,8 @@ public class ServerReceiver extends Thread {
 		
 		try {
 			String input;
-			while(running && (input = clientInput.readLine()) != null) {				
-				board.input(input);
+			while(running && (input = clientInput.readLine()) != null) {		
+				board.input(input); //This will also return a string that should be stuck into a queue.
 			}
 			clientInput.close();
 			

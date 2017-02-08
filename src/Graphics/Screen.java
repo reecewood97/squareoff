@@ -14,6 +14,7 @@ public class Screen extends JFrame {
    
     int framewidth = 1500;
     int frameHeight = 700;
+    private ScreenBoard board;
    // private Audio audio;
     
     public Screen(Board newboard,UserInput q){
@@ -29,7 +30,7 @@ public class Screen extends JFrame {
     	ButtonPanel controls = new ButtonPanel(this);
     	controls.setBackground(lightblue);
     	    	
-    	ScreenBoard board = new ScreenBoard(newboard);
+    	this.board = new ScreenBoard(newboard);
     	board.setBackground(lightblue);
     	
     	setLayout(new BorderLayout());
@@ -41,7 +42,6 @@ public class Screen extends JFrame {
     	   	
     	setVisible(true);
     }
-    
     
     @Override
     public void paint(Graphics g) {

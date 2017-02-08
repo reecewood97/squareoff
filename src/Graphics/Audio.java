@@ -25,7 +25,7 @@ public class Audio
 	
 	public void startBackgroundMusic(){
 		
-		music.start();
+		//music.start();
 	}
 	
 	public void endBackgroundMusic(){
