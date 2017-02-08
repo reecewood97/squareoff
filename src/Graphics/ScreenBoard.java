@@ -3,6 +3,7 @@ package Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import GameLogic.Board;
+import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
 import java.awt.Color;
@@ -47,16 +48,16 @@ public class ScreenBoard extends JPanel{
         	w = w+30;
         }
        
-        paintBlocks(board.getBlocks(), g2d);
+       // paintBlocks(board.getBlocks(), g2d);
         paintSquares(board.getSquares(),g2d);
         
     }
 	
-	public void paintBlocks(ArrayList<TerrainBlock> blocks, Graphics2D g2d){
+	public void paintBlocks(ArrayList<PhysObject> blocks, Graphics2D g2d){
     	
-		for(TerrainBlock block : blocks){
+		for(PhysObject block : blocks){
 			
-			//System.out.println("length of blocks is " + blocks.size());
+			
     		int x = (int) block.getPos().getX();
     		//System.out.println("bx is: " + x);
     		
@@ -64,9 +65,9 @@ public class ScreenBoard extends JPanel{
     		y = 700 - y;
     		//System.out.println("by is: " + y);
     		
-    		int blocktype = block.getType();
-    		int blockhealth = block.getHealth();
-    		boolean visible = block.isVisible();
+    		int blocktype = ((TerrainBlock) block).getType();
+    		int blockhealth = ((TerrainBlock) block).getHealth();
+    		boolean visible = ((TerrainBlock) block).isVisible();
     		
     		if(visible){
     			
@@ -79,16 +80,16 @@ public class ScreenBoard extends JPanel{
     			}
     		
     			if((blockhealth==1) && (blocktype == 0)){
-    				g2d.fillRect(x,y,60,30);
+    				g2d.fillRect(x,y,40,30);
     			}
     			else if((blockhealth==1) && (blocktype == 1)){
     				
-    				g2d.fillRect(x, y, 60, 30);
+    				g2d.fillRect(x, y, 40, 30);
     				g2d.setColor(new Color(135,206,250));
     				
     				for(int i = 0; i <30; i++){
     					
-    					int randomx = ThreadLocalRandom.current().nextInt(x, x+60);
+    					int randomx = ThreadLocalRandom.current().nextInt(x, x+40);
     					int randomy = ThreadLocalRandom.current().nextInt(y, y+30);
     					g2d.fillRect(randomx, randomy, 5, 5);
     					
@@ -99,9 +100,12 @@ public class ScreenBoard extends JPanel{
     	}
     }
     
-    public void paintSquares(ArrayList<Square> squares, Graphics2D g2d){
+    public void paintSquares(ArrayList<PhysObject> squares, Graphics2D g2d){
     	
-    	for(Square square : squares){
+    	for(PhysObject square : squares){
+    		
+    		//square = (Square) square;
+    		
     		int x = (int) square.getPos().getX();
     		//System.out.println("x is: " + x);
     		
@@ -109,7 +113,8 @@ public class ScreenBoard extends JPanel{
     		y = 700 - y;
     		//System.out.println("y is: " + y);
     		
-    		int playernum = square.getPlayerID();
+    		int playernum = ((Square) square).getPlayerID();
+    		
     		if (playernum == 1){
     			g2d.setColor(Color.RED);
     		}
@@ -131,6 +136,22 @@ public class ScreenBoard extends JPanel{
     	}
     	
     }
-	
+   
+    /* 
+    public void paintWeapon(ArrayList<PhysObject> objs, Graphics2D g2d){
+    	
+    	for(PhysObject obj: objs){
+    		
+    		if(obj.getType() == BombExplodeOnImpact){
+    		
+    			g2d.setColor(Color.BLACK);
+    			g2d.fillOval((int) obj.getPos().getX(), (int) obj.getPos().getY(), obj.getWidth(), 
+    					obj.getHeight());
+    		}
+    	}
+    	
+    	
+    }
+	*/
 	
 }

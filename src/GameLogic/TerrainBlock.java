@@ -16,11 +16,13 @@ public class TerrainBlock extends PhysObject {
 		this.type = type;
 		this.visible = visible;
 		this.pos = pos;
+		this.setName("TerrainBlock");
 		 
 	 }
 	public int getHealth(){	
 		return health;
 	}
+
 	
 	public int getColour(){
 		return colour;

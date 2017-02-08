@@ -11,21 +11,17 @@ public class Board {
 	private int player;
 	private int squareID;
 	private ArrayList<PhysObject> objects;
-	private ArrayList<PhysObject> changed;
-	private ArrayList<Square> squares;
-	private ArrayList<TerrainBlock> blocks;
 	private boolean freeState;
 	private ArrayBlockingQueue<String> q;
+	private int winner;
 	
 	public Board(){
 		this.player = 0;
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
-		this.changed = new ArrayList<PhysObject>();
-		this.squares = new ArrayList<Square>();
-		this.blocks = new ArrayList<TerrainBlock>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
+		this.winner = 0;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
@@ -37,19 +33,14 @@ public class Board {
 		Square yel = new Square(3 ,0, 0, yelpos);
 		Point2D.Double grnpos = new Point2D.Double(700, 220);
 		Square grn = new Square(4 ,0, 0, grnpos);
-		squares.add(red);
 		objects.add(red);
-		squares.add(blu);
 		objects.add(blu);
-		squares.add(yel);
 		objects.add(yel);
-		squares.add(grn);
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
 		for(int i = 150; i < 1450; i+=100) {
 			TerrainBlock block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,250), true);
-			blocks.add(block);
 			objects.add(block);
 			//TerrainBlocks block2 = new TerrainBlocks(1, 1, 1,new Point2D.Double(i,195), true);
 			//objects.add(block2);
@@ -60,163 +51,221 @@ public class Board {
 			}
 	}
 	
+	public void setWinner(int player){
+		
+		this.winner = player;
+		
+	}
+	
+	public int getWinner(){
+		return winner;
+	}
+	
 	public void setActivePlayer(int newPlayer, int newID) {
 		this.player = newPlayer;
 		this.squareID = newID;
 	}
 	
 	public PhysObject getActivePlayer() {
-		//int x = 4*player + squareID;
 		int x = player + squareID;
 		return objects.get(x);
 	}
 	
-//	private double wallDistL(Square guy) {
-//		Iterator<TerrainBlock> it = blocks.iterator();
-//		while(it.hasNext()) {
-//			TerrainBlock nextblock = it.next();
-//			if(wallDistLOne(guy, nextblock)<2) {
-//				return nextblock;
-//			}
-//		}
-//		return 10;
-//	}
-//	
-//	private boolean wallDistLOne(Square guy, TerrainBlock block) {
-//		double guyleft = guy.getPos().getX();
-//		double guyright = guy.getPos().getX()+guy.getWidth();
-//		double guydown = guy.getPos().getY();
-//		double blockleft = block.getPos().getX();
-//		double blockright = block.getPos().getX()+block.getWidth();
-//		double blockup = block.getPos().getY();
-//		
-//		if((blockleft<guyleft && guyleft<blockright) || 
-//				(blockleft<guyright && guyright<blockright)) {
-//			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-//			if(Math.abs(blockup-guydown)<2){
-//				return true;
-//			}
-//			else {
-//				return false;
-//			}
-//		}
-//		else {
-//			return false;
-//		}
-//	}
-//	
-//	private double wallDistR(Square guy) {
-//		Iterator<TerrainBlock> it = blocks.iterator();
-//		while(it.hasNext()) {
-//			TerrainBlock nextblock = it.next();
-//			if(wallDistROne(guy, nextblock)) {
-//				return nextblock;
-//			}
-//		}
-//		return 10;
-//	}
-//	
-//	private boolean onFloorOne(Square guy, TerrainBlock block) {
-//		double guyleft = guy.getPos().getX();
-//		double guyright = guy.getPos().getX()+guy.getWidth();
-//		double guydown = guy.getPos().getY();
-//		double blockleft = block.getPos().getX();
-//		double blockright = block.getPos().getX()+block.getWidth();
-//		double blockup = block.getPos().getY();
-//		
-//		if((blockleft<guyleft && guyleft<blockright) || 
-//				(blockleft<guyright && guyright<blockright)) {
-//			if(Math.abs(blockup-guydown)<2){
-//				return true;
-//			}
-//			else {
-//				return false;
-//			}
-//		}
-//		else {
-//			return false;
-//		}
-//	}
-//	
-//	private TerrainBlock onFloor(Square guy) {
-//		Iterator<TerrainBlock> it = blocks.iterator();
-//		while(it.hasNext()) {
-//			TerrainBlock nextblock = it.next();
-//			if(onFloorOne(guy, nextblock)) {
-//				return nextblock;
-//			}
-//		}
-//		return null;
-//	}
-//	
-//	private boolean onFloorOne(Square guy, TerrainBlock block) {
-//		double guyleft = guy.getPos().getX();
-//		double guyright = guy.getPos().getX()+guy.getWidth();
-//		double guydown = guy.getPos().getY();
-//		double blockleft = block.getPos().getX();
-//		double blockright = block.getPos().getX()+block.getWidth();
-//		double blockup = block.getPos().getY();
-//		
-//		if((blockleft<guyleft && guyleft<blockright) || 
-//				(blockleft<guyright && guyright<blockright)) {
-//			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-//			if(Math.abs(blockup-guydown)<2){
-//				return true;
-//			}
-//			else {
-//				return false;
-//			}
-//		}
-//		else {
-//			return false;
-//		}
-//	}
-//	
-//	private void freeSim() {
-//		//TODO
-//	}
-//	
-//	public void updateFrame(Move move) {
-//		changed = new ArrayList<PhysObject>();
-//		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
-//			freeSim();  // just simulate another frame.
-//		}
-//		else {
-//			Square activePlayer = (Square)getActivePlayer();
-//			TerrainBlock floor = onFloor(activePlayer);
-//			if (floor!=null) { //if the player is standing on a block
-//				activePlayer.setYvel(0);
-//				activePlayer.setPos(new Point2D.Double
-//				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
-//					if(move.getJump()) {
-//					activePlayer.setYvel(20);
-//				}
-//				switch(move.getDirection()) {
-//				// TODO check wall collisions
-//					case "Left" : activePlayer.setPos
-//					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-//					case "Right": activePlayer.setPos
-//					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
-//					case "None" : //do nothing
-//					default     : System.out.println("Physics engine has detected an invalid move string.");
-//				}
-//			}
-//			else {
-//				switch(move.getDirection()) {
-//				// TODO check wall collisions
-//					case "Left" : activePlayer.setPos
-//					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-//					case "Right": activePlayer.setPos
-//					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
-//					case "None" : //do nothing
-//					default     : System.out.println("Physics engine has detected an invalid move string.");
-//				}
-//				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-//				activePlayer.getPos().getY()+activePlayer.getYvel()));
-//				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
-//			}
-//		}
-//	}
+public ArrayList<PhysObject> getBlocks(){
+		
+		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("TerrainBlock")){
+				
+				blocks.add(obj);
+			}
+		}
+		
+		return blocks;
+	}
+	
+	public ArrayList<PhysObject> getSquares(){
+		
+		ArrayList<PhysObject> squares = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("Square")){
+				
+				squares.add(obj);
+			}
+		}
+		
+		return squares;
+	}
+	private double wallDistL(Square guy) {
+		Iterator<PhysObject> it = getBlocks().iterator();
+		while(it.hasNext()) {
+			PhysObject nextblock = it.next();
+			if(wallDistLOne(guy, nextblock)<2) {
+				return wallDistLOne(guy, nextblock);
+			}
+		}
+		return 10; //Out of range
+	}
+	
+	private double wallDistLOne(Square guy, PhysObject block) {
+		double guyleft = guy.getPos().getX();
+		double guydown = guy.getPos().getY();
+		double guyup = guy.getPos().getY()+guy.getHeight();
+		double blockright = block.getPos().getX()+block.getWidth();
+		double blockdown = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
+		
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
+			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
+			if(Math.abs(blockright-guyleft)<2){
+				return Math.abs(blockright-guyleft);
+			}
+			else {
+				return 10; //Out of range
+			}
+		}
+		else {
+			return 10; //Out of range
+		}
+	}
+	
+	private double wallDistR(Square guy) {
+		Iterator<PhysObject> it = getBlocks().iterator();
+		while(it.hasNext()) {
+			PhysObject nextblock = it.next();
+			if(wallDistROne(guy, nextblock)<2) {
+				return wallDistROne(guy, nextblock);
+			}
+		}
+		return 10; //Out of range
+	}
+	
+	private double wallDistROne(Square guy, PhysObject block) {
+		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guyup = guy.getPos().getY()+guy.getHeight();
+		double guydown = guy.getPos().getY();
+		double blockleft = block.getPos().getX();
+		double blockup = block.getPos().getY()+block.getHeight();
+		double blockdown = block.getPos().getY();
+		
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup)) {
+			if(Math.abs(blockleft-guyright)<2){
+				return Math.abs(blockleft-guyright);
+			}
+			else {
+				return 10; //Out of range
+			}
+		}
+		else {
+			return 10; //Out of range
+		}
+	}
+	
+	private PhysObject onFloor(Square guy) {
+		Iterator<PhysObject> it = getBlocks().iterator();
+		while(it.hasNext()) {
+			PhysObject nextblock = it.next();
+			if(onFloorOne(guy, nextblock)) {
+				return nextblock;
+			}
+		}
+		return null;
+	}
+	
+	private boolean onFloorOne(Square guy, PhysObject block) {
+		double guyleft = guy.getPos().getX();
+		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guydown = guy.getPos().getY();
+		double blockleft = block.getPos().getX();
+		double blockright = block.getPos().getX()+block.getWidth();
+		double blockup = block.getPos().getY();
+		
+		if((blockleft<guyleft && guyleft<blockright) || 
+				(blockleft<guyright && guyright<blockright)) {
+			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
+			if(Math.abs(blockup-guydown)<2){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	
+	private void freeSim() {
+		//TODO
+	}
+	
+	public void updateFrame(Move move) {
+		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
+			freeSim();  // just simulate another frame.
+		}
+		else {
+			Square activePlayer = (Square)getActivePlayer();
+			PhysObject floor = onFloor(activePlayer);
+			if (floor!=null) { //if the player is standing on a block
+				activePlayer.setYvel(0);
+				activePlayer.setPos(new Point2D.Double
+				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
+					if(move.getJump()) {
+					activePlayer.setYvel(20);
+				}
+				switch(move.getDirection()) {
+					case "Left" : if (wallDistL(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+					}
+					case "Right": if (wallDistR(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
+					}
+					case "None" : //do nothing
+					default     : System.out.println("Physics engine has detected an invalid move string.");
+				}
+			}
+			else {
+				switch(move.getDirection()) {
+				case "Left" : if (wallDistL(activePlayer)<2){
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+					activePlayer.getPos().getY()));
+				} else {
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+				}
+				case "Right": if (wallDistR(activePlayer)<2){
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
+					activePlayer.getPos().getY()));
+				} else {
+					activePlayer.setPos
+					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
+				}
+				case "None" : //do nothing
+				default     : System.out.println("Physics engine has detected an invalid move string.");
+				}
+				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
+				activePlayer.getPos().getY()+activePlayer.getYvel()));
+				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+			}
+		}
+	}
+	
 	
 	/**
 	 * Used on the client-side, receiving an update string from the server.
@@ -269,16 +318,7 @@ public class Board {
 		return q.take();
 	}
 	
-	public ArrayList<PhysObject> getChanged() {
-		return changed;
-	}
-	
-	public ArrayList<TerrainBlock> getBlocks(){
-		return blocks;
-		
-	}
-	
-	public ArrayList<Square> getSquares(){
-		return squares;
+	public ArrayList<PhysObject> getObjects(){
+		return objects;
 	}
 }
