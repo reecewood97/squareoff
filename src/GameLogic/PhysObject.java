@@ -44,6 +44,16 @@ public class PhysObject {
 		this.height = height;
 	}
 	
+	public void update() {
+		setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
+		setYvel(getYvel()-getGrav());
+	}
+	
+	public boolean collides(PhysObject object) {
+		//This method should be overrriden by every other PhysObject
+		return false;
+	}
+	
 	public boolean getGravity() {
 		return gravity;
 	}
@@ -78,6 +88,10 @@ public class PhysObject {
 	
 	public int getWidth() {
 		return width;
+	}
+	
+	public String getName(){
+		return name;
 	}
 	
 	public void setGravity(boolean gravity) {
@@ -117,10 +131,6 @@ public class PhysObject {
 	public void setWidth(int newWidth) {
 		this.width = newWidth;
 		this.changed = true;
-	}
-	
-	public String getName(){
-		return name;
 	}
 	
 	public void setName(String newname){

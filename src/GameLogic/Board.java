@@ -200,12 +200,29 @@ public ArrayList<PhysObject> getBlocks(){
 	}
 	
 	private void freeSim() {
-		//TODO
+		//This is going to be relatively quite slow. Perhaps it can be improved later.
+		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
+		for (PhysObject obj : objs) {
+			obj.update();
+		}
+		for (int i = 0; i < objs.size(); i++) {
+			for (int j = i; j < objs.size(); j++) {
+				if(objs.get(i).collides(objs.get(j))){
+					//TODO resolveCollision(objs.get(i),objs.get(j));???
+				}
+			}
+		}
+		return;
 	}
 	
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim();  // just simulate another frame.
+		}
+		else if (move.getWeaponMove()) {
+			move = (WeaponMove)move;
+			//TODO
+			freeState = true;
 		}
 		else {
 			Square activePlayer = (Square)getActivePlayer();
@@ -260,7 +277,7 @@ public ArrayList<PhysObject> getBlocks(){
 				default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
 				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-				activePlayer.getPos().getY()+activePlayer.getYvel()));
+						activePlayer.getPos().getY()+activePlayer.getYvel()));
 				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 		}

@@ -8,12 +8,18 @@ public class Move {
 	private int squareID;
 	private String direction;
 	private boolean jump;
+	private boolean weapon;
 	
 	public Move(int playerColour, int squareID, String direction, boolean jump) {
 		this.playerColour = playerColour;
 		this.squareID = squareID;
 		this.direction = direction;
 		this.jump = jump;
+		this.weapon = false;
+	}
+	
+	public void setWeapon(boolean wep) {
+		this.weapon = wep;
 	}
 	
 	public int getPlayerColour() {
@@ -30,6 +36,10 @@ public class Move {
 	
 	public boolean getJump() {
 		return jump;
+	}
+	
+	public boolean getWeaponMove() {
+		return weapon;
 	}
 
 }
