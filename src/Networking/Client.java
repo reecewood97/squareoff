@@ -1,8 +1,9 @@
 package Networking;
 
 import java.net.*;
+import java.util.ArrayList;
+
 import GameLogic.Board;
-import GameLogic.UserInput;
 import Graphics.Screen;
 import Graphics.SplashSplash;
 
@@ -15,22 +16,27 @@ import java.io.*;
  */
 public class Client {
 	
+	private String name;
+	private boolean isHost;
 	private Socket socket;
-	private PrintStream toServer;
-	private BufferedReader fromServer;
+	private ObjectOutputStream toServer;
+	private ObjectInputStream fromServer;
 	private ClientSender sender;
 	private ClientReceiver receiver;
 	private Board board;
-	private UserInput q;
+	private MoveQueue q;
 	
 	/**
 	 * Constructor.
+	 * @param name The client's nickname.
+	 * @param isHost Whether the client is the host.
 	 */
-	public Client() {
+	public Client(String name) {
+		this.name = name;
 		socket = null;
 		toServer = null;
 		fromServer = null;
-		q = new UserInput();
+		q = new MoveQueue();
 		board = new Board();
 	}
 	
@@ -40,29 +46,37 @@ public class Client {
 	 * @param port The port connected to of the server.
 	 * @throws UnknownHostException If the host could not be found.
 	 */
-	public void connect(String ip, int port) throws UnknownHostException {
+	public boolean connect(String ip, int port) {
 		//Creates a socket connecting to the server and then creates methods to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
-			toServer = new PrintStream(socket.getOutputStream());
-			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		}
+		catch(IOException e) {
+			return false;
+		}
+		try {
+			toServer = new ObjectOutputStream(socket.getOutputStream());
+			fromServer = new ObjectInputStream(socket.getInputStream());
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
+		
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
-		@SuppressWarnings("unused")
-		Screen newui = new Screen(board,q);
+
+		Screen newui = new Screen(board, q);
 		
 		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer,q);
+		sender = new ClientSender(toServer, q, name);
 		receiver = new ClientReceiver(fromServer, board, newui);
 			
 		sender.start();
 		receiver.start();
+		
+		return true;
 	}
 	
 	/**
@@ -70,7 +84,7 @@ public class Client {
 	 */
 	public void disconnect() {
 		//Do nothing if the client is not connected.
-		if(socket == null ||socket.isClosed()) return;
+		if(socket == null || socket.isClosed()) return;
 		
 		//Close the socket and stop the threads.
 		try {
@@ -82,5 +96,13 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public ArrayList<String> getPlayers() {
+		return receiver.getPlayers();
+	}
+	
+	public void play() {
+		sender.play();
 	}
 }

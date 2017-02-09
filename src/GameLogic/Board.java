@@ -3,7 +3,9 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.lang.Math;
 
 public class Board {
@@ -216,13 +218,87 @@ public class Board {
 		}
 	}
 	
+	private boolean collides(PhysObject obj1, PhysObject obj2) {
+		if(obj1.getSolid()==obj2.getSolid()){//Or if either is not visible TODO
+			return false;
+		}
+		else {
+			if(obj1.getName().equals("TerrainBlock")) {
+				if(obj2.getName().equals("Weapon")){
+					Ellipse2D.Double circle = new Ellipse2D.Double
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					return circle.intersects
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+				}
+				else{
+					Rectangle2D.Double rect = new Rectangle2D.Double
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					return rect.intersects
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+				}
+			}
+			else {
+				if(obj1.getName().equals("Weapon")){
+					Ellipse2D.Double circle = new Ellipse2D.Double
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					return circle.intersects
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+				}
+				else {
+					Rectangle2D.Double rect = new Rectangle2D.Double
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					return rect.intersects
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+				}
+			}
+		}
+	}
+	
+	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
+		if(thing.getName().equals("Weapon")){
+			//thing.setVisible(false);
+			//block.damage(1);
+		}
+		else {
+			thing = objects.get(lspos);
+			if(true) {
+				//one for x
+			}
+			if(true) {
+				//one for y
+			}
+		}
+	}
+	
 	private void freeSim() {
-		//TODO
+		//This is going to be relatively quite slow. Perhaps it can be improved later.
+		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
+		for (PhysObject obj : objs) {
+			obj.update();
+		}
+		for (int i = 0; i < objs.size(); i++) {
+			for (int j = i+1; j < objs.size(); j++) {
+				if(collides(objs.get(i),objs.get(j))){
+					if(objs.get(j).getName().equals("TerrainBlock")) {
+						resolveCollision(objs.get(i),i,objs.get(j));
+					}
+					else {
+						resolveCollision(objs.get(j),j,objs.get(i));
+					}
+				}
+			}
+		}
+		return;
 	}
 	
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim();  // just simulate another frame.
+		}
+		else if (move.getWeaponMove()) {
+			move = (WeaponMove)move;
+			//TODO
+			freeState = true;
 		}
 		else {
 			Square activePlayer = (Square)getActivePlayer();
@@ -277,7 +353,7 @@ public class Board {
 				default     : System.out.println("Physics engine has detected an invalid move string.");
 				}
 				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-				activePlayer.getPos().getY()+activePlayer.getYvel()));
+						activePlayer.getPos().getY()+activePlayer.getYvel()));
 				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 		}
@@ -288,42 +364,44 @@ public class Board {
 	 * Used on the client-side, receiving an update string from the server.
 	 * @param update The update string.
 	 */
-	public void update(String update) {
-		System.out.println(update);
-		String[] updateA = update.split(" ");
-		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
-		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
-		active.setPoint(xy);
-		objects.remove(Integer.parseInt(updateA[0]));
-		objects.add(Integer.parseInt(updateA[0]), active);
+	//This method wont even be needed anymore
+	public void update(Object update) {
+//		System.out.println(update);
+//		String[] updateA = update.split(" ");
+//		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
+//		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
+//		active.setPoint(xy);
+//		objects.remove(Integer.parseInt(updateA[0]));
+//		objects.add(Integer.parseInt(updateA[0]), active);
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public void input(String input) {
-		if(input.contains("Pressed")){
-			Square active = (Square)getActivePlayer();
-			String inputKey = input.substring(8,9);
-			//System.out.println(inputKey);
-			String ret = null;
-			
-			switch(inputKey){
-			case "W" : //jump?
-				break;
-			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
-						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-						q.offer(ret);
-				break;
-			case "S" : //duck?
-				break;
-			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
-						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-						q.offer(ret);
-				break;
-			}
-		}
+	public void input(Move input){
+	//public void input(String input) {
+//		if(input.contains("Pressed")){
+//			Square active = (Square)getActivePlayer();
+//			String inputKey = input.substring(8,9);
+//			//System.out.println(inputKey);
+//			String ret = null;
+//			
+//			switch(inputKey){
+//			case "W" : //jump?
+//				break;
+//			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
+//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+//						q.offer(ret);
+//				break;
+//			case "S" : //duck?
+//				break;
+//			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
+//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+//						q.offer(ret);
+//				break;
+//			}
+//		}
 	}
 	
 	/**

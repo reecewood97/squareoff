@@ -1,39 +1,56 @@
 package Networking;
 
 import java.io.*;
+import java.util.ArrayList;
+
 import GameLogic.Board;
 
 public class ServerSender extends Thread {
 
-	private PrintStream serverOutput;
+	private ObjectOutputStream toClient;
 	private Board board;
-	private boolean running;
+	private ArrayList<String> players;
+	private boolean inGame;
 	
-	public ServerSender(PrintStream serverOutput, Board board) {
-		this.serverOutput = serverOutput;
+	public ServerSender(ObjectOutputStream toClient, Board board, ArrayList<String> players) {
+		this.toClient = toClient;
 		this.board = board;
+		this.players = players;
 	}
 	
 	public void run() {
-		running = true;
+		inGame = false;
 		
 		try {
-			while(running) {
-				System.out.println(board.getUpdate());
-				serverOutput.println(board.getUpdate()); //I actually need to pull down from the queue and give the results of the moves.
-				//board.input("");
+			toClient.writeObject(players);
+			toClient.flush();
+			while(!inGame) {
+
+			}
+			while(inGame) {
+				toClient.writeObject((board.getUpdate()));
 				sleep(40);
 			}
 			
-			serverOutput.close();
+			toClient.close();
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
-			//TODO
+			System.exit(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
 	public void close() {
-		running = false;
+		inGame = true;
+		inGame = false;
+		try {
+			toClient.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import GameLogic.Board;
 import GameLogic.UserInput;
+import Networking.MoveQueue;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame {
@@ -15,9 +16,8 @@ public class Screen extends JFrame {
     int framewidth = 1500;
     int frameHeight = 700;
     private ScreenBoard board;
-  
-    public Screen(Board newboard,UserInput q){
-    	
+    public Screen(Board newboard,MoveQueue q){
+
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
@@ -52,7 +52,7 @@ public class Screen extends JFrame {
     	System.out.println("sup2");
     	setVisible(true);
     }
-    	    	
+
     
     @Override
     public void paint(Graphics g) {
