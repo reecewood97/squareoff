@@ -44,10 +44,14 @@ public class ServerReceiver extends Thread {
 				board.input(input);
 				}
 			fromClient.close();	
+			
 		}
-		catch(IOException | ClassNotFoundException e) {
+		catch(IOException e) {
 			e.printStackTrace();
-			//TODO
+			System.exit(1);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	

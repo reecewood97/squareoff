@@ -51,12 +51,8 @@ public class Client {
 		try {
 			socket = new Socket(ip, port);
 		}
-		catch(UnknownHostException e) {
-			return false;
-		}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			return false;
 		}
 		
 		try {
