@@ -1,32 +1,49 @@
 package Networking;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 import GameLogic.Board;
 import GameLogic.Move;
 
 public class ServerReceiver extends Thread {
 	
-	private ObjectInputStream clientInput;
+	private ObjectInputStream fromClient;
 	private Board board;
-	private boolean running;
+	private boolean inGame;
+	private ArrayList<String> players;
 	
-	public ServerReceiver(ObjectInputStream clientInput, Board board) {
-		this.clientInput = clientInput;
+	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players) {
+		this.fromClient = fromClient;
 		this.board = board;
+		this.players = players; 
 	}
 	
 	public void run() {
-		running = true;
+		inGame = false;
 		
 		try {
+			String name = (String)fromClient.readObject();
+			if(players.size() < 4) {
+				players.add(name);
+			}
+			else {
+				//TODO
+			}
+			
+			Object stuff;
+			while(!inGame && (stuff = fromClient.readObject()) != null) {
+				if(stuff.equals(1)) {
+					inGame = true;
+				}
+			}
+			
 			Move input;
-			while(running && (input = (Move)clientInput.readObject()) != null) {				
+			while(inGame && (input = (Move)fromClient.readObject()) != null) {				
 				board.input(input);
 				}
-			clientInput.close();	
+			fromClient.close();	
 		}
 		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -35,6 +52,7 @@ public class ServerReceiver extends Thread {
 	}
 	
 	public void close() {
-		running = false;
+		inGame = true;
+		inGame = false;
 	}
 }

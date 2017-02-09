@@ -1,8 +1,9 @@
 package Networking;
 
 import java.net.*;
+import java.util.ArrayList;
+
 import GameLogic.Board;
-import GameLogic.UserInput;
 import Graphics.Screen;
 import Graphics.SplashSplash;
 
@@ -30,9 +31,8 @@ public class Client {
 	 * @param name The client's nickname.
 	 * @param isHost Whether the client is the host.
 	 */
-	public Client(String name, boolean isHost) {
+	public Client(String name) {
 		this.name = name;
-		this. isHost = isHost;
 		socket = null;
 		toServer = null;
 		fromServer = null;
@@ -46,10 +46,20 @@ public class Client {
 	 * @param port The port connected to of the server.
 	 * @throws UnknownHostException If the host could not be found.
 	 */
-	public void connect(String ip, int port) throws UnknownHostException {
+	public boolean connect(String ip, int port) {
 		//Creates a socket connecting to the server and then creates methods to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
+		}
+		catch(UnknownHostException e) {
+			return false;
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		try {
 			toServer = new ObjectOutputStream(socket.getOutputStream());
 			fromServer = new ObjectInputStream(socket.getInputStream());
 		}
@@ -60,17 +70,17 @@ public class Client {
 		
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
-		@SuppressWarnings("unused")
-		Screen newui = new Screen(board,q);
+
+		Screen newui = new Screen(board, q);
 		
 		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer,q,name);
+		sender = new ClientSender(toServer, q, name);
 		receiver = new ClientReceiver(fromServer, board, newui);
 			
 		sender.start();
 		receiver.start();
 		
-		Object o = new Object();
+		return true;
 	}
 	
 	/**
@@ -78,7 +88,7 @@ public class Client {
 	 */
 	public void disconnect() {
 		//Do nothing if the client is not connected.
-		if(socket == null ||socket.isClosed()) return;
+		if(socket == null || socket.isClosed()) return;
 		
 		//Close the socket and stop the threads.
 		try {
@@ -90,5 +100,13 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public ArrayList<String> getPlayers() {
+		return receiver.getPlayers();
+	}
+	
+	public void play() {
+		sender.play();
 	}
 }

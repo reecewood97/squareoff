@@ -1,29 +1,43 @@
 package Networking;
 
 import java.io.*;
+import java.util.ArrayList;
+
 import GameLogic.Board;
 
 public class ServerSender extends Thread {
 
-	private ObjectOutputStream serverOutput;
+	private ObjectOutputStream toClient;
 	private Board board;
-	private boolean running;
+	private ArrayList<String> players;
+	private boolean inGame;
 	
-	public ServerSender(ObjectOutputStream serverOutput, Board board) {
-		this.serverOutput = serverOutput;
+	public ServerSender(ObjectOutputStream toClient, Board board, ArrayList<String> players) {
+		this.toClient = toClient;
 		this.board = board;
+		this.players = players;
 	}
 	
 	public void run() {
-		running = true;
+		inGame = false;
 		
 		try {
-			while(running) {
-				serverOutput.writeObject((board.getUpdate()));
+			while(!inGame) {
+				toClient.writeObject(players);
+				try {
+					sleep(1000);
+				}
+				catch(InterruptedException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+			while(inGame) {
+				toClient.writeObject((board.getUpdate()));
 				sleep(40);
 			}
 			
-			serverOutput.close();
+			toClient.close();
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
@@ -35,9 +49,10 @@ public class ServerSender extends Thread {
 	}
 	
 	public void close() {
-		running = false;
+		inGame = true;
+		inGame = false;
 		try {
-			serverOutput.close();
+			toClient.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
