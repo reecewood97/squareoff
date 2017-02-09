@@ -16,6 +16,7 @@ public class PhysObject {
 	private int width;
 	private int height;
 	private String name;
+	private boolean solid;
 	
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
@@ -28,9 +29,10 @@ public class PhysObject {
 		this.attributes = new ArrayList<String>();
 		this.width = 10;
 		this.height = 10;
+		this.solid = true;
 	}
 	
-	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width) {
+	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
 		//Probably best to use this constructor
 		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
@@ -42,16 +44,13 @@ public class PhysObject {
 		this.attributes = new ArrayList<String>();
 		this.width = width;
 		this.height = height;
+		this.solid = solid;
+		this.name = "";
 	}
 	
 	public void update() {
 		setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
 		setYvel(getYvel()-getGrav());
-	}
-	
-	public boolean collides(PhysObject object) {
-		//This method should be overrriden by every other PhysObject
-		return false;
 	}
 	
 	public boolean getGravity() {
@@ -92,6 +91,10 @@ public class PhysObject {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public boolean getSolid() {
+		return solid;
 	}
 	
 	public void setGravity(boolean gravity) {
@@ -136,6 +139,10 @@ public class PhysObject {
 	public void setName(String newname){
 		this.name = newname;
 		
+	}
+	
+	public void setSolid(boolean s) {
+		this.solid = s;
 	}
 	
 }
