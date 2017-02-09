@@ -1,5 +1,6 @@
 package Networking;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -37,18 +38,14 @@ public class ClientReceiver extends Thread {
 		inGame = false;
 		
 		try {
+			//server.readObject();
 			while(!inGame) {
-				Object ob = server.readObject();
-				if(players.getClass().isInstance(ob))
-					players = (ArrayList<String>) server.readObject();
 				
 			}
 			
 			while(inGame) {
 				board.update(server.readObject());
 			}
-			
-
 		}
 		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();

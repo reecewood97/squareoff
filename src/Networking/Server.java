@@ -35,7 +35,7 @@ public class Server extends Thread {
 		try {
 			while(running) {
 				Socket s = socket.accept();
-				
+
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
 				new ServerReceiver(fromClient, board, players).start();
 				

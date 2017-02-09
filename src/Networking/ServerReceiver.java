@@ -27,10 +27,14 @@ public class ServerReceiver extends Thread {
 			String name = (String)fromClient.readObject();
 			if(players.size() < 4) {
 				players.add(name);
+				
 			}
 			else {
 				//TODO
 			}
+			
+			
+			while(!inGame) System.out.println(fromClient.readObject());
 			
 			Object stuff;
 			while(!inGame && (stuff = fromClient.readObject()) != null) {
@@ -49,7 +53,8 @@ public class ServerReceiver extends Thread {
 		catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
-		} catch (ClassNotFoundException e) {
+		} 
+		catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}

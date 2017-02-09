@@ -54,7 +54,6 @@ public class Client {
 		catch(IOException e) {
 			return false;
 		}
-		
 		try {
 			toServer = new ObjectOutputStream(socket.getOutputStream());
 			fromServer = new ObjectInputStream(socket.getInputStream());
@@ -63,6 +62,7 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
 		
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();

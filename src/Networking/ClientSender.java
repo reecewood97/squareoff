@@ -68,4 +68,15 @@ public class ClientSender extends Thread {
 			System.exit(1);
 		}
 	}
+	
+	public void send(Object obj) {
+		try {
+			server.writeObject(obj);
+			server.flush();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
 }
