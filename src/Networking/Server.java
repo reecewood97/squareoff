@@ -30,16 +30,16 @@ public class Server extends Thread {
 			while(running) {
 				Socket s = socket.accept();
 				
-				BufferedReader clientInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-				new ServerReceiver(clientInput, board).start();
+				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
+				new ServerReceiver(fromClient, board).start();
 				
-				PrintStream serverOutput = new PrintStream(s.getOutputStream());
-				new ServerSender(serverOutput, board).start();
+				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
+				new ServerSender(toClient, board).start();
 			} 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			//TODO
+			System.exit(1);
 		}
 	}
 	

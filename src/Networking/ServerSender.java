@@ -5,11 +5,11 @@ import GameLogic.Board;
 
 public class ServerSender extends Thread {
 
-	private PrintStream serverOutput;
+	private ObjectOutputStream serverOutput;
 	private Board board;
 	private boolean running;
 	
-	public ServerSender(PrintStream serverOutput, Board board) {
+	public ServerSender(ObjectOutputStream serverOutput, Board board) {
 		this.serverOutput = serverOutput;
 		this.board = board;
 	}
@@ -19,9 +19,7 @@ public class ServerSender extends Thread {
 		
 		try {
 			while(running) {
-				System.out.println(board.getUpdate());
-				serverOutput.println(board.getUpdate()); //I actually need to pull down from the queue and give the results of the moves.
-				//board.input("");
+				serverOutput.writeObject((board.getUpdate()));
 				sleep(40);
 			}
 			
@@ -29,11 +27,20 @@ public class ServerSender extends Thread {
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
-			//TODO
+			System.exit(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
 	public void close() {
 		running = false;
+		try {
+			serverOutput.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 }

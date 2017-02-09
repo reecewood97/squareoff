@@ -1,8 +1,11 @@
 package Networking;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import GameLogic.Move;
 import GameLogic.UserInput;
 
 /**
@@ -12,18 +15,19 @@ import GameLogic.UserInput;
  */
 public class ClientSender extends Thread {
 
-	private PrintStream server;
-	private UserInput input;
+	private ObjectOutputStream server;
+	private MoveQueue q;
 	private boolean running;
+	private String name;
 	
 	/**
 	 * Constructor.
 	 * @param server The PrintStream used to send messages to a server.
 	 */
-	public ClientSender(PrintStream server,UserInput q) {
+	public ClientSender(ObjectOutputStream server, MoveQueue q, String name) {
 		this.server = server;
-		input = new UserInput();
-		this.input = q;
+		this.q = q;
+		this.name = name;
 	}
 	
 	/**
@@ -34,11 +38,12 @@ public class ClientSender extends Thread {
 		
 		try {
 			while(running) {
-				String nextInput = input.getInputStrings(); // I'm pretty sure we're safer having a q here so we don't get odd  null points.
+				Move move = q.getMove(); 
+				//String nextInput = input.getInputStrings(); // I'm pretty sure we're safer having a q here so we don't get odd  null points.
 				//for(String s: nextInputs) {
 				//	server.print(s);	
 				//}
-				server.println(nextInput);
+				server.writeObject(move);
 				server.flush();
 				
 				sleep(40);
@@ -48,7 +53,10 @@ public class ClientSender extends Thread {
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
-			//TODO
+			System.exit(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	

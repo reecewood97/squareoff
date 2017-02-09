@@ -15,22 +15,28 @@ import java.io.*;
  */
 public class Client {
 	
+	private String name;
+	private boolean isHost;
 	private Socket socket;
-	private PrintStream toServer;
-	private BufferedReader fromServer;
+	private ObjectOutputStream toServer;
+	private ObjectInputStream fromServer;
 	private ClientSender sender;
 	private ClientReceiver receiver;
 	private Board board;
-	private UserInput q;
+	private MoveQueue q;
 	
 	/**
 	 * Constructor.
+	 * @param name The client's nickname.
+	 * @param isHost Whether the client is the host.
 	 */
-	public Client() {
+	public Client(String name, boolean isHost) {
+		this.name = name;
+		this. isHost = isHost;
 		socket = null;
 		toServer = null;
 		fromServer = null;
-		q = new UserInput();
+		q = new MoveQueue();
 		board = new Board();
 	}
 	
@@ -44,8 +50,8 @@ public class Client {
 		//Creates a socket connecting to the server and then creates methods to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
-			toServer = new PrintStream(socket.getOutputStream());
-			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			toServer = new ObjectOutputStream(socket.getOutputStream());
+			fromServer = new ObjectInputStream(socket.getInputStream());
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -58,11 +64,13 @@ public class Client {
 		Screen newui = new Screen(board,q);
 		
 		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer,q);
+		sender = new ClientSender(toServer,q,name);
 		receiver = new ClientReceiver(fromServer, board, newui);
 			
 		sender.start();
 		receiver.start();
+		
+		Object o = new Object();
 	}
 	
 	/**

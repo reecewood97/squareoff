@@ -288,42 +288,44 @@ public ArrayList<PhysObject> getBlocks(){
 	 * Used on the client-side, receiving an update string from the server.
 	 * @param update The update string.
 	 */
-	public void update(String update) {
-		System.out.println(update);
-		String[] updateA = update.split(" ");
-		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
-		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
-		active.setPoint(xy);
-		objects.remove(Integer.parseInt(updateA[0]));
-		objects.add(Integer.parseInt(updateA[0]), active);
+	//This method wont even be needed anymore
+	public void update(Object update) {
+//		System.out.println(update);
+//		String[] updateA = update.split(" ");
+//		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
+//		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
+//		active.setPoint(xy);
+//		objects.remove(Integer.parseInt(updateA[0]));
+//		objects.add(Integer.parseInt(updateA[0]), active);
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public void input(String input) {
-		if(input.contains("Pressed")){
-			Square active = (Square)getActivePlayer();
-			String inputKey = input.substring(8,9);
-			//System.out.println(inputKey);
-			String ret = null;
-			
-			switch(inputKey){
-			case "W" : //jump?
-				break;
-			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
-						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-						q.offer(ret);
-				break;
-			case "S" : //duck?
-				break;
-			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
-						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-						q.offer(ret);
-				break;
-			}
-		}
+	public void input(Move input){
+	//public void input(String input) {
+//		if(input.contains("Pressed")){
+//			Square active = (Square)getActivePlayer();
+//			String inputKey = input.substring(8,9);
+//			//System.out.println(inputKey);
+//			String ret = null;
+//			
+//			switch(inputKey){
+//			case "W" : //jump?
+//				break;
+//			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
+//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+//						q.offer(ret);
+//				break;
+//			case "S" : //duck?
+//				break;
+//			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
+//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+//						q.offer(ret);
+//				break;
+//			}
+//		}
 	}
 	
 	/**

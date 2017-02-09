@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import GameLogic.Board;
 import GameLogic.UserInput;
+import Networking.MoveQueue;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame {
@@ -17,7 +18,7 @@ public class Screen extends JFrame {
     private ScreenBoard board;
    // private Audio audio;
     
-    public Screen(Board newboard,UserInput q){
+    public Screen(Board newboard,MoveQueue q){
     	
     	//this.audio = audio;
     	
@@ -67,7 +68,7 @@ public class Screen extends JFrame {
 //    	board = listeners.hangOn2(board);
 //    	   	
 //    	setVisible(true);
-    }
+    
     
     @Override
     public void paint(Graphics g) {

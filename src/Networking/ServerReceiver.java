@@ -2,16 +2,18 @@ package Networking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import GameLogic.Board;
+import GameLogic.Move;
 
 public class ServerReceiver extends Thread {
 	
-	private BufferedReader clientInput;
+	private ObjectInputStream clientInput;
 	private Board board;
 	private boolean running;
 	
-	public ServerReceiver(BufferedReader clientInput, Board board) {
+	public ServerReceiver(ObjectInputStream clientInput, Board board) {
 		this.clientInput = clientInput;
 		this.board = board;
 	}
@@ -20,14 +22,13 @@ public class ServerReceiver extends Thread {
 		running = true;
 		
 		try {
-			String input;
-			while(running && (input = clientInput.readLine()) != null) {		
-				board.input(input); //This will also return a string that should be stuck into a queue.
-			}
-			clientInput.close();
-			
+			Move input;
+			while(running && (input = (Move)clientInput.readObject()) != null) {				
+				board.input(input);
+				}
+			clientInput.close();	
 		}
-		catch(IOException e) {
+		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			//TODO
 		}

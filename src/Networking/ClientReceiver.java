@@ -2,6 +2,7 @@ package Networking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import GameLogic.Board;
 import Graphics.Screen;
@@ -13,7 +14,7 @@ import Graphics.Screen;
  */
 public class ClientReceiver extends Thread {
 	
-	private BufferedReader server;
+	private ObjectInputStream server;
 	private Board board;
 	private boolean running;
 	private Screen UI;
@@ -22,7 +23,7 @@ public class ClientReceiver extends Thread {
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(BufferedReader server, Board board, Screen UI) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen UI) {
 		this.server = server;
 		this.board = board;
 		this.UI = UI;
@@ -37,14 +38,14 @@ public class ClientReceiver extends Thread {
 		//Constantly waits for a string from the server and sends it to the board.
 		try {
 			while(running) {
-				board.update(server.readLine());
+				board.update(server.readObject());
 				//Updoot fran
 			}
 			
 			//Closes the BufferedReader if the thread has been itself closed.
 
 		}
-		catch(IOException e) {
+		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
