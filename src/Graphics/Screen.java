@@ -14,7 +14,8 @@ public class Screen extends JFrame {
    
     int framewidth = 1500;
     int frameHeight = 700;
-    
+    private ScreenBoard board;
+  
     public Screen(Board newboard,UserInput q){
     	
     	setBounds(100, 100, framewidth, frameHeight);
@@ -26,16 +27,13 @@ public class Screen extends JFrame {
     	ButtonPanel controls = new ButtonPanel(this,newboard);
     	controls.setBackground(lightblue);
     	
-    	System.out.println("sup");
     	if(newboard.getWinner() == -1){
-    		
+
     		ScreenBoard sboard = new ScreenBoard(newboard);
     		sboard.setBackground(lightblue);
     		setLayout(new BorderLayout());
     		add(sboard, BorderLayout.CENTER);
     		add(controls, BorderLayout.NORTH);
-    		
-    		System.out.println("sup");
  
     		HangerOn listeners = new HangerOn(q);
     		sboard = listeners.hangOn2(sboard);
@@ -54,7 +52,7 @@ public class Screen extends JFrame {
     	System.out.println("sup2");
     	setVisible(true);
     }
-    
+    	    	
     
     @Override
     public void paint(Graphics g) {
@@ -64,11 +62,8 @@ public class Screen extends JFrame {
     	System.out.println("sup3");
     	Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-      
+            RenderingHints.VALUE_ANTIALIAS_ON);  
        
     }
-    
-       
     
 }

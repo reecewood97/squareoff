@@ -2,6 +2,7 @@ package GameLogic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.awt.geom.Point2D;
 import java.lang.Math;
 
@@ -11,6 +12,7 @@ public class Board {
 	private int squareID;
 	private ArrayList<PhysObject> objects;
 	private boolean freeState;
+	private ArrayBlockingQueue<String> q;
 	private int winner;
 	
 	public Board(){
@@ -18,6 +20,8 @@ public class Board {
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
+
+		this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -66,7 +70,7 @@ public class Board {
 	}
 	
 	public PhysObject getActivePlayer() {
-		int x = 4*player + squareID;
+		int x = player + squareID;
 		return objects.get(x);
 	}
 	
@@ -111,7 +115,6 @@ public class Board {
 		
 		return squares;
 	}
-
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -280,44 +283,56 @@ public class Board {
 		}
 	}
 	
+	
 	/**
 	 * Used on the client-side, receiving an update string from the server.
 	 * @param update The update string.
 	 */
 	public void update(String update) {
-		//This would be way easier if we handed whole new boards over to be fair - bit worried about phys objects is all.
+		System.out.println(update);
+		String[] updateA = update.split(" ");
+		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
+		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
+		active.setPoint(xy);
+		objects.remove(Integer.parseInt(updateA[0]));
+		objects.add(Integer.parseInt(updateA[0]), active);
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public String input(String input) {
+	public void input(String input) {
 		if(input.contains("Pressed")){
 			Square active = (Square)getActivePlayer();
-			String inputKey = input.substring(8,8);
+			String inputKey = input.substring(8,9);
+			//System.out.println(inputKey);
+			String ret = null;
 			
 			switch(inputKey){
 			case "W" : //jump?
 				break;
-			case "A" : active.setXvel(active.getXvel()-1);
+			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
+						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+						q.offer(ret);
 				break;
 			case "S" : //duck?
 				break;
-			case "D" : active.setXvel(active.getXvel()+1);
+			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
+						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
+						q.offer(ret);
 				break;
 			}
 		}
-
-		return null;
 	}
 	
 	/**
 	 * Used on the server-side to send an update to all the client for how their boards should look.
 	 * @return The update sent.
+	 * @throws InterruptedException 
 	 */
-	public ArrayList<PhysObject> getUpdate() {
-		return objects;
+	public String getUpdate() throws InterruptedException {
+		return q.take();
 	}
 	
 	public ArrayList<PhysObject> getObjects(){

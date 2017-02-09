@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import GameLogic.Board;
+import Graphics.Screen;
 
 /**
  * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.
@@ -15,14 +16,16 @@ public class ClientReceiver extends Thread {
 	private BufferedReader server;
 	private Board board;
 	private boolean running;
+	private Screen UI;
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(BufferedReader server, Board board) {
+	public ClientReceiver(BufferedReader server, Board board, Screen UI) {
 		this.server = server;
 		this.board = board;
+		this.UI = UI;
 	}
 	
 	/**
@@ -35,6 +38,7 @@ public class ClientReceiver extends Thread {
 		try {
 			while(running) {
 				board.update(server.readLine());
+				//Updoot fran
 			}
 			
 			//Closes the BufferedReader if the thread has been itself closed.

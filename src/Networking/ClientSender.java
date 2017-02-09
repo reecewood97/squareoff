@@ -38,8 +38,7 @@ public class ClientSender extends Thread {
 				//for(String s: nextInputs) {
 				//	server.print(s);	
 				//}
-				server.print(nextInput);
-				server.println();
+				server.println(nextInput);
 				server.flush();
 				
 				sleep(40);

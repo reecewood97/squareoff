@@ -52,14 +52,14 @@ public class Client {
 			System.exit(1);
 		}
 		
-		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer,q);
-		receiver = new ClientReceiver(fromServer, board);
-		
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
 		@SuppressWarnings("unused")
 		Screen newui = new Screen(board,q);
+		
+		//Creates and starts the  client-side threads to communicate with the server.
+		sender = new ClientSender(toServer,q);
+		receiver = new ClientReceiver(fromServer, board, newui);
 			
 		sender.start();
 		receiver.start();
