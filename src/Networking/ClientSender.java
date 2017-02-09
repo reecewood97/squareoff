@@ -16,7 +16,7 @@ import GameLogic.UserInput;
 public class ClientSender extends Thread {
 
 	private ObjectOutputStream server;
-	private MoveQueue q;
+	private Queue q;
 	private boolean running;
 	private String name;
 	
@@ -24,7 +24,7 @@ public class ClientSender extends Thread {
 	 * Constructor.
 	 * @param server The PrintStream used to send messages to a server.
 	 */
-	public ClientSender(ObjectOutputStream server, MoveQueue q, String name) {
+	public ClientSender(ObjectOutputStream server, Queue q, String name) {
 		this.server = server;
 		this.q = q;
 		this.name = name;
@@ -38,7 +38,7 @@ public class ClientSender extends Thread {
 		
 		try {
 			while(running) {
-				Move move = q.getMove(); 
+				String move = (String)q.get(); 
 				//String nextInput = input.getInputStrings(); // I'm pretty sure we're safer having a q here so we don't get odd  null points.
 				//for(String s: nextInputs) {
 				//	server.print(s);	

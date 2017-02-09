@@ -18,15 +18,17 @@ public class ClientReceiver extends Thread {
 	private Board board;
 	private boolean running;
 	private Screen UI;
+	private Queue q;
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen UI) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen UI, Queue q) {
 		this.server = server;
 		this.board = board;
 		this.UI = UI;
+		this.q = q;
 	}
 	
 	/**
@@ -38,7 +40,9 @@ public class ClientReceiver extends Thread {
 		//Constantly waits for a string from the server and sends it to the board.
 		try {
 			while(running) {
-				board.update(server.readObject());
+				Board x = (Board) server.readObject();
+				board.update(x);
+				UI = new Screen(x,q);
 				//Updoot fran
 			}
 			

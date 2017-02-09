@@ -23,7 +23,7 @@ public class Client {
 	private ClientSender sender;
 	private ClientReceiver receiver;
 	private Board board;
-	private MoveQueue q;
+	private Queue q;
 	
 	/**
 	 * Constructor.
@@ -36,7 +36,7 @@ public class Client {
 		socket = null;
 		toServer = null;
 		fromServer = null;
-		q = new MoveQueue();
+		q = new Queue();
 		board = new Board();
 	}
 	
@@ -65,7 +65,7 @@ public class Client {
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer,q,name);
-		receiver = new ClientReceiver(fromServer, board, newui);
+		receiver = new ClientReceiver(fromServer, board, newui,q);
 			
 		sender.start();
 		receiver.start();

@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import GameLogic.UserInput;
-import Networking.MoveQueue;
+import Networking.Queue;
 
 public class HangerOn implements KeyListener,MouseListener { 
-	private MoveQueue q;
+	private Queue q;
 	
-	public HangerOn(MoveQueue q){
+	public HangerOn(Queue q){
 		this.q =q;
 	}
 	
@@ -38,7 +38,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 String keyString;
 		 int keyCode = e.getKeyCode();
 		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode);
-		 //q.addInput();
+		 q.add(keyString);
 		 panel.grabFocus();
 		 } 
 	 
@@ -63,7 +63,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
 		 String clickedEvent = "Clicked " + e.getPoint();
-		 //q.addInput();
+		 q.add(clickedEvent);
 		 //System.out.println("works!");
 		 panel.grabFocus();
 	 }

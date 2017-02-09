@@ -12,7 +12,7 @@ public class Board {
 	private int squareID;
 	private ArrayList<PhysObject> objects;
 	private boolean freeState;
-	private ArrayBlockingQueue<String> q;
+	private ArrayBlockingQueue<Board> q;
 	private int winner;
 	
 	public Board(){
@@ -20,7 +20,7 @@ public class Board {
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
+		this.q = new ArrayBlockingQueue<Board>(100); //This handles the moves that need to be sent to clients.
 		this.winner = 0;
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -303,29 +303,34 @@ public ArrayList<PhysObject> getBlocks(){
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs
 	 */
-	public void input(Move input){
-	//public void input(String input) {
-//		if(input.contains("Pressed")){
-//			Square active = (Square)getActivePlayer();
-//			String inputKey = input.substring(8,9);
-//			//System.out.println(inputKey);
-//			String ret = null;
-//			
-//			switch(inputKey){
-//			case "W" : //jump?
-//				break;
-//			case "A" : active.setPoint(new Point2D.Double(active.getPoint().getX()-1,active.getPoint().getY()));
+	//public void input(Move input){
+	public void input(String input) {
+		if(input.contains("Pressed")){
+			Square active = (Square)getActivePlayer();
+			String inputKey = input.substring(8,9);
+			//System.out.println(inputKey);
+			String ret = null;
+			Move mv;
+			
+			switch(inputKey){
+			case "W" : //jump?
+				break;
+			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
+						updateFrame(mv);
+						q.add(this);
 //						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
 //						q.offer(ret);
-//				break;
-//			case "S" : //duck?
-//				break;
-//			case "D" : active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
+			case "S" : //duck?
+				break;
+			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
+						updateFrame(mv);
+						q.add(this);
+//						active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
 //						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
 //						q.offer(ret);
-//				break;
-//			}
-//		}
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -333,7 +338,7 @@ public ArrayList<PhysObject> getBlocks(){
 	 * @return The update sent.
 	 * @throws InterruptedException 
 	 */
-	public String getUpdate() throws InterruptedException {
+	public Board getUpdate() throws InterruptedException {
 		return q.take();
 	}
 	

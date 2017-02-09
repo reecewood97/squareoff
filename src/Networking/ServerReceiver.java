@@ -22,8 +22,8 @@ public class ServerReceiver extends Thread {
 		running = true;
 		
 		try {
-			Move input;
-			while(running && (input = (Move)clientInput.readObject()) != null) {				
+			String input;
+			while(running && (input = (String)clientInput.readObject()) != null) {				
 				board.input(input);
 				}
 			clientInput.close();	
