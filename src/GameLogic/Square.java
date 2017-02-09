@@ -13,12 +13,13 @@ public class Square extends PhysObject {
 	private boolean alive;
 	
 	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
-		super(true, pos, 10, 10);
+		super(true, pos, 10, 10, false);
 		this.playerID = playerID;
 		this.colour = colour;
 		this.squareID = squareID;
 		this.point = pos;
 		this.alive = true;
+		this.setName("Square");
 	}
 	
 	public int getPlayerID() {

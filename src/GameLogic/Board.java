@@ -3,7 +3,9 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.lang.Math;
 
 public class Board {
@@ -199,6 +201,58 @@ public ArrayList<PhysObject> getBlocks(){
 		}
 	}
 	
+	private boolean collides(PhysObject obj1, PhysObject obj2) {
+		if(obj1.getSolid()==obj2.getSolid()){//Or if either is not visible TODO
+			return false;
+		}
+		else {
+			if(obj1.getName().equals("TerrainBlock")) {
+				if(obj2.getName().equals("Weapon")){
+					Ellipse2D.Double circle = new Ellipse2D.Double
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					return circle.intersects
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+				}
+				else{
+					Rectangle2D.Double rect = new Rectangle2D.Double
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					return rect.intersects
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+				}
+			}
+			else {
+				if(obj1.getName().equals("Weapon")){
+					Ellipse2D.Double circle = new Ellipse2D.Double
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					return circle.intersects
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+				}
+				else {
+					Rectangle2D.Double rect = new Rectangle2D.Double
+							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					return rect.intersects
+							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+				}
+			}
+		}
+	}
+	
+	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
+		if(thing.getName().equals("Weapon")){
+			//thing.setVisible(false);
+			//block.damage(1);
+		}
+		else {
+			thing = objects.get(lspos);
+			if(true) {
+				//one for x
+			}
+			if(true) {
+				//one for y
+			}
+		}
+	}
+	
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
@@ -206,9 +260,14 @@ public ArrayList<PhysObject> getBlocks(){
 			obj.update();
 		}
 		for (int i = 0; i < objs.size(); i++) {
-			for (int j = i; j < objs.size(); j++) {
-				if(objs.get(i).collides(objs.get(j))){
-					//TODO resolveCollision(objs.get(i),objs.get(j));???
+			for (int j = i+1; j < objs.size(); j++) {
+				if(collides(objs.get(i),objs.get(j))){
+					if(objs.get(j).getName().equals("TerrainBlock")) {
+						resolveCollision(objs.get(i),i,objs.get(j));
+					}
+					else {
+						resolveCollision(objs.get(j),j,objs.get(i));
+					}
 				}
 			}
 		}
