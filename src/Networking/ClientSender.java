@@ -14,7 +14,7 @@ public class ClientSender extends Thread {
 
 	private ObjectOutputStream server;
 	private Queue q;
-	private boolean inLobby, inGame;
+	private boolean inGame;
 	private String name;
 	
 	/**
@@ -28,12 +28,16 @@ public class ClientSender extends Thread {
 	}
 	
 	public void run() {
-		inLobby = true;
 		inGame = false;
 		
 		try {
 			server.writeObject(name);
 			server.flush();
+			
+			while(!inGame) {
+				server.writeObject("hello");
+				server.flush();
+			}
 		
 			while(inGame) {
 				Object obj = q.take(); 
@@ -55,7 +59,6 @@ public class ClientSender extends Thread {
 	
 	public void close() {
 		inGame = false;
-		inLobby = false;
 	}
 	
 	public void play() {

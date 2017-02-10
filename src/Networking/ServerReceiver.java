@@ -26,8 +26,7 @@ public class ServerReceiver extends Thread {
 		try {
 			String name = (String)fromClient.readObject();
 			if(players.size() < 4) {
-				players.add(name);
-				
+				players.add(name);	
 			}
 			else {
 				//TODO
