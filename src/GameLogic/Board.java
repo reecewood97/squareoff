@@ -310,6 +310,7 @@ public class Board {
 					if(move.getJump()) {
 					activePlayer.setYvel(20);
 				}
+					//System.out.println("test");
 				switch(move.getDirection()) {
 					case "Left" : if (wallDistL(activePlayer)<2){
 						activePlayer.setPos
@@ -392,18 +393,14 @@ public class Board {
 			case "W" : //jump?
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
+						//System.out.println("Hey left sorta works");
 						updateFrame(mv);
 						q.add(objects);
-//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-//						q.offer(ret);
 			case "S" : //duck?
 				break;
 			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
 						updateFrame(mv);
 						q.add(objects);
-//						active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
-//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-//						q.offer(ret);
 				break;
 			}
 		}

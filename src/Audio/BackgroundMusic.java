@@ -1,8 +1,10 @@
+<<<<<<< HEAD:src/Graphics/BackgroundMusic.java
 package graphics;
+=======
+package Audio;
+>>>>>>> ad87e017eaa9288847a307119dbb434aa6e55a06:src/Audio/BackgroundMusic.java
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
