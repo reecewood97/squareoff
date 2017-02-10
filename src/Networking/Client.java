@@ -1,11 +1,11 @@
-package Networking;
+package networking;
 
 import java.net.*;
 import java.util.ArrayList;
 
-import GameLogic.Board;
-import Graphics.Screen;
-import Graphics.SplashSplash;
+import gameLogic.Board;
+import graphics.Screen;
+import graphics.SplashSplash;
 
 import java.io.*;
 
@@ -68,6 +68,7 @@ public class Client {
 		splashscreen.showSplash();
 
 		Screen newui = new Screen(board, q);
+		newui.setVisible();
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);

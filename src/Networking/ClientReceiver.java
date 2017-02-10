@@ -1,12 +1,13 @@
-package Networking;
+package networking;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import GameLogic.Board;
-import Graphics.Screen;
+import gameLogic.Board;
+import gameLogic.PhysObject;
+import graphics.Screen;
 
 /**
  * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.
@@ -32,13 +33,14 @@ public class ClientReceiver extends Thread {
 		this.board = board;
 		this.ui = ui;
 		this.q = q;
+		players = new ArrayList<String>();
 	}
 	
 	/**
 	 * Run method for the thread.
 	 */
 	public void run() {
-		inGame = false;
+		inGame = true;
 		
 		try {
 //<<<<<<< HEAD
@@ -51,11 +53,21 @@ public class ClientReceiver extends Thread {
 //=======
 			//server.readObject();
 			while(!inGame) {
-				System.out.println(server.readObject());
+				ArrayList<String> dummy = new ArrayList<String>();
+				Object ob = server.readObject();
+				if(!ob.equals(0)) 
+					dummy.add((String) ob);
+				else {
+					players = dummy;
+					dummy.clear();
+				}
+					
+					
 			}
 			
 			while(inGame) {
-				board.update(server.readObject());
+				board.setObjects((ArrayList<PhysObject>) server.readObject());
+				ui = new Screen(board,q);
 			}
 		}
 		catch(IOException | ClassNotFoundException e) {

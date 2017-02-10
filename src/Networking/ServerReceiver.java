@@ -1,11 +1,11 @@
-package Networking;
+package networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import GameLogic.Board;
-import GameLogic.Move;
+import gameLogic.Board;
+import gameLogic.Move;
 
 public class ServerReceiver extends Thread {
 	
@@ -21,15 +21,16 @@ public class ServerReceiver extends Thread {
 	}
 	
 	public void run() {
-		inGame = false;
+		inGame = true;
 		
 		try {
 			String name = (String)fromClient.readObject();
+			//TODO duplicate name
 			if(players.size() < 4) {
 				players.add(name);	
 			}
 			else {
-				//TODO
+				//TODO too many players.
 			}
 			
 			
@@ -45,7 +46,7 @@ public class ServerReceiver extends Thread {
 			String input;
 			while(inGame && (input = (String)fromClient.readObject()) != null) {				
 				board.input(input);
-				}
+			}
 			fromClient.close();	
 			
 		}

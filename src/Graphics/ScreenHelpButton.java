@@ -1,4 +1,4 @@
-package Graphics;
+package graphics;
 
 public class ScreenHelpButton {
 	

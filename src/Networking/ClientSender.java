@@ -1,8 +1,9 @@
-package Networking;
+package networking;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import GameLogic.Move;
+
+import gameLogic.Move;
 
 
 /**
@@ -28,21 +29,23 @@ public class ClientSender extends Thread {
 	}
 	
 	public void run() {
-		inGame = false;
+		inGame = true;
 		
 		try {
 			server.writeObject(name);
 			server.flush();
 			
 			while(!inGame) {
-				server.writeObject("hello");
-				server.flush();
+				//server.writeObject("");
+				//server.flush();
 			}
 		
 			while(inGame) {
 				Object obj = q.take(); 
 				server.writeObject(obj);
 				server.flush();
+				
+				sleep(40);
 			}
 			
 			server.close();

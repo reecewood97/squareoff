@@ -1,4 +1,4 @@
-package GameLogic;
+package gameLogic;
 
 public class Move {
 	//This class should represent a move.

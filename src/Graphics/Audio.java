@@ -1,4 +1,4 @@
-package Graphics;
+package graphics;
 
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;

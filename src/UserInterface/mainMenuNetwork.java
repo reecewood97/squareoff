@@ -1,9 +1,9 @@
-package UserInterface;
+package userInterface;
 
 import java.io.IOException;
 
-import Networking.Client;
-import Networking.Server;
+import networking.Client;
+import networking.Server;
 
 public class mainMenuNetwork {
 	

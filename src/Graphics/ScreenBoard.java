@@ -1,12 +1,13 @@
-package Graphics;
+package graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import GameLogic.Board;
-import GameLogic.PhysObject;
-import GameLogic.Square;
-import GameLogic.TerrainBlock;
-import GameLogic.Weapon;
+
+import gameLogic.Board;
+import gameLogic.PhysObject;
+import gameLogic.Square;
+import gameLogic.TerrainBlock;
+import gameLogic.Weapon;
 
 import java.awt.Color;
 import java.awt.Graphics;

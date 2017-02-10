@@ -4,9 +4,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
-import GameLogic.Board;
-import GameLogic.PhysObject;
-import GameLogic.Square;
+import gameLogic.Board;
+import gameLogic.PhysObject;
+import gameLogic.Square;
 
 // Coordinates size: 800 x 450
 

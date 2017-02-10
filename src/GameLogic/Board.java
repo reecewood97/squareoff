@@ -1,4 +1,4 @@
-package GameLogic;
+package gameLogic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ public class Board {
 	private int squareID;
 	private ArrayList<PhysObject> objects;
 	private boolean freeState;
-	private ArrayBlockingQueue<Board> q;
+	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
 	
 	public Board(){
@@ -22,7 +22,7 @@ public class Board {
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.q = new ArrayBlockingQueue<Board>(100); //This handles the moves that need to be sent to clients.
+		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(100); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
@@ -393,14 +393,14 @@ public class Board {
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
 						updateFrame(mv);
-						q.add(this);
+						q.add(objects);
 //						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
 //						q.offer(ret);
 			case "S" : //duck?
 				break;
 			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
 						updateFrame(mv);
-						q.add(this);
+						q.add(objects);
 //						active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
 //						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
 //						q.offer(ret);
@@ -414,11 +414,15 @@ public class Board {
 	 * @return The update sent.
 	 * @throws InterruptedException 
 	 */
-	public Board getUpdate() throws InterruptedException {
+	public ArrayList<PhysObject> getUpdate() throws InterruptedException {
 		return q.take();
 	}
 	
 	public ArrayList<PhysObject> getObjects(){
 		return objects;
+	}
+	
+	public void  setObjects(ArrayList<PhysObject> obj){
+		this.objects = obj;
 	}
 }
