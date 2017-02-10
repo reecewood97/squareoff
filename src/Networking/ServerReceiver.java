@@ -23,7 +23,8 @@ public class ServerReceiver extends Thread {
 		
 		try {
 			String input;
-			while(running && (input = (String)clientInput.readObject()) != null) {				
+			while(running && (input = (String)clientInput.readObject()) != null) {	
+				System.out.println("This is only a test2");
 				board.input(input);
 				}
 			clientInput.close();	

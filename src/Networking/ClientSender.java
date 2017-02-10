@@ -38,11 +38,8 @@ public class ClientSender extends Thread {
 		
 		try {
 			while(running) {
+				System.out.println("This is only a test");
 				String move = (String)q.get(); 
-				//String nextInput = input.getInputStrings(); // I'm pretty sure we're safer having a q here so we don't get odd  null points.
-				//for(String s: nextInputs) {
-				//	server.print(s);	
-				//}
 				server.writeObject(move);
 				server.flush();
 				

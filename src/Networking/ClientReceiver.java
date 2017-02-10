@@ -40,6 +40,7 @@ public class ClientReceiver extends Thread {
 		//Constantly waits for a string from the server and sends it to the board.
 		try {
 			while(running) {
+				System.out.println("This is only a test4");
 				Board x = (Board) server.readObject();
 				board.update(x);
 				UI = new Screen(x,q);

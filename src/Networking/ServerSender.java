@@ -19,6 +19,7 @@ public class ServerSender extends Thread {
 		
 		try {
 			while(running) {
+				System.out.println("This is only a test3");
 				serverOutput.writeObject((board.getUpdate()));
 				sleep(40);
 			}
