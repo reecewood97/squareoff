@@ -6,6 +6,8 @@ import GameLogic.Board;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
+import GameLogic.Weapon;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -48,8 +50,9 @@ public class ScreenBoard extends JPanel{
         	w = w+30;
         }
        
-       // paintBlocks(board.getBlocks(), g2d);
+        paintBlocks(board.getBlocks(), g2d);
         paintSquares(board.getSquares(),g2d);
+        paintWeapons(board.getWeapons(),g2d);
         
     }
 	
@@ -87,7 +90,7 @@ public class ScreenBoard extends JPanel{
     				g2d.fillRect(x, y, 40, 30);
     				g2d.setColor(new Color(135,206,250));
     				
-    				for(int i = 0; i <30; i++){
+    				for(int i = 0; i <25; i++){
     					
     					int randomx = ThreadLocalRandom.current().nextInt(x, x+40);
     					int randomy = ThreadLocalRandom.current().nextInt(y, y+30);
@@ -103,15 +106,11 @@ public class ScreenBoard extends JPanel{
     public void paintSquares(ArrayList<PhysObject> squares, Graphics2D g2d){
     	
     	for(PhysObject square : squares){
-    		
-    		//square = (Square) square;
-    		
+    		    		
     		int x = (int) square.getPos().getX();
-    		//System.out.println("x is: " + x);
-    		
+    	
     		int y = (int) square.getPos().getY();
     		y = 700 - y;
-    		//System.out.println("y is: " + y);
     		
     		int playernum = ((Square) square).getPlayerID();
     		
@@ -137,21 +136,23 @@ public class ScreenBoard extends JPanel{
     	
     }
    
-    /* 
-    public void paintWeapon(ArrayList<PhysObject> objs, Graphics2D g2d){
+    
+    public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
     	
-    	for(PhysObject obj: objs){
+    	for(PhysObject weapon : weapons){
     		
-    		if(obj.getType() == BombExplodeOnImpact){
+    		if (((Weapon)weapon).getInUse()){
+    			int x = (int) weapon.getPos().getX();
+    	
+    			int y = (int) weapon.getPos().getY();
+    			y = 700 - y;
     		
     			g2d.setColor(Color.BLACK);
-    			g2d.fillOval((int) obj.getPos().getX(), (int) obj.getPos().getY(), obj.getWidth(), 
-    					obj.getHeight());
+    			g2d.fillOval(x,y,10,10);
+    	
     		}
     	}
     	
-    	
     }
-	*/
 	
 }

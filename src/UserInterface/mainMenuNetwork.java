@@ -1,18 +1,44 @@
 package UserInterface;
 
-import java.util.ArrayList;
+import java.io.IOException;
+
+import Networking.Client;
+import Networking.Server;
 
 public class mainMenuNetwork {
-
-	boolean doesHostExist(String hostName) {
-		ArrayList<String> hostList = new ArrayList<String>();
-		hostList.add("192.168.0.1:2020");
-		//Get list of hosts
-		//if hostName in list then return true else false
-		if (hostList.contains(hostName))
-			return true;
-		else
+	
+	public boolean connectToHost(String hostName, String name) {
+		
+		Client c = new Client(name);
+		
+		String[] address;
+		
+		try {
+			address = hostName.split(":");
+			if (c.connect(address[0], Integer.parseInt(address[1])))
+				return true;
+		} catch (Exception e) {
+			System.out.println("Exception caught in mainMenuNetwork");
+			//e.printStackTrace();
 			return false;
+		}
+		return false;
 	}
+	
+	public void runServer(Server s) {
+		System.out.println("Starting the Server - mainMenuNetwork");
+		s.start();
+	}
+	
+
+	public void closeServer(Server s) {
+		System.out.println("Closing the Server - mainMenuNetwork");
+		try {
+			s.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 }

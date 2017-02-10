@@ -1,8 +1,9 @@
 package Networking;
 
-import java.io.BufferedReader;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 import GameLogic.Board;
 import Graphics.Screen;
@@ -16,18 +17,20 @@ public class ClientReceiver extends Thread {
 	
 	private ObjectInputStream server;
 	private Board board;
-	private boolean running;
-	private Screen UI;
 	private Queue q;
+	private boolean inGame;
+	private Screen ui;
+	private ArrayList<String> players;
+
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen UI, Queue q) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen ui) {
 		this.server = server;
 		this.board = board;
-		this.UI = UI;
+		this.ui = ui;
 		this.q = q;
 	}
 	
@@ -35,20 +38,25 @@ public class ClientReceiver extends Thread {
 	 * Run method for the thread.
 	 */
 	public void run() {
-		running = true;
+		inGame = false;
 		
-		//Constantly waits for a string from the server and sends it to the board.
 		try {
-			while(running) {
-				System.out.println("This is only a test4");
-				Board x = (Board) server.readObject();
-				board.update(x);
-				UI = new Screen(x,q);
-				//Updoot fran
+//<<<<<<< HEAD
+//			while(running) {
+//				System.out.println("This is only a test4");
+//				Board x = (Board) server.readObject();
+//				board.update(x);
+//				UI = new Screen(x,q);
+//				//Updoot fran
+//=======
+			//server.readObject();
+			while(!inGame) {
+				
 			}
 			
-			//Closes the BufferedReader if the thread has been itself closed.
-
+			while(inGame) {
+				board.update(server.readObject());
+			}
 		}
 		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -60,13 +68,17 @@ public class ClientReceiver extends Thread {
 	 * Terminates the while loop that checks for a new line from the server and closes the BufferedReader..
 	 */
 	public void close() {
-		running = false;
+		inGame = false;
 		try {
 			server.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public ArrayList<String> getPlayers() {
+		return players;
 	}
 }
 

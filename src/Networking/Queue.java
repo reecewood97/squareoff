@@ -7,10 +7,10 @@ import GameLogic.Move;
 public class Queue {
 	private ArrayBlockingQueue<Object> q = new ArrayBlockingQueue<Object>(100);	
 
-	public Object get() throws InterruptedException {
+	public Object take() throws InterruptedException {
 		return q.take();
 	}	
-	public void add(Object move){
+	public void offer(Object move){
 		q.offer(move);
 	}
 }

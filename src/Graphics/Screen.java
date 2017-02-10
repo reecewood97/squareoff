@@ -22,17 +22,18 @@ public class Screen extends JFrame {
     	
     	//this.audio = audio;
     	
+
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
     	
     	Color lightblue = new Color(135,206,250);
     	
-    	ButtonPanel controls = new ButtonPanel(this);
+    	ButtonPanel controls = new ButtonPanel(this,newboard);
     	controls.setBackground(lightblue);
     	
-    	if(newboard.getWinner() == 0){
-    		
+    	if(newboard.getWinner() == -1){
+
     		ScreenBoard sboard = new ScreenBoard(newboard);
     		sboard.setBackground(lightblue);
     		setLayout(new BorderLayout());
@@ -53,35 +54,21 @@ public class Screen extends JFrame {
     		
     	}
     	
-    	   	
+    	System.out.println("sup2");
     	setVisible(true);
     }
-    	    	
-//    	this.board = new ScreenBoard(newboard);
-//    	board.setBackground(lightblue);
-//    	
-//    	setLayout(new BorderLayout());
-//    	add(board, BorderLayout.CENTER);
-//    	add(controls, BorderLayout.NORTH);
-// 
-//    	HangerOn listeners = new HangerOn(q);
-//    	board = listeners.hangOn2(board);
-//    	   	
-//    	setVisible(true);
-    
+
     
     @Override
     public void paint(Graphics g) {
         
     	super.paint(g);
         
+    	System.out.println("sup3");
     	Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-      
+            RenderingHints.VALUE_ANTIALIAS_ON);  
        
     }
-    
-       
     
 }
