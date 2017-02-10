@@ -311,16 +311,17 @@ public class Board {
 					activePlayer.setYvel(20);
 				}
 					//System.out.println("test");
-				switch(move.getDirection()) {
-					case "Left" : if (wallDistL(activePlayer)<2){
-						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
-						activePlayer.getPos().getY()));
-					} else {
-						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-					}
-					case "Right": if (wallDistR(activePlayer)<2){
+					if(move.getDirection().equals("Left")){
+						if (wallDistL(activePlayer)<2){
+							activePlayer.setPos
+							(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+							activePlayer.getPos().getY()));
+						} else {
+							activePlayer.setPos
+							(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+						}
+					}else if(move.getDirection().equals("Right")){
+						if (wallDistR(activePlayer)<2){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
 						activePlayer.getPos().getY()));
@@ -328,13 +329,11 @@ public class Board {
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
 					}
-					case "None" : //do nothing
-					default     : System.out.println("Physics engine has detected an invalid move string.");
-				}
-			}
-			else {
-				switch(move.getDirection()) {
-				case "Left" : if (wallDistL(activePlayer)<2){
+					}else
+						System.out.println("Invalid move String");
+		}else {
+			if(move.getDirection().equals("Left")){
+				if (wallDistL(activePlayer)<2){
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
 					activePlayer.getPos().getY()));
@@ -342,7 +341,8 @@ public class Board {
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
 				}
-				case "Right": if (wallDistR(activePlayer)<2){
+			}else if(move.getDirection().equals("Right")){
+				if (wallDistR(activePlayer)<2){
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
 					activePlayer.getPos().getY()));
@@ -350,15 +350,14 @@ public class Board {
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
 				}
-				case "None" : //do nothing
-				default     : System.out.println("Physics engine has detected an invalid move string.");
+			}else
+				System.out.println("Physics engine has detected an invalid move string.");
 				}
-				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-						activePlayer.getPos().getY()+activePlayer.getYvel()));
-				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+//				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
+//						activePlayer.getPos().getY()+activePlayer.getYvel()));
+//				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 		}
-	}
 	
 	
 	/**
