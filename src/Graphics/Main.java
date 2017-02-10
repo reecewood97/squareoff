@@ -12,6 +12,7 @@ public class Main {
 		splashscreen.showSplash();
 		//@SuppressWarnings("unused")
 		Screen newui = new Screen(new Board(),new Queue());
+		newui.setVisible();
 
 	}
 	
