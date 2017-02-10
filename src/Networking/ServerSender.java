@@ -22,8 +22,11 @@ public class ServerSender extends Thread {
 		inGame = false;
 		
 		try {
-			toClient.writeObject(players);
-			toClient.flush();
+			while(!inGame) {
+				toClient.writeObject("bewb");
+				toClient.flush();
+			}
+			
 			while(!inGame) {
 				toClient.writeObject((board.getUpdate()));
 				sleep(40);

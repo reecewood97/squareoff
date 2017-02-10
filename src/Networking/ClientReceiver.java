@@ -51,7 +51,7 @@ public class ClientReceiver extends Thread {
 //=======
 			//server.readObject();
 			while(!inGame) {
-				
+				System.out.println(server.readObject());
 			}
 			
 			while(inGame) {
