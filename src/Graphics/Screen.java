@@ -16,13 +16,9 @@ public class Screen extends JFrame {
     int framewidth = 1500;
     int frameHeight = 700;
     private ScreenBoard board;
-   // private Audio audio;
     
     public Screen(Board newboard,Queue q){
     	
-    	//this.audio = audio;
-    	
-
     	setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
@@ -54,8 +50,6 @@ public class Screen extends JFrame {
     		
     	}
     	
-    	System.out.println("sup2");
-    	setVisible(true);
     }
 
     
@@ -63,12 +57,21 @@ public class Screen extends JFrame {
     public void paint(Graphics g) {
         
     	super.paint(g);
-        
-    	System.out.println("sup3");
+       
     	Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);  
        
+    }
+    
+    public void setVisible(){
+    	
+    	setVisible(true);
+    
+    }
+    
+    public void setInvisible(){
+    	setVisible(false);
     }
     
 }
