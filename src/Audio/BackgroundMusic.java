@@ -1,8 +1,6 @@
-package Graphics;
+package Audio;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;

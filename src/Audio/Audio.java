@@ -1,4 +1,4 @@
-package Graphics;
+package Audio;
 
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;
@@ -77,7 +77,4 @@ public class Audio
 	public void disableSound(){
 		sound = false;
 	}
-	
-	
-  
 }

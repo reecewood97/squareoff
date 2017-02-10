@@ -10,7 +10,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
+import Audio.*;
 import com.sun.prism.paint.Color;
 
 import GameLogic.Board;
@@ -64,7 +64,6 @@ public class ButtonPanel extends JPanel{
 
 	public void openMainMenu(Screen screen, Board board){
 		
-		String[] arguments = new String[1];
 		board.notifyQuit();
 		screen.setVisible(false);
 		mainMenu mainmenu = new mainMenu();
