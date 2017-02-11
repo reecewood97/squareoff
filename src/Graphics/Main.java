@@ -1,8 +1,8 @@
-package graphics;
+package Graphics;
 
-import gameLogic.Board;
-import gameLogic.UserInput;
-import networking.Queue;
+import GameLogic.Board;
+import GameLogic.UserInput;
+import Networking.Queue;
 
 public class Main {
 	

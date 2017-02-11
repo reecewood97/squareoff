@@ -1,19 +1,12 @@
 package ai;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
-<<<<<<< HEAD
-import gameLogic.Board;
-import gameLogic.PhysObject;
-import gameLogic.Square;
-=======
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
->>>>>>> ad87e017eaa9288847a307119dbb434aa6e55a06
 
 // Coordinates size: 800 x 450
 

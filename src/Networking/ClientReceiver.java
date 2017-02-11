@@ -1,13 +1,13 @@
-package networking;
+package Networking;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import gameLogic.Board;
-import gameLogic.PhysObject;
-import graphics.Screen;
+import GameLogic.Board;
+import GameLogic.PhysObject;
+import Graphics.Screen;
 
 /**
  * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.

@@ -1,11 +1,11 @@
-package networking;
+package Networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import gameLogic.Board;
-import gameLogic.Move;
+import GameLogic.Board;
+import GameLogic.Move;
 
 public class ServerReceiver extends Thread {
 	

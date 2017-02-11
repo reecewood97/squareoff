@@ -1,11 +1,11 @@
-package graphics;
+package Graphics;
 
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import gameLogic.Board;
-import userInterface.mainMenu;
+import GameLogic.Board;
+import UserInterface.mainMenu;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

@@ -1,10 +1,10 @@
-package networking;
+package Networking;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-import gameLogic.Board;
+import GameLogic.Board;
 
 public class Server extends Thread {
 

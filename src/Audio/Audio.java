@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/Graphics/Audio.java
-package graphics;
-=======
 package Audio;
->>>>>>> ad87e017eaa9288847a307119dbb434aa6e55a06:src/Audio/Audio.java
 
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;

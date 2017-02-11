@@ -1,4 +1,4 @@
-package graphics;
+package Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JFrame;
 
-import gameLogic.Board;
-import gameLogic.UserInput;
-import networking.Queue;
+import GameLogic.Board;
+import GameLogic.UserInput;
+import Networking.Queue;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame {

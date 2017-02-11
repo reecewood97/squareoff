@@ -1,9 +1,9 @@
-package networking;
+package Networking;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import gameLogic.Move;
+import GameLogic.Move;
 
 
 /**

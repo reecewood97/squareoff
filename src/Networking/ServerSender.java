@@ -1,9 +1,9 @@
-package networking;
+package Networking;
 
 import java.io.*;
 import java.util.ArrayList;
 
-import gameLogic.Board;
+import GameLogic.Board;
 
 public class ServerSender extends Thread {
 

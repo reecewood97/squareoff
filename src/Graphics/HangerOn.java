@@ -5,7 +5,7 @@ This is a buddy for the UI - create an istance of this class wherever you make t
  * 
  * *  * Only worry I have is that the frame wont ever be in focus- in which case we may need to make the methods  
  * * more generic to just return whatever kind of component is needed.*/
-package graphics;
+package Graphics;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,8 +14,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import gameLogic.UserInput;
-import networking.Queue;
+import GameLogic.UserInput;
+import Networking.Queue;
 
 public class HangerOn implements KeyListener,MouseListener { 
 	private Queue q;

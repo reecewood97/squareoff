@@ -1,4 +1,4 @@
-package gameLogic;
+package GameLogic;
 
 import java.util.concurrent.ArrayBlockingQueue;
 

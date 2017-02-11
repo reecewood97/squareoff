@@ -1,11 +1,11 @@
-package networking;
+package Networking;
 
 import java.net.*;
 import java.util.ArrayList;
 
-import gameLogic.Board;
-import graphics.Screen;
-import graphics.SplashSplash;
+import GameLogic.Board;
+import Graphics.Screen;
+import Graphics.SplashSplash;
 
 import java.io.*;
 

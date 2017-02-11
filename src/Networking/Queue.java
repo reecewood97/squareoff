@@ -1,8 +1,8 @@
-package networking;
+package Networking;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import gameLogic.Move;
+import GameLogic.Move;
 
 public class Queue {
 	private ArrayBlockingQueue<Object> q = new ArrayBlockingQueue<Object>(100);	

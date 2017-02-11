@@ -1,4 +1,4 @@
-package userInterface;
+package UserInterface;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import networking.Server;
+import Networking.Server;
 
 public class mainMenu extends Application {
     public static void main(String[] args) {
