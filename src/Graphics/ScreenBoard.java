@@ -53,6 +53,7 @@ public class ScreenBoard extends JPanel{
         paintBlocks(board.getBlocks(), g2d);
         paintSquares(board.getSquares(),g2d);
         paintWeapons(board.getWeapons(),g2d);
+        paintBubble(g2d);
         
     }
 	
@@ -133,6 +134,15 @@ public class ScreenBoard extends JPanel{
     	
     		
     	}
+    	
+    }
+    
+    public void paintBubble(Graphics2D g2d){
+    	
+    	g2d.setColor(Color.WHITE);
+    	//g2d.drawRoundRect(100, 10, 80, 30, 15, 15);
+    	g2d.fillRoundRect(100, 10, 80, 80, 15, 15);
+    	
     	
     }
    

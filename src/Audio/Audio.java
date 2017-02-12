@@ -69,6 +69,24 @@ public class Audio
 		}
 	}
 	
+	public void splash(){
+		
+		try {
+			
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Files/Audio/splash.wav").getAbsoluteFile());
+	        Clip click = AudioSystem.getClip();
+	        click.open(audioInputStream);
+	        click.start();
+	        
+		}
+		catch(Exception ex){
+			
+			System.out.println("Error playing sound");
+	        ex.printStackTrace();
+		}
+	}
+	
+	
 	public void enableSound(){
 		
 		sound = true;
