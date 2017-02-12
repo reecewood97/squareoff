@@ -3,7 +3,6 @@ package UserInterface;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import Networking.Server;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import Networking.Server;
 
 public class mainMenu extends Application {
     public static void main(String[] args) {

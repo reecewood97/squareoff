@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JFrame;
+
 import GameLogic.Board;
 import GameLogic.UserInput;
 import Networking.Queue;

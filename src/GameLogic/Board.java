@@ -14,7 +14,7 @@ public class Board {
 	private int squareID;
 	private ArrayList<PhysObject> objects;
 	private boolean freeState;
-	private ArrayBlockingQueue<Board> q;
+	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
 	
 	public Board(){
@@ -22,7 +22,7 @@ public class Board {
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.q = new ArrayBlockingQueue<Board>(100); //This handles the moves that need to be sent to clients.
+		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(100); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
@@ -310,16 +310,18 @@ public class Board {
 					if(move.getJump()) {
 					activePlayer.setYvel(20);
 				}
-				switch(move.getDirection()) {
-					case "Left" : if (wallDistL(activePlayer)<2){
-						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
-						activePlayer.getPos().getY()));
-					} else {
-						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-					}
-					case "Right": if (wallDistR(activePlayer)<2){
+					//System.out.println("test");
+					if(move.getDirection().equals("Left")){
+						if (wallDistL(activePlayer)<2){
+							activePlayer.setPos
+							(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+							activePlayer.getPos().getY()));
+						} else {
+							activePlayer.setPos
+							(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+						}
+					}else if(move.getDirection().equals("Right")){
+						if (wallDistR(activePlayer)<2){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
 						activePlayer.getPos().getY()));
@@ -327,13 +329,11 @@ public class Board {
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
 					}
-					case "None" : //do nothing
-					default     : System.out.println("Physics engine has detected an invalid move string.");
-				}
-			}
-			else {
-				switch(move.getDirection()) {
-				case "Left" : if (wallDistL(activePlayer)<2){
+					}else
+						System.out.println("Invalid move String");
+		}else {
+			if(move.getDirection().equals("Left")){
+				if (wallDistL(activePlayer)<2){
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
 					activePlayer.getPos().getY()));
@@ -341,7 +341,8 @@ public class Board {
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
 				}
-				case "Right": if (wallDistR(activePlayer)<2){
+			}else if(move.getDirection().equals("Right")){
+				if (wallDistR(activePlayer)<2){
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
 					activePlayer.getPos().getY()));
@@ -349,15 +350,14 @@ public class Board {
 					activePlayer.setPos
 					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
 				}
-				case "None" : //do nothing
-				default     : System.out.println("Physics engine has detected an invalid move string.");
+			}else
+				System.out.println("Physics engine has detected an invalid move string.");
 				}
-				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-						activePlayer.getPos().getY()+activePlayer.getYvel()));
-				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+//				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
+//						activePlayer.getPos().getY()+activePlayer.getYvel()));
+//				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 		}
-	}
 	
 	
 	/**
@@ -392,18 +392,14 @@ public class Board {
 			case "W" : //jump?
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
+						//System.out.println("Hey left sorta works");
 						updateFrame(mv);
-						q.add(this);
-//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-//						q.offer(ret);
+						q.add(objects);
 			case "S" : //duck?
 				break;
 			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
 						updateFrame(mv);
-						q.add(this);
-//						active.setPoint(new Point2D.Double(active.getPoint().getX()+1,active.getPoint().getY()));
-//						ret = player+squareID + " " + active.getPoint().getX()+ " "+ active.getPoint().getY();
-//						q.offer(ret);
+						q.add(objects);
 				break;
 			}
 		}
@@ -414,11 +410,15 @@ public class Board {
 	 * @return The update sent.
 	 * @throws InterruptedException 
 	 */
-	public Board getUpdate() throws InterruptedException {
+	public ArrayList<PhysObject> getUpdate() throws InterruptedException {
 		return q.take();
 	}
 	
 	public ArrayList<PhysObject> getObjects(){
 		return objects;
+	}
+	
+	public void  setObjects(ArrayList<PhysObject> obj){
+		this.objects = obj;
 	}
 }

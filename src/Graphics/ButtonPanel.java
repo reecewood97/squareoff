@@ -3,7 +3,10 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
+import GameLogic.Board;
 import UserInterface.mainMenu;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -12,8 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import Audio.*;
 import com.sun.prism.paint.Color;
-
-import GameLogic.Board;
 
 @SuppressWarnings("serial")
 public class ButtonPanel extends JPanel{

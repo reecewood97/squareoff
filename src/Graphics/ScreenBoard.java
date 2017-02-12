@@ -2,6 +2,7 @@ package Graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import GameLogic.Square;
