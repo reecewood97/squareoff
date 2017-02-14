@@ -15,8 +15,9 @@ public class ButtonPanel extends JPanel{
 	private boolean first = true;
 	private Audio audio;
 	private Screen screen;
-	private WeaponsMenu newmenu; // = new WeaponsMenu();
+	private NewWeaponsMenu newmenu; // = new WeaponsMenu();
 	private boolean firstopen;
+	
 	
 	public ButtonPanel(Screen screen, Board board) {
 		
@@ -50,7 +51,7 @@ public class ButtonPanel extends JPanel{
 		add(exit, BorderLayout.EAST);
 		
 		firstopen=true;
-		newmenu = new WeaponsMenu();
+		newmenu = new NewWeaponsMenu();
 		//newmenu.launchMenu();
 		//newmenu.exit();
 	
@@ -67,15 +68,7 @@ public class ButtonPanel extends JPanel{
 		mainmenu.launchMenu();
 		*/
 		
-		if(firstopen){
-			newmenu.launchMenu();
-			firstopen=false;
-		}
-		else{
-			
-			WeaponsMenu nextmenu = new WeaponsMenu();
-			nextmenu. launchMenu();
-		}
+		newmenu.open();
 		
 		
 		

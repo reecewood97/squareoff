@@ -23,9 +23,6 @@ public class Screen extends JFrame {
     double screenwidth = screenSize.getWidth();
     double framewidth = 800;
     double frameHeight = 450;
-    //double heightfactor = screenheight/frameHeight;
-    //double widthfactor = screenwidth/framewidth;
-    
     private ScreenBoard board;
     
     
@@ -41,7 +38,7 @@ public class Screen extends JFrame {
     	setTitle("SQUARE-OFF");
     	
     	Color lightblue = new Color(135,206,250);
-    	
+    	this.setUndecorated(true);
     	ButtonPanel controls = new ButtonPanel(this,newboard);
     	controls.setBackground(lightblue);
     	

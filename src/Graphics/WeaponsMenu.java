@@ -89,11 +89,15 @@ public class WeaponsMenu extends Application {
   }
 
   public void showMenu() {
+	  System.out.println("show2");
 	  primaryStage.show();
+	  System.out.println("show2");
   }
   
   public static void launchMenu() {
+	  System.out.println("launch1");
   	launch();
+  	System.out.println("launch2");
   }
   
   public Stage getStage(){
@@ -102,8 +106,9 @@ public class WeaponsMenu extends Application {
   }
   
   public void exit(){
-	  
-	  primaryStage.hide();
+	  System.out.println("hide1");
+	  primaryStage.close();
+	  System.out.println("hide2");
   }
   
   public void cycleRight(){
