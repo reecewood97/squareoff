@@ -2,8 +2,9 @@ package UserInterface;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,6 +26,11 @@ public class mainMenu extends Application {
     public static void main(String[] args) {
         //launch(args);
     	launchMenu();
+    }
+    
+    @Override
+    public void stop() {
+        System.out.println("Program Exited");
     }
     
     public static void launchMenu() {
@@ -82,9 +89,10 @@ public class mainMenu extends Application {
     
     
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
 	public static void lobbyWindow(Stage primaryStage, Scene scene1, String type) {
-    	ArrayList<String> playerList = new ArrayList<String>();
+    	//ArrayList<String> playerArrayList = new ArrayList();
+    	mainMenuNetwork net = new mainMenuNetwork();
     	
     	if (type.equals("Host")) {
     		
@@ -96,30 +104,24 @@ public class mainMenu extends Application {
     			return;
     		}
     		else {
-    			playerList.add(name);
+    			
     		}
     		
-    		//Server s = new Server(123);
-    		mainMenuNetwork net = new mainMenuNetwork();
-    		//net.runServer(s);
+    		Server s = new Server(123);
+    		net.runServer(s);
+    		net.connectToHost("127.0.0.1:123", name);
     		
         	primaryStage.setTitle("Square-Off: Lobby");
         	
         	Button btn5 = new Button("Back to Main Menu");
         	btn5.setMinWidth(120);
-            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); net.closeServer(new Server(123)); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); net.closeServer(s); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
             
             Button btn6 = new Button("Start Game");
         	btn6.setMinWidth(120);
-            btn6.setOnAction( e -> { System.out.println("Starting Game"); net.runServer(new Server(123)); } );
+            btn6.setOnAction( e -> { System.out.println("Starting Game"); } );
             
-            TableView table = new TableView();
-            table.setEditable(false);
-            
-            TableColumn playerIDCol = new TableColumn("Player ID");
-            TableColumn playerNameCol = new TableColumn("Player Name");
-                    
-            table.getColumns().addAll(playerIDCol, playerNameCol);
+            TableView table = lobbyTable(net);
             
             HBox hbox = new HBox(12);
             hbox.getChildren().addAll(btn6, btn5);
@@ -127,9 +129,21 @@ public class mainMenu extends Application {
             
             VBox vbox = new VBox(12);
             vbox.getChildren().addAll(table, hbox);
+            vbox.setMaxWidth(710);
             vbox.setAlignment(Pos.CENTER);
             
-            Scene scene2 = new Scene(vbox, 960, 540);
+            
+            GridPane grid3 = new GridPane();
+            
+            Label label3 = new Label("");
+            
+            grid3.add(label3, 1, 0);
+            grid3.add(vbox, 0, 0);
+            grid3.setAlignment(Pos.CENTER);
+            
+            primaryStage.setOnCloseRequest( e -> net.closeServer(s) ); 
+            
+            Scene scene2 = new Scene(grid3, 960, 540);
             primaryStage.setScene(scene2);
             primaryStage.show();
     	}
@@ -140,19 +154,22 @@ public class mainMenu extends Application {
         	btn5.setMinWidth(120);
             btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
             
-            TableView table = new TableView();
-            table.setEditable(false);
-            
-            TableColumn playerIDCol = new TableColumn("Player ID");
-            TableColumn playerNameCol = new TableColumn("Player Name");
-                    
-            table.getColumns().addAll(playerIDCol, playerNameCol);
+            TableView table = lobbyTable(net);
             
             VBox vbox = new VBox(12);
             vbox.getChildren().addAll(table, btn5);
+            vbox.setMaxWidth(710);
             vbox.setAlignment(Pos.CENTER);
+
+            GridPane grid3 = new GridPane();
             
-            Scene scene2 = new Scene(vbox, 960, 540);
+            Label label3 = new Label("");
+            
+            grid3.add(label3, 1, 0);
+            grid3.add(vbox, 0, 0);
+            grid3.setAlignment(Pos.CENTER);
+            
+            Scene scene2 = new Scene(grid3, 960, 540);
             primaryStage.setScene(scene2);
             primaryStage.show();
     	}
@@ -160,6 +177,43 @@ public class mainMenu extends Application {
     
     
     
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public static TableView<Players> lobbyTable(mainMenuNetwork net) {
+		ArrayList<String> playerArrayList = net.getPlayers();
+		ObservableList<Players> playerList = FXCollections.observableArrayList();
+        
+		for (int x=0; x<playerArrayList.size(); x++) {
+			if (x==0)
+				playerList.add(new Players("(Host) " + String.valueOf(x+1), playerArrayList.get(x)));
+			else if (x==1)
+				playerList.add(new Players("(Human) " + String.valueOf(x+1), playerArrayList.get(x)));
+			else
+				playerList.add(new Players(String.valueOf(x+1), playerArrayList.get(x)));
+		}
+        
+        TableView<Players> table = new TableView<Players>();
+        table.setEditable(false);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        TableColumn<Players, String> playerIDCol = new TableColumn<>("playerID");
+        TableColumn<Players, String> playerNameCol = new TableColumn<>("playerName");
+        playerIDCol.setMinWidth(300);
+        playerNameCol.setMinWidth(400);
+        playerIDCol.setResizable(false);
+        playerNameCol.setResizable(false);
+        playerIDCol.impl_setReorderable(false);
+        playerNameCol.impl_setReorderable(false);
+        playerIDCol.setStyle( "-fx-alignment: CENTER;");
+        playerNameCol.setStyle( "-fx-alignment: CENTER;");
+        
+        playerIDCol.setCellValueFactory(new PropertyValueFactory<>("playerID"));
+        playerNameCol.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+        
+        table.setItems(playerList);
+        table.getColumns().addAll(playerIDCol, playerNameCol);
+        
+        return table;
+    }
     
     
     
@@ -231,11 +285,10 @@ public class mainMenu extends Application {
         Scene scene3 = new Scene(grid3, 960, 540);
         primaryStage.setScene(scene3);
         primaryStage.show();
-    } 
-
+    }
+	
     
-    
-    
+	
     public static void oWindow(Stage primaryStage, Scene scene1) {
     	primaryStage.setTitle("Square-Off: Options");
     	
