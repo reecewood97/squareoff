@@ -1,20 +1,12 @@
 package Graphics;
 
 import java.awt.BorderLayout;
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import GameLogic.Board;
-import UserInterface.mainMenu;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import Audio.*;
-import com.sun.prism.paint.Color;
+
 
 @SuppressWarnings("serial")
 public class ButtonPanel extends JPanel{
@@ -23,14 +15,14 @@ public class ButtonPanel extends JPanel{
 	private boolean first = true;
 	private Audio audio;
 	private Screen screen;
+	private WeaponsMenu newmenu; // = new WeaponsMenu();
+	private boolean firstopen;
 	
-	//@SuppressWarnings("deprecation")
 	public ButtonPanel(Screen screen, Board board) {
 		
 		super();
-		
 		this.screen = screen;
-		
+		//opened = false;
 		setLayout(new BorderLayout());
 	
 		//back to main menu
@@ -53,22 +45,39 @@ public class ButtonPanel extends JPanel{
 		sound.setContentAreaFilled(false); 
 		sound.setFocusPainted(false); 
 		sound.setOpaque(false);
-		
-		
-		//add(help);
+	
 		add(sound,BorderLayout.WEST);
 		add(exit, BorderLayout.EAST);
 		
-	}
-	
+		firstopen=true;
+		newmenu = new WeaponsMenu();
+		//newmenu.launchMenu();
+		//newmenu.exit();
 	
 
+	}
+	
 	public void openMainMenu(Screen screen, Board board){
-		
+	
 		board.notifyQuit();
+		
+		/*
 		screen.setVisible(false);
 		mainMenu mainmenu = new mainMenu();
 		mainmenu.launchMenu();
+		*/
+		
+		if(firstopen){
+			newmenu.launchMenu();
+			firstopen=false;
+		}
+		else{
+			
+			WeaponsMenu nextmenu = new WeaponsMenu();
+			nextmenu. launchMenu();
+		}
+		
+		
 		
 	}
 	public void ToggleBackgroundMusic(JButton button){
@@ -82,7 +91,6 @@ public class ButtonPanel extends JPanel{
 				
 				System.out.println("music on");
 				button.setOpaque(true);
-				//button.setForeground(Color.RED);
 				audio.endBackgroundMusic();
 			}
 			else{
@@ -103,6 +111,8 @@ public class ButtonPanel extends JPanel{
 		audio.getBackgroundMusic().end();
 		first = false;
 	}
+	
+
 		
 	
 }

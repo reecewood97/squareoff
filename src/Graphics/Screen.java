@@ -2,9 +2,12 @@ package Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 import GameLogic.Board;
@@ -14,13 +17,26 @@ import Networking.Queue;
 @SuppressWarnings("serial")
 public class Screen extends JFrame {
    
-    int framewidth = 1500;
-    int frameHeight = 700;
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
+    
+    double screenheight = screenSize.getHeight(); 
+    double screenwidth = screenSize.getWidth();
+    double framewidth = 800;
+    double frameHeight = 450;
+    //double heightfactor = screenheight/frameHeight;
+    //double widthfactor = screenwidth/framewidth;
+    
     private ScreenBoard board;
+    
     
     public Screen(Board newboard,Queue q){
     	
-    	setBounds(100, 100, framewidth, frameHeight);
+    	
+    	//double newheight = frameHeight * heightfactor;
+    	//double newwidth = framewidth * widthfactor;
+    
+    	setBounds(0,0,(int)screenwidth,(int)screenheight);
+    	//setBounds(100, 100, framewidth, frameHeight);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setTitle("SQUARE-OFF");
     	

@@ -8,6 +8,9 @@ import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
 import GameLogic.Weapon;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -54,7 +57,6 @@ public class ScreenBoard extends JPanel{
         paintBlocks(board.getBlocks(), g2d);
         paintSquares(board.getSquares(),g2d);
         paintWeapons(board.getWeapons(),g2d);
-        paintBubble(g2d);
         
     }
 	
@@ -64,11 +66,8 @@ public class ScreenBoard extends JPanel{
 			
 			
     		int x = (int) block.getPos().getX();
-    		//System.out.println("bx is: " + x);
-    		
     		int y = (int) block.getPos().getY();
     		y = 700 - y;
-    		//System.out.println("by is: " + y);
     		
     		int blocktype = ((TerrainBlock) block).getType();
     		int blockhealth = ((TerrainBlock) block).getHealth();
@@ -90,16 +89,9 @@ public class ScreenBoard extends JPanel{
     			else if((blockhealth==1) && (blocktype == 1)){
     				
     				g2d.fillRect(x, y, 40, 30);
-    				g2d.setColor(new Color(135,206,250));
-    				
-    				for(int i = 0; i <25; i++){
-    					
-    					int randomx = ThreadLocalRandom.current().nextInt(x, x+40);
-    					int randomy = ThreadLocalRandom.current().nextInt(y, y+30);
-    					g2d.fillRect(randomx, randomy, 5, 5);
-    					
-    				}
+    				//g2d.setColor(new Color(135,206,250));
     			
+    				
     			}
     		}
     	}
@@ -138,14 +130,6 @@ public class ScreenBoard extends JPanel{
     	
     }
     
-    public void paintBubble(Graphics2D g2d){
-    	
-    	g2d.setColor(Color.WHITE);
-    	//g2d.drawRoundRect(100, 10, 80, 30, 15, 15);
-    	g2d.fillRoundRect(100, 10, 80, 80, 15, 15);
-    	
-    	
-    }
    
     
     public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
@@ -165,5 +149,12 @@ public class ScreenBoard extends JPanel{
     	}
     	
     }
+    
+    public void openWeaponsMenu(){
+    	
+    	//TODO
+    }
+    
+    
 	
 }
