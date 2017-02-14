@@ -47,7 +47,7 @@ public class Board {
 			objects.add(block);
 		}
 		
-		Point2D.Double weaponpos = new Point2D.Double(100, 100);
+		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
 	}
@@ -225,10 +225,14 @@ public class Board {
 		else {
 			if(obj1.getName().equals("TerrainBlock")) {
 				if(obj2.getName().equals("Weapon")){
-					Ellipse2D.Double circle = new Ellipse2D.Double
-							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
-					return circle.intersects
-							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					if(((Weapon)obj2).getInUse()) {
+						Ellipse2D.Double circle = new Ellipse2D.Double
+								(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+						return circle.intersects
+	
+								(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+					}
+					else {return false;}
 				}
 				else{
 					Rectangle2D.Double rect = new Rectangle2D.Double
@@ -239,10 +243,14 @@ public class Board {
 			}
 			else {
 				if(obj1.getName().equals("Weapon")){
-					Ellipse2D.Double circle = new Ellipse2D.Double
-							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
-					return circle.intersects
-							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					if(((Weapon)obj2).getInUse()) {
+						Ellipse2D.Double circle = new Ellipse2D.Double
+								(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
+						return circle.intersects
+	
+								(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
+					}
+					else {return false;}
 				}
 				else {
 					Rectangle2D.Double rect = new Rectangle2D.Double
@@ -256,16 +264,26 @@ public class Board {
 	
 	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
 		if(thing.getName().equals("Weapon")){
-			//thing.setVisible(false);
-			//block.damage(1);
+			Weapon wep = (Weapon)thing;
+			wep.setInUse(false);
+			wep.setPos(new Point2D.Double(30, 30));
+			TerrainBlock castedblock = (TerrainBlock)block;
+			castedblock.damage(1);
+			//TODO later implement different weapon types
 		}
-		else {
+		else {//thing is a square
 			thing = objects.get(lspos);
-			if(true) {
-				//one for x
+				if(thing.getPos().getX()+thing.getWidth()<block.getPos().getX()) { //on the left
+					thing.setXvel((-1.5)*thing.getXvel());
+				}
+				if(thing.getPos().getX()>block.getPos().getX()+block.getWidth()) { //on the right
+					thing.setXvel((-1.5)*thing.getXvel());
+				}
+				if(thing.getPos().getY()>block.getPos().getY()+block.getHeight()) { //on top
+					thing.setYvel((-1.5)*thing.getYvel());
 			}
-			if(true) {
-				//one for y
+				if(thing.getPos().getY()+thing.getHeight()<block.getPos().getY()) { //below
+					thing.setYvel((-1.5)*thing.getYvel());
 			}
 		}
 	}
@@ -296,8 +314,20 @@ public class Board {
 			freeSim();  // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
-			move = (WeaponMove)move;
-			//TODO
+			WeaponMove wepMove = (WeaponMove)move;
+			//get weapon from arraylist
+			//TODO implement other weapon types
+			Weapon wep = null;
+	
+			for(PhysObject obj : objects){
+				if (obj.getName().equals("ExplodeOnImpact")){
+					wep = (Weapon)obj;
+				}
+			}
+			wep.setInUse(true);
+			wep.setPos(wepMove.getPos());
+			wep.setXvel(wepMove.getXvel());
+			wep.setYvel(wepMove.getYvel());;
 			freeState = true;
 		}
 		else {

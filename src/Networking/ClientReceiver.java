@@ -32,7 +32,6 @@ public class ClientReceiver extends Thread {
 		this.server = server;
 		this.board = board;
 		this.ui = ui;
-		this.q = q;
 		players = new ArrayList<String>();
 	}
 	
@@ -43,15 +42,6 @@ public class ClientReceiver extends Thread {
 		inGame = true;
 		
 		try {
-//<<<<<<< HEAD
-//			while(running) {
-//				System.out.println("This is only a test4");
-//				Board x = (Board) server.readObject();
-//				board.update(x);
-//				UI = new Screen(x,q);
-//				//Updoot fran
-//=======
-			//server.readObject();
 			while(!inGame) {
 				ArrayList<String> dummy = new ArrayList<String>();
 				Object ob = server.readObject();
@@ -66,8 +56,11 @@ public class ClientReceiver extends Thread {
 			}
 			
 			while(inGame) {
-				board.setObjects((ArrayList<PhysObject>) server.readObject());
-				ui = new Screen(board,q);
+				ArrayList<PhysObject> x = (ArrayList<PhysObject>) server.readObject();
+				//System.out.println(x);
+	
+				board.setObjects(x);
+				ui.updateSBoard();
 			}
 		}
 		catch(IOException | ClassNotFoundException e) {

@@ -23,7 +23,11 @@ public class Screen extends JFrame {
     double screenwidth = screenSize.getWidth();
     double framewidth = 800;
     double frameHeight = 450;
-    private ScreenBoard board;
+
+    //double heightfactor = screenheight/frameHeight;
+    //double widthfactor = screenwidth/framewidth;
+    
+    private ScreenBoard sboard;
     
     
     public Screen(Board newboard,Queue q){
@@ -44,7 +48,7 @@ public class Screen extends JFrame {
     	
     	if(newboard.getWinner() == -1){
 
-    		ScreenBoard sboard = new ScreenBoard(newboard);
+    		this.sboard = new ScreenBoard(newboard);
     		sboard.setBackground(lightblue);
     		setLayout(new BorderLayout());
     		add(sboard, BorderLayout.CENTER);
@@ -79,13 +83,12 @@ public class Screen extends JFrame {
     }
     
     public void setVisible(){
-    	
     	setVisible(true);
-    
     }
-    
     public void setInvisible(){
     	setVisible(false);
     }
-    
+    public void updateSBoard(){
+    	sboard.repaint();
+    }
 }
