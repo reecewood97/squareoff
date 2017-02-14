@@ -30,7 +30,7 @@ public class WeaponMove extends Move {
 		return xvel;
 	}
 	
-	public double yvel() {
+	public double getYvel() {
 		return yvel;
 	}
 

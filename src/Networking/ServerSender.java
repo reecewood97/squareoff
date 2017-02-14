@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 import GameLogic.Board;
+import GameLogic.PhysObject;
 
 public class ServerSender extends Thread {
 
@@ -33,7 +34,12 @@ public class ServerSender extends Thread {
 			}
 			
 			while(inGame) {
-				toClient.writeObject((board.getUpdate()));
+				ArrayList<PhysObject> x = (board.getUpdate()); 
+				//System.out.println(x);
+	
+				toClient.writeObject(x);
+				toClient.flush();
+				toClient.reset();
 				sleep(40);
 			}
 			

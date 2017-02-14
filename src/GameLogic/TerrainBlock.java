@@ -10,7 +10,7 @@ public class TerrainBlock extends PhysObject {
 	private Point2D.Double pos;
 	
 	public TerrainBlock(int health, int colour, int type, Point2D.Double pos, boolean visible){
-		super(false, pos, 5, 5, true);
+		super(false, pos, 40, 30, true);
 		this.health = health;
 		this.colour = colour;
 		this.type = type;
@@ -27,6 +27,12 @@ public class TerrainBlock extends PhysObject {
 	public int getColour(){
 		return colour;
 	} 
+	public void damage(int damage) {
+		this.health = this.health-damage;
+		if(health<1) {
+			this.visible = false;
+		}
+	}
 	
 	public int getType(){
 		return type;
