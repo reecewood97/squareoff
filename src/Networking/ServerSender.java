@@ -11,7 +11,7 @@ public class ServerSender extends Thread {
 	private ObjectOutputStream toClient;
 	private Board board;
 	private ArrayList<String> players;
-	private boolean inGame;
+	private boolean running, inGame;
 	
 	public ServerSender(ObjectOutputStream toClient, Board board, ArrayList<String> players) {
 		this.toClient = toClient;
@@ -21,16 +21,17 @@ public class ServerSender extends Thread {
 	
 	public void run() {
 		inGame = false;
+		running = true;
 		
 		try {
-			while(!inGame) {
+			while(running && !inGame) {
 				toClient.writeObject(players);
 				toClient.flush();
 				toClient.reset();
 				sleep(1000);
 			}
 			
-			while(inGame) {
+			while(running && inGame) {
 				ArrayList<PhysObject> x = (board.getUpdate()); 
 	
 				toClient.writeObject(x);
@@ -40,7 +41,7 @@ public class ServerSender extends Thread {
 			}
 			
 			toClient.close();
-			}
+		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -50,9 +51,13 @@ public class ServerSender extends Thread {
 		}
 	}
 	
-	public void send(Object obj) {
+	public void send(Object ob) {
 		try {
-			toClient.writeObject(obj);
+			if(ob.getClass().isInstance(Server.PLAY) && (int)ob == Server.PLAY)
+				inGame = true;
+			if(ob.getClass().isInstance(Server.QUIT) && (int)ob == Server.QUIT)
+				running = false;	
+			toClient.writeObject(ob);
 			toClient.flush();
 			toClient.reset();
 		}
