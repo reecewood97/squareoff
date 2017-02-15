@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,7 +21,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import Networking.Server;
 
 public class mainMenu extends Application {
     public static void main(String[] args) {
@@ -104,22 +104,21 @@ public class mainMenu extends Application {
     			return;
     		}
     		else {
-    			
+    			//Dunno if I'll need this in the future
     		}
-    		
-    		Server s = new Server(123);
-    		net.runServer(s);
+
+    		net.runServer();
     		net.connectToHost("127.0.0.1:123", name);
     		
         	primaryStage.setTitle("Square-Off: Lobby");
         	
         	Button btn5 = new Button("Back to Main Menu");
         	btn5.setMinWidth(120);
-            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); net.closeServer(s); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); net.closeServer(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
             
             Button btn6 = new Button("Start Game");
         	btn6.setMinWidth(120);
-            btn6.setOnAction( e -> { System.out.println("Starting Game"); } );
+            btn6.setOnAction( e -> { System.out.println("Starting Game"); net.startGame(); primaryStage.hide(); } );
             
             TableView table = lobbyTable(net);
             
@@ -141,7 +140,7 @@ public class mainMenu extends Application {
             grid3.add(vbox, 0, 0);
             grid3.setAlignment(Pos.CENTER);
             
-            primaryStage.setOnCloseRequest( e -> net.closeServer(s) ); 
+            primaryStage.setOnCloseRequest( e -> net.closeServer() ); 
             
             Scene scene2 = new Scene(grid3, 960, 540);
             primaryStage.setScene(scene2);
@@ -314,8 +313,8 @@ public class mainMenu extends Application {
         Scene scene4 = new Scene(grid4, 960, 540);
         
         btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
-        btn7.setOnAction( e -> { System.out.println("Opening Video Options"); extraWindow(primaryStage, scene4); primaryStage.setTitle("Square-Off: Video Options"); } );
-        btn8.setOnAction( e -> { System.out.println("Opening Audio Options"); extraWindow(primaryStage, scene4); primaryStage.setTitle("Square-Off: Audio Options"); } );
+        btn7.setOnAction( e -> { System.out.println("Opening Video Options"); videoWindow(primaryStage, scene4, 960, 540); primaryStage.setTitle("Square-Off: Video Options"); } );
+        btn8.setOnAction( e -> { System.out.println("Opening Audio Options"); audioWindow(primaryStage, scene4); primaryStage.setTitle("Square-Off: Audio Options"); } );
         
         primaryStage.setScene(scene4);
         primaryStage.show();
@@ -323,21 +322,46 @@ public class mainMenu extends Application {
     
     
     
+    public static void setVolume(double d) {
+    	System.out.println(d);
+    }
+    
+    public static void setResolution(double d) {
+    	System.out.println(((16.0/9.0) * d) + " x " + d);
+    }
     
     
-    
-    
-    public static void extraWindow(Stage primaryStage, Scene scene1) {
-    	//primaryStage.setTitle("Square-Off: Temporary");
+    public static void audioWindow(Stage primaryStage, Scene scene1) {
     	
     	Button btn9 = new Button("Back to Options");
     	btn9.setMinWidth(120);
         btn9.setOnAction( e -> { System.out.println("Returning to Options"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
         
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(100);
+        slider.setValue(75);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(10);
+        
+        
+        HBox hb = new HBox(10);
+    	Button btn10 = new Button("Set Volume");
+    	btn10.setMinWidth(140);
+        btn10.setOnAction( e -> { System.out.println("Setting Volume"); setVolume(slider.getValue()); } );
+        
+        hb.getChildren().addAll(slider, btn10);
+        hb.setAlignment(Pos.CENTER);
+        
+        
         GridPane grid5 = new GridPane();
         grid5.setVgap(12);
         
-        grid5.add(btn9, 0, 23);
+        grid5.add(hb, 0, 19);
+        grid5.add(btn9, 0, 20);
         grid5.setAlignment(Pos.CENTER);
         
         
@@ -349,7 +373,57 @@ public class mainMenu extends Application {
     
     
     
-    
+    public static void videoWindow(Stage primaryStage, Scene scene1, double width, double height) {
+    	
+    	Button btn9 = new Button("Back to Options");
+    	btn9.setMinWidth(120);
+        btn9.setOnAction( e -> { System.out.println("Returning to Options"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
+        
+        Slider slider = new Slider();
+        slider.setMin(480);
+        slider.setMax(1080);
+        slider.setValue( (int) height );
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(10);
+        //slider
+        
+        Label currentLabel = new Label( ((int) width) + " x " + ( (int) height ));
+        
+        /*
+        opacityLevel.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    cappuccino.setOpacity(new_val.doubleValue());
+                    opacityValue.setText(String.format("%.2f", new_val));
+            }
+        });
+        */
+        
+        HBox hb = new HBox(10);
+    	Button btn10 = new Button("Set Resolution");
+    	btn10.setMinWidth(140);
+        btn10.setOnAction( e -> { System.out.println("Setting Resolution"); videoWindow(primaryStage, scene1, ((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
+        
+        hb.getChildren().addAll(slider, btn10);
+        hb.setAlignment(Pos.CENTER);
+        
+        
+        GridPane grid5 = new GridPane();
+        grid5.setVgap(12);
+        
+        grid5.add(currentLabel, 0, 16);
+        grid5.add(hb, 0, 17);
+        grid5.add(btn9, 0, 18);
+        grid5.setAlignment(Pos.CENTER);
+        
+        
+        Scene scene5 = new Scene(grid5, (int) width, (int) height);
+        primaryStage.setScene(scene5);
+        primaryStage.show();
+    }    
     
     
     
