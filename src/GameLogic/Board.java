@@ -17,6 +17,7 @@ public class Board {
 	private boolean freeState;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
+	private boolean debug = true;
 	
 	public static void main(String[] args) {
 		Board board = new Board();
@@ -312,9 +313,13 @@ public class Board {
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
-		if(objs.equals(objects)){//TODO probably won't work
-			freeState = false;
+		boolean same = true;
+		for(int i = 0;i<objects.size();i++){
+			if (objs.get(i).equal(objects.get(i))) { //Watch out!! This code may very well not work.
+				same = false;
+			}
 		}
+		freeState = !same;
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
@@ -355,7 +360,7 @@ public class Board {
 			Square activePlayer = (Square)getActivePlayer();
 			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
-				System.out.println("Player standing on floor");
+				if (debug) System.out.println("Player standing on floor");
 				activePlayer.setYvel(0);
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
@@ -412,7 +417,7 @@ public class Board {
 			activePlayer.getPos().getY()+activePlayer.getYvel()));
 			activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 		}
-		System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+		if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
 	}
 	
 	

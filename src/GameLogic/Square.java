@@ -38,6 +38,10 @@ public class Square extends PhysObject {
 		return point;
 	}
 	
+	public boolean getInUse() {
+		return alive;
+	}
+	
 	public void setPoint(Point2D.Double update){
 		this.point = update;
 	}

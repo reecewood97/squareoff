@@ -18,6 +18,7 @@ public class PhysObject implements Serializable{
 	private int height;
 	private String name;
 	private boolean solid;
+	private boolean inUse;
 	
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
@@ -31,6 +32,7 @@ public class PhysObject implements Serializable{
 		this.width = 10;
 		this.height = 10;
 		this.solid = true;
+		this.inUse = true;
 	}
 	
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
@@ -47,6 +49,11 @@ public class PhysObject implements Serializable{
 		this.height = height;
 		this.solid = solid;
 		this.name = "";
+		this.inUse = true;
+	}
+	
+	public boolean getInUse() {
+		return inUse;
 	}
 	
 	public void update() {
@@ -144,6 +151,13 @@ public class PhysObject implements Serializable{
 	
 	public void setSolid(boolean s) {
 		this.solid = s;
+	}
+	
+	public boolean equal(PhysObject p) {
+		if(xvel==p.getXvel() && yvel==p.getYvel() && pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
+			return true;
+		}
+		else return false;
 	}
 	
 }

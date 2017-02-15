@@ -46,6 +46,10 @@ public class TerrainBlock extends PhysObject {
 		return visible;
 	}
 	
+	public boolean getInUse() {
+		return visible;
+	}
+	
 	public void setHealth(int newHealth) {
 		this.health = newHealth;
 		if(newHealth < 1) {
