@@ -1,6 +1,7 @@
 package ai;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import GameLogic.Board;
@@ -10,6 +11,10 @@ import GameLogic.TerrainBlock;
 
 // Coordinates size: 800 x 450
 
+/**
+ * @author JeffLeung
+ *
+ */
 public class AI {
 	
 	private static final double maxVelocity = 20;
@@ -22,6 +27,15 @@ public class AI {
 	private double outAngle;
 	private double outVelocity;
 	
+	
+	/**
+	 * Constructor that set up AI player
+	 * @param aiID Square ID
+	 * @param aiColour colour for this AI player
+	 * @param aiPlayer player ID of this Square
+	 * @param board Board of the current game
+	 * @param startPos starting position of the square
+	 */
 	public AI(int aiID, int aiColour, int aiPlayer, Board board, Point2D.Double startPos) {
 		setID(aiID);
 		setColour(aiColour);
@@ -30,23 +44,43 @@ public class AI {
 		setPos(startPos); // start position
 	}
 	
+	/**
+	 * Set Player ID
+	 * @param player player ID
+	 */
 	private void setPlayer(int player) {
 		this.myPlayer = player;
 	}
 
+	/**
+	 * Set Position of Square
+	 * @param pos position of Square
+	 */
 	private void setPos(Point2D.Double pos) {
 		this.myPos = pos;
 	}
 
+	/**
+	 * Set colour of Player
+	 * @param colour
+	 */
 	private void setColour(int colour) {
 		this.myColour = colour;
 	}
 
+	/**
+	 * Set Square ID
+	 * @param id square ID
+	 */
 	public void setID(int id) {
 		this.myID = id;
 	}
 
-	private void determineState() {
+	/**
+	 * Determines whether to move and attack or to pick up items
+	 * Should be called by the server to send movements and attacks
+	 */
+	public void determineState() {
 		if(haveItems()) {
 			// go get items
 			// Then go attack
@@ -62,6 +96,10 @@ public class AI {
 		}
 	}
 	
+	/**
+	 * Check are there any random items on the board
+	 * @return true if there are, false if there are no items
+	 */
 	public boolean haveItems() {
 //		if (there are items){
 //			return true;
@@ -72,12 +110,16 @@ public class AI {
 		return false;
 	}
 	
+	/**
+	 * Send out the final velocity and angle chosen for attack
+	 */
 	private void aiAttack() {
 		// choose the closest target at this moment (get it from server copy)
-		Point2D.Double finalCoor = getFinalDestination();
+		//Point2D.Double finalCoor = getFinalDestination();
 		determineResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
+		sendAttack(angle_chosen, velocity_chosen);
 		// attack the provided coordinate
 		// 		by sending power, angle chosen to methods in other class.
 		
@@ -87,6 +129,10 @@ public class AI {
 		//				 if it can, attack, else, choose another target
 	}
 	
+	/**
+	 * Movement of the Square of the AI player
+	 * Current Stage: if the current block standing has less than 2 health, move to other position
+	 */
 	private void aiMove() {
 		// go to the best position to attack target
 		// checks the best position through physics engine (get coordinates)
@@ -146,7 +192,7 @@ public class AI {
 			}
 			while ((xPos < targetX) || (xPos > targetX + 25.0) || yPos != targetY) {
 				if (xPos > targetX) {
-					Point2D nextblock = new Point2D.Double(xPos + 3.0, yPos);
+					Point2D nextblock = new Point2D.Double(xPos + 26.0, yPos);
 					if (!blocks.contains(nextblock)) {
 						moveUp();
 						moveRight();
@@ -154,10 +200,10 @@ public class AI {
 					moveRight();
 				}
 				else {
-					Point2D nextblock = new Point2D.Double(xPos - 3.0, yPos);
+					Point2D nextblock = new Point2D.Double(xPos - 26.0, yPos);
 					if (!blocks.contains(nextblock)) {
 						moveUp();
-						moveRight();
+						moveLeft();
 					}
 					moveLeft();
 				}
@@ -176,13 +222,15 @@ public class AI {
 
 	}
 	
-	// Determine the accurate result to hit the chosen enemy
-	// Currently assuming there are no obstacles(blocks) in the path of the grenade
-	// Next step: calculate and record the coordinates that the grenade is at for every second 
-	// 			  (Recording the path of coordinates of the grenade). 
-	//			  Then, iterate through the path(list of coordinates) to check is there any blocks in those coordinates
-	//			  If there is at least one coordinate that is a block, calculate another path.
-	public void determineResult(){
+	/**
+	 * Determine the accurate result to hit the chosen enemy
+	 * Currently assuming there are no obstacles(blocks) in the path of the grenade
+	 * Next step: calculate and record the coordinates that the grenade is at for every second 
+	 * (Recording the path of coordinates of the grenade).
+	 * Then, iterate through the path(list of coordinates) to check is there any blocks in those coordinates
+	 * If there is at least one coordinate that is a block, calculate another path.
+	 */
+	private void determineResult(){
 		Point2D.Double target = getFinalDestination();
 		// double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -254,7 +302,14 @@ public class AI {
 		}
 	}
 	
-	public int calculation(double a, double v) {
+	/**
+	 * Calculate whether the chosen angle and velocity would be accurate enough to hit chosen target (only suitable for projectile motion weapons)
+	 * States would be return, return 0 if accurate, return 1 if target not reach, return 2 if over target
+	 * @param a angle given
+	 * @param v velocity given
+	 * @return the state of such angle and velocity chosen
+	 */
+	private int calculation(double a, double v) {
 		Point2D.Double target = getFinalDestination();
 		double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -279,7 +334,12 @@ public class AI {
 		//return 2 if over target
 	}
 	
-	public boolean isHit(int cal) {
+	/**
+	 * Determine whether a target is hit with the state return by calculation
+	 * @param cal state that calculation has returned, 0 if accurate, 1 if target not reach, 2 if over target
+	 * @return true if hit, false, if too far or too close
+	 */
+	private boolean isHit(int cal) {
 		if (cal == 0) {
 			return true;
 		}
@@ -288,35 +348,77 @@ public class AI {
 		}
 	}
 	
-	public void moveLeft() {
+	/**
+	 * Send move left command
+	 * @return command
+	 */
+	public String moveLeft() {
+		return "left";
+	}
+	
+	/**
+	 * Send move right command
+	 * @return command
+	 */
+	public String moveRight() {
+		return "right";
+	}
+	
+	/**
+	 * Send jump command
+	 * @return command
+	 */
+	public String moveUp() {
+		return "jump";
+	}
+	
+	/**
+	 * Send attack command by sending the angle and velocity to attack
+	 * @param angle angle to attack
+	 * @param velocity velocity to attack
+	 * @return command
+	 */
+	public String sendAttack(double angle, double velocity){
+		return angle + ", " + velocity;
 		
 	}
 	
-	public void moveRight() {
-		
-	}
-	
-	public void moveUp() {
-		
-	}
-	
+	/**
+	 * Set the angle chosen to attack
+	 * @param angle_chosen angle chosen to attack
+	 */
 	public void setAngle(double angle_chosen) {
 		this.outAngle = angle_chosen;
 	}
 	
+	/**
+	 * Set the velocity chosen to attack
+	 * @param velocity_chosen velocity chosen to attack
+	 */
 	public void setVelocity(double velocity_chosen) {
 		this.outVelocity = velocity_chosen;
 	}
 	
+	/**
+	 * Get the angle chosen to attack
+	 * @return angle chosen to attack
+	 */
 	public double getAngle() {
 		return this.outAngle;
 	}
 	
+	/**
+	 * Get the velocity chosen to attack
+	 * @return velocity chosen to attack
+	 */
 	public double getVelocity() {
 		return this.outVelocity;
 	}
 	
 	
+	/**
+	 * Change the Square position
+	 */
 	public void changeAIPos() {
 		ArrayList<PhysObject> squares = board.getSquares();
 		int numOfPlayers = squares.size();
@@ -327,10 +429,19 @@ public class AI {
 		}
 	}
 	
+	/**
+	 * Get the Square position
+	 * @return the position of the Square
+	 */
 	public Point2D.Double getAIPos() {
 		return this.myPos;
 	}
 	
+	/**
+	 * Determine a target to attack and calculate the position of the target
+	 * Choosing target by the shortest displacement (by pythagoras theorem)
+	 * @return the position of the chosen target
+	 */
 	public Point2D.Double getFinalDestination() {
 		// Call functions that get enemy position from board
 		ArrayList<PhysObject> squares = board.getSquares();
