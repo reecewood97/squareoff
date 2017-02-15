@@ -1,21 +1,25 @@
 package Networking;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientTable {
 
-	private ArrayList<ClientSender> table;
+	private ConcurrentHashMap<ServerReceiver, ServerSender> table;
 	
 	public ClientTable() {
-		table = new ArrayList<ClientSender>();
+		table = new ConcurrentHashMap<ServerReceiver, ServerSender>();
 	}
 	
-	public void send(int i, Object obj) {
-		table.get(i).send(obj);
+	public void add(ServerReceiver r, ServerSender s) {
+		table.put(r, s);
+	}
+	
+	public void send(ServerReceiver r, Object obj) {
+		table.get(r).send(obj);
 	}
 	
 	public void sendAll(Object obj) {
-		for(ClientSender s: table) 
+		for(ServerSender s: table.values())
 			s.send(obj);
 	}
 }

@@ -13,15 +13,17 @@ public class ServerReceiver extends Thread {
 	private Board board;
 	private boolean inGame;
 	private ArrayList<String> players;
+	private ClientTable table;
 	
-	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players) {
+	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players, ClientTable table) {
 		this.fromClient = fromClient;
 		this.board = board;
 		this.players = players; 
+		this.table = table;
 	}
 	
 	public void run() {
-		inGame = true;
+		inGame = false;
 		
 		try {
 			String name = (String)fromClient.readObject();
@@ -33,13 +35,10 @@ public class ServerReceiver extends Thread {
 				//TODO too many players.
 			}
 			
-			
-			while(!inGame) System.out.println(fromClient.readObject());
-			
-			Object stuff;
-			while(!inGame && (stuff = fromClient.readObject()) != null) {
-				if(stuff.equals(1)) {
-					inGame = true;
+			Object ob;
+			while(!inGame && (ob = fromClient.readObject()) != null) {
+				if((int)ob == Server.PLAY) {
+					table.sendAll(Server.PLAY);
 				}
 			}
 			

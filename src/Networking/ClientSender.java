@@ -15,7 +15,7 @@ public class ClientSender extends Thread {
 
 	private ObjectOutputStream server;
 	private Queue q;
-	private boolean inGame;
+	private boolean running;
 	private String name;
 	
 	/**
@@ -29,21 +29,18 @@ public class ClientSender extends Thread {
 	}
 	
 	public void run() {
-		inGame = true;
+		running = false;
 		
 		try {
 			server.writeObject(name);
 			server.flush();
-			
-			while(!inGame) {
-				//server.writeObject("");
-				//server.flush();
-			}
+			server.reset();
 		
-			while(inGame) {
+			while(running) {
 				Object obj = q.take(); 
 				server.writeObject(obj);
 				server.flush();
+				server.reset();
 				
 				sleep(40);
 			}
@@ -61,24 +58,14 @@ public class ClientSender extends Thread {
 	}
 	
 	public void close() {
-		inGame = false;
+		running = false;
 	}
 	
-	public void play() {
+	public void send(int msg) {
 		try {
-			server.writeObject(1);
+			server.writeObject(msg);
 			server.flush();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
-	
-	public void send(Object obj) {
-		try {
-			server.writeObject(obj);
-			server.flush();
+			server.reset();
 		}
 		catch(IOException e) {
 			e.printStackTrace();

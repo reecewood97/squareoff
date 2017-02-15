@@ -68,11 +68,10 @@ public class Client {
 		splashscreen.showSplash();
 
 		Screen newui = new Screen(board, q);
-		newui.setVisible();
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);
-		receiver = new ClientReceiver(fromServer, board, newui);
+		receiver = new ClientReceiver(fromServer, board, newui, toServer);
 			
 		sender.start();
 		receiver.start();
@@ -104,6 +103,6 @@ public class Client {
 	}
 	
 	public void play() {
-		sender.play();
+		sender.send(Server.PLAY);
 	}
 }

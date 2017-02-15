@@ -22,42 +22,43 @@ public class ClientReceiver extends Thread {
 	private boolean inGame;
 	private Screen ui;
 	private ArrayList<String> players;
+	private ClientSender sender;
 
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen ui) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, ClientSender sender) {
 		this.server = server;
 		this.board = board;
 		this.ui = ui;
 		players = new ArrayList<String>();
+		this.sender = sender;
 	}
 	
 	/**
 	 * Run method for the thread.
 	 */
+	@SuppressWarnings("unchecked")
 	public void run() {
-		inGame = true;
+		inGame = false;
 		
 		try {
-			while(!inGame) {
-				ArrayList<String> dummy = new ArrayList<String>();
-				Object ob = server.readObject();
-				if(!ob.equals(0)) 
-					dummy.add((String) ob);
-				else {
-					players = dummy;
-					dummy.clear();
+			Object ob;
+			while(!inGame && (ob = server.readObject()) != null) {
+				if(ob.getClass().isInstance(players)) 
+					players = (ArrayList<String>) ob;
+				else if((int)ob == Server.PLAY) {
+					inGame = true;
 				}
-					
-					
+				
 			}
+			
+			ui.setVisible();
 			
 			while(inGame) {
 				ArrayList<PhysObject> x = (ArrayList<PhysObject>) server.readObject();
-				//System.out.println(x);
 	
 				board.setObjects(x);
 				ui.updateSBoard();

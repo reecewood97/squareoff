@@ -20,22 +20,18 @@ public class ServerSender extends Thread {
 	}
 	
 	public void run() {
-		inGame = true;
+		inGame = false;
 		
 		try {
 			while(!inGame) {
-				for(String name: players) {
-					toClient.writeObject(name);
-					toClient.flush();
-				}
-				toClient.writeObject(0);
+				toClient.writeObject(players);
 				toClient.flush();
+				toClient.reset();
 				sleep(1000);
 			}
 			
 			while(inGame) {
 				ArrayList<PhysObject> x = (board.getUpdate()); 
-				//System.out.println(x);
 	
 				toClient.writeObject(x);
 				toClient.flush();
@@ -49,6 +45,18 @@ public class ServerSender extends Thread {
 			e.printStackTrace();
 			System.exit(1);
 		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
+	public void send(Object obj) {
+		try {
+			toClient.writeObject(obj);
+			toClient.flush();
+			toClient.reset();
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
