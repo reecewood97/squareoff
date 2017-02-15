@@ -19,22 +19,20 @@ public class ClientReceiver extends Thread {
 	private ObjectInputStream server;
 	private Board board;
 	private Queue q;
-	private boolean inGame;
+	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
-	private ClientSender sender;
 
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, ClientSender sender) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen ui) {
 		this.server = server;
 		this.board = board;
 		this.ui = ui;
 		players = new ArrayList<String>();
-		this.sender = sender;
 	}
 	
 	/**
@@ -42,27 +40,30 @@ public class ClientReceiver extends Thread {
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() {
+		running = true;
 		inGame = false;
 		
 		try {
 			Object ob;
-			while(!inGame && (ob = server.readObject()) != null) {
-				if(ob.getClass().isInstance(players)) 
+			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
+			while(running && (ob = server.readObject()) != null) {
+				if(inGame && ob.getClass().isInstance(check)) {
+					board.setObjects((ArrayList<PhysObject>) ob);
+					ui.updateSBoard();
+				}
+				if(!inGame && ob.getClass().isInstance(players)) 
 					players = (ArrayList<String>) ob;
 				else if((int)ob == Server.PLAY) {
 					inGame = true;
+					ui.setVisible();
 				}
-				
+				else if((int)ob == Server.QUIT) {
+					running = false;
+				}	
 			}
 			
-			ui.setVisible();
-			
-			while(inGame) {
-				ArrayList<PhysObject> x = (ArrayList<PhysObject>) server.readObject();
-	
-				board.setObjects(x);
-				ui.updateSBoard();
-			}
+			ui.setInvisible();
+			server.close();
 		}
 		catch(IOException | ClassNotFoundException e) {
 			e.printStackTrace();

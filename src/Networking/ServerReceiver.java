@@ -11,7 +11,7 @@ public class ServerReceiver extends Thread {
 	
 	private ObjectInputStream fromClient;
 	private Board board;
-	private boolean inGame;
+	private boolean running, inGame;
 	private ArrayList<String> players;
 	private ClientTable table;
 	
@@ -23,31 +23,38 @@ public class ServerReceiver extends Thread {
 	}
 	
 	public void run() {
+		running = true;
 		inGame = false;
 		
 		try {
 			String name = (String)fromClient.readObject();
-			//TODO duplicate name
-			if(players.size() < 4) {
-				players.add(name);	
+			if(players.contains(name)) {
+				//TODO 
 			}
+			else if(players.size() < 4) 
+				players.add(name);	
 			else {
-				//TODO too many players.
+				//TODO 
 			}
 			
 			Object ob;
-			while(!inGame && (ob = fromClient.readObject()) != null) {
+			while(running && !inGame && (ob = fromClient.readObject()) != null) {
 				if((int)ob == Server.PLAY) {
 					table.sendAll(Server.PLAY);
+					inGame = true;
 				}
+				else if((int)ob == Server.QUIT) 
+					quit();
 			}
 			
-			String input;
-			while(inGame && (input = (String)fromClient.readObject()) != null) {				
-				board.input(input);
+			Object input;
+			while(running && inGame && (input = fromClient.readObject()) != null) {	
+				if(input.getClass().isInstance("Sup?"))
+					board.input((String)input);
+				else if((int)input == Server.QUIT) 
+					quit();
 			}
-			fromClient.close();	
-			
+			fromClient.close();
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -59,8 +66,8 @@ public class ServerReceiver extends Thread {
 		}
 	}
 	
-	public void close() {
-		inGame = true;
-		inGame = false;
+	private void quit() {
+		table.send(this, Server.QUIT);
+		running = false;
 	}
 }

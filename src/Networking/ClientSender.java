@@ -61,7 +61,7 @@ public class ClientSender extends Thread {
 		running = false;
 	}
 	
-	public void send(int msg) {
+	private void send(int msg) {
 		try {
 			server.writeObject(msg);
 			server.flush();
@@ -71,5 +71,14 @@ public class ClientSender extends Thread {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public void play() {
+		send(Server.PLAY);
+	}
+		
+	public void quit() {
+		running = false;
+		send(Server.QUIT);
 	}
 }
