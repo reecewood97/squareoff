@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -39,10 +41,11 @@ public class NewWeaponsMenu extends JFrame {
 	    String[] weaponArray = {"Bomb","Ball","Grenade"};
 	    int currentWeapon = 0;
 	    JLabel picLabel;
+	    JButton image;
 	 
 	    public NewWeaponsMenu(){
 	    	
-	    	setBounds(0,0,(int)screenwidth/10,(int)screenheight/10);
+	    	setBounds(0,0,(int)screenwidth/10,(int)screenheight/8);
 	    	setUndecorated(true);
 	    	setBackground(Color.white);
 	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,17 +63,55 @@ public class NewWeaponsMenu extends JFrame {
 	    	JButton left = new JButton("<");
 	    	JButton right = new JButton(">");
 	    	JButton exit = new JButton("Exit");
+	    	 	
+	    	//left.setSize(5,5);
+	    	//right.setSize(5,5);
 	    	
+	    	
+	    	JPanel leftbuttonpanel = new JPanel();
+	    	leftbuttonpanel.setLayout(new BorderLayout());
+	    	
+	    	JPanel rightbuttonpanel = new JPanel();
+	    	rightbuttonpanel.setLayout(new BorderLayout());
+	    	
+	    	leftbuttonpanel.add(new JLabel(" "), BorderLayout.NORTH);
+	    	leftbuttonpanel.add(left, BorderLayout.CENTER);
+	    	leftbuttonpanel.add(new JLabel(" "), BorderLayout.SOUTH);
+	    	
+	    	rightbuttonpanel.add(new JLabel(" "), BorderLayout.NORTH);
+	    	rightbuttonpanel.add(right, BorderLayout.CENTER);
+	    	rightbuttonpanel.add(new JLabel(" "), BorderLayout.SOUTH);
+	    	
+	    	ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
+	    	image = new JButton(image2);
+	    	image.setSize(5,5);
+			
+	    	
+	    	//exit.addActionListener(e -> openMainMenu(screen,board));
+			image.setBorderPainted(false); 
+			image.setContentAreaFilled(false); 
+			image.setFocusPainted(false); 
+			image.setOpaque(false);
+			
 	    	left.addActionListener(e -> cycleLeft());
+				
 	    	right.addActionListener(e -> cycleRight());
 	    	select.addActionListener(e -> select());
 	    	exit.addActionListener(e -> exit());
 	    	
 	    	centerpanel.setLayout(new BorderLayout());
 	    	toppanel.add(new JLabel("Weapons Menu"), BorderLayout.NORTH);
-	    	centerpanel.add(left, BorderLayout.WEST);
+	    	centerpanel.add(leftbuttonpanel, BorderLayout.WEST);
 	    	
 	    	
+	    	//ImageIcon pic = new ImageIcon("Files/Images/" + 
+			//							weaponArray[currentWeapon] 
+				//								+ ".png");
+	        centerpanel.add(image,BorderLayout.CENTER);
+
+			
+			centerpanel.add(rightbuttonpanel, BorderLayout.EAST);
+			
 	    	
 	    	bottompanel.setLayout(new FlowLayout());
 	    	bottompanel.add(select);
@@ -80,29 +121,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	add(bottompanel, BorderLayout.SOUTH);
 	    	add(centerpanel, BorderLayout.CENTER);
 	    	
-	    	
-	    	
-	    	
-	    	
-			try {
-				BufferedImage myPicture = ImageIO.read(new File("Files/Images/" + weaponArray[currentWeapon] 
-						+ ".png"));
-				//picLabel = new JLabel(new ImageIcon(myPicture));
-				picLabel = new JLabel(weaponArray[currentWeapon]);
-				//picLabel.setBounds(0, 0, 10, 10);
-				centerpanel.setLayout(new FlowLayout());
-				centerpanel.add(new JLabel("   "));
-				centerpanel.add(picLabel);
-				centerpanel.add(new JLabel("   "));
-				
-				
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			centerpanel.add(right, BorderLayout.EAST);
-			
+	    
 			centerpanel.setBackground(Color.WHITE);
 			toppanel.setBackground(Color.WHITE);
 			bottompanel.setBackground(Color.WHITE);
@@ -151,22 +170,13 @@ public class NewWeaponsMenu extends JFrame {
 		  currentWeapon = currentWeapon + 1;
 	  }
 	  
-
-	  BufferedImage image;
-	  try {
-		image = ImageIO.read(new File("Files/Images/" + weaponArray[currentWeapon] 
-					+ ".png"));
-
-		  picLabel.setText(weaponArray[currentWeapon]);
-	  }
-	  catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	  }
 	  
-	 // picLabel.setIcon(new ImageIcon(image));
+	  ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] + ".png");
+	 // image2.
+	  image.setIcon(image2);
 	  
-	  
+	   
+	 
 	}
 	
 	public void select(){
@@ -174,7 +184,7 @@ public class NewWeaponsMenu extends JFrame {
 	}
 
 
-	public void cycleLeft(){
+	public void cycleLeft() {
 	  
 	  if (currentWeapon == 0){
 		  currentWeapon = 2;
@@ -183,13 +193,14 @@ public class NewWeaponsMenu extends JFrame {
 		  currentWeapon = currentWeapon - 1;
 	  }
 	  
-	  BufferedImage image;
-	
-	  //image = ImageIO.read(new File("Files/Images/" + weaponArray[currentWeapon] 
-		//		+ ".png"));
-	  picLabel.setText(weaponArray[currentWeapon]);
-	  
+
+	  ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] +
+			  ".png");
+	  image.setIcon(image2);
+	  //image.
 	}
+	
+	
 	
 	public void exit(){
 		
