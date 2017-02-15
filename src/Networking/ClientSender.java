@@ -29,7 +29,7 @@ public class ClientSender extends Thread {
 	}
 	
 	public void run() {
-		running = false;
+		running = true;
 		
 		try {
 			server.writeObject(name);
