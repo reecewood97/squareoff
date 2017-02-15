@@ -1,6 +1,7 @@
 package GameLogic;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.awt.geom.Ellipse2D;
@@ -16,6 +17,23 @@ public class Board {
 	private boolean freeState;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
+	
+	public static void main(String[] args) {
+		Board board = new Board();
+		Scanner scanner = new Scanner(System.in);
+		while(true){
+			String input = scanner.nextLine();
+			if (input.equals("l")){
+				board.updateFrame(new Move(0,0,"Left",false));
+			}
+			if (input.equals("r")){
+				board.updateFrame(new Move(0,0,"Right",false));
+			}
+			if (input.equals("u")){
+				board.updateFrame(new Move(0,0,"None",true));
+			}
+		}
+	}
 	
 	public Board(){
 		this.player = 0;
@@ -201,7 +219,7 @@ public class Board {
 		double guydown = guy.getPos().getY();
 		double blockleft = block.getPos().getX();
 		double blockright = block.getPos().getX()+block.getWidth();
-		double blockup = block.getPos().getY();
+		double blockup = block.getPos().getY()+block.getHeight();
 		
 		if((blockleft<guyleft && guyleft<blockright) || 
 				(blockleft<guyright && guyright<blockright)) {
@@ -294,6 +312,9 @@ public class Board {
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
+		if(objs.equals(objects)){//TODO probably won't work
+			freeState = false;
+		}
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
@@ -330,28 +351,52 @@ public class Board {
 			wep.setYvel(wepMove.getYvel());;
 			freeState = true;
 		}
-		else {
+		else { //Not in freeState, change active player depending on move
 			Square activePlayer = (Square)getActivePlayer();
 			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
+				System.out.println("Player standing on floor");
 				activePlayer.setYvel(0);
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
-					if(move.getJump()) {
+				if(move.getJump()) {
 					activePlayer.setYvel(20);
 				}
-					//System.out.println("test");
-					if(move.getDirection().equals("Left")){
-						if (wallDistL(activePlayer)<2){
-							activePlayer.setPos
-							(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
-							activePlayer.getPos().getY()));
-						} else {
-							activePlayer.setPos
-							(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
-						}
-					}else if(move.getDirection().equals("Right")){
-						if (wallDistR(activePlayer)<2){
+				//System.out.println("test");
+				if(move.getDirection().equals("Left")){
+					if (wallDistL(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+					}
+				} else if(move.getDirection().equals("Right")){
+					if (wallDistR(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()+wallDistR(activePlayer),
+						activePlayer.getPos().getY()));
+					}
+					else {
+						activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX()+2,
+						activePlayer.getPos().getY()));
+					}
+				} else if(move.getDirection().equals("None")){
+					//Don't move the square
+				}
+			} else { //Player not standing on a block
+				if(move.getDirection().equals("Left")){
+					if (wallDistL(activePlayer)<2){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
+					} else {
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+					}
+				} else if(move.getDirection().equals("Right")){
+					if (wallDistR(activePlayer)<2){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
 						activePlayer.getPos().getY()));
@@ -359,35 +404,16 @@ public class Board {
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
 					}
-					}else
-						System.out.println("Invalid move String");
-		}else {
-			if(move.getDirection().equals("Left")){
-				if (wallDistL(activePlayer)<2){
-					activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
-					activePlayer.getPos().getY()));
-				} else {
-					activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+				} else if(move.getDirection().equals("None")) {
+					
 				}
-			}else if(move.getDirection().equals("Right")){
-				if (wallDistR(activePlayer)<2){
-					activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
-					activePlayer.getPos().getY()));
-				} else {
-					activePlayer.setPos
-					(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
-				}
-			}else
-				System.out.println("Physics engine has detected an invalid move string.");
-				}
-//				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-//						activePlayer.getPos().getY()+activePlayer.getYvel()));
-//				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
-			}
+			} 
+			activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
+			activePlayer.getPos().getY()+activePlayer.getYvel()));
+			activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 		}
+		System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+	}
 	
 	
 	/**
@@ -419,7 +445,10 @@ public class Board {
 			Move mv;
 			
 			switch(inputKey){
-			case "W" : //jump?
+			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
+							//System.out.println("Hey left sorta works");
+							updateFrame(mv);
+							q.add(objects);
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
 						//System.out.println("Hey left sorta works");
