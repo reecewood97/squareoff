@@ -52,8 +52,7 @@ public class ButtonPanel extends JPanel{
 		
 		firstopen=true;
 		newmenu = new NewWeaponsMenu();
-		//newmenu.launchMenu();
-		//newmenu.exit();
+		
 	
 
 	}
@@ -61,6 +60,8 @@ public class ButtonPanel extends JPanel{
 	public void openMainMenu(Screen screen, Board board){
 	
 		board.notifyQuit();
+		Audio audioforclick = new Audio();
+		audioforclick.click();
 		
 		/*
 		screen.setVisible(false);
@@ -68,6 +69,7 @@ public class ButtonPanel extends JPanel{
 		mainmenu.launchMenu();
 		*/
 		
+		//openweaponsmenu
 		newmenu.open();
 		
 		

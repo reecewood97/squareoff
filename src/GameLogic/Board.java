@@ -66,6 +66,13 @@ public class Board {
 			objects.add(block);
 		}
 		
+		for(int i = 100; i <800; i+=40){
+			
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,650), true);
+			objects.add(block);
+			
+		}
+		
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);

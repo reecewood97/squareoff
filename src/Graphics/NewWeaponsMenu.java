@@ -1,72 +1,57 @@
 package Graphics;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GameLogic.Board;
-import Networking.Queue;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import Audio.Audio;
 
+/**
+ * 
+ * @author Fran
+ *
+ */
 public class NewWeaponsMenu extends JFrame {
 
-	
-	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-	    
-	    double screenheight = screenSize.getHeight(); 
-	    double screenwidth = screenSize.getWidth();
-	    double framewidth = 800;
-	    double frameHeight = 450;
-	    String[] weaponArray = {"Bomb","Ball","Grenade"};
-	    int currentWeapon = 0;
-	    JLabel picLabel;
-	    JButton image;
+		private static final long serialVersionUID = 1L;
+		private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
+	    private double screenheight = screenSize.getHeight(); 
+	    private double screenwidth = screenSize.getWidth();
+	    private Audio audio;
+	   // private double framewidth = 800;
+	    //private double frameHeight = 450;
+	    private String[] weaponArray = {"Bomb","Ball","Grenade"};
+	    private int currentWeapon = 0;
+	    //private JLabel picLabel;
+	    private JButton image;
 	 
+	    /**
+	     * weapon menu constructor
+	     */
 	    public NewWeaponsMenu(){
 	    	
+	    	//edit menu settings
 	    	setBounds(0,0,(int)screenwidth/10,(int)screenheight/8);
 	    	setUndecorated(true);
 	    	setBackground(Color.white);
 	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    	setTitle("SQUARE-OFF");
 	    
+	    	
+	    	//create panels
 	    	JPanel toppanel = new JPanel();
 	    	JPanel bottompanel = new JPanel();
 	    	JPanel centerpanel = new JPanel();
-	    	toppanel.setBackground(Color.blue);
-	    	centerpanel.setBackground(Color.green);
-	    	//bottompanel.setBackground(Color.black);
-	    	//centerpanel.setBackground(Color.green);
-	    	
-	    	JButton select = new JButton("Select");
-	    	JButton left = new JButton("<");
-	    	JButton right = new JButton(">");
-	    	JButton exit = new JButton("Exit");
-	    	 	
-	    	//left.setSize(5,5);
-	    	//right.setSize(5,5);
-	    	
 	    	
 	    	JPanel leftbuttonpanel = new JPanel();
 	    	leftbuttonpanel.setLayout(new BorderLayout());
@@ -74,64 +59,89 @@ public class NewWeaponsMenu extends JFrame {
 	    	JPanel rightbuttonpanel = new JPanel();
 	    	rightbuttonpanel.setLayout(new BorderLayout());
 	    	
+	    	
+	    	//create buttons
+	    	JButton select = new JButton("Select");
+	    	JButton left = new JButton("<");
+	    	JButton right = new JButton(">");
+	    	JButton exit = new JButton("Exit");
+	    	 	
+	    
+	    	//add left button to leftbuttonpanel
+	    	leftbuttonpanel.setLayout(new BorderLayout());
 	    	leftbuttonpanel.add(new JLabel(" "), BorderLayout.NORTH);
 	    	leftbuttonpanel.add(left, BorderLayout.CENTER);
 	    	leftbuttonpanel.add(new JLabel(" "), BorderLayout.SOUTH);
 	    	
+	    	//add right button to right button panel
+	    	rightbuttonpanel.setLayout(new BorderLayout());
 	    	rightbuttonpanel.add(new JLabel(" "), BorderLayout.NORTH);
 	    	rightbuttonpanel.add(right, BorderLayout.CENTER);
 	    	rightbuttonpanel.add(new JLabel(" "), BorderLayout.SOUTH);
 	    	
-	    	ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
+	    	//set current weapon image
+	    	ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] + ".png");
 	    	image = new JButton(image2);
 	    	image.setSize(5,5);
-			
-	    	
-	    	//exit.addActionListener(e -> openMainMenu(screen,board));
 			image.setBorderPainted(false); 
 			image.setContentAreaFilled(false); 
 			image.setFocusPainted(false); 
 			image.setOpaque(false);
 			
+			//establish button actions
 	    	left.addActionListener(e -> cycleLeft());
-				
-	    	right.addActionListener(e -> cycleRight());
+			right.addActionListener(e -> cycleRight());
 	    	select.addActionListener(e -> select());
 	    	exit.addActionListener(e -> exit());
 	    	
-	    	centerpanel.setLayout(new BorderLayout());
+	    	//add weapon menu title to menu
 	    	toppanel.add(new JLabel("Weapons Menu"), BorderLayout.NORTH);
+	    	
+	    	//add leftbuttonpanel, weapon and rightbuttonpanel to centerpanel
+	    	centerpanel.setLayout(new BorderLayout());
 	    	centerpanel.add(leftbuttonpanel, BorderLayout.WEST);
-	    	
-	    	
-	    	//ImageIcon pic = new ImageIcon("Files/Images/" + 
-			//							weaponArray[currentWeapon] 
-				//								+ ".png");
-	        centerpanel.add(image,BorderLayout.CENTER);
-
+	    	centerpanel.add(image,BorderLayout.CENTER);
+	        centerpanel.add(rightbuttonpanel, BorderLayout.EAST);
 			
-			centerpanel.add(rightbuttonpanel, BorderLayout.EAST);
-			
-	    	
+	    	//add select adn exit buttons to bottompanel
 	    	bottompanel.setLayout(new FlowLayout());
 	    	bottompanel.add(select);
 	    	bottompanel.add(exit);
 	    
+	    	//add main panels to menu
 	    	add(toppanel,BorderLayout.NORTH);
 	    	add(bottompanel, BorderLayout.SOUTH);
 	    	add(centerpanel, BorderLayout.CENTER);
 	    	
-	    
+	    	//set panel colours
 			centerpanel.setBackground(Color.WHITE);
 			toppanel.setBackground(Color.WHITE);
 			bottompanel.setBackground(Color.WHITE);
 			
-	    	
+			
+			//establish sounds
+			audio = new Audio();
+			
+	    	//hide menu
 			setVisible(false);
 	    	
 	    }
 
 	    
+	    /**
+	     * get current weapon method
+	     * @return currentWeapon the weapon in use
+	     */
+	    public int getCurrentWeapon(){
+	    	
+	    	return currentWeapon;
+	    }
+	   
+	    
+	    /**
+	     * paint method
+	     * @param g Graphics
+	     */
 	    @Override
 	    public void paint(Graphics g) {
 	        
@@ -143,67 +153,106 @@ public class NewWeaponsMenu extends JFrame {
 	       
 	    }
 	    
+	    
+	    /**
+	     * open menu method
+	     */
 	    public void open(){
 	    	
 	    	setVisible(true);
 	    }
 	    
-	    public void setVisible(){
-	    	
-	    	setVisible(true);
 	    
-	    }
-	    
+	    /**
+	     * hide menu method
+	     */
 	    public void setInvisible(){
+	    	
 	    	setVisible(false);
 	    }
 	    
 
 
-
-	public void cycleRight(){
+	    /**
+	     * cycleRight method cycles weapons array to the right
+	     * 
+	     */
+	    public void cycleRight(){
 	  
-	  if (currentWeapon == 2){
-		  currentWeapon = 0;
-	  }
-	  else{
-		  currentWeapon = currentWeapon + 1;
-	  }
+	    	//click sound
+	    	audio.click();
+	    	
+	    	//update current weapon
+	    	if (currentWeapon == 2)
+	    	{
+	    		
+	    		currentWeapon = 0;
+	    	}
+	    	else
+	    	{
+	    		currentWeapon = currentWeapon + 1;
+	    	}
 	  
 	  
-	  ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] + ".png");
-	 // image2.
-	  image.setIcon(image2);
+	    	//update image
+	    	updateWeaponImage();
 	  
 	   
-	 
-	}
+	    }
 	
-	public void select(){
-		//TODO
-	}
+	    
+	    /**
+	     * select weapon
+	     */
+	    public void select(){
+	    	
+	    	//click sound
+	    	audio.click();
+	    	
+	    	//TODO notify board of weapon choice
+	    }
 
 
-	public void cycleLeft() {
+	    public void cycleLeft() {
 	  
-	  if (currentWeapon == 0){
-		  currentWeapon = 2;
-	  }
-	  else{
-		  currentWeapon = currentWeapon - 1;
-	  }
+	    	//click sound
+	    	audio.click();
+	    	
+	    	if (currentWeapon == 0)
+	    	{
+	    		currentWeapon = 2;
+	    	}
+	    	else
+	    	{
+	    		currentWeapon = currentWeapon - 1;
+	    	}
+		  
+	    	//update image
+	    	updateWeaponImage();
 	  
-
-	  ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] +
-			  ".png");
-	  image.setIcon(image2);
-	  //image.
-	}
+	    }
 	
 	
-	
-	public void exit(){
-		
-		setVisible(false);
-	}
+	    /**
+	     * updates weapon image to current weapon
+	     */
+	    public void updateWeaponImage(){
+	    	
+	    	//update image to current weapon
+	    	ImageIcon image2 = new ImageIcon("Files/Images/" + weaponArray[currentWeapon] + ".png");
+	    	image.setIcon(image2);
+	    	
+	    }
+	    
+	    /**
+	     * exit method hides menu
+	     */
+	    public void exit(){
+	    	
+	    	//click sound
+	    	audio.click();
+	    	
+	    	//hide menu
+	    	setVisible(false);
+	    }
 }
