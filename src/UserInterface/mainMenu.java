@@ -1,7 +1,16 @@
+/**
+ * The mainMenu class is the initial menu a player will interact with.
+ * They can host or join a game from here, as well as change any options required.
+ * @author ksk523
+ */
+
 package UserInterface;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import Audio.Audio;
+import Graphics.SplashSplash;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +32,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class mainMenu extends Application {
+	static int width = 960;
+	static int height = 540;
+	static Audio a = new Audio();
+	//private static Refresher r;
+	
     public static void main(String[] args) {
         //launch(args);
     	launchMenu();
@@ -34,6 +48,8 @@ public class mainMenu extends Application {
     }
     
     public static void launchMenu() {
+    	SplashSplash splashscreen = new SplashSplash(1000);
+		splashscreen.showSplash();
     	launch();
     }
     
@@ -59,12 +75,12 @@ public class mainMenu extends Application {
         grid.setAlignment(Pos.CENTER);
         
         
-        Scene scene1 = new Scene(grid, 960, 540);
+        Scene scene1 = new Scene(grid, width, height);
         
-        btn.setOnAction( e -> { System.out.println("Hosting new lobby"); lobbyWindow(primaryStage, scene1, "Host"); } );
-        btn2.setOnAction( e -> { System.out.println("Loading existing lobbies"); jgWindow(primaryStage, scene1); } );
-        btn3.setOnAction( e -> { System.out.println("Opening options"); oWindow(primaryStage, scene1); } );
-        btn4.setOnAction( e -> { System.out.println("Quitting Game"); System.exit(0); } );
+        btn.setOnAction( e -> { System.out.println("Hosting new lobby"); a.click(); lobbyWindow(primaryStage, scene1, "Host", (new mainMenuNetwork()) ); } );
+        btn2.setOnAction( e -> { System.out.println("Loading existing lobbies"); a.click(); jgWindow(primaryStage, scene1); } );
+        btn3.setOnAction( e -> { System.out.println("Opening options"); a.click(); oWindow(primaryStage, scene1); } );
+        btn4.setOnAction( e -> { System.out.println("Quitting Game"); a.click(); System.exit(0); } );
         
         primaryStage.setScene(scene1);
         primaryStage.show();
@@ -79,6 +95,7 @@ public class mainMenu extends Application {
 		dialog.setContentText("Please enter your name:");
 
 		Optional<String> result = dialog.showAndWait();
+		a.click();
 
 		if (result.isPresent() && !(result.get().isEmpty())) {
 			return result.get();
@@ -87,15 +104,91 @@ public class mainMenu extends Application {
 		}
 	} 
     
-    
-    
     @SuppressWarnings({ "rawtypes" })
-	public static void lobbyWindow(Stage primaryStage, Scene scene1, String type) {
+    public static void refreshHLobby(Stage primaryStage, Scene scene1, mainMenuNetwork net) {
+    	primaryStage.setTitle("Square-Off: Lobby");
+    	
+    	Button btn4 = new Button("Refresh");
+    	btn4.setMinWidth(120);
+        btn4.setOnAction( e -> { System.out.println("Refreshing Table"); a.click(); refreshHLobby(primaryStage, scene1, net); } );
+    	
+    	Button btn5 = new Button("Back to Main Menu");
+    	btn5.setMinWidth(120);
+        btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); a.click(); net.closeServer(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+        
+        Button btn6 = new Button("Start Game");
+    	btn6.setMinWidth(120);
+        btn6.setOnAction( e -> { System.out.println("Starting Game"); a.click(); net.startGame(); primaryStage.hide(); } );
+        
+        TableView table = lobbyTable(net);
+        
+        HBox hbox = new HBox(12);
+        hbox.getChildren().addAll(btn6, btn5, btn4);
+        hbox.setAlignment(Pos.CENTER);
+        
+        VBox vbox = new VBox(12);
+        vbox.getChildren().addAll(table, hbox);
+        vbox.setMaxWidth(710);
+        vbox.setAlignment(Pos.CENTER);
+        
+        
+        GridPane grid3 = new GridPane();
+        
+        Label label3 = new Label("");
+        
+        grid3.add(label3, 1, 0);
+        grid3.add(vbox, 0, 0);
+        grid3.setAlignment(Pos.CENTER);
+        
+        primaryStage.setOnCloseRequest( e -> net.closeServer() ); 
+        
+        Scene scene2 = new Scene(grid3, width, height);
+        primaryStage.setScene(scene2);
+        primaryStage.show();
+    }
+  
+    @SuppressWarnings({ "rawtypes" })
+    public static void refreshCLobby(Stage primaryStage, Scene scene1, mainMenuNetwork net) {
+    	primaryStage.setTitle("Square-Off: Lobby");
+    	
+    	Button btn4 = new Button("Refresh");
+    	btn4.setMinWidth(120);
+        btn4.setOnAction( e -> { System.out.println("Refreshing Table"); a.click(); refreshCLobby(primaryStage, scene1, net); } );
+    	
+    	Button btn5 = new Button("Back to Main Menu");
+    	btn5.setMinWidth(120);
+        btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); a.click(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+        
+        TableView table = lobbyTable(net);
+        
+        HBox hbox = new HBox(12);
+        hbox.getChildren().addAll(btn5, btn4);
+        hbox.setAlignment(Pos.CENTER);
+        
+        VBox vbox = new VBox(12);
+        vbox.getChildren().addAll(table, hbox);
+        vbox.setMaxWidth(710);
+        vbox.setAlignment(Pos.CENTER);
+
+        GridPane grid3 = new GridPane();
+        
+        Label label3 = new Label("");
+        
+        grid3.add(label3, 1, 0);
+        grid3.add(vbox, 0, 0);
+        grid3.setAlignment(Pos.CENTER);
+        
+        Scene scene2 = new Scene(grid3, width, height);
+        primaryStage.setScene(scene2);
+        primaryStage.show();
+    } 
+   
+    @SuppressWarnings({ })
+	public static void lobbyWindow(Stage primaryStage, Scene scene1, String type, mainMenuNetwork net) {
     	//ArrayList<String> playerArrayList = new ArrayList();
-    	mainMenuNetwork net = new mainMenuNetwork();
     	
     	if (type.equals("Host")) {
-    		
+    		//mainMenuNetwork net = new mainMenuNetwork();
     		String name = hostUsername();
     		
     		if (name==null) {
@@ -108,69 +201,17 @@ public class mainMenu extends Application {
     		}
 
     		net.runServer();
-    		net.connectToHost("127.0.0.1:123", name);
+    		net.connectToHost("127.0.0.1:4444", name);
     		
-        	primaryStage.setTitle("Square-Off: Lobby");
-        	
-        	Button btn5 = new Button("Back to Main Menu");
-        	btn5.setMinWidth(120);
-            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); net.closeServer(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
-            
-            Button btn6 = new Button("Start Game");
-        	btn6.setMinWidth(120);
-            btn6.setOnAction( e -> { System.out.println("Starting Game"); net.startGame(); primaryStage.hide(); } );
-            
-            TableView table = lobbyTable(net);
-            
-            HBox hbox = new HBox(12);
-            hbox.getChildren().addAll(btn6, btn5);
-            hbox.setAlignment(Pos.CENTER);
-            
-            VBox vbox = new VBox(12);
-            vbox.getChildren().addAll(table, hbox);
-            vbox.setMaxWidth(710);
-            vbox.setAlignment(Pos.CENTER);
-            
-            
-            GridPane grid3 = new GridPane();
-            
-            Label label3 = new Label("");
-            
-            grid3.add(label3, 1, 0);
-            grid3.add(vbox, 0, 0);
-            grid3.setAlignment(Pos.CENTER);
-            
-            primaryStage.setOnCloseRequest( e -> net.closeServer() ); 
-            
-            Scene scene2 = new Scene(grid3, 960, 540);
-            primaryStage.setScene(scene2);
-            primaryStage.show();
+    		refreshHLobby(primaryStage, scene1, net);
+    		
+    		//r = new Refresher(primaryStage, scene1, net, true);
+    		//r.start();
     	}
     	else {
-        	primaryStage.setTitle("Square-Off: Lobby");
-        	
-        	Button btn5 = new Button("Back to Main Menu");
-        	btn5.setMinWidth(120);
-            btn5.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
-            
-            TableView table = lobbyTable(net);
-            
-            VBox vbox = new VBox(12);
-            vbox.getChildren().addAll(table, btn5);
-            vbox.setMaxWidth(710);
-            vbox.setAlignment(Pos.CENTER);
-
-            GridPane grid3 = new GridPane();
-            
-            Label label3 = new Label("");
-            
-            grid3.add(label3, 1, 0);
-            grid3.add(vbox, 0, 0);
-            grid3.setAlignment(Pos.CENTER);
-            
-            Scene scene2 = new Scene(grid3, 960, 540);
-            primaryStage.setScene(scene2);
-            primaryStage.show();
+    		refreshCLobby(primaryStage, scene1, net);
+    		//r = new Refresher(primaryStage, scene1, net, false);
+    		//r.start();
     	}
     }
     
@@ -180,12 +221,10 @@ public class mainMenu extends Application {
 	public static TableView<Players> lobbyTable(mainMenuNetwork net) {
 		ArrayList<String> playerArrayList = net.getPlayers();
 		ObservableList<Players> playerList = FXCollections.observableArrayList();
-        
+		
 		for (int x=0; x<playerArrayList.size(); x++) {
 			if (x==0)
 				playerList.add(new Players("(Host) " + String.valueOf(x+1), playerArrayList.get(x)));
-			else if (x==1)
-				playerList.add(new Players("(Human) " + String.valueOf(x+1), playerArrayList.get(x)));
 			else
 				playerList.add(new Players(String.valueOf(x+1), playerArrayList.get(x)));
 		}
@@ -226,10 +265,11 @@ public class mainMenu extends Application {
 			alert.setContentText("You must enter a valid name.");
 			alert.setTitle("Square-Off: Joining Game");
 			alert.showAndWait();
+			a.click();
     	}
     	else {
     		if (net.connectToHost(hostName, name))
-				lobbyWindow(primaryStage, scene1, "Client");
+				lobbyWindow(primaryStage, scene1, "Client", net);
 			else {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -237,6 +277,7 @@ public class mainMenu extends Application {
 				alert.setContentText("There is no host with the address: " + hostName);
 				alert.setTitle("Square-Off: Joining Game");
 				alert.showAndWait();
+				a.click();
 			}
     	}
     }
@@ -255,11 +296,11 @@ public class mainMenu extends Application {
         
     	Button btn5 = new Button("Click to Join");
     	btn5.setMinWidth(90);
-        btn5.setOnAction( e -> { System.out.println("Opening Message Box"); tryToJoin(textField.getText(), textField2.getText(), primaryStage, scene1); } );
+        btn5.setOnAction( e -> { System.out.println("Opening Message Box"); a.click(); tryToJoin(textField.getText(), textField2.getText(), primaryStage, scene1); } );
     	
     	Button btn6 = new Button("Back to Main Menu");
     	btn6.setMinWidth(140);
-        btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+        btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); a.click(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
         
         hb.getChildren().addAll(label1, textField, btn5);
         hb.setAlignment(Pos.CENTER);
@@ -281,7 +322,7 @@ public class mainMenu extends Application {
         grid3.setAlignment(Pos.CENTER);
         
         
-        Scene scene3 = new Scene(grid3, 960, 540);
+        Scene scene3 = new Scene(grid3, width, height);
         primaryStage.setScene(scene3);
         primaryStage.show();
     }
@@ -310,11 +351,11 @@ public class mainMenu extends Application {
         grid4.setAlignment(Pos.CENTER);
         
         
-        Scene scene4 = new Scene(grid4, 960, 540);
+        Scene scene4 = new Scene(grid4, width, height);
         
-        btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
-        btn7.setOnAction( e -> { System.out.println("Opening Video Options"); videoWindow(primaryStage, scene4, 960, 540); primaryStage.setTitle("Square-Off: Video Options"); } );
-        btn8.setOnAction( e -> { System.out.println("Opening Audio Options"); audioWindow(primaryStage, scene4); primaryStage.setTitle("Square-Off: Audio Options"); } );
+        btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); a.click(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Start Menu"); } );
+        btn7.setOnAction( e -> { System.out.println("Opening Video Options"); a.click(); videoWindow(primaryStage, scene4, width, height); primaryStage.setTitle("Square-Off: Video Options"); } );
+        btn8.setOnAction( e -> { System.out.println("Opening Audio Options"); a.click(); audioWindow(primaryStage, scene4); primaryStage.setTitle("Square-Off: Audio Options"); } );
         
         primaryStage.setScene(scene4);
         primaryStage.show();
@@ -335,7 +376,7 @@ public class mainMenu extends Application {
     	
     	Button btn9 = new Button("Back to Options");
     	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { System.out.println("Returning to Options"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
+        btn9.setOnAction( e -> { System.out.println("Returning to Options"); a.click(); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
         
         Slider slider = new Slider();
         slider.setMin(0);
@@ -351,7 +392,7 @@ public class mainMenu extends Application {
         HBox hb = new HBox(10);
     	Button btn10 = new Button("Set Volume");
     	btn10.setMinWidth(140);
-        btn10.setOnAction( e -> { System.out.println("Setting Volume"); setVolume(slider.getValue()); } );
+        btn10.setOnAction( e -> { System.out.println("Setting Volume"); a.click(); setVolume(slider.getValue()); } );
         
         hb.getChildren().addAll(slider, btn10);
         hb.setAlignment(Pos.CENTER);
@@ -365,7 +406,7 @@ public class mainMenu extends Application {
         grid5.setAlignment(Pos.CENTER);
         
         
-        Scene scene5 = new Scene(grid5, 960, 540);
+        Scene scene5 = new Scene(grid5, width, height);
         primaryStage.setScene(scene5);
         primaryStage.show();
     }
@@ -373,11 +414,11 @@ public class mainMenu extends Application {
     
     
     
-    public static void videoWindow(Stage primaryStage, Scene scene1, double width, double height) {
+    public static void videoWindow(Stage primaryStage, Scene scene1, double w, double h) {
     	
     	Button btn9 = new Button("Back to Options");
     	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { System.out.println("Returning to Options"); primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
+        btn9.setOnAction( e -> { System.out.println("Returning to Options"); a.click(); width = (int) w; height = (int) h; primaryStage.setScene(scene1); primaryStage.setTitle("Square-Off: Options"); } );
         
         Slider slider = new Slider();
         slider.setMin(480);
@@ -390,7 +431,7 @@ public class mainMenu extends Application {
         slider.setBlockIncrement(10);
         //slider
         
-        Label currentLabel = new Label( ((int) width) + " x " + ( (int) height ));
+        Label currentLabel = new Label( ((int) w) + " x " + ( (int) h ));
         
         /*
         opacityLevel.valueProperty().addListener(new ChangeListener<Number>() {
@@ -405,7 +446,7 @@ public class mainMenu extends Application {
         HBox hb = new HBox(10);
     	Button btn10 = new Button("Set Resolution");
     	btn10.setMinWidth(140);
-        btn10.setOnAction( e -> { System.out.println("Setting Resolution"); videoWindow(primaryStage, scene1, ((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
+        btn10.setOnAction( e -> { System.out.println("Setting Resolution"); a.click(); videoWindow(primaryStage, scene1, ((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
         
         hb.getChildren().addAll(slider, btn10);
         hb.setAlignment(Pos.CENTER);
@@ -420,7 +461,7 @@ public class mainMenu extends Application {
         grid5.setAlignment(Pos.CENTER);
         
         
-        Scene scene5 = new Scene(grid5, (int) width, (int) height);
+        Scene scene5 = new Scene(grid5, (int) w, (int) h);
         primaryStage.setScene(scene5);
         primaryStage.show();
     }    
