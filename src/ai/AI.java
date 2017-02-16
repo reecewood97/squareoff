@@ -5,9 +5,11 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import GameLogic.Board;
+import GameLogic.Move;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
+import Networking.Queue;
 
 // Coordinates size: 800 x 450
 
@@ -17,7 +19,7 @@ import GameLogic.TerrainBlock;
  */
 public class AI {
 	
-	private static final double maxVelocity = 20;
+	private static final double maxVelocity = 50;
 	private static final double gravity = 9.81;
 	private int myID; // Square ID
 	private int myColour;
@@ -26,6 +28,7 @@ public class AI {
 	private int myPlayer; // AI Player ID
 	private double outAngle;
 	private double outVelocity;
+	private Queue q;
 	
 	
 	/**
@@ -44,11 +47,15 @@ public class AI {
 		setPos(startPos); // start position
 	}
 	
+	public void setBoard(Board updatedBoard) {
+		this.board = updatedBoard;
+	}
+	
 	/**
 	 * Set Player ID
 	 * @param player player ID
 	 */
-	private void setPlayer(int player) {
+	public void setPlayer(int player) {
 		this.myPlayer = player;
 	}
 
@@ -56,7 +63,7 @@ public class AI {
 	 * Set Position of Square
 	 * @param pos position of Square
 	 */
-	private void setPos(Point2D.Double pos) {
+	public void setPos(Point2D.Double pos) {
 		this.myPos = pos;
 	}
 
@@ -64,7 +71,7 @@ public class AI {
 	 * Set colour of Player
 	 * @param colour
 	 */
-	private void setColour(int colour) {
+	public void setColour(int colour) {
 		this.myColour = colour;
 	}
 
@@ -75,6 +82,7 @@ public class AI {
 	public void setID(int id) {
 		this.myID = id;
 	}
+	
 
 	/**
 	 * Determines whether to move and attack or to pick up items
@@ -120,6 +128,8 @@ public class AI {
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
 		sendAttack(angle_chosen, velocity_chosen);
+		String command = angle_chosen + ", " + velocity_chosen;
+		q.offer(command);
 		// attack the provided coordinate
 		// 		by sending power, angle chosen to methods in other class.
 		
@@ -194,6 +204,7 @@ public class AI {
 				if (xPos > targetX) {
 					Point2D nextblock = new Point2D.Double(xPos + 26.0, yPos);
 					if (!blocks.contains(nextblock)) {
+						//moveUpRight();
 						moveUp();
 						moveRight();
 					}
@@ -202,6 +213,7 @@ public class AI {
 				else {
 					Point2D nextblock = new Point2D.Double(xPos - 26.0, yPos);
 					if (!blocks.contains(nextblock)) {
+						//moveUpLeft();
 						moveUp();
 						moveLeft();
 					}
@@ -221,7 +233,7 @@ public class AI {
 		// or attack when there is a clear target (a must hit enemy situation).
 
 	}
-	
+
 	/**
 	 * Determine the accurate result to hit the chosen enemy
 	 * Currently assuming there are no obstacles(blocks) in the path of the grenade
@@ -350,27 +362,55 @@ public class AI {
 	
 	/**
 	 * Send move left command
-	 * @return command
+	 * @return move
 	 */
-	public String moveLeft() {
-		return "left";
+	public void moveLeft() {
+//		Move left = new Move(myColour, myID, "Left", false);
+//		board.updateFrame(left);
+//		board.input("Pressed A");
+		q.offer("Pressed A");
+		
 	}
 	
 	/**
 	 * Send move right command
-	 * @return command
+	 * @return move
 	 */
-	public String moveRight() {
-		return "right";
+	public void moveRight() {
+//		Move right = new Move(myColour, myID, "Right", false);
+//		board.updateFrame(right);
+//		board.input("Pressed D");
+		q.offer("Pressed D");
 	}
 	
 	/**
 	 * Send jump command
-	 * @return command
+	 * @return move
 	 */
-	public String moveUp() {
-		return "jump";
+	public void moveUp() {
+//		Move up = new Move(myColour, myID, "None", true);
+//		board.updateFrame(up);
+//		board.input("Pressed W");
+		q.offer("Pressed W");
 	}
+	
+//	/**
+//	 * Send jump to the right command
+//	 * @return move
+//	 */
+//	private void moveUpRight() {
+//		Move upR = new Move(myColour, myID, "Right", true);
+//		board.updateFrame(upR);
+//	}
+//	
+//	/**
+//	 * Send jump to the left command
+//	 * @return move
+//	 */
+//	private void moveUpLeft() {
+//		Move upL = new Move(myColour, myID, "Left", true);
+//		board.updateFrame(upL);
+//	}
 	
 	/**
 	 * Send attack command by sending the angle and velocity to attack
