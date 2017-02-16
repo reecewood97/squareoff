@@ -245,7 +245,7 @@ public class Board {
 		if((blockleft<guyleft && guyleft<blockright) || 
 				(blockleft<guyright && guyright<blockright)) {
 			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockup-guydown)<2){
+			if(Math.abs(blockup-guydown)<10){
 				return true;
 			}
 			else {
