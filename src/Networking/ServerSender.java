@@ -30,7 +30,7 @@ public class ServerSender extends Thread {
 				toClient.reset();
 				sleep(1000);
 			}
-			
+		
 			while(running && inGame) {
 				ArrayList<PhysObject> x = (board.getUpdate()); 
 	
