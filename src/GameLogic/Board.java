@@ -10,7 +10,6 @@ import java.awt.geom.Rectangle2D;
 import java.lang.Math;
 
 public class Board {
-	
 	private int player;
 	private int squareID;
 	private ArrayList<PhysObject> objects;
@@ -37,7 +36,7 @@ public class Board {
 	}
 	
 	public Board(){
-		this.player = 0;
+		this.player = 1;
 		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;

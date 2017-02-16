@@ -8,7 +8,7 @@ public class ServerTest {
 		
 		Client c1 = new Client("Bob");
 		c1.connect("127.0.0.1", 4444);	
-		
+
 //		Client c2 = new Client("Jerry");
 //		c2.connect("127.0.0.1", 4444);	
 	}
