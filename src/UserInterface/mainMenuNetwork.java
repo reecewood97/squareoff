@@ -33,7 +33,8 @@ public class mainMenuNetwork {
 			}
 			
 			if (c.connect(address[0], Integer.parseInt(address[1]))) {
-				getPlayers();
+				Thread.sleep(1000);
+				players = c.getPlayers();
 				return true;
 			}
 			else
@@ -46,14 +47,9 @@ public class mainMenuNetwork {
 	}
 	
 	public ArrayList<String> getPlayers() {
-		try {
-			Thread.sleep(1000);
-			players = c.getPlayers();
-			//System.out.println(players);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		//Thread.sleep(1000);
+		players = c.getPlayers();
+		System.out.println(players);
 		return players;
 		
 	}
