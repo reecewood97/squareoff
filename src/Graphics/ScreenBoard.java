@@ -48,7 +48,9 @@ public class ScreenBoard extends JPanel{
 		
 		g2d.fillRect(a,b,c,d);
 		
-		g2d.fillOval(a, b-10, 10, 10);
+		for(int i = 0; i < c; i+=40){
+			g2d.fillOval(i, b-5, 40, 40);
+		}
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);

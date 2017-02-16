@@ -28,17 +28,12 @@ public class Screen extends JFrame {
 	public Screen(Board newboard,Queue q){
 		
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println(screenSize.getHeight());
-		System.out.println(screenSize.getWidth());
 		screenheight = screenSize.getHeight();
 		screenwidth = screenSize.getWidth();
 		
 		heightratio = screenheight/frameheight;
 		widthratio = screenwidth/framewidth;
-		
-		System.out.println(heightratio);
-		System.out.println(widthratio);
-		
+	
 		setBounds(0,0,(int)screenwidth,(int)screenheight);
 		Color lightblue = new Color(135,206,250);
 

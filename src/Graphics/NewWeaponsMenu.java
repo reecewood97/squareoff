@@ -44,7 +44,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	
 	    		    	
 	    	//edit menu settings
-	    	setBounds(0,0,(int)screenwidth/10,(int)screenheight/8);
+	    	setBounds(0,0,200,200);
 	    	setUndecorated(true);
 	    	setBackground(Color.white);
 	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,10 +58,12 @@ public class NewWeaponsMenu extends JFrame {
 	    	
 	    	JPanel leftbuttonpanel = new JPanel();
 	    	leftbuttonpanel.setLayout(new BorderLayout());
+	    	leftbuttonpanel.setBackground(Color.WHITE);
+	    	
 	    	
 	    	JPanel rightbuttonpanel = new JPanel();
 	    	rightbuttonpanel.setLayout(new BorderLayout());
-	    	
+	    	rightbuttonpanel.setBackground(Color.WHITE);
 	    	
 	    	//create buttons
 	    	JButton select = new JButton("Select");
