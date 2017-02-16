@@ -22,7 +22,8 @@ public class Board {
 	private boolean debug = true;
 	private boolean weaponsopen = false;
 	private Audio audio = new Audio();
-	
+	private static Square activePlayer;
+
 	public static void main(String[] args) {
 		Board board = new Board();
 		Scanner scanner = new Scanner(System.in);
@@ -37,12 +38,13 @@ public class Board {
 			if (input.equals("u")){
 				board.updateFrame(new Move(0,0,"None",true));
 			}
+			if (input.equals("w")){
+				board.updateFrame(new WeaponMove("ExplodeOnImpact",activePlayer.getPos(),20,20));
+			}
 		}
 	}
 	
 	public Board(){
-		this.player = 1;
-		this.squareID = 0;
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(100); //This handles the moves that need to be sent to clients.
@@ -91,6 +93,11 @@ public class Board {
 			
 		}
 		
+		this.player = 0;
+		this.squareID = 0;
+		int x = player + squareID;
+		activePlayer = (Square)objects.get(x);
+		
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
@@ -113,6 +120,8 @@ public class Board {
 	public void setActivePlayer(int newPlayer, int newID) {
 		this.player = newPlayer;
 		this.squareID = newID;
+		int x = player + squareID;
+		activePlayer = (Square)objects.get(x);
 	}
 	
 	public PhysObject getActivePlayer() {
@@ -144,7 +153,6 @@ public class Board {
 				blocks.add(obj);
 			}
 		}
-		
 		return blocks;
 	}
 	
@@ -165,7 +173,7 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(wallDistLOne(guy, nextblock)<2) {
+			if(wallDistLOne(guy, nextblock)<=2) {
 				return wallDistLOne(guy, nextblock);
 			}
 		}
@@ -183,7 +191,7 @@ public class Board {
 		if((blockdown<guyup && guyup<blockup) || 
 				(blockdown<guydown && guydown<blockup)) {
 			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockright-guyleft)<2){
+			if(Math.abs(blockright-guyleft)<=2){
 				return Math.abs(blockright-guyleft);
 			}
 			else {
@@ -199,7 +207,7 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(wallDistROne(guy, nextblock)<2) {
+			if(wallDistROne(guy, nextblock)<=2) {
 				return wallDistROne(guy, nextblock);
 			}
 		}
@@ -216,7 +224,7 @@ public class Board {
 		
 		if((blockdown<guyup && guyup<blockup) || 
 				(blockdown<guydown && guydown<blockup)) {
-			if(Math.abs(blockleft-guyright)<2){
+			if(Math.abs(blockleft-guyright)<=2){
 				return Math.abs(blockleft-guyright);
 			}
 			else {
@@ -230,6 +238,7 @@ public class Board {
 	
 	private PhysObject onFloor(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
+		System.out.println(getBlocks().size());
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
 			if(onFloorOne(guy, nextblock)) {
@@ -250,7 +259,7 @@ public class Board {
 		if((blockleft<guyleft && guyleft<blockright) || 
 				(blockleft<guyright && guyright<blockright)) {
 			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockup-guydown)<2){
+			if(Math.abs(blockup-guydown)<10){
 				return true;
 			}
 			else {

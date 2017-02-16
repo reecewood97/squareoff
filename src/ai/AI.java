@@ -14,6 +14,8 @@ import Networking.Queue;
 // Coordinates size: 800 x 450
 
 /**
+ * The class of an AI player. It does all the calculation that an AI need currently.
+ * It sends the moves played to the server through the AIClientSender class.
  * @author JeffLeung
  *
  */
@@ -37,7 +39,6 @@ public class AI {
 	 * @param aiColour colour for this AI player
 	 * @param aiPlayer player ID of this Square
 	 * @param board Board of the current game
-	 * @param startPos starting position of the square
 	 */
 	public AI(int aiID, int aiColour, int aiPlayer, Board board) {
 		setID(aiID);
@@ -47,6 +48,11 @@ public class AI {
 		//setPos(startPos); // start position
 	}
 	
+	/**
+	 * Set board
+	 * Update the board for calculation
+	 * @param updatedBoard board
+	 */
 	public void setBoard(Board updatedBoard) {
 		this.board = updatedBoard;
 	}
@@ -129,8 +135,7 @@ public class AI {
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
 		sendAttack(angle_chosen, velocity_chosen);
-		String command = angle_chosen + ", " + velocity_chosen;
-		q.offer(command);
+		
 		// attack the provided coordinate
 		// 		by sending power, angle chosen to methods in other class.
 		
@@ -364,7 +369,6 @@ public class AI {
 	
 	/**
 	 * Send move left command
-	 * @return move
 	 */
 	public void moveLeft() {
 //		Move left = new Move(myColour, myID, "Left", false);
@@ -373,10 +377,9 @@ public class AI {
 		q.offer("Pressed A");
 		
 	}
-	
+
 	/**
 	 * Send move right command
-	 * @return move
 	 */
 	public void moveRight() {
 //		Move right = new Move(myColour, myID, "Right", false);
@@ -387,7 +390,6 @@ public class AI {
 	
 	/**
 	 * Send jump command
-	 * @return move
 	 */
 	public void moveUp() {
 //		Move up = new Move(myColour, myID, "None", true);
@@ -418,11 +420,10 @@ public class AI {
 	 * Send attack command by sending the angle and velocity to attack
 	 * @param angle angle to attack
 	 * @param velocity velocity to attack
-	 * @return command
 	 */
-	public String sendAttack(double angle, double velocity){
-		return angle + ", " + velocity;
-		
+	public void sendAttack(double angle, double velocity){
+		String command = angle + ", " + velocity;
+		q.offer(command);
 	}
 	
 	/**
@@ -459,7 +460,7 @@ public class AI {
 	
 	
 	/**
-	 * Change the Square position
+	 * Change the position of the Square
 	 */
 	public void changeAIPos() {
 		ArrayList<PhysObject> squares = board.getSquares();
@@ -472,7 +473,7 @@ public class AI {
 	}
 	
 	/**
-	 * Get the Square position
+	 * Get the position of the Square
 	 * @return the position of the Square
 	 */
 	public Point2D.Double getAIPos() {
