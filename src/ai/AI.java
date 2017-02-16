@@ -39,12 +39,12 @@ public class AI {
 	 * @param board Board of the current game
 	 * @param startPos starting position of the square
 	 */
-	public AI(int aiID, int aiColour, int aiPlayer, Board board, Point2D.Double startPos) {
+	public AI(int aiID, int aiColour, int aiPlayer, Board board) {
 		setID(aiID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		this.board = board;
-		setPos(startPos); // start position
+		//setPos(startPos); // start position
 	}
 	
 	public void setBoard(Board updatedBoard) {
@@ -89,6 +89,7 @@ public class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
+		changeAIPos();
 		if(haveItems()) {
 			// go get items
 			// Then go attack
