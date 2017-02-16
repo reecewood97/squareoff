@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Audio.Audio;
+import GameLogic.Board;
 
 /**
  * 
@@ -34,12 +35,14 @@ public class NewWeaponsMenu extends JFrame {
 	    private int currentWeapon = 0;
 	    //private JLabel picLabel;
 	    private JButton image;
+	    
 	 
 	    /**
 	     * weapon menu constructor
 	     */
 	    public NewWeaponsMenu(){
 	    	
+	    		    	
 	    	//edit menu settings
 	    	setBounds(0,0,(int)screenwidth/10,(int)screenheight/8);
 	    	setUndecorated(true);

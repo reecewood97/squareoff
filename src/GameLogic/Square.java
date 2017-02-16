@@ -11,6 +11,7 @@ public class Square extends PhysObject {
 	private int squareID;
 	private Point2D.Double point;
 	private boolean alive;
+	private String facing;
 	
 	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
@@ -20,8 +21,19 @@ public class Square extends PhysObject {
 		this.point = pos;
 		this.alive = true;
 		this.setName("Square");
+		this.facing = "Right";
 	}
 	
+	public String getFacing(){
+		
+		return facing;
+	}
+	
+	public void setFacing(String direction){
+		
+		facing = direction;
+		
+	}
 	public int getPlayerID() {
 		return playerID;
 	}

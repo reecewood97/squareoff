@@ -48,6 +48,8 @@ public class ScreenBoard extends JPanel{
 		
 		g2d.fillRect(a,b,c,d);
 		
+		g2d.fillOval(a, b-10, 10, 10);
+		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d);
@@ -64,8 +66,8 @@ public class ScreenBoard extends JPanel{
 			
 			y = 450 - y; 
 			
-			x = (int) (x*widthratio);
-			y = (int) (y*heightratio);
+			int newx = (int) (x*widthratio);
+			int newy = (int) (y*heightratio);
 			
 			int blockwidth = (int) (40*widthratio);
 			int blockheight = (int) (30*heightratio);
@@ -82,11 +84,15 @@ public class ScreenBoard extends JPanel{
 					g2d.setColor(new Color(105,105,105));
 				}
 				
-				
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
 				g2d.setColor(Color.black);
-				g2d.fillRect(x,y,blockwidth,blockheight);
+				g2d.fillRect(newx,newy,blockwidth,blockheight);
 				g2d.setColor(Color.GRAY);
-				g2d.fillRect(x+1,y+1,blockwidth-2,blockheight-2);
+				g2d.fillRect(newx+1,newy+1,blockwidth-2,blockheight-2);
+				
+				
+
 				
 			}
 		}
@@ -100,8 +106,8 @@ public class ScreenBoard extends JPanel{
 			int y = (int) square.getPos().getY();
 			y = 450 - y;
 			
-			x = (int) (x*widthratio);
-			y = (int) (y*heightratio);
+			int newx = (int) (x*widthratio);
+			int newy = (int) (y*heightratio);
 			
 			int squarewidth = (int) (30*widthratio);
 			int squareheight = (int) (30*heightratio);
@@ -121,7 +127,56 @@ public class ScreenBoard extends JPanel{
 				g2d.setColor(Color.GREEN);
 			}
 			
-			g2d.fillRect(x,y,squarewidth,squareheight);
+			g2d.fillRect(newx,newy,squarewidth,squareheight);
+			
+			g2d.setColor(Color.WHITE);
+			
+			int eye1backstartx = 0;
+			int eye2backstartx = 0;
+
+			int eye1frontstartx = 0;
+			int eye2frontstartx = 0;
+			
+			if(((Square) square).getFacing().equals("Right")){
+				eye1backstartx = (int) ((x + 8)*widthratio);
+				eye2backstartx = (int) ((x+22)*widthratio);
+				eye1frontstartx = (int) ((x+10)*widthratio);
+				eye2frontstartx = (int) ((x+24)*widthratio);
+			}
+			else{
+				
+				eye1backstartx = (int) ((x)*widthratio);
+				eye2backstartx = (int) ((x+16)*widthratio);
+
+				eye1frontstartx = (int) ((x+2)*widthratio);
+				eye2frontstartx = (int) ((x+18)*widthratio);
+				
+			}
+			
+			int eye1backstarty = (int) ((y + 10)*heightratio);
+			int eye2backstarty = eye1backstarty;
+			int eye1frontstarty = (int) ((y + 12)*heightratio);
+			int eye2frontstarty = eye1frontstarty;
+			int eyewidth = (int) (9*widthratio);
+			int eyeheight = (int) (9*heightratio);
+			int iriswidth = (int) (6*widthratio);
+			int irisheight = (int) (6*heightratio);
+			
+			//g2d.fillOval(100, eye2backstarty, width, height);
+			
+			g2d.setColor(Color.black);
+			g2d.fillOval(eye1backstartx-1, eye1backstarty-1, eyewidth+2, eyeheight+2);
+			g2d.fillOval(eye2backstartx-1, eye2backstarty-1, eyewidth+2, eyeheight+2);
+			g2d.setColor(Color.white);
+			g2d.fillOval(eye1backstartx, eye1backstarty, eyewidth, eyeheight);
+			g2d.fillOval(eye2backstartx, eye2backstarty, eyewidth, eyeheight);
+			g2d.setColor(Color.black);
+			g2d.fillOval(eye1frontstartx, eye1frontstarty, iriswidth, irisheight);
+			g2d.fillOval(eye2frontstartx, eye2frontstarty, iriswidth, irisheight);
+			
+			
+			
+			
 		}
 	}
 	

@@ -23,6 +23,7 @@ public class Screen extends JFrame {
 	double heightratio;
 	
 	private ScreenBoard sboard;
+	private Board newboard;
 	
 	public Screen(Board newboard,Queue q){
 		
@@ -43,7 +44,7 @@ public class Screen extends JFrame {
 
 		setUndecorated(true);
 		
-		
+		this.newboard = newboard;
 				
 		ButtonPanel controls = new ButtonPanel(this,newboard);
 		controls.setBackground(lightblue);
@@ -84,6 +85,14 @@ public class Screen extends JFrame {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+	}
+	
+	public void openWeaponsMenu(boolean open){
+		
+		if(open){
+			NewWeaponsMenu wmenu = new NewWeaponsMenu();
+			wmenu.open();
+		}
 	}
 	
 	/**
