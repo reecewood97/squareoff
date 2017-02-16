@@ -49,6 +49,7 @@ public class ServerReceiver extends Thread {
 			
 			Object input;
 			while(running && inGame && (input = fromClient.readObject()) != null) {	
+				
 				if(input.getClass().isInstance("Sup?"))
 					board.input((String)input);
 				else if((int)input == Server.QUIT) 

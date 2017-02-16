@@ -51,6 +51,15 @@ public class Server extends Thread {
 				ss.start();
 				
 				table.add(sr, ss);
+				
+				while(true){
+					board.input("None");
+					try {
+						sleep(40);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			} 
 		}
 		catch (IOException e) {
