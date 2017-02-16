@@ -471,8 +471,8 @@ public class Board {
 	 */
 	//public void input(Move input){
 	public void input(String input) {
+		Square active = (Square)getActivePlayer();
 		if(input.contains("Pressed")){
-			Square active = (Square)getActivePlayer();
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			String ret = null;
@@ -495,7 +495,11 @@ public class Board {
 						q.add(objects);
 				break;
 			}
-		}
+		}else
+		{
+			Move mv = new Move(active.getColour(),active.getSquareID(),"None",false);
+			updateFrame(mv);
+		};
 	}
 	
 	/**
