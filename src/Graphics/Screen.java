@@ -23,27 +23,23 @@ public class Screen extends JFrame {
 	double heightratio;
 	
 	private ScreenBoard sboard;
+	private Board newboard;
 	
 	public Screen(Board newboard,Queue q){
 		
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println(screenSize.getHeight());
-		System.out.println(screenSize.getWidth());
 		screenheight = screenSize.getHeight();
 		screenwidth = screenSize.getWidth();
 		
 		heightratio = screenheight/frameheight;
 		widthratio = screenwidth/framewidth;
-		
-		System.out.println(heightratio);
-		System.out.println(widthratio);
-		
+	
 		setBounds(0,0,(int)screenwidth,(int)screenheight);
 		Color lightblue = new Color(135,206,250);
 
 		//setUndecorated(true);
 		
-		
+		this.newboard = newboard;
 				
 		ButtonPanel controls = new ButtonPanel(this,newboard);
 		controls.setBackground(lightblue);
@@ -84,6 +80,14 @@ public class Screen extends JFrame {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+	}
+	
+	public void openWeaponsMenu(boolean open){
+		
+		if(open){
+			NewWeaponsMenu wmenu = new NewWeaponsMenu();
+			wmenu.open();
+		}
 	}
 	
 	/**

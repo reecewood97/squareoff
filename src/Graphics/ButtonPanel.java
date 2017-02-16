@@ -2,6 +2,8 @@ package Graphics;
 
 import java.awt.BorderLayout;
 import GameLogic.Board;
+import UserInterface.mainMenu;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -51,7 +53,7 @@ public class ButtonPanel extends JPanel{
 		add(exit, BorderLayout.EAST);
 		
 		firstopen=true;
-		newmenu = new NewWeaponsMenu();
+		//newmenu = new NewWeaponsMenu(board);
 		
 	
 
@@ -63,14 +65,14 @@ public class ButtonPanel extends JPanel{
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		/*
-		screen.setVisible(false);
-		mainMenu mainmenu = new mainMenu();
-		mainmenu.launchMenu();
-		*/
+		NewWeaponsMenu menu = new NewWeaponsMenu();
+		menu.open();
+		//screen.setVisible(false);
+		//mainMenu mainmenu = new mainMenu();
+		//mainmenu.launchMenu();
 		
-		//openweaponsmenu
-		newmenu.open();
+		
+		
 		
 		
 		

@@ -47,7 +47,7 @@ public class ClientReceiver extends Thread {
 			Object ob;
 			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
 			while(running && (ob = server.readObject()) != null) {
-				System.out.println(ob);
+				//System.out.println(ob);        This keeps on printing...
 				if(inGame && ob.getClass().isInstance(check)) {
 					board.setObjects((ArrayList<PhysObject>) ob);
 					ui.updateSBoard();

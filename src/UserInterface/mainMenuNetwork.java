@@ -1,15 +1,21 @@
+/**
+ * The mainMenuNetwork class is where all the networking call of the game are made
+ * For eg: Pressing the start game button in mainMenu runs a method in this class to start the game for all clients
+ * @author ksk523
+ */
+
 package UserInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import Networking.Client;
 import Networking.Server;
 
 public class mainMenuNetwork {
 	
 	ArrayList<String> players = new ArrayList<>();
-	Server s = new Server(123);
+	int port = 4444;
+	Server s = new Server(port);
 	Client c;
 	
 	public boolean connectToHost(String hostName, String name) {
@@ -21,21 +27,14 @@ public class mainMenuNetwork {
 		try {
 			address = hostName.split(":");
 			
-			if ((address[0].length()<7) | Integer.parseInt(address[1])!=123) {
-			//if (!(address[0].equals("127.0.0.1")) | Integer.parseInt(address[1])!=123) {
-				//System.out.println("Address too small or incorrect port");
-				System.out.println("Address or incorrect port");
+			if ((address[0].length()<7) | Integer.parseInt(address[1])!=port) {
+				System.out.println("Incorrect address/port or address too small");
 				return false;
 			}
 			
-			System.out.println(address[0]);
-			System.out.println(Integer.parseInt(address[1]));
-			
 			if (c.connect(address[0], Integer.parseInt(address[1]))) {
+				Thread.sleep(1000);
 				players = c.getPlayers();
-				for (int i=0; i<players.size(); i++) {
-					System.out.println(players.get(i));
-				}
 				return true;
 			}
 			else
@@ -48,14 +47,11 @@ public class mainMenuNetwork {
 	}
 	
 	public ArrayList<String> getPlayers() {
-		players.add("Player 1 Name Here - should be the host");
-		players.add("Player 2 Name Here - should be a human player who's 1st to join");
-		players.add("Player 3 Name Here - could be ai or next human to join");
-		players.add("Player 4 Name Here - could be ai or last human to join");
-		for (int i=0; i<players.size(); i++) {
-			System.out.println(players.get(i));
-		}
+		//Thread.sleep(1000);
+		players = c.getPlayers();
+		System.out.println(players);
 		return players;
+		
 	}
 	
 	public void runServer() {
@@ -75,6 +71,4 @@ public class mainMenuNetwork {
 			e.printStackTrace();
 		}
 	}
-
-	
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import Audio.Audio;
+
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -17,8 +20,10 @@ public class Board {
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
 	private boolean debug = true;
+	private boolean weaponsopen = false;
+	private Audio audio = new Audio();
 	private static Square activePlayer;
-	
+
 	public static void main(String[] args) {
 		Board board = new Board();
 		Scanner scanner = new Scanner(System.in);
@@ -445,6 +450,15 @@ public class Board {
 			activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
 			activePlayer.getPos().getY()+activePlayer.getYvel()));
 			activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+			
+			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
+				
+				activePlayer.setDead();
+				
+				
+				audio.splash();
+				
+			}
 		}
 		if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
 	}
@@ -483,16 +497,23 @@ public class Board {
 							//System.out.println("Hey left sorta works");
 							updateFrame(mv);
 							q.add(objects);
+							
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
 						//System.out.println("Hey left sorta works");
 						updateFrame(mv);
 						q.add(objects);
+						active.setFacing("Left");
 			case "S" : //duck?
 				break;
 			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
 						updateFrame(mv);
 						q.add(objects);
+						active.setFacing("Right");
+			//case "L" : //mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
+					   //updateFrame(mv);
+			  //         q.add(objects);
+			    //       weaponsopen = true;
 				break;
 			}
 		}else
@@ -517,5 +538,15 @@ public class Board {
 	
 	public void  setObjects(ArrayList<PhysObject> obj){
 		this.objects = obj;
+	}
+	
+	public boolean getWeaponsOpen(){
+		
+		return weaponsopen;
+	}
+	
+	public void setWeaponsOpen(boolean open){
+		
+		weaponsopen = open;
 	}
 }
