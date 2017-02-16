@@ -47,13 +47,13 @@ public class Board {
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(200, 380);
+		Point2D.Double redpos = new Point2D.Double(200, 180);
 		PhysObject red = new Square(1 ,0, 0, redpos);
-		Point2D.Double blupos = new Point2D.Double(300, 380);
+		Point2D.Double blupos = new Point2D.Double(300, 180);
 		PhysObject blu = new Square(2 ,0, 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(400, 380);
+		Point2D.Double yelpos = new Point2D.Double(400, 180);
 		PhysObject yel = new Square(3 ,0, 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(500, 380);
+		Point2D.Double grnpos = new Point2D.Double(500, 180);
 		PhysObject grn = new Square(4 ,0, 0, grnpos);
 		objects.add(red);
 		objects.add(blu);
@@ -61,14 +61,28 @@ public class Board {
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
-		for(int i = 150; i < 1450; i+=40) {
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,350), true);
+		for(int i = 100; i < 700; i+=40) {
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,150), true);
 			objects.add(block);
 		}
 		
-		for(int i = 100; i <800; i+=40){
+		for(int i = 100; i < 700; i+=120){
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,650), true);
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,225), true);
+			objects.add(block);
+			
+		}
+		
+		for(int i = 150; i < 700; i+=160){
+			
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,300), true);
+			objects.add(block);
+			
+		}
+		
+		for(int i = 50; i < 700; i+=200){
+			
+			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,375), true);
 			objects.add(block);
 			
 		}

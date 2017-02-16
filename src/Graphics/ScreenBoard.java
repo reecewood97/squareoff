@@ -1,31 +1,31 @@
 package Graphics;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
 import GameLogic.Weapon;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.image.ImageObserver;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("serial") 
 public class ScreenBoard extends JPanel{
-	Board board;
 	
-	public ScreenBoard(Board board){
+	private Board board;
+	private double heightratio;
+	private double widthratio;
+	
+	public ScreenBoard(Board board, double heightratio, double widthratio){
 		super();
 		this.board = board;
+		this.heightratio = heightratio;
+		this.widthratio = widthratio;
 	}
 	
 	@Override
@@ -34,13 +34,19 @@ public class ScreenBoard extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.blue);
-		g2d.fillRect(0,500,1500,200);
-		int w = 0;
-		for(int i = 0; i < 50; i++){ 
-			
-			g2d.fillOval(w, 488, 30, 20);
-			w = w+30;
-		}
+		
+		//draw sea
+		int a = 0;
+		int b = 350;
+		int c = 800;
+		int d = 100;
+		
+		a = (int) (a*widthratio);
+		b = (int) (b*heightratio);
+		c = (int) (c*widthratio);
+		d = (int) (d*heightratio);
+		
+		g2d.fillRect(a,b,c,d);
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
@@ -50,14 +56,25 @@ public class ScreenBoard extends JPanel{
 	
 	
 	public void paintBlocks(ArrayList<PhysObject> blocks, Graphics2D g2d){
+		
 		for(PhysObject block : blocks){
+			
 			int x = (int) block.getPos().getX();
 			int y = (int) block.getPos().getY();
-			y = 700 - y; 
+			
+			y = 450 - y; 
+			
+			x = (int) (x*widthratio);
+			y = (int) (y*heightratio);
+			
+			int blockwidth = (int) (40*widthratio);
+			int blockheight = (int) (30*heightratio);
 			int blocktype = ((TerrainBlock) block).getType();
-			int blockhealth = ((TerrainBlock) block).getHealth(); 
+			//int blockhealth = ((TerrainBlock) block).getHealth(); 
 			boolean visible = ((TerrainBlock) block).isVisible(); 
+			
 			if(visible){
+			
 				if (blocktype == 1){
 					g2d.setColor(new Color(139,69,19));
 				}
@@ -65,14 +82,12 @@ public class ScreenBoard extends JPanel{
 					g2d.setColor(new Color(105,105,105));
 				}
 				
-				if((blockhealth==1) && (blocktype == 0)){
-					
-					g2d.fillRect(x,y,40,30);
-				}
-				else if((blockhealth==1) && (blocktype == 1)){
-					g2d.fillRect(x, y, 40, 30);
-					//g2d.setColor(new Color(135,206,250));
-				}
+				
+				g2d.setColor(Color.black);
+				g2d.fillRect(x,y,blockwidth,blockheight);
+				g2d.setColor(Color.GRAY);
+				g2d.fillRect(x+1,y+1,blockwidth-2,blockheight-2);
+				
 			}
 		}
 	}
@@ -83,7 +98,14 @@ public class ScreenBoard extends JPanel{
 			
 			int x = (int) square.getPos().getX();
 			int y = (int) square.getPos().getY();
-			y = 700 - y;
+			y = 450 - y;
+			
+			x = (int) (x*widthratio);
+			y = (int) (y*heightratio);
+			
+			int squarewidth = (int) (30*widthratio);
+			int squareheight = (int) (30*heightratio);
+			
 			int playernum = ((Square) square).getPlayerID();
 			if (playernum == 1){
 				
@@ -99,7 +121,7 @@ public class ScreenBoard extends JPanel{
 				g2d.setColor(Color.GREEN);
 			}
 			
-			g2d.fillRect(x,y,30,30);
+			g2d.fillRect(x,y,squarewidth,squareheight);
 		}
 	}
 	
@@ -111,9 +133,16 @@ public class ScreenBoard extends JPanel{
 				
 				int x = (int) weapon.getPos().getX();
 				int y = (int) weapon.getPos().getY();
-				y = 700 - y;
+				
+
+				x = (int) (x*widthratio);
+				y = (int) (y*heightratio);
+				y = 450 - y;
+				
+				int weaponwidth = (int) (10*widthratio);
+				int weaponheight = (int) (10*heightratio);
 				g2d.setColor(Color.BLACK);
-				g2d.fillOval(x,y,10,10);
+				g2d.fillOval(x,y,weaponwidth,weaponheight);
 			}
 		}
 	}
