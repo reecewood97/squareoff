@@ -194,7 +194,7 @@ public class AI {
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-					if (displacement < distance) {
+					if (displacement < distance && displacement > 25.0) {
 						distance = displacement;
 						targetX = sBlockX;
 						targetY = sBlockY;
@@ -220,6 +220,7 @@ public class AI {
 					}
 					moveLeft();
 				}
+				changeAIPos();
 				xPos = getAIPos().getX();
 				yPos = getAIPos().getY() - 30.0;
 			}
