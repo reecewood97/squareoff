@@ -30,7 +30,7 @@ public class Screen extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("SQUARE-OFF");
 		Color lightblue = new Color(135,206,250);
-		this.setUndecorated(true);//CHANGE ME BACK
+		//this.setUndecorated(true);//CHANGE ME BACK
 		ButtonPanel controls = new ButtonPanel(this,newboard);
 		controls.setBackground(lightblue);
 		if(newboard.getWinner() == -1){
