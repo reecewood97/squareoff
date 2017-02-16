@@ -40,11 +40,12 @@ public class AI {
 	 * @param aiPlayer player ID of this Square
 	 * @param board Board of the current game
 	 */
-	public AI(int aiID, int aiColour, int aiPlayer, Board board) {
+	public AI(int aiID, int aiColour, int aiPlayer, Board board, Queue q) {
 		setID(aiID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		this.board = board;
+		this.q = q;
 		//setPos(startPos); // start position
 	}
 	
