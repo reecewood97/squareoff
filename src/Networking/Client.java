@@ -63,9 +63,7 @@ public class Client {
 			System.exit(1);
 		}
 		
-		
-		SplashSplash splashscreen = new SplashSplash(1000);
-		splashscreen.showSplash();
+	
 
 		Screen newui = new Screen(board, q);
 		

@@ -19,7 +19,7 @@ public class Board {
 	private boolean freeState;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
-	private boolean debug = true;
+	private boolean debug = false;
 	private boolean weaponsopen = false;
 	private Audio audio = new Audio();
 	private static Square activePlayer;
