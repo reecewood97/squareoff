@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import Graphics.Screen;
-import Graphics.Updater;
 
 /**
  * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.

@@ -42,6 +42,7 @@ public class ServerReceiver extends Thread {
 				if((int)ob == Server.PLAY) {
 					table.sendAll(Server.PLAY);
 					inGame = true;
+					board.startGame();
 				}
 				else if((int)ob == Server.QUIT) 
 					quit();

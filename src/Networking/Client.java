@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import Graphics.Screen;
 import Graphics.SplashSplash;
-import Graphics.Updater;
 
 import java.io.*;
 
