@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.ArrayList;
 
 import GameLogic.Board;
+import ai.AI;
 
 public class Server extends Thread {
 
@@ -37,6 +38,8 @@ public class Server extends Thread {
 			System.exit(1);
 		}
 		
+		addAI();
+		
 		running = true;
 		try {
 			while(running) {
@@ -52,6 +55,8 @@ public class Server extends Thread {
 				
 				table.add(sr, ss);
 				
+				
+				//Temp
 				while(true){
 					board.input("None");
 					try {
@@ -71,5 +76,10 @@ public class Server extends Thread {
 	public void close() throws IOException {
 		running = false;
 		socket.close();
+	}
+	
+	public void addAI() {
+		AI ai = new AI(0, 0, board);
+		ai.determineState();
 	}
 }
