@@ -238,7 +238,7 @@ public class Board {
 	
 	private PhysObject onFloor(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
-		System.out.println(getBlocks().size());
+		//System.out.println(getBlocks().size());
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
 			if(onFloorOne(guy, nextblock)) {
