@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import Graphics.Screen;
+import Graphics.Updater;
 
 /**
  * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.
@@ -40,6 +41,7 @@ public class ClientReceiver extends Thread {
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() {
+		
 		running = true;
 		inGame = false;
 		
@@ -57,6 +59,8 @@ public class ClientReceiver extends Thread {
 				else if((int)ob == Server.PLAY) {
 					inGame = true;
 					ui.setVisible();
+//					Updater update = new Updater(ui);
+//					update.start();
 				}
 				else if((int)ob == Server.QUIT) {
 					running = false;

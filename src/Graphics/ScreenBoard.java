@@ -26,6 +26,7 @@ public class ScreenBoard extends JPanel{
 		this.board = board;
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
+		
 	}
 	
 	@Override

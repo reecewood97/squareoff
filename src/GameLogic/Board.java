@@ -19,7 +19,7 @@ public class Board {
 	private boolean freeState;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private int winner;
-	private boolean debug = true;
+	private boolean debug = false;
 	private boolean weaponsopen = false;
 	private Audio audio = new Audio();
 	private static Square activePlayer;
@@ -47,7 +47,7 @@ public class Board {
 	public Board(){
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(100); //This handles the moves that need to be sent to clients.
+		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
@@ -238,7 +238,7 @@ public class Board {
 	
 	private PhysObject onFloor(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
-		System.out.println(getBlocks().size());
+		//System.out.println(getBlocks().size());
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
 			if(onFloorOne(guy, nextblock)) {
@@ -496,18 +496,21 @@ public class Board {
 			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
 							//System.out.println("Hey left sorta works");
 							updateFrame(mv);
+							q.remove();
 							q.add(objects);
 							
 				break;
 			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
 						//System.out.println("Hey left sorta works");
 						updateFrame(mv);
+						q.remove();
 						q.add(objects);
 						active.setFacing("Left");
 			case "S" : //duck?
 				break;
 			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
 						updateFrame(mv);
+						q.remove();
 						q.add(objects);
 						active.setFacing("Right");
 			//case "L" : //mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
@@ -520,6 +523,7 @@ public class Board {
 		{
 			Move mv = new Move(active.getColour(),active.getSquareID(),"None",false);
 			updateFrame(mv);
+			q.offer(objects);
 		};
 	}
 	

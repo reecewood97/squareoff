@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import Graphics.Screen;
 import Graphics.SplashSplash;
+import Graphics.Updater;
 
 import java.io.*;
 
@@ -72,7 +73,7 @@ public class Client {
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);
 		receiver = new ClientReceiver(fromServer, board, newui);
-			
+		
 		sender.start();
 		receiver.start();
 		
