@@ -77,4 +77,8 @@ public class ServerSender extends Thread {
 			System.exit(1);
 		}
 	}
+	
+	public boolean inGame() {
+		return inGame;
+	}
 }

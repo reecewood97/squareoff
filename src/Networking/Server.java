@@ -38,8 +38,6 @@ public class Server extends Thread {
 			System.exit(1);
 		}
 		
-		addAI();
-		
 		running = true;
 		try {
 			while(running) {
@@ -57,7 +55,13 @@ public class Server extends Thread {
 				
 				
 				//Temp
+				boolean aigenned = false;
 				while(true){
+			
+					if(!aigenned && table.getSender().inGame()) {
+						AI ai = new AI(0, 0, board);
+					    aigenned = true;
+					}
 					board.input("None");
 					try {
 						sleep(40);
@@ -76,10 +80,5 @@ public class Server extends Thread {
 	public void close() throws IOException {
 		running = false;
 		socket.close();
-	}
-	
-	public void addAI() {
-		AI ai = new AI(0, 0, board);
-		ai.determineState();
 	}
 }
