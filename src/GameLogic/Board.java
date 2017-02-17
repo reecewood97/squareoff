@@ -560,14 +560,14 @@ public class Board {
 	
 	public void startGame(){
 		TurnMaster turn = new TurnMaster(this);
-		turn.run();
+		turn.start();
 	}
 	public void incrementTurn(){
 		if (player != 4){
 			player = player+1;
 		}else{
 			player = 0;
-			squareID = squareID+1;
+			//squareID = squareID+1;
 		}
 		System.out.println(player);
 	}

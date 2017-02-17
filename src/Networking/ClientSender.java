@@ -38,7 +38,7 @@ public class ClientSender extends Thread {
 			server.reset();
 		
 			while(running) {
-				Object obj = q.take(); 
+				Object obj = q.take();
 				server.writeObject(obj);
 				server.flush();
 				server.reset();
