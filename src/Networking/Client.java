@@ -69,7 +69,7 @@ public class Client {
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);
 		receiver = new ClientReceiver(fromServer, board, newui);
-			
+		
 		sender.start();
 		receiver.start();
 		

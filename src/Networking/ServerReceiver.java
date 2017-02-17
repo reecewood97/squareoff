@@ -42,14 +42,16 @@ public class ServerReceiver extends Thread {
 				if((int)ob == Server.PLAY) {
 					table.sendAll(Server.PLAY);
 					inGame = true;
+					board.startGame();
+					System.out.println("return");
 				}
 				else if((int)ob == Server.QUIT) 
 					quit();
 			}
 			
+			
 			Object input;
-			while(running && inGame && (input = fromClient.readObject()) != null) {	
-				
+			while(running && inGame && (input = fromClient.readObject()) != null) {
 				if(input.getClass().isInstance("Sup?"))
 					board.input((String)input);
 				else if((int)input == Server.QUIT) 

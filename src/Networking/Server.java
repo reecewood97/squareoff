@@ -58,12 +58,12 @@ public class Server extends Thread {
 				boolean aigenned = false;
 				while(true){
 			
-					if(!aigenned && table.getSender().inGame()) {
-						/*
-						AI ai = new AI(0, 0, board);
-					    aigenned = true;
-					    */
-					}
+
+//					if(!aigenned && table.getSender().inGame()) {
+//						new AI(0, 0, 0, board).determineState();
+//					    aigenned = true;
+//					}
+
 					board.input("None");
 					try {
 						sleep(40);

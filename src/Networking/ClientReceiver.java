@@ -40,6 +40,7 @@ public class ClientReceiver extends Thread {
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() {
+		
 		running = true;
 		inGame = false;
 		
@@ -57,6 +58,8 @@ public class ClientReceiver extends Thread {
 				else if((int)ob == Server.PLAY) {
 					inGame = true;
 					ui.setVisible();
+//					Updater update = new Updater(ui);
+//					update.start();
 				}
 				else if((int)ob == Server.QUIT) {
 					running = false;
