@@ -110,20 +110,21 @@ public class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		changeAIPos();
-		if(haveItems()) {
-			// go get items
-			// Then go attack
-			aiMove();
-			aiAttack();
-			
-			// More advance: locate item position, calculate time to reach item
-			// 				 choose to get item and attack or attack directly
-		}
-		else {
-			aiMove();
-			aiAttack();
-		}
+//		changeAIPos();
+//		if(haveItems()) {
+//			// go get items
+//			// Then go attack
+//			aiMove();
+//			aiAttack();
+//			
+//			// More advance: locate item position, calculate time to reach item
+//			// 				 choose to get item and attack or attack directly
+//		}
+//		else {
+//			aiMove();
+//			aiAttack();
+//		}
+		moveRight();
 	}
 	
 	/**
