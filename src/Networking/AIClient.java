@@ -81,7 +81,7 @@ public class AIClient {
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		// Start up an AI.
-		ai = new AI(aiID, aiColour, aiPlayer, board, q); // start position missing
+		//ai = new AI(aiID, aiColour, aiPlayer, board, q); // start position missing
 		sender = new AIClientSender(ai, toServer, q, name);
 //		receiver = new ClientReceiver(fromServer, board, newui);
 		receiver = new AIClientReceiver(ai, fromServer, board);
