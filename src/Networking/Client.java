@@ -62,8 +62,7 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-	
+
 
 		Screen newui = new Screen(board, q);
 		

@@ -40,14 +40,28 @@ public class AI {
 	 * @param aiPlayer player ID of this Square
 	 * @param board Board of the current game
 	 */
-	public AI(int aiID, int aiColour, int aiPlayer, Board board, Queue q) {
+	public AI(int aiID, int aiColour, int aiPlayer, Board board) {
 		setID(aiID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		this.board = board;
-		this.q = q;
-		//setPos(startPos); // start position
 	}
+	
+//	/**
+//	 * Constructor that set up AI player
+//	 * @param aiID Square ID
+//	 * @param aiColour colour for this AI player
+//	 * @param aiPlayer player ID of this Square
+//	 * @param board Board of the current game
+//	 */
+//	public AI(int aiID, int aiColour, int aiPlayer, Board board, Queue q) {
+//		setID(aiID);
+//		setColour(aiColour);
+//		setPlayer(aiPlayer);
+//		this.board = board;
+//		this.q = q;
+//		//setPos(startPos); // start position
+//	}
 	
 	/**
 	 * Set board
@@ -200,7 +214,7 @@ public class AI {
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-					if (displacement < distance && displacement > 25.0) {
+					if (displacement > distance && displacement > 25.0) {
 						distance = displacement;
 						targetX = sBlockX;
 						targetY = sBlockY;
@@ -374,8 +388,8 @@ public class AI {
 	public void moveLeft() {
 //		Move left = new Move(myColour, myID, "Left", false);
 //		board.updateFrame(left);
-//		board.input("Pressed A");
-		q.offer("Pressed A");
+		board.input("Pressed A");
+//		q.offer("Pressed A");
 		
 	}
 
@@ -385,8 +399,8 @@ public class AI {
 	public void moveRight() {
 //		Move right = new Move(myColour, myID, "Right", false);
 //		board.updateFrame(right);
-//		board.input("Pressed D");
-		q.offer("Pressed D");
+		board.input("Pressed D");
+//		q.offer("Pressed D");
 	}
 	
 	/**
@@ -395,8 +409,8 @@ public class AI {
 	public void moveUp() {
 //		Move up = new Move(myColour, myID, "None", true);
 //		board.updateFrame(up);
-//		board.input("Pressed W");
-		q.offer("Pressed W");
+		board.input("Pressed W");
+//		q.offer("Pressed W");
 	}
 	
 //	/**
@@ -424,7 +438,8 @@ public class AI {
 	 */
 	public void sendAttack(double angle, double velocity){
 		String command = angle + ", " + velocity;
-		q.offer(command);
+//		q.offer(command);
+		board.input(command);
 	}
 	
 	/**
