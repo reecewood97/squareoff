@@ -45,8 +45,23 @@ public class AI {
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		this.board = board;
-		//setPos(startPos); // start position
 	}
+	
+//	/**
+//	 * Constructor that set up AI player
+//	 * @param aiID Square ID
+//	 * @param aiColour colour for this AI player
+//	 * @param aiPlayer player ID of this Square
+//	 * @param board Board of the current game
+//	 */
+//	public AI(int aiID, int aiColour, int aiPlayer, Board board, Queue q) {
+//		setID(aiID);
+//		setColour(aiColour);
+//		setPlayer(aiPlayer);
+//		this.board = board;
+//		this.q = q;
+//		//setPos(startPos); // start position
+//	}
 	
 	/**
 	 * Set board
@@ -95,19 +110,28 @@ public class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		changeAIPos();
-		if(haveItems()) {
-			// go get items
-			// Then go attack
-			aiMove();
-			aiAttack();
-			
-			// More advance: locate item position, calculate time to reach item
-			// 				 choose to get item and attack or attack directly
-		}
-		else {
-			aiMove();
-			aiAttack();
+//		changeAIPos();
+//		if(haveItems()) {
+//			// go get items
+//			// Then go attack
+//			aiMove();
+//			aiAttack();
+//			
+//			// More advance: locate item position, calculate time to reach item
+//			// 				 choose to get item and attack or attack directly
+//		}
+//		else {
+//			aiMove();
+//			aiAttack();
+//		}
+		for (int i = 0; i < 100; i++) {
+			moveRight();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -199,7 +223,7 @@ public class AI {
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-					if (displacement < distance && displacement > 25.0) {
+					if (displacement > distance && displacement > 25.0) {
 						distance = displacement;
 						targetX = sBlockX;
 						targetY = sBlockY;
@@ -373,8 +397,8 @@ public class AI {
 	public void moveLeft() {
 //		Move left = new Move(myColour, myID, "Left", false);
 //		board.updateFrame(left);
-//		board.input("Pressed A");
-		q.offer("Pressed A");
+		board.input("Pressed A");
+//		q.offer("Pressed A");
 		
 	}
 
@@ -384,8 +408,8 @@ public class AI {
 	public void moveRight() {
 //		Move right = new Move(myColour, myID, "Right", false);
 //		board.updateFrame(right);
-//		board.input("Pressed D");
-		q.offer("Pressed D");
+		board.input("Pressed D");
+//		q.offer("Pressed D");
 	}
 	
 	/**
@@ -394,8 +418,8 @@ public class AI {
 	public void moveUp() {
 //		Move up = new Move(myColour, myID, "None", true);
 //		board.updateFrame(up);
-//		board.input("Pressed W");
-		q.offer("Pressed W");
+		board.input("Pressed W");
+//		q.offer("Pressed W");
 	}
 	
 //	/**
@@ -423,7 +447,8 @@ public class AI {
 	 */
 	public void sendAttack(double angle, double velocity){
 		String command = angle + ", " + velocity;
-		q.offer(command);
+//		q.offer(command);
+		board.input(command);
 	}
 	
 	/**

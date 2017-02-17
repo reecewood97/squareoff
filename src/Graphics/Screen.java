@@ -37,7 +37,7 @@ public class Screen extends JFrame {
 		setBounds(0,0,(int)screenwidth,(int)screenheight);
 		Color lightblue = new Color(135,206,250);
 
-		//setUndecorated(true);
+		setUndecorated(true);
 		
 		this.newboard = newboard;
 				

@@ -22,4 +22,10 @@ public class ClientTable {
 		for(ServerSender s: table.values())
 			s.send(obj);
 	}
+	
+	public ServerSender getSender() {
+		for(ServerSender s: table.values())
+			return s;
+		return null;
+	}
 }

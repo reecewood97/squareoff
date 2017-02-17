@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.ArrayList;
 
 import GameLogic.Board;
+import ai.AI;
 
 public class Server extends Thread {
 
@@ -52,7 +53,15 @@ public class Server extends Thread {
 				
 				table.add(sr, ss);
 				
+				
+				//Temp
+				boolean aigenned = false;
 				while(true){
+			
+					if(!aigenned && table.getSender().inGame()) {
+						new AI(0, 0, 0, board).determineState();
+					    aigenned = true;
+					}
 					board.input("None");
 					try {
 						sleep(40);

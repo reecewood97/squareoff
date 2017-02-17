@@ -6,6 +6,7 @@
 
 package UserInterface;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -39,6 +40,8 @@ public class mainMenu extends Application {
 	
     public static void main(String[] args) {
         //launch(args);
+    	//SplashSplash splashscreen = new SplashSplash(400);
+    	//splashscreen.showSplash();
     	launchMenu();
     }
     
@@ -66,6 +69,7 @@ public class mainMenu extends Application {
         btn4.setMinWidth(75);
         
         GridPane grid = new GridPane();
+        
         grid.setVgap(12);
         
         grid.add(btn, 0, 14);
