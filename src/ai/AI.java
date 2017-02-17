@@ -124,7 +124,9 @@ public class AI {
 //			aiMove();
 //			aiAttack();
 //		}
-		moveRight();
+		for (int i = 0; i < 100; i++) {
+			moveRight();
+		}
 	}
 	
 	/**
