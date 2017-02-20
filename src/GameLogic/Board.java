@@ -21,6 +21,8 @@ public class Board {
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
+	private String[] players = new String[4];
+	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	
@@ -487,7 +489,12 @@ public class Board {
 	//public void input(Move input){
 	public void input(String input) {
 		Square active = (Square)getActivePlayer();
+		
 		if(input.contains("Pressed")){
+			if(input.contains(players[player])){
+				System.out.println("I'm from the current player!");
+				}
+			
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			String ret = null;
@@ -561,6 +568,12 @@ public class Board {
 	public void startGame(){
 		TurnMaster turn = new TurnMaster(this);
 		turn.start();
+		
+		for (int i = 0; i < 4; i++){
+			if (players[i] == null){
+				players[i] = "meep";
+			}
+		}
 	}
 	public void incrementTurn(){
 		if (player != 4){
@@ -570,5 +583,10 @@ public class Board {
 			//squareID = squareID+1;
 		}
 		System.out.println(player);
+	}
+	
+	public void addName(String name){
+		players[numberOfPlayers] = name;
+		numberOfPlayers++;
 	}
 }

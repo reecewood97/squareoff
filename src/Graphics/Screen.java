@@ -24,8 +24,9 @@ public class Screen extends JFrame {
 	
 	private ScreenBoard sboard;
 	private Board newboard;
+	private String name;
 	
-	public Screen(Board newboard,Queue q){
+	public Screen(Board newboard,Queue q,String name){
 		
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		screenheight = screenSize.getHeight();
@@ -52,7 +53,7 @@ public class Screen extends JFrame {
 			sboard.setBackground(lightblue);
 			add(sboard, BorderLayout.CENTER);
 			
-			HangerOn listeners = new HangerOn(q);
+			HangerOn listeners = new HangerOn(q,name);
 			sboard = listeners.hangOn2(sboard);
 		}
 		else{

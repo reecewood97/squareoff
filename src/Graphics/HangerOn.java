@@ -19,9 +19,11 @@ import Networking.Queue;
 
 public class HangerOn implements KeyListener,MouseListener { 
 	private Queue q;
+	private String name;
 	
-	public HangerOn(Queue q){
+	public HangerOn(Queue q,String name){
 		this.q =q;
+		this.name = name;
 	}
 	
 	 //ArrayBlockingQueue<String> q = new ArrayBlockingQueue<String>(100);		
@@ -37,7 +39,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	 public void keyPressed(KeyEvent e) {
 		 String keyString;
 		 int keyCode = e.getKeyCode();
-		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode);
+		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode) + " " + name;
 		 q.offer(keyString);
 		 panel.grabFocus();
 		 } 

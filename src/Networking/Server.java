@@ -40,7 +40,8 @@ public class Server extends Thread {
 		
 		running = true;
 		try {
-			while(running) {
+			int i = 0;
+			while(i != 2) { //Hey there! Change the number here to alter how many players you want to connect before the game can start.
 				Socket s = socket.accept();
 
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
@@ -52,13 +53,13 @@ public class Server extends Thread {
 				ss.start();
 				
 				table.add(sr, ss);
-				
-				
+				System.out.println(i);
+				i++;
 				//Temp
+			}
 				boolean aigenned = false;
-				while(true){
 			
-
+				while(true){
 //					if(!aigenned && table.getSender().inGame()) {
 //						new AI(0, 0, 0, board).determineState();
 //					    aigenned = true;
@@ -70,8 +71,7 @@ public class Server extends Thread {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				}
-			} 
+				} 
 		}
 		catch (IOException e) {
 			//e.printStackTrace();

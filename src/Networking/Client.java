@@ -64,7 +64,7 @@ public class Client {
 		}
 
 
-		Screen newui = new Screen(board, q);
+		Screen newui = new Screen(board, q,name);
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);

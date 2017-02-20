@@ -31,8 +31,10 @@ public class ServerReceiver extends Thread {
 			if(players.contains(name)) {
 				//TODO 
 			}
-			else if(players.size() < 4) 
-				players.add(name);	
+			else if(players.size() < 4){ 
+				players.add(name);
+				board.addName(name);
+			}
 			else {
 				//TODO 
 			}
