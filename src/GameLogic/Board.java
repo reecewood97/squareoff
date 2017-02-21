@@ -576,7 +576,7 @@ public class Board {
 		}
 	}
 	public void incrementTurn(){
-		if (player != 4){
+		if (player != 3){
 			player = player+1;
 		}else{
 			player = 0;

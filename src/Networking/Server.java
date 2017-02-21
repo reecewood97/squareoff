@@ -41,7 +41,7 @@ public class Server extends Thread {
 		running = true;
 		try {
 			int i = 0;
-			while(i != 2) { //Hey there! Change the number here to alter how many players you want to connect before the game can start.
+			while(i != 1) { //Hey there! Change the number here to alter how many players you want to connect before the game can start.
 				Socket s = socket.accept();
 
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
