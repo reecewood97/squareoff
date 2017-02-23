@@ -11,6 +11,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
@@ -105,82 +107,94 @@ public class ScreenBoard extends JPanel{
 		
 		for(PhysObject square : squares){
 			
-			int x = (int) square.getPos().getX();
-			int y = (int) square.getPos().getY();
-			y = 450 - y;
-			
-			int newx = (int) (x*widthratio);
-			int newy = (int) (y*heightratio);
-			
-			int squarewidth = (int) (30*widthratio);
-			int squareheight = (int) (30*heightratio);
-			
-			int playernum = ((Square) square).getPlayerID();
-			if (playernum == 1){
+			if(((Square) square).getAlive()){
+				int x = (int) square.getPos().getX();
+				int y = (int) square.getPos().getY();
+				y = 450 - y;
 				
-				g2d.setColor(Color.RED);
-			}
-			else if(playernum == 2){
-				g2d.setColor(Color.BLUE);
-			}
-			else if(playernum == 3){
-				g2d.setColor(Color.YELLOW);
-			}
-			else{
-				g2d.setColor(Color.GREEN);
-			}
-			
-			g2d.fillRect(newx,newy,squarewidth,squareheight);
-			
-			g2d.setColor(Color.WHITE);
-			
-			int eye1backstartx = 0;
-			int eye2backstartx = 0;
-
-			int eye1frontstartx = 0;
-			int eye2frontstartx = 0;
-			
-			if(((Square) square).getFacing().equals("Right")){
-				eye1backstartx = (int) ((x + 8)*widthratio);
-				eye2backstartx = (int) ((x+22)*widthratio);
-				eye1frontstartx = (int) ((x+10)*widthratio);
-				eye2frontstartx = (int) ((x+24)*widthratio);
-			}
-			else{
+				int newx = (int) (x*widthratio);
+				int newy = (int) (y*heightratio);
 				
-				eye1backstartx = (int) ((x)*widthratio);
-				eye2backstartx = (int) ((x+16)*widthratio);
-
-				eye1frontstartx = (int) ((x+2)*widthratio);
-				eye2frontstartx = (int) ((x+18)*widthratio);
+				int squarewidth = (int) (30*widthratio);
+				int squareheight = (int) (30*heightratio);
+				
+				int playernum = ((Square) square).getPlayerID();
+				if (playernum == 1){
+					
+					g2d.setColor(Color.RED);
+				}
+				else if(playernum == 2){
+					g2d.setColor(Color.BLUE);
+				}
+				else if(playernum == 3){
+					g2d.setColor(Color.YELLOW);
+				}
+				else{
+					g2d.setColor(Color.GREEN);
+				}
+				
+				g2d.fillRect(newx,newy,squarewidth,squareheight);
+				
+				g2d.setColor(Color.WHITE);
+				
+				int eye1backstartx = 0;
+				int eye2backstartx = 0;
+	
+				int eye1frontstartx = 0;
+				int eye2frontstartx = 0;
+				
+				if(((Square) square).getFacing().equals("Right")){
+					eye1backstartx = (int) ((x + 8)*widthratio);
+					eye2backstartx = (int) ((x+22)*widthratio);
+					eye1frontstartx = (int) ((x+10)*widthratio);
+					eye2frontstartx = (int) ((x+24)*widthratio);
+				}
+				else{
+					
+					eye1backstartx = (int) ((x)*widthratio);
+					eye2backstartx = (int) ((x+16)*widthratio);
+	
+					eye1frontstartx = (int) ((x+2)*widthratio);
+					eye2frontstartx = (int) ((x+18)*widthratio);
+					
+				}
+				
+				int eye1backstarty = (int) ((y + 10)*heightratio);
+				int eye2backstarty = eye1backstarty;
+				int eye1frontstarty = (int) ((y + 12)*heightratio);
+				int eye2frontstarty = eye1frontstarty;
+				int eyewidth = (int) (9*widthratio);
+				int eyeheight = (int) (9*heightratio);
+				int iriswidth = (int) (6*widthratio);
+				int irisheight = (int) (6*heightratio);
+				
+				//g2d.fillOval(100, eye2backstarty, width, height);
+				
+				g2d.setColor(Color.black);
+				g2d.fillOval(eye1backstartx-1, eye1backstarty-1, eyewidth+2, eyeheight+2);
+				g2d.fillOval(eye2backstartx-1, eye2backstarty-1, eyewidth+2, eyeheight+2);
+				g2d.setColor(Color.white);
+				g2d.fillOval(eye1backstartx, eye1backstarty, eyewidth, eyeheight);
+				g2d.fillOval(eye2backstartx, eye2backstarty, eyewidth, eyeheight);
+				g2d.setColor(Color.black);
+				g2d.fillOval(eye1frontstartx, eye1frontstarty, iriswidth, irisheight);
+				g2d.fillOval(eye2frontstartx, eye2frontstarty, iriswidth, irisheight);
+				
+				
+				
 				
 			}
-			
-			int eye1backstarty = (int) ((y + 10)*heightratio);
-			int eye2backstarty = eye1backstarty;
-			int eye1frontstarty = (int) ((y + 12)*heightratio);
-			int eye2frontstarty = eye1frontstarty;
-			int eyewidth = (int) (9*widthratio);
-			int eyeheight = (int) (9*heightratio);
-			int iriswidth = (int) (6*widthratio);
-			int irisheight = (int) (6*heightratio);
-			
-			//g2d.fillOval(100, eye2backstarty, width, height);
-			
-			g2d.setColor(Color.black);
-			g2d.fillOval(eye1backstartx-1, eye1backstarty-1, eyewidth+2, eyeheight+2);
-			g2d.fillOval(eye2backstartx-1, eye2backstarty-1, eyewidth+2, eyeheight+2);
-			g2d.setColor(Color.white);
-			g2d.fillOval(eye1backstartx, eye1backstarty, eyewidth, eyeheight);
-			g2d.fillOval(eye2backstartx, eye2backstarty, eyewidth, eyeheight);
-			g2d.setColor(Color.black);
-			g2d.fillOval(eye1frontstartx, eye1frontstarty, iriswidth, irisheight);
-			g2d.fillOval(eye2frontstartx, eye2frontstarty, iriswidth, irisheight);
-			
-			
-			
-			
 		}
+	}
+	
+	public void targetline(){
+		
+		Point mousepos = MouseInfo.getPointerInfo().getLocation();
+		
+		
+		
+		
+		
 	}
 	
 	public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
@@ -201,8 +215,12 @@ public class ScreenBoard extends JPanel{
 				int weaponheight = (int) (10*heightratio);
 				g2d.setColor(Color.BLACK);
 				g2d.fillOval(x,y,weaponwidth,weaponheight);
+			
 			}
 		}
+		Point mousepos = MouseInfo.getPointerInfo().getLocation();
+		
+		g2d.drawLine(50, 50,(int) mousepos.getX(),(int)mousepos.getY());
 	}
 	
 	public void openWeaponsMenu(){

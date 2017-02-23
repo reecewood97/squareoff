@@ -9,7 +9,7 @@ public class Main {
 	   
 		SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
-		Screen newui = new Screen(new Board(),new Queue());
+		Screen newui = new Screen(new Board(),new Queue(),"fran");
 		newui.setVisible();
 
 	}
