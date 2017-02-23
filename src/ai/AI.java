@@ -21,9 +21,9 @@ import Networking.Queue;
  */
 public class AI {
 	
-	private static final double maxVelocity = 50;
+	private static final double maxVelocity = 100;
 	private static final double gravity = 9.81;
-	private int myID; // Square ID
+	private int mySquareID; // Square ID
 	private int myColour;
 	private Point2D.Double myPos;
 	private Board board;
@@ -40,8 +40,8 @@ public class AI {
 	 * @param aiPlayer player ID of this Square
 	 * @param board Board of the current game
 	 */
-	public AI(int aiID, int aiColour, int aiPlayer, Board board) {
-		setID(aiID);
+	public AI(int aiPlayer, int aiSquareID, int aiColour, Board board) {
+		setSquareID(aiSquareID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		this.board = board;
@@ -100,8 +100,8 @@ public class AI {
 	 * Set Square ID
 	 * @param id square ID
 	 */
-	public void setID(int id) {
-		this.myID = id;
+	public void setSquareID(int id) {
+		this.mySquareID = id;
 	}
 	
 
@@ -110,29 +110,29 @@ public class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-//		changeAIPos();
-//		if(haveItems()) {
-//			// go get items
-//			// Then go attack
-//			aiMove();
-//			aiAttack();
-//			
-//			// More advance: locate item position, calculate time to reach item
-//			// 				 choose to get item and attack or attack directly
-//		}
-//		else {
-//			aiMove();
-//			aiAttack();
-//		}
-		for (int i = 0; i < 100; i++) {
-			moveRight();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		changeAIPos();
+		if(haveItems()) {
+			// go get items
+			// Then go attack
+			aiMove();
+			aiAttack();
+			
+			// More advance: locate item position, calculate time to reach item
+			// 				 choose to get item and attack or attack directly
 		}
+		else {
+			aiMove();
+			aiAttack();
+		}
+//		for (int i = 0; i < 100; i++) {
+//			moveRight();
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
 	/**
@@ -152,13 +152,13 @@ public class AI {
 	/**
 	 * Send out the final velocity and angle chosen for attack
 	 */
-	private void aiAttack() {
+	public void aiAttack() {
 		// choose the closest target at this moment (get it from server copy)
 		//Point2D.Double finalCoor = getFinalDestination();
 		determineResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
-		sendAttack(angle_chosen, velocity_chosen);
+		//sendAttack(angle_chosen, velocity_chosen);
 		
 		// attack the provided coordinate
 		// 		by sending power, angle chosen to methods in other class.
@@ -173,24 +173,32 @@ public class AI {
 	 * Movement of the Square of the AI player
 	 * Current Stage: if the current block standing has less than 2 health, move to other position
 	 */
-	private void aiMove() {
+	public void aiMove() {
 		// go to the best position to attack target
 		// checks the best position through physics engine (get coordinates)
 		// move to the provided coordinate
 		
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double myX = getAIPos().getX();
+//		System.out.println(myX);
 		double myY = getAIPos().getY();
 		double targetX = myX;
 		double targetY = myY - 30.0;
 		TerrainBlock currentBlock = (TerrainBlock) blocks.get(0);
+//		System.out.println("block 0: " + currentBlock.getPos());
 		for (PhysObject block:blocks) {
-			if ((block.getPos().getY() == myY - 30.0) && (block.getPos().getX() <= myX - 25.0) && (block.getPos().getX() > myX)) {
+			if ((block.getPos().getY() == myY - 30.0) && (block.getPos().getX() > myX) && (block.getPos().getX() <= myX + 50.0)) {
+//				&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
 				currentBlock = (TerrainBlock) block;
 			}
 		}
+//		System.out.println("block standing: " + currentBlock.getPos());
 		int currentBlockHealth = currentBlock.getHealth();
 		double distance = 99999999999.0;
+		
+		// fixed how to get the block an AI is standing on!!!!
+		
+		
 		// Stage 1:
 		// Only move if the blocks that it's standing on has low hp.
 		// If the coordinate's block has low hp (e.g. cannot survive two hits), 
@@ -213,7 +221,8 @@ public class AI {
 		if (currentBlockHealth <= 2) {
 			int largerHealth = currentBlockHealth;
 			double xPos = currentBlock.getPos().getX();
-			double yPos = currentBlock.getPos().getY();;
+			double yPos = currentBlock.getPos().getY();
+			System.out.println(xPos);
 			for (PhysObject block:blocks) {
 				TerrainBlock searchBlock = (TerrainBlock) block;
 				if (searchBlock.getHealth() >= largerHealth) {
@@ -230,8 +239,12 @@ public class AI {
 					}
 				}
 			}
-			while ((xPos < targetX) || (xPos > targetX + 25.0) || yPos != targetY) {
-				if (xPos > targetX) {
+//			System.out.println(targetX);
+//			System.out.println(targetY);
+			int i = 0;
+			while ((xPos < targetX) || (xPos > targetX + 15.0) || yPos != targetY) {
+				if (xPos < targetX) {
+					System.out.println(xPos);
 					Point2D nextblock = new Point2D.Double(xPos + 26.0, yPos);
 					if (!blocks.contains(nextblock)) {
 						//moveUpRight();
@@ -239,15 +252,28 @@ public class AI {
 						moveRight();
 					}
 					moveRight();
+//					Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
+//					setPos(newPos);
+//					xPos += 2;
+					i++;
+					System.out.println("Right " + i);
 				}
 				else {
 					Point2D nextblock = new Point2D.Double(xPos - 26.0, yPos);
+					System.out.println(xPos);
 					if (!blocks.contains(nextblock)) {
 						//moveUpLeft();
+						System.out.println("moveUp");
 						moveUp();
 						moveLeft();
 					}
 					moveLeft();
+//					xPos -= 2;
+
+//					Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
+//					setPos(newPos);
+					i++;
+					System.out.println("Left " + i);
 				}
 				changeAIPos();
 				xPos = getAIPos().getX();
@@ -279,18 +305,20 @@ public class AI {
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
 		double acc_angle = 45.0;
 		double acc_velocity = maxVelocity/2;
+		System.out.println("not yet calculate");
 		if (ydis < 0) {
 			// angle larger than 45 degrees
 			boolean hit = false;
 			int state = calculation(acc_angle, acc_velocity);
 			hit = isHit(state);
 			while (!hit) {
+				System.out.println("not yet hit");
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
 					acc_angle += 3.0;
 					while (acc_velocity <= maxVelocity && !hit) {
 						// increase power
-						acc_velocity += 10.0;
+						acc_velocity += 7.5;
 						state = calculation(acc_angle, acc_velocity);
 						hit = isHit(state);
 					}
@@ -300,16 +328,12 @@ public class AI {
 					acc_angle += 3.0;
 					while (acc_velocity > 0 && !hit) {
 						// decrease power
-						acc_velocity -= 10.0;
+						acc_velocity -= 7.5;
 						state = calculation(acc_angle, acc_velocity);
 						hit = isHit(state);
 					}
 				}
 			}
-			
-			// output angle and power (force)
-			setAngle(acc_angle);
-			setVelocity(acc_velocity);
 		}
 		else {
 			//try with 45 degrees and decrease it.
@@ -317,12 +341,13 @@ public class AI {
 			int state = calculation(acc_angle, acc_velocity);
 			hit = isHit(state);
 			while (!hit) {
+				System.out.println("not yet hit");
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
 					acc_angle -= 3.0;
 					while (acc_velocity <= maxVelocity && !hit) {
 						// increase power
-						acc_velocity += 10.0;
+						acc_velocity += 7.5;
 						state = calculation(acc_angle, acc_velocity);
 						hit = isHit(state);
 					}
@@ -332,17 +357,17 @@ public class AI {
 					acc_angle -= 3.0;
 					while (acc_velocity > 0 && !hit) {
 						// decrease power
-						acc_velocity -= 10.0;
+						acc_velocity -= 7.5;
 						state = calculation(acc_angle, acc_velocity);
 						hit = isHit(state);
 					}
 				}
 			}
-			
-			// output angle and power (force)
-			setAngle(acc_angle);
-			setVelocity(acc_velocity);
 		}
+
+		// output angle and power (force)
+		setAngle(acc_angle);
+		setVelocity(acc_velocity);
 	}
 	
 	/**
@@ -362,7 +387,7 @@ public class AI {
 		// R = v * cos(angle) * ((v * sin(angle)) + sqrt((v * v * sin(angle) * sin(angle)) + 2 * g * ydis))
 		r = (velocity * Math.cos(angle) * ((velocity * Math.sin(angle)) + Math.sqrt((v * v * Math.sin(angle) * Math.sin(angle)) + 2 * gravity * ydis))) / 2;
 		
-		if (r > (xdis - 5) && r < (xdis + 5)) {
+		if (r > (xdis - 100) && r < (xdis + 100)) {
 			return 0;
 		}
 		else if (r < xdis) {
@@ -399,6 +424,11 @@ public class AI {
 //		board.updateFrame(left);
 		board.input("Pressed A");
 //		q.offer("Pressed A");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -410,6 +440,11 @@ public class AI {
 //		board.updateFrame(right);
 		board.input("Pressed D");
 //		q.offer("Pressed D");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -420,6 +455,11 @@ public class AI {
 //		board.updateFrame(up);
 		board.input("Pressed W");
 //		q.offer("Pressed W");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 //	/**
@@ -491,7 +531,8 @@ public class AI {
 		ArrayList<PhysObject> squares = board.getSquares();
 		int numOfPlayers = squares.size();
 		for (int i = 0; i < numOfPlayers; i++) {
-			if (((Square) squares.get(i)).getPlayerID() == myID) {
+			if (((Square) squares.get(i)).getSquareID() == mySquareID && ((Square) squares.get(i)).getPlayerID() == myPlayer) {
+//				System.out.println("Square ID match.");
 				setPos(squares.get(i).getPos());
 			}
 		}
@@ -519,10 +560,12 @@ public class AI {
 		int finalX = 0;
 		int finalY = 0;
 		PhysObject finalSquare = null;
-		double finalDis = 0;
+		double finalDis = 9999999999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
-			PhysObject enemySquare = squares.get(i);
-			if (((Square) enemySquare).getPlayerID() != myPlayer) {
+			Square enemySquare = (Square) squares.get(i);
+			if (enemySquare.getPlayerID() != myPlayer) {
+//				System.out.println(enemySquare.getPlayerID());
+//				System.out.println(enemySquare.getPos());
 				// get position of enemies
 				int enemyX = (int) enemySquare.getPos().getX();
 				int enemyY = (int) enemySquare.getPos().getY();
@@ -531,6 +574,7 @@ public class AI {
 				
 				// calculate shortest displacement by pythagoras theorem
 				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
+//				System.out.println(displacement);
 				if (displacement < finalDis) {
 					finalDis = displacement;
 					finalX = enemyX;
