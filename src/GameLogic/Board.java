@@ -25,6 +25,7 @@ public class Board {
 	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
 	private static Square activePlayer;
+	private TurnMaster turn;
 	
 
 	public static void main(String[] args) {
@@ -460,6 +461,12 @@ public class Board {
 				
 				
 				audio.splash();
+				incrementTurn();
+				turn.resetTimer();
+				if (checkForWinner){
+					setWinner(activePlayer);
+					turn.destroy();
+				}
 				
 			}
 		}
@@ -529,6 +536,10 @@ public class Board {
 			  //         q.add(objects);
 			    //       weaponsopen = true;
 				break;
+			default : if (input.contains("Space")){
+							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
+							mv.setWeapon(true);
+				}
 			}
 		}else
 		{
@@ -566,7 +577,7 @@ public class Board {
 	}
 	
 	public void startGame(){
-		TurnMaster turn = new TurnMaster(this);
+		this.turn = new TurnMaster(this);
 		turn.start();
 		
 		for (int i = 0; i < 4; i++){
@@ -582,7 +593,11 @@ public class Board {
 			player = 0;
 			//squareID = squareID+1;
 		}
-		System.out.println(player);
+		//System.out.println(player);
+		Square active = (Square)getActivePlayer();
+		if (!(active.getAlive())){
+			incrementTurn();
+		}
 	}
 	
 	public void addName(String name){
