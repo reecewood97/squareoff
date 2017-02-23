@@ -14,8 +14,10 @@ public class TurnMaster extends Thread{
 			try {
 				sleep(40);
 				i = i+1;
-				if(i >= 500)
+				if(i >= 500){
 					board.incrementTurn();
+					i = 0;
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

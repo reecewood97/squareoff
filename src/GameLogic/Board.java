@@ -463,9 +463,11 @@ public class Board {
 				audio.splash();
 				incrementTurn();
 				turn.resetTimer();
-				if (checkForWinner){
-					setWinner(activePlayer);
-					turn.destroy();
+				if (checkForWinner()){
+					int won = findPlayer();
+					setWinner(won);
+					System.out.println(won);
+					turn.endItAll();
 				}
 				
 			}
@@ -603,5 +605,29 @@ public class Board {
 	public void addName(String name){
 		players[numberOfPlayers] = name;
 		numberOfPlayers++;
+	}
+	
+	private boolean checkForWinner(){
+		ArrayList<PhysObject> chickenDinner = getSquares();
+		int i = 0;
+		
+		while(i < chickenDinner.size()){
+			if(((Square)chickenDinner.get(i)).getAlive() && ((Square)chickenDinner.get(i+1)).getAlive() && (((Square)chickenDinner.get(i+1)).getPlayerID() == ((Square)chickenDinner.get(i)).getPlayerID())){
+				i++;
+			}else
+				return false;
+		}
+		return true;
+		
+	}
+	
+	private int findPlayer()
+	{
+		ArrayList<PhysObject> chickenDinner = getSquares();
+		int i = 0;
+		while(true){
+			if (((Square)chickenDinner.get(0)).getAlive())
+				return ((Square)chickenDinner.get(0)).getPlayerID();
+		}
 	}
 }
