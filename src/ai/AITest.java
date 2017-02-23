@@ -11,7 +11,7 @@ public class AITest {
 	public static void main(String[] args) {
 		Board board = new Board();
 		
-		AI ai = new AI(2, 0, 0, board);
+		AI ai = new EasyAI(2, 0, 0, board);
 		
 		ai.changeAIPos();
 		
@@ -19,11 +19,7 @@ public class AITest {
 		System.out.println(ai.getAIPos() + " \n");
 //		System.out.println(ai.getFinalDestination());
 		
-		ai.determineState();
-		
 		System.out.println(ai.getAIPos());
-		
-		ai.aiAttack();
 		
 		double velocity_chosen = ai.getVelocity();
 		double angle_chosen = ai.getAngle();

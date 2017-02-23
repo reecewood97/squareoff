@@ -3,6 +3,7 @@ package ai;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
+import java.util.Random;
 
 import GameLogic.Board;
 import GameLogic.Move;
@@ -104,37 +105,6 @@ public class AI {
 		this.mySquareID = id;
 	}
 	
-
-	/**
-	 * Determines whether to move and attack or to pick up items
-	 * Should be called by the server to send movements and attacks
-	 */
-	public void determineState() {
-		changeAIPos();
-		if(haveItems()) {
-			// go get items
-			// Then go attack
-			aiMove();
-			aiAttack();
-			
-			// More advance: locate item position, calculate time to reach item
-			// 				 choose to get item and attack or attack directly
-		}
-		else {
-			aiMove();
-			aiAttack();
-		}
-//		for (int i = 0; i < 100; i++) {
-//			moveRight();
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-	}
-	
 	/**
 	 * Check are there any random items on the board
 	 * @return true if there are, false if there are no items
@@ -147,26 +117,6 @@ public class AI {
 //			return false;
 //		}
 		return false;
-	}
-	
-	/**
-	 * Send out the final velocity and angle chosen for attack
-	 */
-	public void aiAttack() {
-		// choose the closest target at this moment (get it from server copy)
-		//Point2D.Double finalCoor = getFinalDestination();
-		determineResult();
-		double velocity_chosen = getVelocity();
-		double angle_chosen = getAngle();
-		//sendAttack(angle_chosen, velocity_chosen);
-		
-		// attack the provided coordinate
-		// 		by sending power, angle chosen to methods in other class.
-		
-		
-		// More advance: choose enemy standing on a block that has less hp,
-		// 				 then calculate will the grenade able to reach target (through physics engine)
-		//				 if it can, attack, else, choose another target
 	}
 	
 	/**
@@ -298,21 +248,21 @@ public class AI {
 	 * (Recording the path of coordinates of the grenade).
 	 * Then, iterate through the path(list of coordinates) to check is there any blocks in those coordinates
 	 * If there is at least one coordinate that is a block, calculate another path.
+	 * @param mistakeAngle 
+	 * @param mistakeVelocity 
 	 */
-	private void determineResult(){
+	public void determineResult(int mistakeAngle, int mistakeVelocity){
 		Point2D.Double target = getFinalDestination();
 		// double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
 		double acc_angle = 45.0;
 		double acc_velocity = maxVelocity/2;
-		System.out.println("not yet calculate");
 		if (ydis < 0) {
 			// angle larger than 45 degrees
 			boolean hit = false;
 			int state = calculation(acc_angle, acc_velocity);
 			hit = isHit(state);
 			while (!hit) {
-				System.out.println("not yet hit");
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
 					acc_angle += 3.0;
@@ -341,7 +291,6 @@ public class AI {
 			int state = calculation(acc_angle, acc_velocity);
 			hit = isHit(state);
 			while (!hit) {
-				System.out.println("not yet hit");
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
 					acc_angle -= 3.0;
@@ -366,8 +315,21 @@ public class AI {
 		}
 
 		// output angle and power (force)
-		setAngle(acc_angle);
-		setVelocity(acc_velocity);
+
+		double final_angle;
+		double final_velocity;
+		Random random = new Random();
+		int posOrNeg = random.nextInt(2);
+		if (posOrNeg == 0) {
+			final_angle = acc_angle + random.nextInt(mistakeAngle);
+			final_velocity = acc_velocity + random.nextInt(mistakeVelocity);
+		}
+		else {
+			final_angle = acc_angle - random.nextInt(mistakeAngle);
+			final_velocity = acc_velocity - random.nextInt(mistakeVelocity);
+		}
+		setAngle(final_angle);
+		setVelocity(final_velocity);
 	}
 	
 	/**
@@ -489,6 +451,11 @@ public class AI {
 		String command = angle + ", " + velocity;
 //		q.offer(command);
 		board.input(command);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
