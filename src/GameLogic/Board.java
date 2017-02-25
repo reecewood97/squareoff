@@ -10,12 +10,13 @@ import Audio.Audio;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.lang.Math;
 
 public class Board {
 	private int player;
 	private int squareID;
-	private int winner;
+	private int winner = -1;
 	private boolean freeState;
 	private boolean debug = false;
 	private boolean weaponsopen = false;
@@ -458,17 +459,15 @@ public class Board {
 			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
 				
 				activePlayer.setDead();
-				
-				
 				audio.splash();
-				incrementTurn();
-				turn.resetTimer();
 				if (checkForWinner()){
+					System.out.println("winner?");
 					int won = findPlayer();
 					setWinner(won);
-					System.out.println(won);
 					turn.endItAll();
 				}
+				incrementTurn();
+				turn.resetTimer();
 				
 			}
 		}
@@ -501,7 +500,7 @@ public class Board {
 		
 		if(input.contains("Pressed")){
 			if(input.contains(players[player])){
-				System.out.println("I'm from the current player!");
+				//System.out.println("I'm from the current player!");
 				}
 			
 			String inputKey = input.substring(8,9);
@@ -609,13 +608,13 @@ public class Board {
 	
 	private boolean checkForWinner(){
 		ArrayList<PhysObject> chickenDinner = getSquares();
-		int i = 0;
 		
-		while(i < chickenDinner.size()){
-			if(((Square)chickenDinner.get(i)).getAlive() && ((Square)chickenDinner.get(i+1)).getAlive() && (((Square)chickenDinner.get(i+1)).getPlayerID() == ((Square)chickenDinner.get(i)).getPlayerID())){
-				i++;
-			}else
-				return false;
+		for(int i=0; i< chickenDinner.size()-1;i++){
+			Square first = ((Square)chickenDinner.get(i));
+			Square second = ((Square)chickenDinner.get(i+1));
+			if((first.getAlive() && second.getAlive()))
+				if(first.getPlayerID() != second.getPlayerID())
+					return false;
 		}
 		return true;
 		
@@ -624,10 +623,11 @@ public class Board {
 	private int findPlayer()
 	{
 		ArrayList<PhysObject> chickenDinner = getSquares();
-		int i = 0;
-		while(true){
-			if (((Square)chickenDinner.get(0)).getAlive())
+		for(int i=0; i< chickenDinner.size();i++){
+			Square first = ((Square)chickenDinner.get(i));
+			if (first.getAlive())
 				return ((Square)chickenDinner.get(0)).getPlayerID();
 		}
+		return -1;
 	}
 }

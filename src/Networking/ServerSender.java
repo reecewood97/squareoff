@@ -32,11 +32,21 @@ public class ServerSender extends Thread {
 			}
 		
 			while(running && inGame) {
-				ArrayList<PhysObject> x = (board.getUpdate()); 
-				toClient.writeObject(x);
-				toClient.flush();
-				toClient.reset();
-				sleep(40);
+				if(board.getWinner() > -1){
+					toClient.writeObject(33);
+					toClient.flush();
+					System.out.println("Sent the winner");
+					toClient.writeObject(board.getWinner());
+					toClient.flush();
+					board.setWinner(-1);
+				}
+				else{
+					ArrayList<PhysObject> x = (board.getUpdate()); 
+					toClient.writeObject(x);
+					toClient.flush();
+					toClient.reset();
+					sleep(40);
+				}
 			}
 			
 			toClient.close();

@@ -1,6 +1,8 @@
 package GameLogic;
 
-public class TurnMaster extends Thread{
+import java.io.Serializable;
+
+public class TurnMaster extends Thread {
 	private Board board;
 	private int i = 0;
 	private boolean running = true;

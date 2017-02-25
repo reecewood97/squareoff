@@ -63,7 +63,14 @@ public class ClientReceiver extends Thread {
 				}
 				else if((int)ob == Server.QUIT) {
 					running = false;
-				}	
+				}
+				else if ((int)ob == 33){
+					System.out.println("The weener is ");
+					int winner = 3;//This needs to be a read in
+					board.setWinner(winner);
+					ui = new Screen(board,q,"");
+					System.out.println("The weener is " + winner);
+				}
 			}
 			
 			ui.setInvisible();

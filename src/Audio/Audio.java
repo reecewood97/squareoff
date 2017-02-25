@@ -10,7 +10,7 @@ import javax.sound.sampled.Clip;
  * @author Fran
  *
  */
-public class Audio
+public class Audio implements Serializable
 {
 	
 	private boolean sound;

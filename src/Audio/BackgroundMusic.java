@@ -1,11 +1,13 @@
 package Audio;
 
 import java.io.File;
+import java.io.Serializable;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-public class BackgroundMusic extends Thread{
+public class BackgroundMusic extends Thread implements Serializable{
 
 	private boolean run = true;
 	
