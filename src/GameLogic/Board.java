@@ -542,7 +542,27 @@ public class Board {
 							mv.setWeapon(true);
 				}
 			}
-		}else
+		}
+		else if(input.contains("Clicked")){
+			WeaponMove wmv;
+			int xs = input.indexOf('x');
+			int xe = input.indexOf(',');
+			String xc = input.substring(xs+2, xe);
+			int ye = input.indexOf(']');
+			String yc = input.substring(xe+3, ye);
+			
+			Double x = Double.parseDouble(xc);
+			Double y = Double.parseDouble(yc);
+			Point2D.Double origin = new Point2D.Double(x, y);
+			System.out.println(origin);
+			
+			wmv = new WeaponMove("None",origin,0.5,4);
+			updateFrame(wmv);
+			if (q.size() > 0)
+				q.remove();
+			q.add(objects);
+		}
+		else
 		{
 			Move mv = new Move(active.getColour(),active.getSquareID(),"None",false);
 			updateFrame(mv);

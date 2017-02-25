@@ -40,6 +40,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 String keyString;
 		 int keyCode = e.getKeyCode();
 		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode) + " " + name;
+		 //System.out.println(keyString);
 		 q.offer(keyString);
 		 panel.grabFocus();
 		 } 
@@ -64,10 +65,13 @@ public class HangerOn implements KeyListener,MouseListener {
 	 
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
-		 String clickedEvent = "Clicked " + e.getPoint();
-		 q.offer(clickedEvent);
-		 //System.out.println("works!");
-		 panel.grabFocus();
+		 if(e.getButton() == 1){
+			 String clickedEvent = "Clicked " + e.getPoint();
+			 q.offer(clickedEvent);
+			 //System.out.println("works!");
+			 panel.grabFocus();
+		 }
+		 //panel.grabFocus();
 	 }
 	 @Override
 	 public void mouseEntered(MouseEvent e) { 		

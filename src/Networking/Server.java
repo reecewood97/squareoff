@@ -67,7 +67,7 @@ public class Server extends Thread {
 
 					board.input("None");
 					try {
-						sleep(40);
+						sleep(30);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

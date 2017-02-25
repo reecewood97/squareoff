@@ -33,6 +33,7 @@ public class ServerSender extends Thread {
 		
 			while(running && inGame) {
 				if(board.getWinner() > -1){
+					//running = false;
 					toClient.writeObject(33);
 					toClient.flush();
 					System.out.println("Sent the winner");

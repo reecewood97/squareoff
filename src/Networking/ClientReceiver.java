@@ -65,11 +65,10 @@ public class ClientReceiver extends Thread {
 					running = false;
 				}
 				else if ((int)ob == 33){
-					System.out.println("The weener is ");
+					//running = false;
 					int winner = 3;//This needs to be a read in
 					board.setWinner(winner);
 					ui = new Screen(board,q,"");
-					System.out.println("The weener is " + winner);
 				}
 			}
 			
