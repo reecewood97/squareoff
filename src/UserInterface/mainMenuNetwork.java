@@ -21,17 +21,14 @@ public class mainMenuNetwork {
 	public boolean connectToHost(String hostName, String name) {
 		
 		c = new Client(name);
-		
 		String[] address;
 		
 		try {
 			address = hostName.split(":");
-			
 			if ((address[0].length()<7) | Integer.parseInt(address[1])!=port) {
 				System.out.println("Incorrect address/port or address too small");
 				return false;
 			}
-			
 			if (c.connect(address[0], Integer.parseInt(address[1]))) {
 				Thread.sleep(1000);
 				players = c.getPlayers();
