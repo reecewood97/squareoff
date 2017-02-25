@@ -14,12 +14,14 @@ public class ServerReceiver extends Thread {
 	private boolean running, inGame;
 	private ArrayList<String> players;
 	private ClientTable table;
+	private String name;
 	
 	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players, ClientTable table) {
 		this.fromClient = fromClient;
 		this.board = board;
 		this.players = players; 
 		this.table = table;
+		name = "";
 	}
 	
 	public void run() {
@@ -27,7 +29,7 @@ public class ServerReceiver extends Thread {
 		inGame = false;
 		
 		try {
-			String name = (String)fromClient.readObject();
+			name = (String)fromClient.readObject();
 			if(players.contains(name)) {
 				//TODO 
 			}
@@ -41,13 +43,7 @@ public class ServerReceiver extends Thread {
 			
 			Object ob;
 			while(running && !inGame && (ob = fromClient.readObject()) != null) {
-				if((int)ob == Server.PLAY) {
-					table.sendAll(Server.PLAY);
-					inGame = true;
-					board.startGame();
-					System.out.println("return");
-				}
-				else if((int)ob == Server.QUIT) 
+				if((int)ob == Server.QUIT) 
 					quit();
 			}
 			
@@ -59,11 +55,9 @@ public class ServerReceiver extends Thread {
 				else if((int)input == Server.QUIT) 
 					quit();
 			}
-			fromClient.close();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		} 
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -71,8 +65,18 @@ public class ServerReceiver extends Thread {
 		}
 	}
 	
+	public void startGame() {
+		inGame = true;
+	}
+	
 	private void quit() {
-		table.send(this, Server.QUIT);
+		table.get(this).send(Server.QUIT);
+		close();
+	}
+	
+	private void close() {
 		running = false;
+		players.remove(name);
+		table.remove(this);
 	}
 }

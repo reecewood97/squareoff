@@ -17,7 +17,6 @@ import java.io.*;
 public class Client {
 	
 	private String name;
-	private boolean isHost;
 	private Socket socket;
 	private ObjectOutputStream toServer;
 	private ObjectInputStream fromServer;
@@ -25,6 +24,7 @@ public class Client {
 	private ClientReceiver receiver;
 	private Board board;
 	private Queue q;
+	private Screen ui;
 	
 	/**
 	 * Constructor.
@@ -38,6 +38,8 @@ public class Client {
 		fromServer = null;
 		q = new Queue();
 		board = new Board();
+		ui = new Screen(board, q,name);
+		
 	}
 	
 	/**
@@ -62,13 +64,10 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
-
-
-		Screen newui = new Screen(board, q,name);
 		
 		//Creates and starts the  client-side threads to communicate with the server.
 		sender = new ClientSender(toServer, q, name);
-		receiver = new ClientReceiver(fromServer, board, newui);
+		receiver = new ClientReceiver(fromServer, board, ui);
 		
 		sender.start();
 		receiver.start();
@@ -80,30 +79,31 @@ public class Client {
 	 * Disconnects the client from a server if it is connected.
 	 */
 	public void disconnect() {
+		
+		//Makes the UI invisible. Doesn't turn off the music however.
+		ui.setInvisible();
+		
 		//Do nothing if the client is not connected.
 		if(socket == null || socket.isClosed()) return;
 		
-		//Close the socket and stop the threads.
+		
+		//Close the socket - this should join all the threads.
 		try {
 			socket.close();
-			sender.close();
-			receiver.close();
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		q.offer("I close the ClientSender.");
+		//ui.close();
 	}
 	
 	public ArrayList<String> getPlayers() {
 		return receiver.getPlayers();
 	}
 	
-	public void play() {
-		sender.play();
-	}
-	
-	public void quit() {
-		sender.quit();
+	public boolean inGame() {
+		return receiver.inGame();
 	}
 }

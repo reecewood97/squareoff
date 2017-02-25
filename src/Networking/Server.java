@@ -26,7 +26,7 @@ public class Server extends Thread {
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();
-
+		start();
 	}
 	
 	public void run() {
@@ -56,15 +56,8 @@ public class Server extends Thread {
 				System.out.println(i);
 				i++;
 				//Temp
-			}
-				boolean aigenned = false;
-			
+			}			
 				while(true){
-//					if(!aigenned && table.getSender().inGame()) {
-//						new AI(0, 0, 0, board).determineState();
-//					    aigenned = true;
-//					}
-
 					board.input("None");
 					try {
 						sleep(30);
@@ -79,8 +72,33 @@ public class Server extends Thread {
 		}
 	}
 	
-	public void close() throws IOException {
+	public void close() {
 		running = false;
-		socket.close();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
+	public void startGame() {
+		addAIs();
+	
+		for(ServerReceiver r: table.getReceivers()) {
+			r.startGame();
+			table.get(r).startGame();
+		}
+			
+		board.startGame();	
+	}
+	
+	private void addAIs() {
+		int maxPlayers = 4;
+		int numberOfPlayers = players.size();
+		
+		for(int i = numberOfPlayers; i < maxPlayers; i++) {
+			new AI(i, i, i, board); //Err... I don't know what to do here.
+		}
 	}
 }

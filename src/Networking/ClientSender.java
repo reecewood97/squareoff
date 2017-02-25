@@ -39,38 +39,28 @@ public class ClientSender extends Thread {
 		
 			while(running) {
 				Object obj = q.take();
-				server.writeObject(obj);
-				server.flush();
-				server.reset();
+				send(obj);
 				
 				sleep(40);
 			}
-			
-			server.close();
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		}
 	}
 	
-	public void close() {
-		running = false;
-	}
-	
-	private void send(int msg) {
+	private void send(Object obj) {
 		try {
-			server.writeObject(msg);
+			server.writeObject(obj);
 			server.flush();
 			server.reset();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		}
 	}
 	
@@ -78,8 +68,7 @@ public class ClientSender extends Thread {
 		send(Server.PLAY);
 	}
 		
-	public void quit() {
+	private void close() {
 		running = false;
-		send(Server.QUIT);
 	}
 }
