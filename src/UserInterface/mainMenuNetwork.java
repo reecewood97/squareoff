@@ -57,15 +57,11 @@ public class mainMenuNetwork {
 	}
 	
 	public void startGame() {
-		c.play();
+		s.startGame();
 	}
 
 	public void closeServer() {
 		System.out.println("Closing the Server - mainMenuNetwork");
-		try {
-			s.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		s.close();
 	}
 }

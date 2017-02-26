@@ -10,13 +10,13 @@ public class ServerTest {
 		
 		server.startGame();
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		c1.disconnect();
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		c1.disconnect();
 	}
 }
 
