@@ -63,8 +63,7 @@ public class ServerSender extends Thread {
 			toClient.reset();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		}
 	}
 	
