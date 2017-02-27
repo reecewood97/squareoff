@@ -61,6 +61,11 @@ public class PhysObject implements Serializable{
 		setYvel(getYvel()-getGrav());
 	}
 	
+	public void undoUpdate() {
+		setYvel(getYvel()+getGrav());
+		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
+	}
+	
 	public boolean getGravity() {
 		return gravity;
 	}
