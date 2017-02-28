@@ -27,7 +27,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	private TurnMaster turn;
-	private double XtravelDist = 1.5;
+	private double XtravelDist = 2.5;
 	
 
 	public static void main(String[] args) {
@@ -45,7 +45,8 @@ public class Board {
 				board.updateFrame(new Move(0,0,"None",true));
 			}
 			if (input.equals("w")){
-				board.updateFrame(new WeaponMove("ExplodeOnImpact",activePlayer.getPos(),0,5));
+				board.updateFrame(new WeaponMove("ExplodeOnImpact",
+						new Point2D.Double(activePlayer.getPos().getX(), activePlayer.getPos().getY()+5),0,0));
 			}
 		}
 	}
@@ -196,8 +197,8 @@ public class Board {
 		double blockdown = block.getPos().getY();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockdown<=guyup && guyup<=blockup) || 
-				(blockdown<=guydown && guydown<=blockup)) {
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
 			if(Math.abs(blockright-guyleft)<=XtravelDist){
 				return Math.abs(blockright-guyleft);
 			}
@@ -229,8 +230,8 @@ public class Board {
 		double blockup = block.getPos().getY()+block.getHeight();
 		double blockdown = block.getPos().getY();
 		
-		if((blockdown<=guyup && guyup<=blockup) || 
-				(blockdown<=guydown && guydown<=blockup)) {
+		if((blockdown<guyup && guyup<blockup) || 
+				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
 			if(Math.abs(blockleft-guyright)<=XtravelDist){
 				return Math.abs(blockleft-guyright);
 			}
@@ -262,8 +263,8 @@ public class Board {
 		double blockright = block.getPos().getX()+block.getWidth();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<=guyleft && guyleft<=blockright) || 
-				(blockleft<=guyright && guyright<=blockright)) {
+		if((blockleft<guyleft && guyleft<blockright) || 
+				(blockleft<guyright && guyright<blockright)) {
 			if((-1)*Math.abs(guydown-blockup)>=guy.getYvel()){
 				return true;
 			}
@@ -295,8 +296,8 @@ public class Board {
 		double blockright = block.getPos().getX()+block.getHeight();
 		double blockdown = block.getPos().getY();
 		
-		if((blockleft<=guyleft && guyleft<=blockright) || 
-				(blockleft<=guyright && guyright<=blockright)) {
+		if((blockleft<guyleft && guyleft<blockright) || 
+				(blockleft<guyright && guyright<blockright)) {
 			if(Math.abs(blockdown-guyup)<=activePlayer.getYvel()){
 				return Math.abs(blockdown-guyup);
 			}
@@ -315,6 +316,7 @@ public class Board {
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
 			if(obj2.getName().equals("ExplodeOnImpact")){
+				System.out.println("Weapon collision detected"); //TODO
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
@@ -327,10 +329,11 @@ public class Board {
 			}
 		} else {
 			if(obj1.getName().equals("ExplodeOnImpact")){
-					Ellipse2D.Double circle = new Ellipse2D.Double
-							(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
-					return circle.intersects
-							(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				System.out.println("Weapon collision detected"); //TODO
+				Ellipse2D.Double circle = new Ellipse2D.Double
+						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				return circle.intersects
+						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			} else {
 				Rectangle2D.Double rect = new Rectangle2D.Double
 						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
@@ -342,14 +345,16 @@ public class Board {
 	
 	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
 		if(thing.getName().equals("ExplodeOnImpact")){
+			System.out.println("Resolving weapon collision");
+			thing.setInUse(false);
 			Weapon wep = (Weapon)thing;
 			wep.setInUse(false);
 			wep.setPos(new Point2D.Double(30, 30));
 			TerrainBlock castedblock = (TerrainBlock)block;
 			castedblock.damage(1);
-			//TODO later implement different weapon types
+			//TODO later implement different weapon types, and this doesn't work
 		}
-		else {//TODO this doesn't work properly... but at least it works!!!
+		else {
 			thing = objects.get(lspos);
 				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 					thing.setXvel((-0.6)*thing.getXvel());
@@ -431,7 +436,7 @@ public class Board {
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
 				if(move.getJump()) {
-					activePlayer.setYvel(10);
+					activePlayer.setYvel(20);
 				}
 				if(move.getDirection().equals("Left")){
 					if (wallDistL(activePlayer)<XtravelDist){

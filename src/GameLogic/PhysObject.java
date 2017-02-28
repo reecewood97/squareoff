@@ -39,7 +39,7 @@ public class PhysObject implements Serializable{
 		//Probably best to use this constructor
 		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
-		this.grav = 1;
+		this.grav = 2;
 		this.changed = false;
 		this.pos = pos;
 		this.xvel = 0;
@@ -108,6 +108,10 @@ public class PhysObject implements Serializable{
 	
 	public boolean getSolid() {
 		return solid;
+	}
+	
+	public void setInUse(boolean hi){
+		inUse = hi;
 	}
 	
 	public void setGravity(boolean gravity) {

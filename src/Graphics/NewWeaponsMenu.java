@@ -37,11 +37,12 @@ public class NewWeaponsMenu extends JFrame {
 	    private JButton image;
 	    private Board board;
 	    private boolean weaponselected;
+	    private HangerOn listeners;
 	 
 	    /**
 	     * weapon menu constructor
 	     */
-	    public NewWeaponsMenu(Board board){
+	    public NewWeaponsMenu(HangerOn listeners, Board board){
 	    	
 	    		    	
 	    	//edit menu settings
@@ -53,6 +54,7 @@ public class NewWeaponsMenu extends JFrame {
 	    
 	    	this.board = board;
 	    	this.weaponselected = false;
+	    	this.listeners = listeners;
 	    	
 	    	//create panels
 	    	JPanel toppanel = new JPanel();
@@ -219,8 +221,8 @@ public class NewWeaponsMenu extends JFrame {
 	    	audio.click();
 	    	
 	    	//TODO notify board of weapon choice
-	    	weaponselected = true;
-	    	repaint();
+	    	listeners.setWep("ExplodeOnImpact");
+	    	//repaint();
 	    	
 	    }
 

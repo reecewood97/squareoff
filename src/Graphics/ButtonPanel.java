@@ -18,6 +18,7 @@ public class ButtonPanel extends JPanel{
 	private boolean first = true;
 	private Audio audio;
 	private Board board;
+	private HangerOn listeners;
 	
 	public ButtonPanel(Screen screen, Board board) {
 		
@@ -30,7 +31,8 @@ public class ButtonPanel extends JPanel{
 		//mainpanel.setBounds(0, 0, screenwidth, height);
 		
 		this.board = board;
-	
+		this.listeners = screen.getHangerOn();
+		
 		//exit button
         ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
         JButton exit = new JButton(image2);
@@ -85,7 +87,7 @@ public class ButtonPanel extends JPanel{
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		NewWeaponsMenu menu = new NewWeaponsMenu(board);
+		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 		menu.open();
 		
 	}
