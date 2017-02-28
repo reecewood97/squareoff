@@ -6,7 +6,6 @@
 
 package UserInterface;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import Networking.Client;
 import Networking.Server;

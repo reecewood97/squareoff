@@ -69,14 +69,14 @@ public class ButtonPanel extends JPanel{
 
 	}
 	
+	@SuppressWarnings("static-access")
 	public void openMainMenu(Screen screen, Board board){
 	
 		board.notifyQuit();
 		
 		screen.setVisible(false);
 		//mainMenu mainmenu = new mainMenu();
-		mainMenu.showUI();
-		
+		//mainMenu.showUI();
 		
 	}
 	
