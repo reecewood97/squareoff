@@ -43,8 +43,8 @@ public class ServerReceiver extends Thread {
 			
 			Object ob;
 			while(running && !inGame && (ob = fromClient.readObject()) != null) { 
-				if(ob.getClass().isInstance(0) && (int)ob == Server.QUIT) 
-					quit();
+//				if(ob.getClass().isInstance(0) && (int)ob == Server.QUIT) 
+//					quit();
 			}
 			
 			
@@ -52,8 +52,8 @@ public class ServerReceiver extends Thread {
 			while(running && inGame && (input = fromClient.readObject()) != null) {
 				if(input.getClass().isInstance("A String"))
 					board.input((String)input);
-				else if((int)input == Server.QUIT) 
-					quit();
+//				else if((int)input == Server.QUIT) 
+//					quit();
 			}
 		}
 		catch(IOException e) {
