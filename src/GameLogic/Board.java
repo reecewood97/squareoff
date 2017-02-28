@@ -596,7 +596,7 @@ public class Board {
 			System.out.println(origin);
 			
 			wmv = new WeaponMove("None",origin,9,4);
-			updateFrame(wmv);
+			//updateFrame(wmv);
 			if (q.size() > 0)
 				q.remove();
 			q.add(objects);
