@@ -35,31 +35,54 @@ public class mainMenu extends Application {
 	static int height = 540;
 	static Audio a = new Audio();
 	static Stage ps;
+	static Scene ogScene;
 	
+	/**
+	 * Main method for local testing of code, will be remove in final release
+	 * @param args arguments passed when running main method (none of which are used)
+	 */
     public static void main(String[] args) {
         //launch(args);
     	launchMenu();
     }
     
+    /**
+     * Prints when program is terminated - used for debugging
+     * If it prints and the program is no terminated, there is a bug of some sort
+     */
     @Override
     public void stop() {
         System.out.println("Program Exited");
+        System.exit(0);
     }
     
+    /**
+     * Method to hide the UI at anytime
+     */
     public static void hideUI() {
     	ps.hide();
     }
     
+    /**
+     * Method to show the UI at anytime
+     */
     public static void showUI() {
     	ps.show();
     }
     
+    /**
+     * Shows the splashscreen before running the menu UI
+     * This method starts the actual menu of the game - the first method called
+     */
     public static void launchMenu() {
     	SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
     	launch();
     }
     
+    /**
+     * This method creates and shows the initial menu the player interacts with
+     */
     public void start(Stage primaryStage) throws Exception {
     	ps = primaryStage;
         primaryStage.setTitle("Square-Off: Start Menu");
@@ -70,6 +93,8 @@ public class mainMenu extends Application {
         btn2.setMinWidth(75);
         Button btn3 = new Button("Options");
         btn3.setMinWidth(75);
+        Button btn5 = new Button("Help");
+        btn5.setMinWidth(75);
         Button btn4 = new Button("Quit Game");
         btn4.setMinWidth(75);
         
@@ -77,26 +102,32 @@ public class mainMenu extends Application {
         
         grid.setVgap(12);
         
-        grid.add(btn, 0, 14);
-        grid.add(btn2, 0, 15);
-        grid.add(btn3, 0, 16);
-        grid.add(btn4, 0, 17);
+        grid.add(btn, 0, 11);
+        grid.add(btn2, 0, 12);
+        grid.add(btn3, 0, 13);
+        grid.add(btn5, 0, 14);
+        grid.add(btn4, 0, 15);
         grid.setAlignment(Pos.CENTER);
         
         
         Scene scene1 = new Scene(grid, width, height);
+        ogScene = scene1;
         
         btn.setOnAction( e -> { System.out.println("Hosting new lobby"); a.click(); lobbyWindow(scene1, "Host", (new mainMenuNetwork()) ); } );
-        btn2.setOnAction( e -> { System.out.println("Loading existing lobbies"); a.click(); jgWindow( scene1); } );
-        btn3.setOnAction( e -> { System.out.println("Opening options"); a.click(); oWindow( scene1); } );
-        btn4.setOnAction( e -> { System.out.println("Quitting Game"); a.click(); System.exit(0); } );
+        btn2.setOnAction( e -> { System.out.println("Loading existing lobbies"); a.click(); jgWindow(scene1); } );
+        btn3.setOnAction( e -> { System.out.println("Opening options"); a.click(); oWindow(scene1); } );
+        btn5.setOnAction( e -> { System.out.println("Opening help"); a.click(); helpWindow(scene1); } );
+        btn4.setOnAction( e -> { System.out.println("Quitting Game"); a.click(); stop(); } );
         
         primaryStage.setScene(scene1);
         primaryStage.show();
                 
     }
     
-    
+    /**
+     * This method is used to get the name of the host
+     * @return a string of the host's name or null if nothing is entered/player presses the cancel button
+     */
     public static String hostUsername() {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Square-Off: Hosting Game");
@@ -113,6 +144,12 @@ public class mainMenu extends Application {
 		}
 	} 
     
+    /**
+     * This method creates the lobby for the host (one with a start button)
+     * It is run whenever a new player joins the lobby - refreshing the lobby
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     * @param net class which handles the networking of the player (both server and client sides)
+     */
     @SuppressWarnings({ "rawtypes" })
     public static void refreshHLobby(Scene scene1, mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
@@ -156,6 +193,12 @@ public class mainMenu extends Application {
         ps.show();
     }
   
+    /**
+     * This method creates the lobby for the client (one without a start button)
+     * It is run whenever a new player joins the lobby - refreshing the lobby
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     * @param net class which handles the networking of the player (just the client side)
+     */
     @SuppressWarnings({ "rawtypes" })
     public static void refreshCLobby(Scene scene1, mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
@@ -191,8 +234,14 @@ public class mainMenu extends Application {
         ps.setScene(scene2);
         ps.show();
     } 
-   
-    @SuppressWarnings({ })
+
+    /**
+     * This method is run when entering a lobby
+     * It determines whether you're a host or client and sets up the lobby accordingly
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     * @param type string used to determine whether the player is a host or client
+     * @param net class which handles the networking of the player
+     */
 	public static void lobbyWindow(Scene scene1, String type, mainMenuNetwork net) {
     	//ArrayList<String> playerArrayList = new ArrayList();
     	
@@ -203,6 +252,7 @@ public class mainMenu extends Application {
     		if (name==null) {
     			ps.setScene(scene1);
     			ps.setTitle("Square-Off: Start Menu");
+    			//net.closeServer();
     			return;
     		}
     		else {
@@ -220,7 +270,11 @@ public class mainMenu extends Application {
     }
     
     
-    
+    /**
+     * This method creates the player table in the lobby
+     * @param net class which handles the networking of the player - used to get the players in the lobby
+     * @return a table with the current players in the lobby is returned
+     */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static TableView<Players> lobbyTable(mainMenuNetwork net) {
 		ArrayList<String> playerArrayList = net.getPlayers();
@@ -258,8 +312,14 @@ public class mainMenu extends Application {
     }
     
     
-    
-    public static void tryToJoin(String hostName, String name, Scene scene1) {
+    /**
+     * Method to handle clients attempts when joining a server
+     * Handles incorrect names and invalid addresses appropriately
+     * @param hostAddress address the client is trying to join 
+     * @param name name of the client
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     */
+    public static void tryToJoin(String hostAddress, String name, Scene scene1) {
     	mainMenuNetwork net = new mainMenuNetwork();
 
     	if (name.equals("")) {
@@ -272,13 +332,13 @@ public class mainMenu extends Application {
 			a.click();
     	}
     	else {
-    		if (net.connectToHost(hostName, name))
+    		if (net.connectToHost(hostAddress, name))
 				lobbyWindow(scene1, "Client", net);
 			else {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
 				alert.setHeaderText("Error: Host doesn't exist");
-				alert.setContentText("There is no host with the address: " + hostName);
+				alert.setContentText("There is no host with the address: " + hostAddress);
 				alert.setTitle("Square-Off: Joining Game");
 				alert.showAndWait();
 				a.click();
@@ -286,7 +346,10 @@ public class mainMenu extends Application {
     	}
     }
     
-
+    /**
+     * The method is run when trying to join a lobby
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     */
 	public static void jgWindow(Scene scene1) {
 		ps.setTitle("Square-Off: Client");
     	
@@ -332,7 +395,10 @@ public class mainMenu extends Application {
     }
 	
     
-	
+	/**
+	 * Options menu for the game, handles video/audio options
+	 * @param scene1 main menu scene - used whenever returning to the main menu
+	 */
     public static void oWindow(Scene scene1) {
     	ps.setTitle("Square-Off: Options");
     	
@@ -366,16 +432,26 @@ public class mainMenu extends Application {
     }
     
     
-    
+    /**
+     * sets the volume of the game
+     * @param d new volume level
+     */
     public static void setVolume(double d) {
     	System.out.println(d);
     }
     
+    /**
+     * sets the resolution of the game (always in 16:9 aspect ratio)
+     * @param d new resolution of the game
+     */
     public static void setResolution(double d) {
     	System.out.println(((16.0/9.0) * d) + " x " + d);
     }
     
-    
+    /**
+     * Audio options window
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     */
     public static void audioWindow(Scene scene1) {
     	
     	Button btn9 = new Button("Back to Options");
@@ -415,9 +491,12 @@ public class mainMenu extends Application {
         ps.show();
     }
     
-    
-    
-    
+    /**
+     * Video options window
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     * @param w new width of window
+     * @param h new height of window
+     */
     public static void videoWindow(Scene scene1, double w, double h) {
     	
     	Button btn9 = new Button("Back to Options");
@@ -470,6 +549,29 @@ public class mainMenu extends Application {
         ps.show();
     }    
     
-    
+    /**
+     * Help window - controls etc
+     * @param scene1 main menu scene - used whenever returning to the main menu
+     */
+    public static void helpWindow(Scene scene1) {
+    	ps.setTitle("Square-Off: Help");
+    	
+    	Button btn6 = new Button("Back to Main Menu");
+        
+        
+        GridPane grid4 = new GridPane();
+        grid4.setVgap(12);
+        
+        grid4.add(btn6, 0, 23);
+        grid4.setAlignment(Pos.CENTER);
+        
+        
+        Scene scene4 = new Scene(grid4, width, height);
+        
+        btn6.setOnAction( e -> { System.out.println("Returning to Main Menu"); a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
+        
+        ps.setScene(scene4);
+        ps.show();
+    }
     
 }
