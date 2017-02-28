@@ -92,8 +92,8 @@ public class HangerOn implements KeyListener,MouseListener {
 	 //q.offer(releasedEvent);
 	 }
 	 
-	 public void setWep(String type, Point2D.Double startL, Point2D.Double selectedPoint){
-		 String wepMV = "wepMV" + " "  + type + " " + startL + " " + selectedPoint;
-		 q.offer(wepMV);
+	 public void setWep(String type){
+		 String setWep = "setWep "+type;
+		 q.offer(setWep);
 	 }
  }
