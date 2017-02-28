@@ -31,64 +31,51 @@ public class ServerSender extends Thread {
 				sleep(1000);
 			}
 		
+			send(Server.PLAY);
+			
 			while(running && inGame) {
 				if(board.getWinner() > -1){
 					//running = false;
-					toClient.writeObject(33);
-					toClient.flush();
+					send(33);
 					System.out.println("Sent the winner");
-					toClient.writeObject(board.getWinner());
-					toClient.flush();
+					send(board.getWinner());
 					board.setWinner(-1);
 				}
 				else{
 					ArrayList<PhysObject> x = (board.getUpdate()); 
-					toClient.writeObject(x);
-					toClient.flush();
-					toClient.reset();
+					send(x);
 					sleep(40);
 				}
 			}
-			
-			toClient.close();
 		}
 		catch(InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		}
 	}
 	
 	public void send(Object ob) {
 		try {
-			if(ob.getClass().isInstance(Server.PLAY) && (int)ob == Server.PLAY)
-				inGame = true;
-			if(ob.getClass().isInstance(Server.QUIT) && (int)ob == Server.QUIT)
-				running = false;	
 			toClient.writeObject(ob);
 			toClient.flush();
 			toClient.reset();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			close();
 		}
 	}
 	
-	public void close() {
-		inGame = true;
-		inGame = false;
-		try {
-			toClient.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+	private void close() {
+		running = false;
 	}
 	
 	public boolean inGame() {
 		return inGame;
+	}
+	
+	public void startGame() {
+		inGame = true;
 	}
 }

@@ -35,12 +35,13 @@ public class NewWeaponsMenu extends JFrame {
 	    private int currentWeapon = 0;
 	    //private JLabel picLabel;
 	    private JButton image;
-	    
+	    private Board board;
+	    private boolean weaponselected;
 	 
 	    /**
 	     * weapon menu constructor
 	     */
-	    public NewWeaponsMenu(){
+	    public NewWeaponsMenu(Board board){
 	    	
 	    		    	
 	    	//edit menu settings
@@ -50,6 +51,8 @@ public class NewWeaponsMenu extends JFrame {
 	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    	setTitle("SQUARE-OFF");
 	    
+	    	this.board = board;
+	    	this.weaponselected = false;
 	    	
 	    	//create panels
 	    	JPanel toppanel = new JPanel();
@@ -155,6 +158,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	Graphics2D g2d = (Graphics2D) g;
 	        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 	            RenderingHints.VALUE_ANTIALIAS_ON);  
+	        
 	       
 	    }
 	    
@@ -215,6 +219,9 @@ public class NewWeaponsMenu extends JFrame {
 	    	audio.click();
 	    	
 	    	//TODO notify board of weapon choice
+	    	weaponselected = true;
+	    	repaint();
+	    	
 	    }
 
 

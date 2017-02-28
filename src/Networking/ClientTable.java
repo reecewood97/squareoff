@@ -1,5 +1,6 @@
 package Networking;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientTable {
@@ -14,8 +15,8 @@ public class ClientTable {
 		table.put(r, s);
 	}
 	
-	public void send(ServerReceiver r, Object obj) {
-		table.get(r).send(obj);
+	public ServerSender get(ServerReceiver r) {
+		return table.get(r);
 	}
 	
 	public void sendAll(Object obj) {
@@ -23,9 +24,15 @@ public class ClientTable {
 			s.send(obj);
 	}
 	
-	public ServerSender getSender() {
-		for(ServerSender s: table.values())
-			return s;
-		return null;
+	public Collection<ServerSender> getSenders() {
+		return table.values();
+	}
+	
+	public Collection<ServerReceiver> getReceivers() {
+		return table.keySet();
+	}
+	
+	public void remove(ServerReceiver r) {
+		table.remove(r);
 	}
 }

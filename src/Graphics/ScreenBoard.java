@@ -22,12 +22,15 @@ public class ScreenBoard extends JPanel{
 	private Board board;
 	private double heightratio;
 	private double widthratio;
+	private boolean showTargetLine;
 	
 	public ScreenBoard(Board board, double heightratio, double widthratio){
 		super();
 		this.board = board;
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
+		this.showTargetLine = false;
+		
 		
 	}
 	
@@ -187,11 +190,16 @@ public class ScreenBoard extends JPanel{
 		}
 	}
 	
-	public void targetline(){
+	public void targetline(ArrayList<PhysObject> weapons, Graphics2D g2d){
+	
+		while(true){
+			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
-		Point mousepos = MouseInfo.getPointerInfo().getLocation();
-		
-		
+			g2d.drawLine((int) weapons.get(0).getPos().getX(), 
+					(int) weapons.get(0).getPos().getY(),
+					(int) mousepos.getX(),
+					(int) ((mousepos.getY())-(10*widthratio)));
+		}
 		
 		
 		
@@ -218,9 +226,8 @@ public class ScreenBoard extends JPanel{
 			
 			}
 		}
-		Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
-		g2d.drawLine(50, 50,(int) mousepos.getX(),(int)mousepos.getY());
+		
 	}
 	
 	public void openWeaponsMenu(){

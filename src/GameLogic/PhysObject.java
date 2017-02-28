@@ -23,7 +23,7 @@ public class PhysObject implements Serializable{
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
 		this.gravity = false;
-		this.grav = 2;
+		this.grav = 1;
 		this.changed = false;
 		this.pos = new Point2D.Double(0, 0);
 		this.xvel = 0;
@@ -39,7 +39,7 @@ public class PhysObject implements Serializable{
 		//Probably best to use this constructor
 		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
-		this.grav = 2;
+		this.grav = 1;
 		this.changed = false;
 		this.pos = pos;
 		this.xvel = 0;
@@ -59,6 +59,11 @@ public class PhysObject implements Serializable{
 	public void update() {
 		setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
 		setYvel(getYvel()-getGrav());
+	}
+	
+	public void undoUpdate() {
+		setYvel(getYvel()+getGrav());
+		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
 	}
 	
 	public boolean getGravity() {

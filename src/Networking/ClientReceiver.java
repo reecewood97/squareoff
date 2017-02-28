@@ -1,10 +1,8 @@
 package Networking;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import Graphics.Screen;
@@ -48,7 +46,6 @@ public class ClientReceiver extends Thread {
 			Object ob;
 			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
 			while(running && (ob = server.readObject()) != null) {
-				//System.out.println(ob);        This keeps on printing...
 				if(inGame && ob.getClass().isInstance(check)) {
 					board.setObjects((ArrayList<PhysObject>) ob);
 					ui.updateSBoard();
@@ -58,11 +55,6 @@ public class ClientReceiver extends Thread {
 				else if((int)ob == Server.PLAY) {
 					inGame = true;
 					ui.setVisible();
-//					Updater update = new Updater(ui);
-//					update.start();
-				}
-				else if((int)ob == Server.QUIT) {
-					running = false;
 				}
 				else if ((int)ob == 33){
 					//running = false;
@@ -71,31 +63,29 @@ public class ClientReceiver extends Thread {
 					ui = new Screen(board,q,"");
 				}
 			}
-			
-			ui.setInvisible();
-			server.close();
 		}
-		catch(IOException | ClassNotFoundException e) {
+		catch(ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
+		}
+		catch(IOException e) {
+			close();
 		}
 	}
 
 	/**
 	 * Terminates the while loop that checks for a new line from the server and closes the BufferedReader..
 	 */
-	public void close() {
-		inGame = false;
-		try {
-			server.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+	private void close() {
+		running = false;
 	}
 	
 	public ArrayList<String> getPlayers() {
 		return players;
+	}
+	
+	public boolean inGame() {
+		return inGame;
 	}
 }
 

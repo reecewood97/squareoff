@@ -10,7 +10,6 @@ public class Weapon extends PhysObject {
 		super(true, pos, 20, 20, false);
 		this.setName("ExplodeOnImpact");
 		inUse = false;
-	
 	}
 	
 	public boolean getInUse(){

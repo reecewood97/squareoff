@@ -4,13 +4,19 @@ public class ServerTest {
 
 	public static void main(String[] args) {
 		Server server = new Server(4444);
-		server.start();
 		
 		Client c1 = new Client("Bob");
-		c1.connect("127.0.0.1", 4444);	
+		c1.connect("127.0.0.1", 4444);
+		
+		server.startGame();
 
-//		Client c2 = new Client("Jerry");
-//		c2.connect("127.0.0.1", 4444);	
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		c1.disconnect();
 	}
 }
 

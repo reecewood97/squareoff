@@ -18,7 +18,7 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private boolean debug = false;
+	private final boolean debug = true;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
@@ -27,6 +27,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	private TurnMaster turn;
+	private double XtravelDist = 1.5;
 	
 
 	public static void main(String[] args) {
@@ -44,7 +45,7 @@ public class Board {
 				board.updateFrame(new Move(0,0,"None",true));
 			}
 			if (input.equals("w")){
-				board.updateFrame(new WeaponMove("ExplodeOnImpact",activePlayer.getPos(),20,20));
+				board.updateFrame(new WeaponMove("ExplodeOnImpact",activePlayer.getPos(),0,5));
 			}
 		}
 	}
@@ -72,6 +73,8 @@ public class Board {
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
+		objects.add(new TerrainBlock(1,1,1,new Point2D.Double(240,180), true));
+		
 		for(int i = 100; i < 700; i+=40) {
 			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,150), true);
 			objects.add(block);
@@ -101,7 +104,7 @@ public class Board {
 		this.player = 0;
 		this.squareID = 0;
 		int x = player + squareID;
-		activePlayer = (Square)objects.get(x);
+		activePlayer = (Square)getSquares().get(x);
 		
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
@@ -178,11 +181,11 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(wallDistLOne(guy, nextblock)<=2) {
+			if(wallDistLOne(guy, nextblock)<=XtravelDist) {
 				return wallDistLOne(guy, nextblock);
 			}
 		}
-		return 10; //Out of range
+		return 100; //Out of range
 	}
 	
 	private double wallDistLOne(Square guy, PhysObject block) {
@@ -193,18 +196,17 @@ public class Board {
 		double blockdown = block.getPos().getY();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup)) {
-			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockright-guyleft)<=2){
+		if((blockdown<=guyup && guyup<=blockup) || 
+				(blockdown<=guydown && guydown<=blockup)) {
+			if(Math.abs(blockright-guyleft)<=XtravelDist){
 				return Math.abs(blockright-guyleft);
 			}
 			else {
-				return 10; //Out of range
+				return 100; //Out of range
 			}
 		}
 		else {
-			return 10; //Out of range
+			return 100; //Out of range
 		}
 	}
 	
@@ -212,11 +214,11 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(wallDistROne(guy, nextblock)<=2) {
+			if(wallDistROne(guy, nextblock)<=XtravelDist) {
 				return wallDistROne(guy, nextblock);
 			}
 		}
-		return 10; //Out of range
+		return 100; //Out of range
 	}
 	
 	private double wallDistROne(Square guy, PhysObject block) {
@@ -227,23 +229,22 @@ public class Board {
 		double blockup = block.getPos().getY()+block.getHeight();
 		double blockdown = block.getPos().getY();
 		
-		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup)) {
-			if(Math.abs(blockleft-guyright)<=2){
+		if((blockdown<=guyup && guyup<=blockup) || 
+				(blockdown<=guydown && guydown<=blockup)) {
+			if(Math.abs(blockleft-guyright)<=XtravelDist){
 				return Math.abs(blockleft-guyright);
 			}
 			else {
-				return 10; //Out of range
+				return 100; //Out of range
 			}
 		}
 		else {
-			return 10; //Out of range
+			return 100; //Out of range
 		}
 	}
 	
 	private PhysObject onFloor(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
-		//System.out.println(getBlocks().size());
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
 			if(onFloorOne(guy, nextblock)) {
@@ -261,10 +262,9 @@ public class Board {
 		double blockright = block.getPos().getX()+block.getWidth();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
-			//Here it is possible to add a bit to slow down the block so it doesnt go through the block
-			if(Math.abs(blockup-guydown)<10){
+		if((blockleft<=guyleft && guyleft<=blockright) || 
+				(blockleft<=guyright && guyright<=blockright)) {
+			if((-1)*Math.abs(guydown-blockup)>=guy.getYvel()){
 				return true;
 			}
 			else {
@@ -276,52 +276,72 @@ public class Board {
 		}
 	}
 	
-	private boolean collides(PhysObject obj1, PhysObject obj2) {
-		if(obj1.getSolid()==obj2.getSolid()){//Or if either is not visible TODO
-			return false;
+	private PhysObject onCeiling(Square guy) {
+		Iterator<PhysObject> it = getBlocks().iterator();
+		while(it.hasNext()) {
+			PhysObject nextblock = it.next();
+			if(onCeilingOne(guy, nextblock)<=activePlayer.getYvel()) {
+				return nextblock;
+			}
 		}
-		else {
-			if(obj1.getName().equals("TerrainBlock")) {
-				if(obj2.getName().equals("Weapon")){
-					if(((Weapon)obj2).getInUse()) {
-						Ellipse2D.Double circle = new Ellipse2D.Double
-								(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
-						return circle.intersects
+		return null; //Out of range
+	}
 	
-								(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
-					}
-					else {return false;}
-				}
-				else{
-					Rectangle2D.Double rect = new Rectangle2D.Double
-							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
-					return rect.intersects
-							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
-				}
+	private double onCeilingOne(Square guy, PhysObject block) {
+		double guyright = guy.getPos().getX()+guy.getWidth();
+		double guyleft = guy.getPos().getX();
+		double guyup = guy.getPos().getY()+guy.getHeight();
+		double blockleft = block.getPos().getX();
+		double blockright = block.getPos().getX()+block.getHeight();
+		double blockdown = block.getPos().getY();
+		
+		if((blockleft<=guyleft && guyleft<=blockright) || 
+				(blockleft<=guyright && guyright<=blockright)) {
+			if(Math.abs(blockdown-guyup)<=activePlayer.getYvel()){
+				return Math.abs(blockdown-guyup);
 			}
 			else {
-				if(obj1.getName().equals("Weapon")){
-					if(((Weapon)obj2).getInUse()) {
-						Ellipse2D.Double circle = new Ellipse2D.Double
-								(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
-						return circle.intersects
+				return 100; //Out of range
+			}
+		}
+		else {
+			return 100; //Out of range
+		}
+	}
 	
-								(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
-					}
-					else {return false;}
-				}
-				else {
-					Rectangle2D.Double rect = new Rectangle2D.Double
-							(obj1.getPos().getX(), obj1.getPos().getY(), obj1.getWidth(), obj1.getHeight());
-					return rect.intersects
-							(obj2.getPos().getX(), obj2.getPos().getY(), obj2.getWidth(), obj2.getHeight());
-				}
+	private boolean collides(PhysObject obj1, PhysObject obj2) {
+		if(obj1.getSolid()==obj2.getSolid() || !obj1.getInUse() || !obj2.getInUse()){
+			return false;
+		}
+		if(obj1.getName().equals("TerrainBlock")) {
+			if(obj2.getName().equals("ExplodeOnImpact")){
+				Ellipse2D.Double circle = new Ellipse2D.Double
+						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return circle.intersects
+						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+			} else {
+				Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return rect.intersects
+						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+			}
+		} else {
+			if(obj1.getName().equals("ExplodeOnImpact")){
+					Ellipse2D.Double circle = new Ellipse2D.Double
+							(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+					return circle.intersects
+							(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+			} else {
+				Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				return rect.intersects
+						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			}
 		}
 	}
 	
 	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
-		if(thing.getName().equals("Weapon")){
+		if(thing.getName().equals("ExplodeOnImpact")){
 			Weapon wep = (Weapon)thing;
 			wep.setInUse(false);
 			wep.setPos(new Point2D.Double(30, 30));
@@ -329,19 +349,19 @@ public class Board {
 			castedblock.damage(1);
 			//TODO later implement different weapon types
 		}
-		else {//thing is a square
+		else {//TODO this doesn't work properly... but at least it works!!!
 			thing = objects.get(lspos);
-				if(thing.getPos().getX()+thing.getWidth()<block.getPos().getX()) { //on the left
-					thing.setXvel((-1.5)*thing.getXvel());
+				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
-				if(thing.getPos().getX()>block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-1.5)*thing.getXvel());
+				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
-				if(thing.getPos().getY()>block.getPos().getY()+block.getHeight()) { //on top
-					thing.setYvel((-1.5)*thing.getYvel());
+				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
+					thing.setYvel((-0.6)*thing.getYvel());
 			}
-				if(thing.getPos().getY()+thing.getHeight()<block.getPos().getY()) { //below
-					thing.setYvel((-1.5)*thing.getYvel());
+				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+					thing.setYvel((-0.6)*thing.getYvel());
 			}
 		}
 	}
@@ -354,7 +374,7 @@ public class Board {
 		}
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
-			if (objs.get(i).equal(objects.get(i))) { //Watch out!! This code may very well not work.
+			if (objs.get(i).equal(objects.get(i))) {
 				same = false;
 			}
 		}
@@ -363,15 +383,17 @@ public class Board {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
 					if(objs.get(j).getName().equals("TerrainBlock")) {
+						objs.get(i).undoUpdate();
 						resolveCollision(objs.get(i),i,objs.get(j));
 					}
 					else {
+						objs.get(j).undoUpdate();
 						resolveCollision(objs.get(j),j,objs.get(i));
 					}
 				}
 			}
 		}
-		return;
+		objects = objs;
 	}
 	
 	public void updateFrame(Move move) {
@@ -404,26 +426,25 @@ public class Board {
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
 				if(move.getJump()) {
-					activePlayer.setYvel(20);
+					activePlayer.setYvel(10);
 				}
-				//System.out.println("test");
 				if(move.getDirection().equals("Left")){
-					if (wallDistL(activePlayer)<2){
+					if (wallDistL(activePlayer)<XtravelDist){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
 						activePlayer.getPos().getY()));
 					} else {
 						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+						(new Point2D.Double(activePlayer.getPos().getX()-XtravelDist,activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("Right")){
-					if (wallDistR(activePlayer)<2){
+					if (wallDistR(activePlayer)<XtravelDist){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+wallDistR(activePlayer),
 						activePlayer.getPos().getY()));
 					}
 					else {
-						activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX()+2,
+						activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX()+XtravelDist,
 						activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("None")){
@@ -431,29 +452,38 @@ public class Board {
 				}
 			} else { //Player not standing on a block
 				if(move.getDirection().equals("Left")){
-					if (wallDistL(activePlayer)<2){
+					if (wallDistL(activePlayer)<XtravelDist){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
 						activePlayer.getPos().getY()));
 					} else {
 						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()-2,activePlayer.getPos().getY()));
+						(new Point2D.Double(activePlayer.getPos().getX()-XtravelDist,activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("Right")){
-					if (wallDistR(activePlayer)<2){
+					if (wallDistR(activePlayer)<XtravelDist){
 						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()+wallDistL(activePlayer),
+						(new Point2D.Double(activePlayer.getPos().getX()+wallDistR(activePlayer),
 						activePlayer.getPos().getY()));
 					} else {
 						activePlayer.setPos
-						(new Point2D.Double(activePlayer.getPos().getX()+2,activePlayer.getPos().getY()));
+						(new Point2D.Double(activePlayer.getPos().getX()+XtravelDist,activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("None")) {
-					
+					//Don't move the square
 				}
-			} 
-			activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(), 
-			activePlayer.getPos().getY()+activePlayer.getYvel()));
+			}
+			
+			PhysObject ceiling = onCeiling(activePlayer);
+			if(ceiling!=null){ //If they are hitting their head
+				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(),
+				ceiling.getPos().getY()-activePlayer.getHeight()));
+				activePlayer.setYvel(0);
+			} else {
+				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(),
+				activePlayer.getPos().getY()+activePlayer.getYvel()));
+			}
+			
 			activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			
 			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
