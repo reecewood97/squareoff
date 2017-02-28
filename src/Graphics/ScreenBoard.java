@@ -230,8 +230,6 @@ public class ScreenBoard extends JPanel{
 		
 	}
 	
-	public void openWeaponsMenu(){
-		//TODO
-	}
+	
 }
 	

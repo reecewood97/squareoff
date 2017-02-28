@@ -26,6 +26,8 @@ public class Screen extends JFrame {
 	private Board newboard;
 	private String name;
 	
+	private HangerOn listeners;
+	
 	public Screen(Board newboard,Queue q,String name){
 		
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -40,6 +42,8 @@ public class Screen extends JFrame {
 
 		setUndecorated(false);//CHANGE ME IM AN ISSUE
 		
+		this.listeners = new HangerOn(q,name);
+		
 		this.newboard = newboard;
 				
 		ButtonPanel controls = new ButtonPanel(this,newboard);
@@ -53,7 +57,7 @@ public class Screen extends JFrame {
 			sboard.setBackground(lightblue);
 			add(sboard, BorderLayout.CENTER);
 			
-			HangerOn listeners = new HangerOn(q,name);
+			//HangerOn listeners = new HangerOn(q,name);
 			sboard = listeners.hangOn2(sboard);
 		}
 		else{
@@ -83,13 +87,7 @@ public class Screen extends JFrame {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 	
-	public void openWeaponsMenu(boolean open){
-		
-		if(open){
-			NewWeaponsMenu wmenu = new NewWeaponsMenu();
-			wmenu.open();
-		}
-	}
+
 	
 	/**
 	 * 
@@ -112,4 +110,9 @@ public class Screen extends JFrame {
 	public void updateSBoard(){
 		sboard.repaint();
 	}  
+	
+	public HangerOn getHangerOn(){
+		
+		return listeners;
+	}
 }
