@@ -10,7 +10,8 @@ package Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener; 
+import java.awt.event.MouseListener;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -89,5 +90,10 @@ public class HangerOn implements KeyListener,MouseListener {
 	 public void mouseReleased(MouseEvent e) { 		
 	 //String releasedEvent = "Released " + e.getPoint();
 	 //q.offer(releasedEvent);
+	 }
+	 
+	 public void setWep(String type){
+		 String setWep = "setWep "+type;
+		 q.offer(setWep);
 	 }
  }

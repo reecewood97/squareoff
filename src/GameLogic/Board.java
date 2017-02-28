@@ -352,16 +352,21 @@ public class Board {
 		else {//TODO this doesn't work properly... but at least it works!!!
 			thing = objects.get(lspos);
 				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
-					thing.setXvel((-1.5)*thing.getXvel());
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-1.5)*thing.getXvel());
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					thing.setYvel((-1.5)*thing.getYvel());
+					if(thing.getYvel()<=1) {
+						thing.setYvel(0);
+						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+					} else {
+						thing.setYvel((-0.6)*thing.getYvel());
+					}
 			}
 				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
-					thing.setYvel((-1.5)*thing.getYvel());
+					thing.setYvel((-0.6)*thing.getYvel());
 			}
 		}
 	}
@@ -573,7 +578,11 @@ public class Board {
 				}
 			}
 		}
-		else if(input.contains("Clicked")){
+		else if(input.contains("clicked")){
+			//if (weapon in use)
+				//Use it
+			//else
+				//Remind the player to select a weapon
 			WeaponMove wmv;
 			int xs = input.indexOf('x');
 			int xe = input.indexOf(',');
@@ -582,15 +591,19 @@ public class Board {
 			String yc = input.substring(xe+3, ye);
 			
 			Double x = Double.parseDouble(xc);
-			Double y = Double.parseDouble(yc);
+			Double y =800- Double.parseDouble(yc);
 			Point2D.Double origin = new Point2D.Double(x, y);
 			System.out.println(origin);
 			
-			wmv = new WeaponMove("None",origin,0.5,4);
+			wmv = new WeaponMove("None",origin,9,4);
 			updateFrame(wmv);
 			if (q.size() > 0)
 				q.remove();
 			q.add(objects);
+		}
+		else if (input.contains("setWep")){
+			//Create a new weapon
+			//Make it in use
 		}
 		else
 		{
