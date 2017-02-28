@@ -27,7 +27,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	private TurnMaster turn;
-	private double XtravelDist = 1.5;
+	private double XtravelDist = 2.5;
 	
 
 	public static void main(String[] args) {
@@ -436,7 +436,7 @@ public class Board {
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
 				if(move.getJump()) {
-					activePlayer.setYvel(10);
+					activePlayer.setYvel(20);
 				}
 				if(move.getDirection().equals("Left")){
 					if (wallDistL(activePlayer)<XtravelDist){
