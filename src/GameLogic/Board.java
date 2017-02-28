@@ -352,16 +352,16 @@ public class Board {
 		else {//TODO this doesn't work properly... but at least it works!!!
 			thing = objects.get(lspos);
 				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
-					thing.setXvel((-1.5)*thing.getXvel());
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-1.5)*thing.getXvel());
+					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					thing.setYvel((-1.5)*thing.getYvel());
+					thing.setYvel((-0.6)*thing.getYvel());
 			}
 				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
-					thing.setYvel((-1.5)*thing.getYvel());
+					thing.setYvel((-0.6)*thing.getYvel());
 			}
 		}
 	}
