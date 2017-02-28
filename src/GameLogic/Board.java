@@ -578,7 +578,11 @@ public class Board {
 				}
 			}
 		}
-		else if(input.contains("Clicked")){
+		else if(input.contains("clicked")){
+			//if (weapon in use)
+				//Use it
+			//else
+				//Remind the player to select a weapon
 			WeaponMove wmv;
 			int xs = input.indexOf('x');
 			int xe = input.indexOf(',');
@@ -596,6 +600,10 @@ public class Board {
 			if (q.size() > 0)
 				q.remove();
 			q.add(objects);
+		}
+		else if (input.contains("setWep")){
+			//Create a new weapon
+			//Make it in use
 		}
 		else
 		{
