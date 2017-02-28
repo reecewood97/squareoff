@@ -591,7 +591,7 @@ public class Board {
 			Point2D.Double origin = new Point2D.Double(x, y);
 			System.out.println(origin);
 			
-			wmv = new WeaponMove("None",new Point2D.Double(0, 0),0.5,4);
+			wmv = new WeaponMove("None",origin,9,4);
 			updateFrame(wmv);
 			if (q.size() > 0)
 				q.remove();
