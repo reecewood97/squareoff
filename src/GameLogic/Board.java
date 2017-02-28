@@ -358,7 +358,12 @@ public class Board {
 					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					thing.setYvel((-0.6)*thing.getYvel());
+					if(thing.getYvel()<=1) {
+						thing.setYvel(0);
+						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+					} else {
+						thing.setYvel((-0.6)*thing.getYvel());
+					}
 			}
 				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
 					thing.setYvel((-0.6)*thing.getYvel());
