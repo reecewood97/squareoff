@@ -110,6 +110,10 @@ public class PhysObject implements Serializable{
 		return solid;
 	}
 	
+	public void setInUse(boolean hi){
+		inUse = hi;
+	}
+	
 	public void setGravity(boolean gravity) {
 		this.gravity = gravity;
 	}

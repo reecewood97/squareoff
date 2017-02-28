@@ -7,7 +7,7 @@ public class Weapon extends PhysObject {
 	private boolean inUse;
 	
 	public Weapon(Point2D.Double pos) {
-		super(true, pos, 20, 20, false);
+		super(true, pos, 10, 10, false);
 		this.setName("ExplodeOnImpact");
 		inUse = false;
 	}
@@ -26,6 +26,7 @@ public class Weapon extends PhysObject {
 		if(inUse) {
 		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
 		setYvel(getYvel()-getGrav());
+		System.out.println("Wep at: " + getPos().getX() + ", " + getPos().getY()); //TODO
 		}
 	}
 
