@@ -9,7 +9,6 @@ public class PhysObject implements Serializable{
 	
 	private boolean gravity;
 	private double grav;
-	private boolean changed;
 	private Point2D.Double pos;
 	private double xvel;
 	private double yvel;
@@ -23,8 +22,7 @@ public class PhysObject implements Serializable{
 	public PhysObject() {
 		//Initiates a new physics object with no values... if you want...
 		this.gravity = false;
-		this.grav = 1;
-		this.changed = false;
+		this.grav = 2;
 		this.pos = new Point2D.Double(0, 0);
 		this.xvel = 0;
 		this.yvel = 0;
@@ -40,7 +38,6 @@ public class PhysObject implements Serializable{
 		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
 		this.grav = 2;
-		this.changed = false;
 		this.pos = pos;
 		this.xvel = 0;
 		this.yvel = 0;
@@ -72,10 +69,6 @@ public class PhysObject implements Serializable{
 	
 	public double getGrav() {
 		return grav;
-	}
-	
-	public boolean getChanged() {
-		return changed;
 	}
 	
 	public Point2D.Double getPos() {
@@ -122,13 +115,8 @@ public class PhysObject implements Serializable{
 		this.grav = grav;
 	}
 	
-	public void setChanged(boolean changed) {
-		this.changed = changed;
-	}
-	
 	public void setPos(Point2D.Double pos) {
 		this.pos = pos;
-		this.changed = true;
 	}
 	
 	public void setXvel(double vel) {
@@ -145,12 +133,10 @@ public class PhysObject implements Serializable{
 	
 	public void setHeight(int newHeight) {
 		this.height = newHeight;
-		this.changed = true;
 	}
 	
 	public void setWidth(int newWidth) {
 		this.width = newWidth;
-		this.changed = true;
 	}
 	
 	public void setName(String newname){
@@ -163,7 +149,7 @@ public class PhysObject implements Serializable{
 	}
 	
 	public boolean equal(PhysObject p) {
-		if(xvel==p.getXvel() && yvel==p.getYvel() && pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
+		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
 			return true;
 		}
 		else return false;

@@ -27,7 +27,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	private TurnMaster turn;
-	private double XtravelDist = 2.5;
+	private double XtravelDist = 4;
 	
 
 	public static void main(String[] args) {
@@ -105,7 +105,7 @@ public class Board {
 		this.player = 0;
 		this.squareID = 0;
 		int x = player + squareID;
-		activePlayer = (Square)getSquares().get(x);
+		activePlayer = (Square)objects.get(x);
 		
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
@@ -134,8 +134,7 @@ public class Board {
 	}
 	
 	public PhysObject getActivePlayer() {
-		int x = player + squareID;
-		return objects.get(x);
+		return activePlayer;
 	}
 	
 	public ArrayList<PhysObject> getWeapons(){
@@ -198,7 +197,8 @@ public class Board {
 		double blockup = block.getPos().getY()+block.getHeight();
 		
 		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
+				(blockdown<guydown && guydown<blockup) ||
+				(guyup == blockup) || (guydown == blockdown)) {
 			if(Math.abs(blockright-guyleft)<=XtravelDist){
 				return Math.abs(blockright-guyleft);
 			}
@@ -231,7 +231,8 @@ public class Board {
 		double blockdown = block.getPos().getY();
 		
 		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
+				(blockdown<guydown && guydown<blockup) ||
+				(guyup == blockup) || (guydown == blockdown)) {
 			if(Math.abs(blockleft-guyright)<=XtravelDist){
 				return Math.abs(blockleft-guyright);
 			}
@@ -263,8 +264,8 @@ public class Board {
 		double blockright = block.getPos().getX()+block.getWidth();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
+		if((blockleft<=guyleft && guyleft<=blockright) || 
+				(blockleft<=guyright && guyright<=blockright)) {
 			if((-1)*Math.abs(guydown-blockup)>=guy.getYvel()){
 				return true;
 			}
@@ -281,14 +282,14 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(onCeilingOne(guy, nextblock)<=activePlayer.getYvel()) {
+			if(onCeilingOne(guy, nextblock)) {
 				return nextblock;
 			}
 		}
 		return null; //Out of range
 	}
 	
-	private double onCeilingOne(Square guy, PhysObject block) {
+	private boolean onCeilingOne(Square guy, PhysObject block) {
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyleft = guy.getPos().getX();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -298,15 +299,15 @@ public class Board {
 		
 		if((blockleft<guyleft && guyleft<blockright) || 
 				(blockleft<guyright && guyright<blockright)) {
-			if(Math.abs(blockdown-guyup)<=activePlayer.getYvel()){
-				return Math.abs(blockdown-guyup);
+			if((Math.abs(blockdown-guyup))<activePlayer.getYvel()){
+				return true;
 			}
 			else {
-				return 100; //Out of range
+				return false; //Out of range
 			}
 		}
 		else {
-			return 100; //Out of range
+			return false; //Out of range
 		}
 	}
 	
@@ -363,7 +364,7 @@ public class Board {
 					thing.setXvel((-0.6)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					if(thing.getYvel()<=1) {
+					if(thing.getYvel()>=(-1)) {
 						thing.setYvel(0);
 						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
 					} else {
@@ -382,13 +383,6 @@ public class Board {
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
-		boolean same = true;
-		for(int i = 0;i<objects.size();i++){
-			if (objs.get(i).equal(objects.get(i))) {
-				same = false;
-			}
-		}
-		freeState = !same;
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
@@ -402,6 +396,19 @@ public class Board {
 					}
 				}
 			}
+		}
+		boolean same = true;
+		System.out.println(objects.size());
+		for(int i = 0;i<objects.size();i++){
+			if (!objs.get(i).equal(objects.get(i))) {
+				same = false;
+				System.out.println(objs.get(i).getName()+", not same as: "+objects.get(i).getName());
+			}
+		}
+		if(same){
+			System.out.println("AHA!");
+			freeState=false;
+			turn.resetTimer();
 		}
 		objects = objs;
 	}
@@ -428,7 +435,6 @@ public class Board {
 			freeState = true;
 		}
 		else { //Not in freeState, change active player depending on move
-			Square activePlayer = (Square)getActivePlayer();
 			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
 				if (debug) System.out.println("Player standing on floor");
@@ -511,7 +517,11 @@ public class Board {
 				
 			}
 		}
-		if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+		System.out.println(player);
+		int x = player+squareID;
+		objects.add(x,activePlayer);
+		objects.remove(x+1);
 	}
 	
 	
@@ -662,9 +672,10 @@ public class Board {
 			player = 0;
 			//squareID = squareID+1;
 		}
+		setActivePlayer(player,squareID);
+		freeState = true;
 		//System.out.println(player);
-		Square active = (Square)getActivePlayer();
-		if (!(active.getAlive())){
+		if (!(activePlayer.getAlive())){
 			incrementTurn();
 		}
 	}

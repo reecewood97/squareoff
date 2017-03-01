@@ -20,8 +20,8 @@ public class Weapon extends PhysObject {
 	public void setInUse(Boolean bool){
 		inUse = bool;
 	}
-@Override
 	
+	@Override
 	public void update() {
 		if(inUse) {
 		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
@@ -29,5 +29,4 @@ public class Weapon extends PhysObject {
 		System.out.println("Wep at: " + getPos().getX() + ", " + getPos().getY()); //TODO
 		}
 	}
-
 }
