@@ -17,7 +17,7 @@ public class TurnMaster extends Thread {
 				sleep(40);
 				i = i+1;
 				if(i >= 500){
-					board.incrementTurn();
+					board.setFreeState(true);
 					i = 0;
 				}
 			} catch (InterruptedException e) {

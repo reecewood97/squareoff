@@ -54,8 +54,10 @@ public class PhysObject implements Serializable{
 	}
 	
 	public void update() {
-		setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
-		setYvel(getYvel()-getGrav());
+		if(getInUse()){
+			setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
+			setYvel(getYvel()-getGrav());
+		}
 	}
 	
 	public void undoUpdate() {
@@ -152,7 +154,7 @@ public class PhysObject implements Serializable{
 		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
 			return true;
 		}
-		else return false;
+		return false;
 	}
 	
 }
