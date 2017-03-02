@@ -264,6 +264,12 @@ public class ScreenBoard extends JPanel{
 					hangeron.setExpUse("false");
 					
 				}
+				else{
+					
+					size++;
+					hangeron.setExp(size + "");
+					
+				}
 			
 			}
 		}
