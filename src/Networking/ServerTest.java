@@ -11,17 +11,22 @@ public class ServerTest {
 		
 //		Client c2 = new Client("Jerry");
 //		c2.connect("127.0.0.1", 4444);
-
-
-		server.startGame();
 		
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		server.startGame();
 		
-		//server.kick("Jerry");
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
+		//System.out.println(server.kick("Jerry"));
 		
 		c1.disconnect();
 	}
