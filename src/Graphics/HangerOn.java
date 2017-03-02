@@ -21,10 +21,12 @@ import Networking.Queue;
 public class HangerOn implements KeyListener,MouseListener { 
 	private Queue q;
 	private String name;
+	private boolean targetLine;
 	
 	public HangerOn(Queue q,String name){
 		this.q =q;
 		this.name = name;
+		this.targetLine = false;
 	}
 	
 	 //ArrayBlockingQueue<String> q = new ArrayBlockingQueue<String>(100);		
@@ -95,5 +97,27 @@ public class HangerOn implements KeyListener,MouseListener {
 	 public void setWep(String type){
 		 String setWep = "setWep "+type;
 		 q.offer(setWep);
+	 }
+	 
+	 public void setExp(String size){
+		 
+		 String setExp = "setExp " + size;
+		 q.offer(setExp);
+	 }
+	 
+	 public void setExpUse(String bool){
+		 
+		 String setExp = "setExpUse " + bool;
+		 q.offer(setExp);
+	 }
+	 
+	 public void setTargetLine(boolean b){
+		 
+		 this.targetLine = b;
+	 }
+	 
+	 public boolean getTargetLine(){
+		 
+		 return this.targetLine;
 	 }
  }

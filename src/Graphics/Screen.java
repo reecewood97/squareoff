@@ -53,7 +53,7 @@ public class Screen extends JFrame {
 		
 		if(newboard.getWinner() == -1){
 			
-			this.sboard = new ScreenBoard(newboard, heightratio, widthratio);
+			this.sboard = new ScreenBoard(newboard, heightratio, widthratio, listeners);
 			sboard.setBackground(lightblue);
 			add(sboard, BorderLayout.CENTER);
 			

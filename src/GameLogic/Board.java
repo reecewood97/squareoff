@@ -28,6 +28,7 @@ public class Board {
 	private static Square activePlayer;
 	private TurnMaster turn;
 	private double XtravelDist = 4;
+	private boolean targetline;
 	
 
 	public static void main(String[] args) {
@@ -56,6 +57,7 @@ public class Board {
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
+		this.targetline = false;
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -110,6 +112,10 @@ public class Board {
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
+		
+		Point2D.Double explosionpos = new Point2D.Double(40,40);
+		PhysObject explosion = new Explosion(explosionpos);
+		objects.add(explosion);
 	}
 	
 	public void setFreeState(boolean free) {
@@ -135,6 +141,14 @@ public class Board {
 		this.squareID = newID;
 		int x = player + squareID;
 		activePlayer = (Square)objects.get(x);
+	}
+	
+	public void setTargetLine(boolean b){
+		this.targetline = b;
+	}
+	
+	public boolean getTargetLine(){
+		return this.targetline;
 	}
 	
 	public PhysObject getActivePlayer() {
@@ -180,6 +194,22 @@ public class Board {
 		}
 		
 		return squares;
+	}
+	
+	 
+	public ArrayList<PhysObject> getExplosion(){
+		
+		ArrayList<PhysObject> exps = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("Explosion")){
+				
+				exps.add(obj);
+			}
+		}
+		
+		return exps;
+		
 	}
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
