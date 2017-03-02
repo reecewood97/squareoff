@@ -94,6 +94,7 @@ public class Server extends Thread {
 	}
 	
 	public boolean kick(String name) {
+		System.out.println(table.getReceivers());
 		for(ServerReceiver r: table.getReceivers()) {
 			if(r.getPlayerName().equals(name)) {
 				table.get(r).send(Server.DISCONNECT);

@@ -34,15 +34,14 @@ public class ServerSender extends Thread {
 						board.setWinner(-1);
 					}
 					else{
-						ArrayList<PhysObject> x = (board.getUpdate()); 
+						ArrayList<PhysObject> x = new ArrayList<PhysObject>();
+						x.addAll(board.getUpdate()); 
 						send(x);
 						sleep(40);
 					}
 				}
 				else {
-					toClient.writeObject(players);
-					toClient.flush();
-					toClient.reset();
+					send(players);
 					sleep(1000);
 				}
 			}
@@ -50,8 +49,6 @@ public class ServerSender extends Thread {
 		catch(InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
-		} catch (IOException e) {
-			close();
 		}
 	}
 	
@@ -62,6 +59,7 @@ public class ServerSender extends Thread {
 			toClient.reset();
 		}
 		catch(IOException e) {
+			//e.printStackTrace();
 			close();
 		}
 	}

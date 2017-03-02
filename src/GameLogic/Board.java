@@ -18,7 +18,7 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = true;
+	private final boolean debug = false;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;

@@ -54,6 +54,7 @@ public class ServerReceiver extends Thread {
 			}
 		}
 		catch(IOException e) {
+			//e.printStackTrace();
 			close();
 		} 
 		catch (ClassNotFoundException e) {

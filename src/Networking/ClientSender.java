@@ -47,6 +47,7 @@ public class ClientSender extends Thread {
 			System.exit(1);
 		} 
 		catch (IOException e) {
+			//e.printStackTrace();
 			close();
 		}
 	}
