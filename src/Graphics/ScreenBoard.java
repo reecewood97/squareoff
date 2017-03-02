@@ -85,26 +85,38 @@ public class ScreenBoard extends JPanel{
 			int blockwidth = (int) (40*widthratio);
 			int blockheight = (int) (30*heightratio);
 			int blocktype = ((TerrainBlock) block).getType();
-			//int blockhealth = ((TerrainBlock) block).getHealth(); 
+			int blockhealth = ((TerrainBlock) block).getHealth(); 
 			boolean visible = ((TerrainBlock) block).isVisible(); 
 			
+			//check if visible
 			if(visible){
 			
+				g2d.setColor(Color.black);
+				g2d.fillRect(newx,newy,blockwidth,blockheight);
+				
+				//if 1 then colour is brown
 				if (blocktype == 1){
 					g2d.setColor(new Color(139,69,19));
 				}
+				//else grey
 				else{
 					g2d.setColor(new Color(105,105,105));
 				}
 				
-				g2d.setColor(Color.DARK_GRAY);
-				g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
-				g2d.setColor(Color.black);
-				g2d.fillRect(newx,newy,blockwidth,blockheight);
-				g2d.setColor(Color.GRAY);
+				//g2d.setColor(Color.DARK_GRAY);
+				//g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
+			
+				//g2d.setColor(Color.GRAY);
 				g2d.fillRect(newx+1,newy+1,blockwidth-2,blockheight-2);
 				
-				
+				if(blockhealth == 1){
+					
+					g2d.setColor(Color.cyan);
+					g2d.fillRect(newx + 2, newy + 3, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 10, newy + 3, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 2, newy + 20, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 10, newy + 20, blockwidth/10, blockheight/10);
+				}
 
 				
 			}
