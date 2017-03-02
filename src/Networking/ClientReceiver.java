@@ -2,6 +2,7 @@ package Networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
@@ -20,16 +21,18 @@ public class ClientReceiver extends Thread {
 	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
+	private Socket socket;
 
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen ui) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, Socket socket) {
 		this.server = server;
 		this.board = board;
 		this.ui = ui;
+		this.socket = socket;
 		players = new ArrayList<String>();
 	}
 	
@@ -46,8 +49,8 @@ public class ClientReceiver extends Thread {
 			Object ob;
 			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
 			while(running && (ob = server.readObject()) != null) {
-				if(ob.getClass().isInstance(Server.DISCONNECT)) {
-					
+				if(ob.getClass().isInstance(Server.DISCONNECT) && (int)ob == Server.DISCONNECT) {
+					socket.close();
 				}
 				if(inGame) {
 					if(ob.getClass().isInstance(check)) {
@@ -77,12 +80,13 @@ public class ClientReceiver extends Thread {
 			System.exit(1);
 		}
 		catch(IOException e) {
+			//e.printStackTrace();
 			close();
 		}
 	}
 
 	/**
-	 * Terminates the while loop that checks for a new line from the server and closes the BufferedReader..
+	 * Terminates the while loop that checks for a new line from the server and closes the BufferedReader.
 	 */
 	private void close() {
 		running = false;
