@@ -38,8 +38,8 @@ public class Server extends Thread {
 		}
 		
 		running = true;
+		
 		try {
-			int i = 0;
 			while(running) { //Hey there! Change the number here to alter how many players you want to connect before the game can start.
 				Socket s = socket.accept();
 
@@ -52,18 +52,7 @@ public class Server extends Thread {
 				ss.start();
 				
 				table.add(sr, ss);
-				System.out.println(i);
-				i++;
-				//Temp
 			}			
-				while(true){
-					board.input("None");
-					try {
-						sleep(30);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				} 
 		}
 		catch (IOException e) {
 			//e.printStackTrace();
@@ -88,8 +77,9 @@ public class Server extends Thread {
 			r.startGame();
 			table.get(r).startGame();
 		}
-			
+
 		board.startGame();	
+		new GameLoop(board).start();
 	}
 	
 	private void addAIs() {

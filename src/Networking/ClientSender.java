@@ -40,8 +40,6 @@ public class ClientSender extends Thread {
 			while(running) {
 				Object obj = q.take();
 				send(obj);
-				
-				sleep(40);
 			}
 		}
 		catch(InterruptedException e) {
