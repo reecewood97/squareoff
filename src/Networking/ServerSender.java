@@ -34,14 +34,16 @@ public class ServerSender extends Thread {
 						board.setWinner(-1);
 					}
 					else{
-						ArrayList<PhysObject> x = new ArrayList<PhysObject>();
-						x.addAll(board.getUpdate()); 
-						send(x);
+						ArrayList<PhysObject> temp = new ArrayList<PhysObject>();
+						temp.addAll(board.getUpdate()); 
+						send(temp);
 						sleep(40);
 					}
 				}
 				else {
-					send(players);
+					ArrayList<String> temp = new ArrayList<String>();
+					temp.addAll(players);
+					send(temp);
 					sleep(1000);
 				}
 			}

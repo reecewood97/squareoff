@@ -33,9 +33,7 @@ public class ClientSender extends Thread {
 		running = true;
 		
 		try {
-			server.writeObject(name);
-			server.flush();
-			server.reset();
+			send(name);
 		
 			while(running) {
 				Object obj = q.take();
@@ -46,10 +44,6 @@ public class ClientSender extends Thread {
 			e.printStackTrace();
 			System.exit(1);
 		} 
-		catch (IOException e) {
-			//e.printStackTrace();
-			close();
-		}
 	}
 	
 	private void send(Object obj) {
