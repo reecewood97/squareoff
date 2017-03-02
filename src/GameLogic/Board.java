@@ -18,7 +18,7 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = true;
+	private final boolean debug = false;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
@@ -321,7 +321,7 @@ public class Board {
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
 			if(obj2.getName().equals("ExplodeOnImpact")){
-				System.out.println("Weapon collision detected"); //TODO
+				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
@@ -334,7 +334,7 @@ public class Board {
 			}
 		} else {
 			if(obj1.getName().equals("ExplodeOnImpact")){
-				System.out.println("Weapon collision detected"); //TODO
+				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return circle.intersects
@@ -350,7 +350,7 @@ public class Board {
 	
 	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
 		if(thing.getName().equals("ExplodeOnImpact")){
-			System.out.println("Resolving weapon collision");
+			if(debug) System.out.println("Resolving weapon collision");
 			thing.setInUse(false);
 			Weapon wep = (Weapon)thing;
 			wep.setInUse(false);
@@ -368,16 +368,16 @@ public class Board {
 					thing.setXvel((-0.3)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					System.out.println(thing.getYvel());
+					if(debug) System.out.println(thing.getYvel());
 					if(Math.abs(thing.getXvel())<=2){
-						System.out.println("Sticky X");
+						if(debug)System.out.println("Sticky X");
 						thing.setXvel(0);
 					}
 					else {
 						thing.setXvel(0.6*thing.getXvel());
 					}
 					if(thing.getYvel()>=(-2)) {
-						System.out.println("Sticky Y");
+						if(debug)System.out.println("Sticky Y");
 						thing.setYvel(0);
 						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
 					}
@@ -395,9 +395,9 @@ public class Board {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
 		for (PhysObject obj : objs) {
-			if(obj.getName().equals("Square")) {System.out.println(obj.getPos().getY());}
+			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 			obj.update();
-			if(obj.getName().equals("Square")) {System.out.println(obj.getPos().getY());}
+			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 		}
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
@@ -405,26 +405,26 @@ public class Board {
 					if(objs.get(j).getName().equals("TerrainBlock")) {
 						objs.get(i).undoUpdate();
 						resolveCollision(objs.get(i),i,objs.get(j));
-						System.out.println(i);
+						if(debug)System.out.println(i);
 					}
 					else {
 						objs.get(j).undoUpdate();
 						resolveCollision(objs.get(j),j,objs.get(i));
-						System.out.println(i);
+						if(debug)System.out.println(i);
 					}
 				}
 			}
 		}
 		boolean same = true;
-		System.out.println(objects.size());
+		if(debug) System.out.println(objects.size());
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equal(objects.get(i))) {
 				same = false;
-				System.out.println(objs.get(i).getName()+", not same as: "+objects.get(i).getName());
+				if(debug)System.out.println(objs.get(i).getName()+", not same as: "+objects.get(i).getName());
 			}
 		}
 		if(same){
-			System.out.println("FreeState exited due to no movement");
+			if(debug)System.out.println("FreeState exited due to no movement");
 			freeState=false;
 			turn.resetTimer();
 			incrementTurn();
@@ -529,7 +529,7 @@ public class Board {
 				activePlayer.setDead();
 				audio.splash();
 				if (checkForWinner()){
-					System.out.println("winner?");
+					if(debug)System.out.println("winner?");
 					int won = findPlayer();
 					setWinner(won);
 					turn.endItAll();
@@ -540,7 +540,7 @@ public class Board {
 			}
 		}
 		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
-		//System.out.println(player);
+		//if (debug) System.out.println(player);
 		int x = player+squareID;
 		objects.add(x,activePlayer);
 		objects.remove(x+1);
@@ -572,7 +572,7 @@ public class Board {
 		
 		if(input.contains("Pressed")){
 			if(input.contains(players[player])){
-				//System.out.println("I'm from the current player!");
+				//if(debug) System.out.println("I'm from the current player!");
 				}
 			
 			String inputKey = input.substring(8,9);
