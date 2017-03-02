@@ -61,10 +61,6 @@ public class ClientSender extends Thread {
 			close();
 		}
 	}
-	
-	public void play() {
-		send(Server.PLAY);
-	}
 		
 	private void close() {
 		running = false;

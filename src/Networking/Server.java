@@ -10,7 +10,7 @@ import ai.AI;
 public class Server extends Thread {
 
 	public static final int PLAY = 1;
-	public static final int QUIT = 2;
+	public static final int DISCONNECT = 2;
 	//public static final int... For other operations.
 	
 	private int port;
@@ -40,7 +40,7 @@ public class Server extends Thread {
 		running = true;
 		
 		try {
-			while(running) { //Hey there! Change the number here to alter how many players you want to connect before the game can start.
+			while(running) {
 				Socket s = socket.accept();
 
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
@@ -88,6 +88,18 @@ public class Server extends Thread {
 		
 		for(int i = numberOfPlayers; i < maxPlayers; i++) {
 			new AI(i, i, i, board); //Err... I don't know what to do here.
+			players.add("AI " + (i + 1 - numberOfPlayers));
+			//TODO fix
 		}
+	}
+	
+	public boolean kick(String name) {
+		for(ServerReceiver r: table.getReceivers()) {
+			if(r.getPlayerName().equals(name)) {
+				table.get(r).send(Server.DISCONNECT);
+				return true;
+			}
+		}
+		return false;
 	}
 }

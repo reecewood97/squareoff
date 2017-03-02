@@ -24,27 +24,26 @@ public class ServerSender extends Thread {
 		running = true;
 		
 		try {
-			while(running && !inGame) {
-				toClient.writeObject(players);
-				toClient.flush();
-				toClient.reset();
-				sleep(1000);
-			}
-		
-			send(Server.PLAY);
-			
-			while(running && inGame) {
-				if(board.getWinner() > -1){
-					//running = false;
-					send(33);
-					System.out.println("Sent the winner");
-					send(board.getWinner());
-					board.setWinner(-1);
+			while(running) {
+				if(inGame) {
+					if(board.getWinner() > -1){
+						//running = false;
+						send(33);
+						System.out.println("Sent the winner");
+						send(board.getWinner());
+						board.setWinner(-1);
+					}
+					else{
+						ArrayList<PhysObject> x = (board.getUpdate()); 
+						send(x);
+						sleep(40);
+					}
 				}
-				else{
-					ArrayList<PhysObject> x = (board.getUpdate()); 
-					send(x);
-					sleep(40);
+				else {
+					toClient.writeObject(players);
+					toClient.flush();
+					toClient.reset();
+					sleep(1000);
 				}
 			}
 		}
@@ -76,6 +75,7 @@ public class ServerSender extends Thread {
 	}
 	
 	public void startGame() {
+		send(Server.PLAY);
 		inGame = true;
 	}
 }
