@@ -18,7 +18,7 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = true;
+	private final boolean debug = false;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
@@ -27,7 +27,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private static Square activePlayer;
 	private TurnMaster turn;
-	private double XtravelDist = 2.5;
+	private double XtravelDist = 4;
 	
 
 	public static void main(String[] args) {
@@ -60,7 +60,7 @@ public class Board {
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(200, 180);
+		Point2D.Double redpos = new Point2D.Double(100, 180);
 		PhysObject red = new Square(1 ,0, 0, redpos);
 		Point2D.Double blupos = new Point2D.Double(300, 180);
 		PhysObject blu = new Square(2 ,0, 0, blupos);
@@ -105,11 +105,15 @@ public class Board {
 		this.player = 0;
 		this.squareID = 0;
 		int x = player + squareID;
-		activePlayer = (Square)getSquares().get(x);
+		activePlayer = (Square)objects.get(x);
 		
 		Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
+	}
+	
+	public void setFreeState(boolean free) {
+		freeState = free;
 	}
 	
 	public void setWinner(int player){
@@ -134,8 +138,7 @@ public class Board {
 	}
 	
 	public PhysObject getActivePlayer() {
-		int x = player + squareID;
-		return objects.get(x);
+		return activePlayer;
 	}
 	
 	public ArrayList<PhysObject> getWeapons(){
@@ -198,7 +201,8 @@ public class Board {
 		double blockup = block.getPos().getY()+block.getHeight();
 		
 		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
+				(blockdown<guydown && guydown<blockup) ||
+				(guyup == blockup) || (guydown == blockdown)) {
 			if(Math.abs(blockright-guyleft)<=XtravelDist){
 				return Math.abs(blockright-guyleft);
 			}
@@ -231,7 +235,8 @@ public class Board {
 		double blockdown = block.getPos().getY();
 		
 		if((blockdown<guyup && guyup<blockup) || 
-				(blockdown<guydown && guydown<blockup) || (guydown == blockup)) {
+				(blockdown<guydown && guydown<blockup) ||
+				(guyup == blockup) || (guydown == blockdown)) {
 			if(Math.abs(blockleft-guyright)<=XtravelDist){
 				return Math.abs(blockleft-guyright);
 			}
@@ -263,8 +268,8 @@ public class Board {
 		double blockright = block.getPos().getX()+block.getWidth();
 		double blockup = block.getPos().getY()+block.getHeight();
 		
-		if((blockleft<guyleft && guyleft<blockright) || 
-				(blockleft<guyright && guyright<blockright)) {
+		if((blockleft<=guyleft && guyleft<=blockright) || 
+				(blockleft<=guyright && guyright<=blockright)) {
 			if((-1)*Math.abs(guydown-blockup)>=guy.getYvel()){
 				return true;
 			}
@@ -281,14 +286,14 @@ public class Board {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
 			PhysObject nextblock = it.next();
-			if(onCeilingOne(guy, nextblock)<=activePlayer.getYvel()) {
+			if(onCeilingOne(guy, nextblock)) {
 				return nextblock;
 			}
 		}
 		return null; //Out of range
 	}
 	
-	private double onCeilingOne(Square guy, PhysObject block) {
+	private boolean onCeilingOne(Square guy, PhysObject block) {
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyleft = guy.getPos().getX();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -298,15 +303,15 @@ public class Board {
 		
 		if((blockleft<guyleft && guyleft<blockright) || 
 				(blockleft<guyright && guyright<blockright)) {
-			if(Math.abs(blockdown-guyup)<=activePlayer.getYvel()){
-				return Math.abs(blockdown-guyup);
+			if((Math.abs(blockdown-guyup))<activePlayer.getYvel()){
+				return true;
 			}
 			else {
-				return 100; //Out of range
+				return false; //Out of range
 			}
 		}
 		else {
-			return 100; //Out of range
+			return false; //Out of range
 		}
 	}
 	
@@ -316,7 +321,7 @@ public class Board {
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
 			if(obj2.getName().equals("ExplodeOnImpact")){
-				System.out.println("Weapon collision detected"); //TODO
+				//System.out.println("Weapon collision detected"); //TODO
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
@@ -357,21 +362,31 @@ public class Board {
 		else {
 			thing = objects.get(lspos);
 				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
-					thing.setXvel((-0.6)*thing.getXvel());
+					thing.setXvel((-0.3)*thing.getXvel());
 				}
 				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-0.6)*thing.getXvel());
+					thing.setXvel((-0.3)*thing.getXvel());
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					if(thing.getYvel()<=1) {
+					System.out.println(thing.getYvel());
+					if(Math.abs(thing.getXvel())<=2){
+						System.out.println("Sticky X");
+						thing.setXvel(0);
+					}
+					else {
+						thing.setXvel(0.6*thing.getXvel());
+					}
+					if(thing.getYvel()>=(-2)) {
+						System.out.println("Sticky Y");
 						thing.setYvel(0);
 						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
-					} else {
-						thing.setYvel((-0.6)*thing.getYvel());
+					}
+					else {
+						thing.setYvel((-0.3)*thing.getYvel());
 					}
 			}
 				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
-					thing.setYvel((-0.6)*thing.getYvel());
+					thing.setYvel((-0.3)*thing.getYvel());
 			}
 		}
 	}
@@ -380,28 +395,39 @@ public class Board {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
 		for (PhysObject obj : objs) {
+			if(obj.getName().equals("Square")) {System.out.println(obj.getPos().getY());}
 			obj.update();
+			if(obj.getName().equals("Square")) {System.out.println(obj.getPos().getY());}
 		}
-		boolean same = true;
-		for(int i = 0;i<objects.size();i++){
-			if (objs.get(i).equal(objects.get(i))) {
-				same = false;
-			}
-		}
-		freeState = !same;
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
 					if(objs.get(j).getName().equals("TerrainBlock")) {
 						objs.get(i).undoUpdate();
 						resolveCollision(objs.get(i),i,objs.get(j));
+						System.out.println(i);
 					}
 					else {
 						objs.get(j).undoUpdate();
 						resolveCollision(objs.get(j),j,objs.get(i));
+						System.out.println(i);
 					}
 				}
 			}
+		}
+		boolean same = true;
+		System.out.println(objects.size());
+		for(int i = 0;i<objects.size();i++){
+			if (!objs.get(i).equal(objects.get(i))) {
+				same = false;
+				System.out.println(objs.get(i).getName()+", not same as: "+objects.get(i).getName());
+			}
+		}
+		if(same){
+			System.out.println("FreeState exited due to no movement");
+			freeState=false;
+			turn.resetTimer();
+			incrementTurn();
 		}
 		objects = objs;
 	}
@@ -428,7 +454,6 @@ public class Board {
 			freeState = true;
 		}
 		else { //Not in freeState, change active player depending on move
-			Square activePlayer = (Square)getActivePlayer();
 			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
 				if (debug) System.out.println("Player standing on floor");
@@ -462,6 +487,7 @@ public class Board {
 				}
 			} else { //Player not standing on a block
 				if(move.getDirection().equals("Left")){
+					activePlayer.setXvel((-1)*XtravelDist);
 					if (wallDistL(activePlayer)<XtravelDist){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
@@ -471,6 +497,7 @@ public class Board {
 						(new Point2D.Double(activePlayer.getPos().getX()-XtravelDist,activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("Right")){
+					activePlayer.setXvel(XtravelDist);
 					if (wallDistR(activePlayer)<XtravelDist){
 						activePlayer.setPos
 						(new Point2D.Double(activePlayer.getPos().getX()+wallDistR(activePlayer),
@@ -480,6 +507,7 @@ public class Board {
 						(new Point2D.Double(activePlayer.getPos().getX()+XtravelDist,activePlayer.getPos().getY()));
 					}
 				} else if(move.getDirection().equals("None")) {
+					activePlayer.setXvel(0);
 					//Don't move the square
 				}
 			}
@@ -511,7 +539,11 @@ public class Board {
 				
 			}
 		}
-		if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
+		//System.out.println(player);
+		int x = player+squareID;
+		objects.add(x,activePlayer);
+		objects.remove(x+1);
 	}
 	
 	
@@ -598,7 +630,7 @@ public class Board {
 			Double x = Double.parseDouble(xc);
 			Double y =800- Double.parseDouble(yc);
 			Point2D.Double origin = new Point2D.Double(x, y);
-			System.out.println(origin);
+			//System.out.println(origin);
 			
 			wmv = new WeaponMove("None",origin,9,4);
 			//updateFrame(wmv);
@@ -662,9 +694,9 @@ public class Board {
 			player = 0;
 			//squareID = squareID+1;
 		}
+		setActivePlayer(player,squareID);
 		//System.out.println(player);
-		Square active = (Square)getActivePlayer();
-		if (!(active.getAlive())){
+		if (!(activePlayer.getAlive())){
 			incrementTurn();
 		}
 	}

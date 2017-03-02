@@ -38,7 +38,7 @@ public class Client {
 		fromServer = null;
 		q = new Queue();
 		board = new Board();
-		ui = new Screen(board, q,name);
+		ui = new Screen(board, q, name);
 		
 	}
 	
@@ -96,7 +96,10 @@ public class Client {
 			System.exit(1);
 		}
 		q.offer("I close the ClientSender.");
-		//ui.close();
+		
+		socket = null;
+		toServer = null;
+		fromServer = null;
 	}
 	
 	public ArrayList<String> getPlayers() {

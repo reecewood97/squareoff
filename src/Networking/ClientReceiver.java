@@ -46,21 +46,29 @@ public class ClientReceiver extends Thread {
 			Object ob;
 			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
 			while(running && (ob = server.readObject()) != null) {
-				if(inGame && ob.getClass().isInstance(check)) {
-					board.setObjects((ArrayList<PhysObject>) ob);
-					ui.updateSBoard();
+				if(ob.getClass().isInstance(Server.DISCONNECT)) {
+					
 				}
-				else if(!inGame && ob.getClass().isInstance(players)) 
-					players = (ArrayList<String>) ob;
-				else if((int)ob == Server.PLAY) {
-					inGame = true;
-					ui.setVisible();
+				if(inGame) {
+					if(ob.getClass().isInstance(check)) {
+						board.setObjects((ArrayList<PhysObject>) ob);
+						ui.updateSBoard();
+					}
+					else if ((int)ob == 33){
+						//running = false;
+						int winner = 3;//This needs to be a read in
+						board.setWinner(winner);
+						ui = new Screen(board,q,"");
+					}
 				}
-				else if ((int)ob == 33){
-					//running = false;
-					int winner = 3;//This needs to be a read in
-					board.setWinner(winner);
-					ui = new Screen(board,q,"");
+				else {
+					if(ob.getClass().isInstance(players)) {
+						players = (ArrayList<String>) ob;
+					}
+					else if((int)ob == Server.PLAY) {
+						inGame = true;
+						ui.setVisible();
+					}
 				}
 			}
 		}

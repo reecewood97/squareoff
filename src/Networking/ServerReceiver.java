@@ -41,19 +41,16 @@ public class ServerReceiver extends Thread {
 				//TODO 
 			}
 			
-			Object ob;
-			while(running && !inGame && (ob = fromClient.readObject()) != null) {
-				if((int)ob == Server.QUIT) 
-					quit();
-			}
-			
-			
 			Object input;
-			while(running && inGame && (input = fromClient.readObject()) != null) {
-				if(input.getClass().isInstance("Sup?"))
-					board.input((String)input);
-				else if((int)input == Server.QUIT) 
-					quit();
+			while(running && (input = fromClient.readObject()) != null) {
+				if(inGame) {
+					if(input.getClass().isInstance("A String")) {
+						board.input((String)input);
+					}
+				}
+				else {
+					//TODO
+				}
 			}
 		}
 		catch(IOException e) {
@@ -69,14 +66,13 @@ public class ServerReceiver extends Thread {
 		inGame = true;
 	}
 	
-	private void quit() {
-		table.get(this).send(Server.QUIT);
-		close();
-	}
-	
 	private void close() {
 		running = false;
 		players.remove(name);
 		table.remove(this);
+	}
+	
+	public String getPlayerName() {
+		return name;
 	}
 }
