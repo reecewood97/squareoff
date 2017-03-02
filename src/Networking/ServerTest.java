@@ -23,7 +23,7 @@ public class ServerTest {
 		
 		//server.kick("Jerry");
 		
-		//c1.disconnect();
+		c1.disconnect();
 	}
 }
 
