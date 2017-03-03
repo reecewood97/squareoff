@@ -48,7 +48,7 @@ public class BackgroundMusic extends Thread implements Serializable{
 		System.out.println("4");
 		
 			while(run){	
-				System.out.println("5");
+				//System.out.println("5");
 				
 				
 				music.start();

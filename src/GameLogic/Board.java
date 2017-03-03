@@ -14,7 +14,8 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = true;
+	private final boolean debug = false;
+	private final boolean debugL = true;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
@@ -26,7 +27,6 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean targetline;
 	private ArrayList<PhysObject> explosions;
-	Weapon wep;
 	
 
 	public static void main(String[] args) {
@@ -580,7 +580,6 @@ public class Board {
 			if(input.contains(players[player])){
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
-			String ret = null;
 			Move mv;
 			
 			switch(inputKey){
@@ -615,9 +614,8 @@ public class Board {
 			}
 		}
 		}
-		else if(input.contains("clicked")){
-			if(wep.getInUse()){
-				WeaponMove wmv;
+		else if(input.contains("Clicked")){
+			//if(this.wep.getInUse()){ I WANT TO WORK OUT IF A WEAPON IS SELECTED HERE?
 				int xs = input.indexOf('x');
 				int xe = input.indexOf(',');
 				String xc = input.substring(xs+2, xe);
@@ -627,21 +625,20 @@ public class Board {
 				Double x = Double.parseDouble(xc);
 				Double y =800- Double.parseDouble(yc);
 				Point2D.Double target = new Point2D.Double(x, y);
-				//System.out.println(origin);
 				
-				wmv = new WeaponMove("None",active.getPoint(),0,0);
+				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",active.getPoint(),0,0);
 				//updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);
-			}
-			else{
+			//}
+			//else{
 				//Create a weapon error check for the server
-			}
+			//}
 		}
 		else if (input.contains("setWep")){
-			this.wep = new Weapon(active.getPoint(), 0, 0);
-			wep.setInUse(true);
+			if(debugL)
+				System.out.println("Now a weapon in use");
 		}
 		else
 		{
@@ -710,7 +707,6 @@ public class Board {
 			//squareID = squareID+1;
 		}
 		setActivePlayer(player,squareID);
-		//System.out.println(player);
 		if (!(activePlayer.getAlive())){
 			incrementTurn();
 		}

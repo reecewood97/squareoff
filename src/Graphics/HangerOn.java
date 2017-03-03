@@ -110,6 +110,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	  */
 	 public void setWep(String type){
 		 String setWep = "setWep "+type;
+		 System.out.println(type);
 		 q.offer(setWep);
 	 }
 	 
