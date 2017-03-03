@@ -83,13 +83,15 @@ public class Server extends Thread {
 	}
 	
 	private void addAIs() {
+		for(ServerReceiver s: table.getReceivers()) {
+			s.getPlayerName();
+		}
 		int maxPlayers = 4;
 		int numberOfPlayers = players.size();
 		
 		for(int i = numberOfPlayers; i < maxPlayers; i++) {
 			new AI(i, i, i, board); //Err... I don't know what to do here.
 			players.add("AI " + (i + 1 - numberOfPlayers));
-			//TODO fix
 		}
 	}
 	

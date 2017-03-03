@@ -29,7 +29,6 @@ public class Client {
 	/**
 	 * Constructor.
 	 * @param name The client's nickname.
-	 * @param isHost Whether the client is the host.
 	 */
 	public Client(String name) {
 		this.name = name;
@@ -44,9 +43,9 @@ public class Client {
 	
 	/**
 	 * Connects the client to a specified server.
-	 * @param ip The IP address of the server to be connected to.
-	 * @param port The port connected to of the server.
-	 * @throws UnknownHostException If the host could not be found.
+	 * @param ip 
+	 * @param port
+	 * @return
 	 */
 	public boolean connect(String ip, int port) {
 		//Creates a socket connecting to the server and then creates methods to communicate with the server.
@@ -103,6 +102,15 @@ public class Client {
 	}
 	
 	public ArrayList<String> getPlayers() {
+		while(!receiver.getPlayers().contains(name)) {
+			try {
+				Thread.sleep(100);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+ 		}
 		return receiver.getPlayers();
 	}
 	

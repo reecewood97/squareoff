@@ -31,14 +31,14 @@ public class ServerReceiver extends Thread {
 		try {
 			name = (String)fromClient.readObject();
 			if(players.contains(name)) {
-				//TODO 
+				table.get(this).send(Server.DISCONNECT);
 			}
 			else if(players.size() < 4){ 
 				players.add(name);
 				board.addName(name);
 			}
 			else {
-				//TODO 
+				table.get(this).send(Server.DISCONNECT);
 			}
 			
 			Object input;
@@ -74,6 +74,15 @@ public class ServerReceiver extends Thread {
 	}
 	
 	public String getPlayerName() {
+		while(name.equals("")) {
+			try {
+				Thread.sleep(100);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
 		return name;
 	}
 }

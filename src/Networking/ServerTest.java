@@ -9,25 +9,29 @@ public class ServerTest {
 		Client c1 = new Client("Bob");
 		c1.connect("127.0.0.1", 4444);
 		
+		System.out.println(c1.getPlayers());
+		
 		Client c2 = new Client("Jerry");
 		c2.connect("127.0.0.1", 4444);
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		System.out.println(c2.getPlayers());
+		
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
-		server.startGame();
+//		server.startGame();
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		server.kick("Jerry");
-		
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		server.kick("Jerry");
+//		
 		//c1.disconnect();
 	}
 }
