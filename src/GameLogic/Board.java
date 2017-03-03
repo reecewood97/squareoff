@@ -450,12 +450,10 @@ public class Board {
 			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
 		}
 		boolean same = true;
-		if(debug) System.out.println(objects.size());
-		if(debug) System.out.println(objs.size());
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
 				same = false;
-				System.out.println(objs.get(i).getName()+ "not equal to "+ objects.get(i).getName());
+				System.out.println(objs.get(i).getPos().getY()+ "not equal to "+ objects.get(i).getPos().getY());
 			}
 		}
 		if(same){

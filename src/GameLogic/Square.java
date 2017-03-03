@@ -24,6 +24,12 @@ public class Square extends PhysObject {
 		this.facing = "Right";
 	}
 	
+	@Override
+	public boolean equals(Object anObject){
+		Square square = (Square)anObject;
+		return (getPos().equals(square.getPos()) && getXvel()==square.getXvel() && getYvel()==square.getYvel());
+	}
+	
 	public String getFacing(){
 		
 		return facing;
