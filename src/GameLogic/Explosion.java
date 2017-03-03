@@ -10,7 +10,7 @@ public class Explosion extends PhysObject{
 	
 	public Explosion(Point2D.Double pos){
 		
-		super(true, pos, 10, 10, false);
+		super(false, pos, 10, 10, false);
 		this.setName("ExplodeOnImpact");
 		inUse = false;
 		this.size = 1;

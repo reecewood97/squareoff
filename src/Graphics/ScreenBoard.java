@@ -251,7 +251,6 @@ public class ScreenBoard extends JPanel{
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
 		for(PhysObject exp : explosion){
-			
 			if (((Explosion) exp).getInUse()){
 				
 				int x = (int) exp.getPos().getX();

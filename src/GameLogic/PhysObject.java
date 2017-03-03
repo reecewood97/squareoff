@@ -150,7 +150,9 @@ public class PhysObject implements Serializable{
 		this.solid = s;
 	}
 	
-	public boolean equal(PhysObject p) {
+	@Override
+	public boolean equals(Object anObject) {
+		PhysObject p = (PhysObject)anObject;
 		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
 			return true;
 		}

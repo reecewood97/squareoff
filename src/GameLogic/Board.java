@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import Audio.Audio;
 
@@ -18,7 +19,7 @@ public class Board {
 	private int squareID;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = false;
+	private final boolean debug = true;
 	private boolean weaponsopen = false;
 	private ArrayList<PhysObject> objects;
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
@@ -29,6 +30,7 @@ public class Board {
 	private TurnMaster turn;
 	private double XtravelDist = 4;
 	private boolean targetline;
+	private ArrayList<PhysObject> explosions;
 	
 
 	public static void main(String[] args) {
@@ -108,14 +110,15 @@ public class Board {
 		this.squareID = 0;
 		int x = player + squareID;
 		activePlayer = (Square)objects.get(x);
+		explosions = new ArrayList<PhysObject>();
 		
-		Point2D.Double weaponpos = new Point2D.Double(30, 30);
+		/*Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
 		
 		Point2D.Double explosionpos = new Point2D.Double(40,40);
 		PhysObject explosion = new Explosion(explosionpos);
-		objects.add(explosion);
+		objects.add(explosion);*/
 	}
 	
 	public void setFreeState(boolean free) {
@@ -196,21 +199,12 @@ public class Board {
 		return squares;
 	}
 	
-	 
 	public ArrayList<PhysObject> getExplosion(){
 		
-		ArrayList<PhysObject> exps = new ArrayList<PhysObject>();
-		for(PhysObject obj : objects){
-			
-			if (obj.getName().equals("Explosion")){
-				
-				exps.add(obj);
-			}
-		}
-		
-		return exps;
+		return new ArrayList<PhysObject>(explosions);
 		
 	}
+	
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -328,7 +322,7 @@ public class Board {
 		double guyleft = guy.getPos().getX();
 		double guyup = guy.getPos().getY()+guy.getHeight();
 		double blockleft = block.getPos().getX();
-		double blockright = block.getPos().getX()+block.getHeight();
+		double blockright = block.getPos().getX()+block.getWidth();
 		double blockdown = block.getPos().getY();
 		
 		if((blockleft<guyleft && guyleft<blockright) || 
@@ -387,6 +381,7 @@ public class Board {
 			wep.setPos(new Point2D.Double(30, 30));
 			TerrainBlock castedblock = (TerrainBlock)block;
 			castedblock.damage(1);
+			explosions.add(new Explosion(thing.getPos()));
 			//TODO later implement different weapon types, and this doesn't work
 		}
 		else {
@@ -399,14 +394,14 @@ public class Board {
 				}
 				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
 					if(debug) System.out.println(thing.getYvel());
-					if(Math.abs(thing.getXvel())<=2){
+					if(Math.abs(thing.getXvel())<=2.5){
 						if(debug)System.out.println("Sticky X");
 						thing.setXvel(0);
 					}
 					else {
 						thing.setXvel(0.6*thing.getXvel());
 					}
-					if(thing.getYvel()>=(-2)) {
+					if(thing.getYvel()>=(-2.5)) {
 						if(debug)System.out.println("Sticky Y");
 						thing.setYvel(0);
 						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
@@ -429,28 +424,29 @@ public class Board {
 			obj.update();
 			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 		}
+		ConcurrentSkipListSet<Collision> set = new ConcurrentSkipListSet<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
 					if(objs.get(j).getName().equals("TerrainBlock")) {
-						objs.get(i).undoUpdate();
-						resolveCollision(objs.get(i),i,objs.get(j));
-						if(debug)System.out.println(i);
+						set.add(new Collision(objs.get(i), objs.indexOf(objs.get(i)), objs.get(j)));
 					}
 					else {
-						objs.get(j).undoUpdate();
-						resolveCollision(objs.get(j),j,objs.get(i));
-						if(debug)System.out.println(i);
+						set.add(new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i)));
 					}
 				}
 			}
 		}
+		for(Collision collision: set){
+			collision.getThing().undoUpdate();
+			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
+		}
 		boolean same = true;
 		if(debug) System.out.println(objects.size());
+		if(debug) System.out.println(objs.size());
 		for(int i = 0;i<objects.size();i++){
-			if (!objs.get(i).equal(objects.get(i))) {
+			if (!objs.get(i).equals(objects.get(i))) {
 				same = false;
-				if(debug)System.out.println(objs.get(i).getName()+", not same as: "+objects.get(i).getName());
 			}
 		}
 		if(same){
@@ -470,23 +466,13 @@ public class Board {
 			WeaponMove wepMove = (WeaponMove)move;
 			//get weapon from arraylist
 			//TODO implement other weapon types
-			Weapon wep = null;
-	
-			for(PhysObject obj : objects){
-				if (obj.getName().equals("ExplodeOnImpact")){
-					wep = (Weapon)obj;
-				}
-			}
-			wep.setInUse(true);
-			wep.setPos(wepMove.getPos());
-			wep.setXvel(wepMove.getXvel());
-			wep.setYvel(wepMove.getYvel());;
+			Weapon wep = new Weapon(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel());
 			freeState = true;
+			objects.add(wep);
 		}
 		else { //Not in freeState, change active player depending on move
 			PhysObject floor = onFloor(activePlayer);
 			if (floor!=null) { //if the player is standing on a block
-				if (debug) System.out.println("Player standing on floor");
 				activePlayer.setYvel(0);
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
