@@ -19,18 +19,18 @@ public class PhysObject implements Serializable{
 	private boolean solid;
 	private boolean inUse;
 	
-	public PhysObject() {
-		//Initiates a new physics object with no values... if you want...
-		this.gravity = false;
-		this.grav = 2;
-		this.pos = new Point2D.Double(0, 0);
-		this.xvel = 0;
-		this.yvel = 0;
-		this.attributes = new ArrayList<String>();
-		this.width = 10;
-		this.height = 10;
-		this.solid = true;
-		this.inUse = true;
+	public PhysObject(PhysObject other) {
+		//Creates a shallow copy
+		this.gravity = other.getGravity();
+		this.grav = other.getGrav();
+		this.pos = other.getPos();
+		this.xvel = other.getXvel();
+		this.yvel = other.getYvel();
+		this.attributes = other.getAttributes();
+		this.width = other.getWidth();
+		this.height = other.getHeight();
+		this.solid = other.getSolid();
+		this.inUse = other.getInUse();
 	}
 	
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
@@ -63,6 +63,20 @@ public class PhysObject implements Serializable{
 	public void undoUpdate() {
 		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
 		setYvel(getYvel()+getGrav());
+	}
+	
+	public boolean rectIntersect(PhysObject other){
+		double left = getPos().getX();
+		double right = getPos().getX()+getWidth();
+		double bottom = getPos().getY();
+		double top = getPos().getY()+getHeight();
+		double otherleft = other.getPos().getX();
+		double otherright = other.getPos().getX()+getWidth();
+		double otherbottom = other.getPos().getY();
+		double othertop = other.getPos().getY()+getHeight();
+		boolean column = (((otherleft<=left) && (left<=otherright)) || ((otherleft<=right) && (right<=otherright)));
+		boolean row = ((otherbottom<=bottom) && (bottom<=othertop) || ((otherbottom<=top) && (top<=othertop)));
+		return(column && row);
 	}
 	
 	public boolean getGravity() {

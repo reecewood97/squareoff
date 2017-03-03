@@ -347,27 +347,29 @@ public class Board {
 			if(obj2.getName().equals("ExplodeOnImpact")){
 				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
 			}
 		} else {
 			if(obj1.getName().equals("ExplodeOnImpact")){
 				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return circle.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());*/
 			}
 		}
 	}
@@ -393,16 +395,13 @@ public class Board {
 				thing.setXvel((-0.3)*thing.getXvel());
 			}
 			if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-				if(debug) System.out.println(thing.getYvel());
-				if(Math.abs(thing.getXvel())<=2.5){
-					if(debug)System.out.println("Sticky X");
+				if(Math.abs(thing.getXvel())<=2){
 					thing.setXvel(0);
 				}
 				else {
 					thing.setXvel(0.6*thing.getXvel());
 				}
-				if(thing.getYvel()>=(-2.5)) {
-					if(debug)System.out.println("Sticky Y");
+				if(thing.getYvel()>=(-2)) {
 					thing.setYvel(0);
 					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
 				}
@@ -418,12 +417,17 @@ public class Board {
 	
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
-		System.out.println("freesim starts");
-		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
+		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
+		for(int i=0; i < objects.size();i++){
+			switch(objects.get(i).getName()) {
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "Square": objs.add(new Square((Square)objects.get(i))); break;
+			case "Weapon": objs.add(new Weapon((Weapon)objects.get(i))); break;
+			default: System.out.println("error copying arraylists in freeSim"); break;
+			}
+		}
 		for (PhysObject obj : objs) {
-			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 			obj.update();
-			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 		}
 		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
@@ -438,37 +442,37 @@ public class Board {
 					else {
 						Collision collis = new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i));
 						if(!list.contains(collis)){
-						list.add(collis);
+							list.add(collis);
 						}
 					}
 				}
 			}
 		}
 		for(Collision collision: list){
+			//System.out.println("resolving collision with block at: "+
+					//collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
 			collision.getThing().undoUpdate();
-			if(debug) System.out.println(collision.getThing().getPos().getY());
 			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
 		}
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
+				//System.out.println(objects.get(i).getYvel()+" is changing to "+objs.get(i).getYvel());
 				same = false;
-				System.out.println(objs.get(i).getPos().getY()+ "not equal to "+ objects.get(i).getPos().getY());
 			}
 		}
 		if(same){
 			if(debug)System.out.println("FreeState exited due to no movement");
 			freeState=false;
-			turn.resetTimer();
 			incrementTurn();
 		}
+		turn.resetTimer();
 		objects = objs;
-		System.out.println("freesim ends");
 	}
 	
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
-			freeSim();  // just simulate another frame.
+			freeSim(); // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
@@ -562,12 +566,10 @@ public class Board {
 				turn.resetTimer();
 				
 			}
+			int x = player+squareID;
+			objects.add(x,activePlayer);
+			objects.remove(x+1);
 		}
-		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
-		//if (debug) System.out.println(player);
-		int x = player+squareID;
-		objects.add(x,activePlayer);
-		objects.remove(x+1);
 	}
 	
 	

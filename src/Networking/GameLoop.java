@@ -15,7 +15,6 @@ public class GameLoop extends Thread {
 		running = true;
 		while(running) {
 			board.input("None");
-			System.out.println("update");
 			try {
 				sleep(40);
 			}
