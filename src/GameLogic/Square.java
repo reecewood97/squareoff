@@ -24,6 +24,23 @@ public class Square extends PhysObject {
 		this.facing = "Right";
 	}
 	
+	public Square(Square other) {
+		super(other);
+		this.playerID = other.getPlayerID();
+		this.colour = other.getColour();
+		this.squareID = other.getSquareID();
+		this.point = other.getPoint();
+		this.alive = other.getAlive();
+		this.setName("Square");
+		this.facing = other.getFacing();
+	}
+	
+	@Override
+	public boolean equals(Object anObject){
+		Square square = (Square)anObject;
+		return (getPos().equals(square.getPos()) && getXvel()==square.getXvel() && getYvel()==square.getYvel());
+	}
+	
 	public String getFacing(){
 		
 		return facing;

@@ -19,6 +19,16 @@ public class TerrainBlock extends PhysObject {
 		this.setName("TerrainBlock");
 	}
 	
+	public TerrainBlock(TerrainBlock other){
+		super(other);
+		this.health = other.getHealth();
+		this.colour = other.getColour();
+		this.type = other.getType();
+		this.visible = other.isVisible();
+		this.pos = other.getPos();
+		this.setName("TerrainBlock");
+	}
+	
 	public int getHealth(){	
 		return health;
 	}

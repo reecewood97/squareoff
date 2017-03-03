@@ -4,14 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
-
 import Audio.Audio;
-
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 import java.lang.Math;
 
 public class Board {
@@ -348,27 +343,29 @@ public class Board {
 			if(obj2.getName().equals("ExplodeOnImpact")){
 				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
 			}
 		} else {
 			if(obj1.getName().equals("ExplodeOnImpact")){
 				if(debug) System.out.println("Weapon collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return circle.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());*/
 			}
 		}
 	}
@@ -387,81 +384,91 @@ public class Board {
 		}
 		else {
 			thing = objects.get(lspos);
-				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
-					thing.setXvel((-0.3)*thing.getXvel());
-				}
-				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-0.3)*thing.getXvel());
-				}
-				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					if(debug) System.out.println(thing.getYvel());
-					if(Math.abs(thing.getXvel())<=2.5){
-						if(debug)System.out.println("Sticky X");
-						thing.setXvel(0);
-					}
-					else {
-						thing.setXvel(0.6*thing.getXvel());
-					}
-					if(thing.getYvel()>=(-2.5)) {
-						if(debug)System.out.println("Sticky Y");
-						thing.setYvel(0);
-						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
-					}
-					else {
-						thing.setYvel((-0.3)*thing.getYvel());
-					}
+			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+				thing.setXvel((-0.3)*thing.getXvel());
 			}
-				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+			if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+				thing.setXvel((-0.3)*thing.getXvel());
+			}
+			if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
+				if(Math.abs(thing.getXvel())<=2){
+					thing.setXvel(0);
+				}
+				else {
+					thing.setXvel(0.6*thing.getXvel());
+				}
+				if(thing.getYvel()>=(-2)) {
+					thing.setYvel(0);
+					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+				}
+				else {
 					thing.setYvel((-0.3)*thing.getYvel());
+				}
+			}
+			if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+				thing.setYvel((-0.3)*thing.getYvel());
 			}
 		}
 	}
 	
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
-		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
-		for (PhysObject obj : objs) {
-			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
-			obj.update();
-			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
+		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
+		for(int i=0; i < objects.size();i++){
+			switch(objects.get(i).getName()) {
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "Square": objs.add(new Square((Square)objects.get(i))); break;
+			case "Weapon": objs.add(new Weapon((Weapon)objects.get(i))); break;
+			default: System.out.println("error copying arraylists in freeSim"); break;
+			}
 		}
-		ConcurrentSkipListSet<Collision> set = new ConcurrentSkipListSet<Collision>();
+		for (PhysObject obj : objs) {
+			obj.update();
+		}
+		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
 					if(objs.get(j).getName().equals("TerrainBlock")) {
-						set.add(new Collision(objs.get(i), objs.indexOf(objs.get(i)), objs.get(j)));
+						Collision collis = new Collision(objs.get(i), objs.indexOf(objs.get(i)), objs.get(j));
+						if(!list.contains(collis)){
+							list.add(collis);
+						}
 					}
 					else {
-						set.add(new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i)));
+						Collision collis = new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i));
+						if(!list.contains(collis)){
+							list.add(collis);
+						}
 					}
 				}
 			}
 		}
-		for(Collision collision: set){
+		for(Collision collision: list){
+			//System.out.println("resolving collision with block at: "+
+					//collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
 			collision.getThing().undoUpdate();
 			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
 		}
 		boolean same = true;
-		if(debug) System.out.println(objects.size());
-		if(debug) System.out.println(objs.size());
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
+				//System.out.println(objects.get(i).getYvel()+" is changing to "+objs.get(i).getYvel());
 				same = false;
 			}
 		}
 		if(same){
 			if(debug)System.out.println("FreeState exited due to no movement");
 			freeState=false;
-			turn.resetTimer();
 			incrementTurn();
 		}
+		turn.resetTimer();
 		objects = objs;
 	}
 	
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
-			freeSim();  // just simulate another frame.
+			freeSim(); // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
@@ -555,12 +562,10 @@ public class Board {
 				turn.resetTimer();
 				
 			}
+			int x = player+squareID;
+			objects.add(x,activePlayer);
+			objects.remove(x+1);
 		}
-		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
-		//if (debug) System.out.println(player);
-		int x = player+squareID;
-		objects.add(x,activePlayer);
-		objects.remove(x+1);
 	}
 	
 	/**
@@ -573,9 +578,6 @@ public class Board {
 		
 		if(input.contains("Pressed")){
 			if(input.contains(players[player])){
-				//if(debug) System.out.println("I'm from the current player!");
-				}
-			
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			String ret = null;
@@ -611,6 +613,7 @@ public class Board {
 							mv.setWeapon(true);
 				}
 			}
+		}
 		}
 		else if(input.contains("clicked")){
 			if(wep.getInUse()){

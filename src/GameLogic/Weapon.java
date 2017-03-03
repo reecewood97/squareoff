@@ -14,6 +14,14 @@ public class Weapon extends PhysObject {
 		inUse = true;
 	}
 	
+	public Weapon(Weapon other) {
+		super(other);
+		this.setName("ExplodeOnImpact");
+		this.setXvel(other.getXvel());
+		this.setYvel(other.getYvel());
+		inUse = other.getInUse();
+	}
+	
 	public boolean getInUse(){
 		
 		return inUse;
