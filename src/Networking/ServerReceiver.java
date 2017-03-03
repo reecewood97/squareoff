@@ -38,7 +38,7 @@ public class ServerReceiver extends Thread {
 				board.addName(name);
 			}
 			else {
-				table.get(this).send(Server.DISCONNECT);
+				//table.get(this).send(Server.DISCONNECT);
 			}
 			
 			Object input;

@@ -16,6 +16,23 @@ public class ServerTest {
 		
 		System.out.println(c2.getPlayers());
 		
+		Client c3 = new Client("Bob");
+		c3.connect("127.0.0.1", 4444);
+		
+		System.out.println(c3.getPlayers());
+		
+		Client c4 = new Client("Bob");
+		c4.connect("127.0.0.1", 4444);
+		
+		System.out.println(c4.getPlayers());
+		
+		Client c5 = new Client("Jerry");
+		c5.connect("127.0.0.1", 4444);
+		
+		System.out.println(c5.getPlayers());
+		
+		System.out.println("hello");
+		
 //		try {
 //			Thread.sleep(2000);
 //		} catch (InterruptedException e) {
