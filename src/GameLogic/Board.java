@@ -386,59 +386,67 @@ public class Board {
 		}
 		else {
 			thing = objects.get(lspos);
-				if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
-					thing.setXvel((-0.3)*thing.getXvel());
-				}
-				if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
-					thing.setXvel((-0.3)*thing.getXvel());
-				}
-				if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-					if(debug) System.out.println(thing.getYvel());
-					if(Math.abs(thing.getXvel())<=2.5){
-						if(debug)System.out.println("Sticky X");
-						thing.setXvel(0);
-					}
-					else {
-						thing.setXvel(0.6*thing.getXvel());
-					}
-					if(thing.getYvel()>=(-2.5)) {
-						if(debug)System.out.println("Sticky Y");
-						thing.setYvel(0);
-						thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
-					}
-					else {
-						thing.setYvel((-0.3)*thing.getYvel());
-					}
+			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+				thing.setXvel((-0.3)*thing.getXvel());
 			}
-				if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+			if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+				thing.setXvel((-0.3)*thing.getXvel());
+			}
+			if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
+				if(debug) System.out.println(thing.getYvel());
+				if(Math.abs(thing.getXvel())<=2.5){
+					if(debug)System.out.println("Sticky X");
+					thing.setXvel(0);
+				}
+				else {
+					thing.setXvel(0.6*thing.getXvel());
+				}
+				if(thing.getYvel()>=(-2.5)) {
+					if(debug)System.out.println("Sticky Y");
+					thing.setYvel(0);
+					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+				}
+				else {
 					thing.setYvel((-0.3)*thing.getYvel());
+				}
+			}
+			if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+				thing.setYvel((-0.3)*thing.getYvel());
 			}
 		}
 	}
 	
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
+		System.out.println("freesim starts");
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
 		for (PhysObject obj : objs) {
-			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
+			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 			obj.update();
-			if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
+			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 		}
-		ConcurrentSkipListSet<Collision> set = new ConcurrentSkipListSet<Collision>();
+		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
 				if(collides(objs.get(i),objs.get(j))){
 					if(objs.get(j).getName().equals("TerrainBlock")) {
-						set.add(new Collision(objs.get(i), objs.indexOf(objs.get(i)), objs.get(j)));
+						Collision collis = new Collision(objs.get(i), objs.indexOf(objs.get(i)), objs.get(j));
+						if(!list.contains(collis)){
+							list.add(collis);
+						}
 					}
 					else {
-						set.add(new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i)));
+						Collision collis = new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i));
+						if(!list.contains(collis)){
+						list.add(collis);
+						}
 					}
 				}
 			}
 		}
-		for(Collision collision: set){
+		for(Collision collision: list){
 			collision.getThing().undoUpdate();
+			if(debug) System.out.println(collision.getThing().getPos().getY());
 			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
 		}
 		boolean same = true;
@@ -447,6 +455,7 @@ public class Board {
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
 				same = false;
+				System.out.println(objs.get(i).getName()+ "not equal to "+ objects.get(i).getName());
 			}
 		}
 		if(same){
@@ -456,6 +465,7 @@ public class Board {
 			incrementTurn();
 		}
 		objects = objs;
+		System.out.println("freesim ends");
 	}
 	
 	public void updateFrame(Move move) {

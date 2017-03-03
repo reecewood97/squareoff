@@ -55,14 +55,14 @@ public class PhysObject implements Serializable{
 	
 	public void update() {
 		if(getInUse()){
-			setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
 			setYvel(getYvel()-getGrav());
+			setPos(new Point2D.Double(pos.getX()+xvel, pos.getY()+yvel));
 		}
 	}
 	
 	public void undoUpdate() {
-		setYvel(getYvel()+getGrav());
 		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
+		setYvel(getYvel()+getGrav());
 	}
 	
 	public boolean getGravity() {
@@ -70,7 +70,10 @@ public class PhysObject implements Serializable{
 	}
 	
 	public double getGrav() {
-		return grav;
+		if(getGravity()){
+			return grav;
+		}
+		return 0;
 	}
 	
 	public Point2D.Double getPos() {
