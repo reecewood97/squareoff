@@ -31,6 +31,7 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean targetline;
 	private ArrayList<PhysObject> explosions;
+	Weapon wep;
 	
 
 	public static void main(String[] args) {
@@ -562,25 +563,9 @@ public class Board {
 		objects.remove(x+1);
 	}
 	
-	
-	/**
-	 * Used on the client-side, receiving an update string from the server.
-	 * @param update The update string.
-	 */
-	//This method wont even be needed anymore
-	public void update(Object update) {
-//		System.out.println(update);
-//		String[] updateA = update.split(" ");
-//		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
-//		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
-//		active.setPoint(xy);
-//		objects.remove(Integer.parseInt(updateA[0]));
-//		objects.add(Integer.parseInt(updateA[0]), active);
-	}
-	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
-	 * @param inputs
+	 * @param inputs the formatted string from hangerOn.
 	 */
 	//public void input(Move input){
 	public void input(String input) {
@@ -620,10 +605,6 @@ public class Board {
 							q.remove();
 						q.add(objects);
 						active.setFacing("Right");
-			//case "L" : //mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
-					   //updateFrame(mv);
-			  //         q.add(objects);
-			    //       weaponsopen = true;
 				break;
 			default : if (input.contains("Space")){
 							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
@@ -632,31 +613,32 @@ public class Board {
 			}
 		}
 		else if(input.contains("clicked")){
-			//if (weapon in use)
-				//Use it
-			//else
-				//Remind the player to select a weapon
-			WeaponMove wmv;
-			int xs = input.indexOf('x');
-			int xe = input.indexOf(',');
-			String xc = input.substring(xs+2, xe);
-			int ye = input.indexOf(']');
-			String yc = input.substring(xe+3, ye);
-			
-			Double x = Double.parseDouble(xc);
-			Double y =800- Double.parseDouble(yc);
-			Point2D.Double origin = new Point2D.Double(x, y);
-			//System.out.println(origin);
-			
-			wmv = new WeaponMove("None",origin,9,4);
-			//updateFrame(wmv);
-			if (q.size() > 0)
-				q.remove();
-			q.add(objects);
+			if(wep.getInUse()){
+				WeaponMove wmv;
+				int xs = input.indexOf('x');
+				int xe = input.indexOf(',');
+				String xc = input.substring(xs+2, xe);
+				int ye = input.indexOf(']');
+				String yc = input.substring(xe+3, ye);
+				
+				Double x = Double.parseDouble(xc);
+				Double y =800- Double.parseDouble(yc);
+				Point2D.Double target = new Point2D.Double(x, y);
+				//System.out.println(origin);
+				
+				wmv = new WeaponMove("None",active.getPoint(),0,0);
+				//updateFrame(wmv);
+				if (q.size() > 0)
+					q.remove();
+				q.add(objects);
+			}
+			else{
+				//Create a weapon error check for the server
+			}
 		}
 		else if (input.contains("setWep")){
-			//Create a new weapon
-			//Make it in use
+			this.wep = new Weapon(active.getPoint(), 0, 0);
+			wep.setInUse(true);
 		}
 		else
 		{
@@ -675,10 +657,18 @@ public class Board {
 		return q.take();
 	}
 	
+	/**
+	 * Returns the PhysObject arraylist that tracks all moving parts in the game
+	 * @return the list of objects that are affected by physics.
+	 */
 	public ArrayList<PhysObject> getObjects(){
 		return objects;
 	}
 	
+	/**
+	 * Update the list of objects affected by physics, used on the client version of the boards so they know what changes the server has made.
+	 * @param obj the updated list of objects
+	 */
 	public void  setObjects(ArrayList<PhysObject> obj){
 		this.objects = obj;
 	}
@@ -693,6 +683,9 @@ public class Board {
 		weaponsopen = open;
 	}
 	
+	/**
+	 * Called when the game actually begins, starts the turn timer and fiddles with the player list.
+	 */
 	public void startGame(){
 		this.turn = new TurnMaster(this);
 		turn.start();
@@ -703,6 +696,9 @@ public class Board {
 			}
 		}
 	}
+	/**
+	 * Increments the active player
+	 */
 	public void incrementTurn(){
 		if (player != 3){
 			player = player+1;
@@ -722,6 +718,10 @@ public class Board {
 		numberOfPlayers++;
 	}
 	
+	/**
+	 * Checks the arraylist of Squares to see if any two living squares have different players
+	 * @return True if all living squares are played by the same player, false otherwise.
+	 */
 	private boolean checkForWinner(){
 		ArrayList<PhysObject> chickenDinner = getSquares();
 		
