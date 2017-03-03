@@ -102,7 +102,7 @@ public class Client {
 	}
 	
 	public ArrayList<String> getPlayers() {
-		while(!receiver.getPlayers().contains(name) && socket != null && !socket.isClosed()) {
+		while(!receiver.getPlayers().contains(name)) {
 			try {
 				Thread.sleep(50);
 			}
