@@ -588,9 +588,6 @@ public class Board {
 		
 		if(input.contains("Pressed")){
 			if(input.contains(players[player])){
-				//if(debug) System.out.println("I'm from the current player!");
-				}
-			
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			String ret = null;
@@ -630,6 +627,7 @@ public class Board {
 							mv.setWeapon(true);
 				}
 			}
+		}
 		}
 		else if(input.contains("clicked")){
 			//if (weapon in use)
