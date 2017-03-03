@@ -32,6 +32,8 @@ public class AI {
 	private double outAngle;
 	private double outVelocity;
 	private Queue q;
+	private double mistakeAngle = 0;
+	private double mistakeVelocity = 0;
 	
 	
 	/**
@@ -120,6 +122,57 @@ public class AI {
 	}
 	
 	/**
+	 * Determines whether to move and attack or to pick up items
+	 * Should be called by the server to send movements and attacks
+	 */
+	public void determineState() {
+		changeAIPos();
+		if(haveItems()) {
+			// go get items
+			// Then go attack
+			aiMove();
+			aiAttack();
+			
+			// More advance: locate item position, calculate time to reach item
+			// 				 choose to get item and attack or attack directly
+		}
+		else {
+			aiMove();
+			aiAttack();
+		}
+//		for (int i = 0; i < 100; i++) {
+//			moveRight();
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+	}
+	
+	/**
+	 * Send out the final velocity and angle chosen for attack
+	 */
+	public void aiAttack() {
+		// choose the closest target at this moment (get it from server copy)
+		//Point2D.Double finalCoor = getFinalDestination();
+		alterResult();
+		double velocity_chosen = getVelocity();
+		double angle_chosen = getAngle();
+		sendAttack(angle_chosen, velocity_chosen);
+		
+		// attack the provided coordinate
+		// 		by sending power, angle chosen to methods in other class.
+		
+		
+		// More advance: choose enemy standing on a block that has less hp,
+		// 				 then calculate will the grenade able to reach target (through physics engine)
+		//				 if it can, attack, else, choose another target
+
+	}
+	
+	/**
 	 * Movement of the Square of the AI player
 	 * Current Stage: if the current block standing has less than 2 health, move to other position
 	 */
@@ -202,6 +255,8 @@ public class AI {
 						moveRight();
 					}
 					moveRight();
+					System.out.println("move Left");
+
 //					Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
 //					setPos(newPos);
 //					xPos += 2;
@@ -218,6 +273,7 @@ public class AI {
 						moveLeft();
 					}
 					moveLeft();
+					System.out.println("move Left");
 //					xPos -= 2;
 
 //					Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
@@ -251,7 +307,7 @@ public class AI {
 	 * @param mistakeAngle 
 	 * @param mistakeVelocity 
 	 */
-	public void determineResult(int mistakeAngle, int mistakeVelocity){
+	public void determineResult(){
 		Point2D.Double target = getFinalDestination();
 		// double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -260,7 +316,7 @@ public class AI {
 		if (ydis < 0) {
 			// angle larger than 45 degrees
 			boolean hit = false;
-			int state = calculation(acc_angle, acc_velocity);
+			int state = calculation(acc_angle, acc_velocity, target);
 			hit = isHit(state);
 			while (!hit) {
 				if (state == 1) { // too close
@@ -269,7 +325,7 @@ public class AI {
 					while (acc_velocity <= maxVelocity && !hit) {
 						// increase power
 						acc_velocity += 7.5;
-						state = calculation(acc_angle, acc_velocity);
+						state = calculation(acc_angle, acc_velocity, target);
 						hit = isHit(state);
 					}
 				}
@@ -279,7 +335,7 @@ public class AI {
 					while (acc_velocity > 0 && !hit) {
 						// decrease power
 						acc_velocity -= 7.5;
-						state = calculation(acc_angle, acc_velocity);
+						state = calculation(acc_angle, acc_velocity, target);
 						hit = isHit(state);
 					}
 				}
@@ -288,7 +344,7 @@ public class AI {
 		else {
 			//try with 45 degrees and decrease it.
 			boolean hit = false;
-			int state = calculation(acc_angle, acc_velocity);
+			int state = calculation(acc_angle, acc_velocity, target);
 			hit = isHit(state);
 			while (!hit) {
 				if (state == 1) { // too close
@@ -297,7 +353,7 @@ public class AI {
 					while (acc_velocity <= maxVelocity && !hit) {
 						// increase power
 						acc_velocity += 7.5;
-						state = calculation(acc_angle, acc_velocity);
+						state = calculation(acc_angle, acc_velocity, target);
 						hit = isHit(state);
 					}
 				}
@@ -307,22 +363,40 @@ public class AI {
 					while (acc_velocity > 0 && !hit) {
 						// decrease power
 						acc_velocity -= 7.5;
-						state = calculation(acc_angle, acc_velocity);
+						state = calculation(acc_angle, acc_velocity, target);
 						hit = isHit(state);
 					}
 				}
 			}
 		}
+//		System.out.println(acc_angle);
+		
+		setAngle(acc_angle);
+		setVelocity(acc_velocity);
 
+		
+	}
+	
+	public void setMistake(double mistakeAngle, double mistakeVelocity) {
+		this.mistakeAngle = mistakeAngle;
+		this.mistakeVelocity = mistakeVelocity;
+	}
+	
+	public void alterResult() {
+		determineResult();
 		// output angle and power (force)
-
+		
+		double acc_angle = getAngle();
+		double acc_velocity = getVelocity();
 		double final_angle;
 		double final_velocity;
+		int mistakeAngle = (int) this.mistakeAngle;
+		int mistakeVelocity = (int) this.mistakeVelocity;
 		Random random = new Random();
 		int posOrNeg = random.nextInt(2);
 		if (posOrNeg == 0) {
-			final_angle = acc_angle + random.nextInt(mistakeAngle);
-			final_velocity = acc_velocity + random.nextInt(mistakeVelocity);
+			final_angle = acc_angle + random.nextInt(mistakeAngle) + (((double)random.nextInt(10)) / 10);
+			final_velocity = acc_velocity + random.nextInt(mistakeVelocity) + (((double)random.nextInt(10)) / 10);
 		}
 		else {
 			final_angle = acc_angle - random.nextInt(mistakeAngle);
@@ -339,8 +413,8 @@ public class AI {
 	 * @param v velocity given
 	 * @return the state of such angle and velocity chosen
 	 */
-	private int calculation(double a, double v) {
-		Point2D.Double target = getFinalDestination();
+	private int calculation(double a, double v, Point2D.Double target) {
+//		Point2D.Double target = getFinalDestination();
 		double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
 		double angle = a;
@@ -376,6 +450,31 @@ public class AI {
 		else {
 			return false;
 		}
+	}
+	
+	private boolean determineObstacle(Point2D.Double target) {
+		double angle = getAngle();
+		double velocity = getVelocity();
+		double range = target.getX();
+		
+		//calculate time
+		// x = velocity * cos(angle) * t
+		double vix = velocity * Math.cos(angle);
+		double timeOfFlight = range / vix;
+		
+		//calculate x coordinate
+		// y = velocity * sin(angle) * t - 0.5 * g * t^2
+		double yDis = 0;
+		double xDis = 0;
+		for (int t = 1; t < timeOfFlight; t ++) {
+			yDis = (velocity * Math.sin(angle) * t) - (0.5 * gravity * t * t);
+			xDis = velocity * Math.cos(angle);
+//			if (there are obstacles) { // method determining obstacles need to be made
+//				return true;
+//			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -527,6 +626,8 @@ public class AI {
 		int finalX = 0;
 		int finalY = 0;
 		PhysObject finalSquare = null;
+		
+		// Calculation for EasyAI
 		double finalDis = 9999999999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square enemySquare = (Square) squares.get(i);
@@ -550,8 +651,42 @@ public class AI {
 				}
 			}
 		}
+		System.out.println(finalSquare);
+		
+		// Calculation for NormalAI & DifficultAI
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		int numOfBlocks = blocks.size();
+		System.out.println(blocks);
+		System.out.println(blocks.get(1).getPos());
+		TerrainBlock targetBlock = null;
+		int targetHealth = 999;
+		for (int i = 0; i < numOfPlayers; i++) {
+//			System.out.println(i);
+			Square targetSquare = (Square) squares.get(i);
+			double targetX = targetSquare.getPos().getX();
+			double targetY = targetSquare.getPos().getY();
+//			System.out.println(targetX);
+//			System.out.println(targetY);
+			for (int j = 0; j < numOfBlocks; j++) {
+				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
+//				System.out.println(oneBlock);
+				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX) && (oneBlock.getPos().getX() <= targetX + 50.0)) {
+//					&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
+					targetBlock = (TerrainBlock) oneBlock;
+				}
+			}
+//			System.out.println(targetBlock);
+			if (targetBlock.getHealth() < targetHealth) {
+				finalSquare = targetSquare;
+				targetHealth = targetBlock.getHealth();
+			}
+			System.out.println(finalSquare);
+		}
+		
 		
 		// return the coordinates
+
+		System.out.println(finalSquare.getPos());
 		return finalSquare.getPos();
 	}
 	
