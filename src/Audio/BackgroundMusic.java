@@ -14,7 +14,6 @@ public class BackgroundMusic extends Thread implements Serializable{
 	
 	public void end(){
 	
-		System.out.println("goodbye");
 		run = false;
 	}
 	

@@ -2,6 +2,7 @@ package Graphics;
 
 import javax.swing.JPanel;
 import GameLogic.Board;
+import GameLogic.Explosion;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
@@ -23,13 +24,15 @@ public class ScreenBoard extends JPanel{
 	private double heightratio;
 	private double widthratio;
 	private boolean showTargetLine;
+	private HangerOn hangeron;
 	
-	public ScreenBoard(Board board, double heightratio, double widthratio){
+	public ScreenBoard(Board board, double heightratio, double widthratio, HangerOn h){
 		super();
 		this.board = board;
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
 		this.showTargetLine = false;
+		this.hangeron = h;
 		
 		
 	}
@@ -61,6 +64,8 @@ public class ScreenBoard extends JPanel{
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d);
+		paintExplosions(board.getExplosion(),g2d);
+		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 	} 		
 	
 	
@@ -80,26 +85,38 @@ public class ScreenBoard extends JPanel{
 			int blockwidth = (int) (40*widthratio);
 			int blockheight = (int) (30*heightratio);
 			int blocktype = ((TerrainBlock) block).getType();
-			//int blockhealth = ((TerrainBlock) block).getHealth(); 
+			int blockhealth = ((TerrainBlock) block).getHealth(); 
 			boolean visible = ((TerrainBlock) block).isVisible(); 
 			
+			//check if visible
 			if(visible){
 			
+				g2d.setColor(Color.black);
+				g2d.fillRect(newx,newy,blockwidth,blockheight);
+				
+				//if 1 then colour is brown
 				if (blocktype == 1){
 					g2d.setColor(new Color(139,69,19));
 				}
+				//else grey
 				else{
 					g2d.setColor(new Color(105,105,105));
 				}
 				
-				g2d.setColor(Color.DARK_GRAY);
-				g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
-				g2d.setColor(Color.black);
-				g2d.fillRect(newx,newy,blockwidth,blockheight);
-				g2d.setColor(Color.GRAY);
+				//g2d.setColor(Color.DARK_GRAY);
+				//g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
+			
+				//g2d.setColor(Color.GRAY);
 				g2d.fillRect(newx+1,newy+1,blockwidth-2,blockheight-2);
 				
-				
+				if(blockhealth == 1){
+					
+					g2d.setColor(Color.cyan);
+					g2d.fillRect(newx + 2, newy + 3, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 10, newy + 3, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 2, newy + 20, blockwidth/10, blockheight/10);
+					g2d.fillRect(newx + 10, newy + 20, blockwidth/10, blockheight/10);
+				}
 
 				
 			}
@@ -190,39 +207,80 @@ public class ScreenBoard extends JPanel{
 		}
 	}
 	
-	public void targetline(ArrayList<PhysObject> weapons, Graphics2D g2d){
+	public void paintTargetLine(ArrayList<PhysObject> weapons, boolean b, Graphics2D g2d){
 	
-		while(true){
+		if(b){
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
 			g2d.drawLine((int) weapons.get(0).getPos().getX(), 
 					(int) weapons.get(0).getPos().getY(),
 					(int) mousepos.getX(),
 					(int) ((mousepos.getY())-(10*widthratio)));
-		}
 		
+		}
 		
 		
 	}
 	
 	public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
 		
-		for(PhysObject weapon : weapons){
-			
-			if (((Weapon)weapon).getInUse()){
+		
+			for(PhysObject weapon : weapons){
 				
-				int x = (int) weapon.getPos().getX();
-				int y = (int) weapon.getPos().getY();
+				if (((Weapon)weapon).getInUse()){
+					
+					int x = (int) weapon.getPos().getX();
+					int y = (int) weapon.getPos().getY();
+					
+	
+					x = (int) (x*widthratio);
+					y = (int) (y*heightratio);
+					y = 450 - y;
+					
+					int weaponwidth = (int) (10*widthratio);
+					int weaponheight = (int) (10*heightratio);
+					g2d.setColor(Color.BLACK);
+					g2d.fillOval(x,y,weaponwidth,weaponheight);
+				
+				}
+			}
+		
+		
+	}
+	
+	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
+		
+		for(PhysObject exp : explosion){
+			if (((Explosion) exp).getInUse()){
+				
+				int x = (int) exp.getPos().getX();
+				int y = (int) exp.getPos().getY();
 				
 
 				x = (int) (x*widthratio);
 				y = (int) (y*heightratio);
 				y = 450 - y;
 				
-				int weaponwidth = (int) (10*widthratio);
-				int weaponheight = (int) (10*heightratio);
-				g2d.setColor(Color.BLACK);
-				g2d.fillOval(x,y,weaponwidth,weaponheight);
+				int size = ((Explosion) exp).getSize();
+				
+				int expwidth = (int) (size*widthratio);
+				int expheight = (int) (size*heightratio);
+				
+				g2d.setColor(Color.ORANGE);
+				g2d.fillOval(x,y,expwidth,expheight);
+				
+				if(size == 30){
+					
+					hangeron.setExp("1");
+					hangeron.setExpUse("false");
+					
+				}
+				else{
+					
+					size++;
+					hangeron.setExp(size + "");
+					
+				}
 			
 			}
 		}

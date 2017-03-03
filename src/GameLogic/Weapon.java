@@ -6,10 +6,12 @@ public class Weapon extends PhysObject {
 	
 	private boolean inUse;
 	
-	public Weapon(Point2D.Double pos) {
+	public Weapon(Point2D.Double pos, double xvel, double yvel) {
 		super(true, pos, 10, 10, false);
 		this.setName("ExplodeOnImpact");
-		inUse = false;
+		this.setXvel(xvel);
+		this.setYvel(yvel);
+		inUse = true;
 	}
 	
 	public boolean getInUse(){

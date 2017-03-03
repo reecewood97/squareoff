@@ -21,18 +21,18 @@ public class ClientReceiver extends Thread {
 	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
-	private Socket socket;
+	private Client client;
 
 	
 	/**
 	 * Constructor.
 	 * @param server
 	 */
-	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, Socket socket) {
+	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, Client client) {
 		this.server = server;
 		this.board = board;
 		this.ui = ui;
-		this.socket = socket;
+		this.client = client;
 		players = new ArrayList<String>();
 	}
 	
@@ -50,7 +50,7 @@ public class ClientReceiver extends Thread {
 			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
 			while(running && (ob = server.readObject()) != null) {
 				if(ob.getClass().isInstance(Server.DISCONNECT) && (int)ob == Server.DISCONNECT) {
-					socket.close();
+					client.disconnect();
 				}
 				if(inGame) {
 					if(ob.getClass().isInstance(check)) {
