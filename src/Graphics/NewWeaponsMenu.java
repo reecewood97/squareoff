@@ -33,7 +33,6 @@ public class NewWeaponsMenu extends JFrame {
 	    //private double frameHeight = 450;
 	    private String[] weaponArray = {"Bomb","Ball","Grenade"};
 	    private int currentWeapon = 0;
-	    //private JLabel picLabel;
 	    private JButton image;
 	    private Board board;
 	    private boolean weaponselected;
@@ -41,16 +40,15 @@ public class NewWeaponsMenu extends JFrame {
 	 
 	    /**
 	     * weapon menu constructor
+	     * @param listeners The HangerOn instance
+	     * @param board The current board
 	     */
 	    public NewWeaponsMenu(HangerOn listeners, Board board){
-	    	
-	    		    	
+	    	   	
 	    	//edit menu settings
-	    	setBounds(0,0,200,200);
+	    	setBounds(0,0,200,200); //TODO change this to match height/width ratios
 	    	setUndecorated(true);
 	    	setBackground(Color.white);
-	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    	setTitle("SQUARE-OFF");
 	    
 	    	this.board = board;
 	    	this.weaponselected = false;

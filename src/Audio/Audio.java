@@ -12,7 +12,7 @@ import javax.sound.sampled.Clip;
  */
 public class Audio implements Serializable
 {
-	
+	private static final long serialVersionUID = 3690097175800550800L;
 	private boolean sound;
 	private BackgroundMusic music; 
 	

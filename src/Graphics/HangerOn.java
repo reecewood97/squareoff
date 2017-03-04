@@ -11,19 +11,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import GameLogic.UserInput;
 import Networking.Queue;
+
 /**
  * This is a simple listener class meant to seperate the function from the form with the UI
  */
 public class HangerOn implements KeyListener,MouseListener { 
+	
 	private Queue q;
 	private String name;
-
+	private ScreenBoard panel;
 	
 	/**
 	 * Constructor
@@ -36,7 +33,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	
 	}	
 	 
-	 ScreenBoard panel;
+	 
 	 
 	 /**
 	  * One of two big listeners, this handles keys pressed on the keyboard, formats them and adds to the queue.
@@ -86,6 +83,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 }
 		 //panel.grabFocus();
 	 }
+	 
 	 @Override
 	 public void mouseEntered(MouseEvent e) { 		
 	 // TODO Auto-generated method stub
@@ -115,7 +113,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	 }
 	 
 	 /**
-	  * A method used for updating graphics animations on the server side.
+	  * A method used for updating graphics explosion animations on the server side.
 	  * @param size The current size of the explosion.
 	  */
 	 public void setExp(String size){
@@ -124,11 +122,19 @@ public class HangerOn implements KeyListener,MouseListener {
 		 q.offer(setExp);
 	 }
 	 
+	 
+	 /**
+	  * A method used for updating graphics explosion animations on the server side.
+	  * @param bool Whether the explosion should be shown or not
+	  * @author fran
+	  */
 	 public void setUse(String bool){
 		 
 		 String setUse = "setUse " + bool;
 		 q.offer(setUse);
 	 }
+	 
+	 
 	 
 	 public void setTargetLine(String b){
 		 
