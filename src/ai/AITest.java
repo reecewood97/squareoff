@@ -9,7 +9,7 @@ import GameLogic.Square;
 public class AITest {
 
 	public static void main(String[] args) {
-		Board board = new Board();
+		Board board = new Board("map1");
 		
 		AI ai = new DifficultAI(2, 0, 0, board);
 		

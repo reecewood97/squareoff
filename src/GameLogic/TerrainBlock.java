@@ -3,6 +3,8 @@ package GameLogic;
 import java.awt.geom.Point2D;
 
 public class TerrainBlock extends PhysObject {
+	
+	private static final long serialVersionUID = 1L;
 	private int health;
 	private int type;
 	private boolean visible;

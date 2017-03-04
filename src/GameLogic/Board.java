@@ -27,10 +27,11 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean targetline;
 	private ArrayList<PhysObject> explosions;
+	private String map;
 	
 
 	public static void main(String[] args) {
-		Board board = new Board();
+		Board board = new Board("map1");
 		Scanner scanner = new Scanner(System.in);
 		while(true){
 			String input = scanner.nextLine();
@@ -50,12 +51,13 @@ public class Board {
 		}
 	}
 	
-	public Board(){
+	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		this.targetline = false;
+		this.map = map;
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -72,33 +74,68 @@ public class Board {
 		objects.add(blu);
 		objects.add(yel);
 		objects.add(grn);
+		
+		if(this.map.equals("map1")){
+			//Draw blocks at bottom of map
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
+			
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
+				objects.add(block);
+			}
+			
+			for(int i = 100; i < 700; i+=120){
 				
-		//Draw blocks at bottom of map
-		objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
-		
-		for(int i = 100; i < 700; i+=40) {
-			PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
-			objects.add(block);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,225), true);
+				objects.add(block);
+				
+			}
+			
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,300), true);
+				objects.add(block);
+				
+			}
+			
+			for(int i = 50; i < 700; i+=200){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,375), true);
+				objects.add(block);
+				
+			}
 		}
-		
-		for(int i = 100; i < 700; i+=120){
+		else{
 			
-			PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,225), true);
-			objects.add(block);
+			//Draw blocks at bottom of map
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
 			
-		}
-		
-		for(int i = 150; i < 700; i+=160){
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,150), true);
+				objects.add(block);
+			}
 			
-			PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,300), true);
-			objects.add(block);
+			for(int i = 100; i < 700; i+=120){
+				
+				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,200), true);
+				objects.add(block);
+				
+			}
 			
-		}
-		
-		for(int i = 50; i < 700; i+=200){
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,250), true);
+				objects.add(block);
+				
+			}
 			
-			PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,375), true);
-			objects.add(block);
+			for(int i = 50; i < 700; i+=200){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,475), true);
+				objects.add(block);
+				
+			}
+			
 			
 		}
 		

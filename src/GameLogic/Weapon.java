@@ -28,7 +28,10 @@ public class Weapon extends PhysObject {
 		if(inUse) {
 		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
 		setYvel(getYvel()-getGrav());
-		System.out.println("Wep at: " + getPos().getX() + ", " + getPos().getY()); //TODO
+		
+		//TODO
+		
+		System.out.println("Wep at: " + getPos().getX() + ", " + getPos().getY()); 
 		}
 	}
 }
