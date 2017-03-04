@@ -370,7 +370,7 @@ public class Board {
 		}
 	}
 	
-	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
+	private void resolveCollision(PhysObject thing, PhysObject block) {
 		if(thing.getName().equals("ExplodeOnImpact")){
 			if(debug) System.out.println("Resolving weapon collision");
 			thing.setInUse(false);
@@ -383,12 +383,17 @@ public class Board {
 			//TODO later implement different weapon types, and this doesn't work
 		}
 		else {
-			thing = objects.get(lspos);
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
 			}
 			if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
 				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
 			}
 			if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
 				if(Math.abs(thing.getXvel())<=2){
@@ -445,10 +450,14 @@ public class Board {
 			}
 		}
 		for(Collision collision: list){
-			//System.out.println("resolving collision with block at: "+
-					//collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
+			/*if(collision.getThing().getName().equals("Square")){
+				if(((Square)collision.getThing()).getPlayerID()==1){
+					System.out.println("resolving red square collision with block at: "+
+						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
+				}
+			}*/
 			collision.getThing().undoUpdate();
-			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
+			resolveCollision(collision.getThing(), collision.getBlock());
 		}
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
@@ -566,6 +575,7 @@ public class Board {
 			objects.add(x,activePlayer);
 			objects.remove(x+1);
 		}
+		System.out.println(activePlayer.getPlayerID());
 	}
 	
 	/**
