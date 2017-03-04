@@ -3,17 +3,14 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import GameLogic.Board;
-import UserInterface.mainMenu;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import Audio.*;
 
-
-@SuppressWarnings("serial")
 public class ButtonPanel extends JPanel{
 
+	private static final long serialVersionUID = 1L;
 	private boolean music_on = true;
 	private boolean first = true;
 	private Audio audio;
@@ -28,7 +25,6 @@ public class ButtonPanel extends JPanel{
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
 		mainpanel.setBackground(Color.WHITE);
-		//mainpanel.setBounds(0, 0, screenwidth, height);
 		
 		this.board = board;
 		this.listeners = screen.getHangerOn();
@@ -71,14 +67,10 @@ public class ButtonPanel extends JPanel{
 
 	}
 	
-	@SuppressWarnings("static-access")
 	public void openMainMenu(Screen screen, Board board){
 	
 		board.notifyQuit();
-		
 		screen.setVisible(false);
-		//mainMenu mainmenu = new mainMenu();
-		//mainMenu.showUI();
 		
 	}
 	
@@ -91,6 +83,7 @@ public class ButtonPanel extends JPanel{
 		menu.open();
 		
 	}
+	
 	public void ToggleBackgroundMusic(JButton button){
 		
 		if(first){
@@ -100,13 +93,11 @@ public class ButtonPanel extends JPanel{
 		
 			if(music_on){
 				
-				//System.out.println("music on");
 				button.setOpaque(true);
 				audio.endBackgroundMusic();
 			}
 			else{
 				
-				//System.out.println("music off");
 				button.setOpaque(false);
 				audio = new Audio();
 				audio.startBackgroundMusic();
