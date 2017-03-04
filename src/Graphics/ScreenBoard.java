@@ -100,7 +100,14 @@ public class ScreenBoard extends JPanel{
 				}
 				//else grey
 				else{
-					g2d.setColor(new Color(105,105,105));
+					
+					if(blockhealth == 2){
+						g2d.setColor(new Color(105,105,105));
+					}
+					else{
+						g2d.setColor(new Color(169,169,169));
+					}
+					
 				}
 				
 				//g2d.setColor(Color.DARK_GRAY);
@@ -108,15 +115,6 @@ public class ScreenBoard extends JPanel{
 			
 				//g2d.setColor(Color.GRAY);
 				g2d.fillRect(newx+1,newy+1,blockwidth-2,blockheight-2);
-				
-				if(blockhealth == 1){
-					
-					g2d.setColor(Color.cyan);
-					g2d.fillRect(newx + 2, newy + 3, blockwidth/10, blockheight/10);
-					g2d.fillRect(newx + 10, newy + 3, blockwidth/10, blockheight/10);
-					g2d.fillRect(newx + 2, newy + 20, blockwidth/10, blockheight/10);
-					g2d.fillRect(newx + 10, newy + 20, blockwidth/10, blockheight/10);
-				}
 
 				
 			}
@@ -272,7 +270,7 @@ public class ScreenBoard extends JPanel{
 				if(size == 30){
 					
 					hangeron.setExp("1");
-					hangeron.setExpUse("false");
+					hangeron.setUse("false");
 					
 				}
 				else{

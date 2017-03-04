@@ -6,13 +6,11 @@ import java.awt.geom.Point2D;
 public class Explosion extends PhysObject{
 	
 	private int size;
-	private boolean inUse;
 	
 	public Explosion(Point2D.Double pos){
 		
 		super(false, pos, 10, 10, false);
-		this.setName("ExplodeOnImpact");
-		inUse = false;
+		this.setName("Explosion");
 		this.size = 1;
 	}
 	
@@ -27,16 +25,6 @@ public class Explosion extends PhysObject{
 		return this.size;
 	}
 	
-	public void setInUse(boolean u){
-		
-		this.inUse = u;
-		
-		
-	}
 	
-	public boolean getInUse(){
-		
-		return this.inUse;
-	}
 
 }

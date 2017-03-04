@@ -23,7 +23,7 @@ import Networking.Queue;
 public class HangerOn implements KeyListener,MouseListener { 
 	private Queue q;
 	private String name;
-	private boolean targetLine;
+
 	
 	/**
 	 * Constructor
@@ -33,7 +33,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	public HangerOn(Queue q,String name){
 		this.q =q;
 		this.name = name;
-		this.targetLine = false;
+	
 	}	
 	 
 	 ScreenBoard panel;
@@ -124,19 +124,17 @@ public class HangerOn implements KeyListener,MouseListener {
 		 q.offer(setExp);
 	 }
 	 
-	 public void setExpUse(String bool){
+	 public void setUse(String bool){
 		 
-		 String setExp = "setExpUse " + bool;
-		 q.offer(setExp);
+		 String setUse = "setUse " + bool;
+		 q.offer(setUse);
 	 }
 	 
-	 public void setTargetLine(boolean b){
+	 public void setTargetLine(String b){
 		 
-		 this.targetLine = b;
+		 String setTar = "setTar " + b;
+		 q.offer(setTar);
 	 }
 	 
-	 public boolean getTargetLine(){
-		 
-		 return this.targetLine;
-	 }
+	
  }

@@ -6,12 +6,12 @@ public class Weapon extends PhysObject {
 	
 	private boolean inUse;
 	
-	public Weapon(Point2D.Double pos, double xvel, double yvel) {
+	public Weapon(Point2D.Double pos, double xvel, double yvel, boolean inUse) {
 		super(true, pos, 10, 10, false);
 		this.setName("ExplodeOnImpact");
 		this.setXvel(xvel);
 		this.setYvel(yvel);
-		inUse = true;
+		this.inUse = inUse;
 	}
 	
 	public Weapon(Weapon other) {
@@ -19,17 +19,9 @@ public class Weapon extends PhysObject {
 		this.setName("ExplodeOnImpact");
 		this.setXvel(other.getXvel());
 		this.setYvel(other.getYvel());
-		inUse = other.getInUse();
+		this.inUse = other.getInUse();
 	}
 	
-	public boolean getInUse(){
-		
-		return inUse;
-	}
-	
-	public void setInUse(Boolean bool){
-		inUse = bool;
-	}
 	
 	@Override
 	public void update() {

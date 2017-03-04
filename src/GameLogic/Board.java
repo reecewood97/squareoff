@@ -483,7 +483,8 @@ public class Board {
 			WeaponMove wepMove = (WeaponMove)move;
 			//get weapon from arraylist
 			//TODO implement other weapon types
-			Weapon wep = new Weapon(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel());
+			Weapon wep = new Weapon(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel()
+					,true);
 			freeState = true;
 			objects.add(wep);
 		}
@@ -649,6 +650,32 @@ public class Board {
 		else if (input.contains("setWep")){
 			if(debugL)
 				System.out.println("Now a weapon in use");
+			else{
+				for(PhysObject weapon : this.getWeapons()){
+					
+					weapon.setInUse(true);
+					weapon.setName(input.substring(8));
+					
+				}
+			}
+		}
+		else if (input.contains("setExp")){
+			
+			for(PhysObject exp : this.getExplosion()){
+				
+				((Explosion) exp).setSize(Integer.parseInt(input.substring(8)));
+				
+			}
+				
+		}
+		else if (input.contains("setUse")){
+			
+			for(PhysObject exp : this.getExplosion()){
+				
+				exp.setInUse(Boolean.parseBoolean(input.substring(8)));
+				
+			}
+			
 		}
 		else
 		{
