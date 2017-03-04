@@ -90,7 +90,10 @@ public class ScreenBoard extends JPanel{
 			
 			//check if visible
 			if(visible){
-			
+				
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
+				
 				g2d.setColor(Color.black);
 				g2d.fillRect(newx,newy,blockwidth,blockheight);
 				
@@ -110,10 +113,7 @@ public class ScreenBoard extends JPanel{
 					
 				}
 				
-				//g2d.setColor(Color.DARK_GRAY);
-				//g2d.fillRect(newx+2, newy-2, blockwidth, blockheight);
-			
-				//g2d.setColor(Color.GRAY);
+
 				g2d.fillRect(newx+1,newy+1,blockwidth-2,blockheight-2);
 
 				

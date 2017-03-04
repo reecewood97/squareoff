@@ -74,30 +74,30 @@ public class Board {
 		objects.add(grn);
 				
 		//Draw blocks at bottom of map
-		objects.add(new TerrainBlock(1,1,1,new Point2D.Double(240,180), true));
+		objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
 		
 		for(int i = 100; i < 700; i+=40) {
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,150), true);
+			PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
 			objects.add(block);
 		}
 		
 		for(int i = 100; i < 700; i+=120){
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,225), true);
+			PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,225), true);
 			objects.add(block);
 			
 		}
 		
 		for(int i = 150; i < 700; i+=160){
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,300), true);
+			PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,300), true);
 			objects.add(block);
 			
 		}
 		
 		for(int i = 50; i < 700; i+=200){
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,375), true);
+			PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,375), true);
 			objects.add(block);
 			
 		}
