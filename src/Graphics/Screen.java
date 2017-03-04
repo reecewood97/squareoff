@@ -5,7 +5,9 @@ import java.awt.Dimension; import java.awt.Graphics;
 import java.awt.Graphics2D; 
 import java.awt.RenderingHints; 
 import java.awt.Toolkit; 
-import javax.swing.JFrame; 
+import javax.swing.JFrame;
+
+import Audio.Audio;
 import GameLogic.Board; 
 import Networking.Queue; 
 
@@ -46,7 +48,7 @@ public class Screen extends JFrame {
 		
 		this.newboard = newboard;
 				
-		ButtonPanel controls = new ButtonPanel(this,newboard);
+		ButtonPanel controls = new ButtonPanel(this,newboard, new Audio());
 		controls.setBackground(lightblue);
 		
 		setLayout(new BorderLayout());

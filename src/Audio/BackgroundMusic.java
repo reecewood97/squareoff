@@ -39,34 +39,33 @@ public class BackgroundMusic extends Thread implements Serializable{
 	
 	public void end(){
 	
-		System.out.println("3");
+		System.out.println("ending");
 		run = false;
 	}
 	
 	public void run(){
 		
-		System.out.println("4");
+		System.out.println("starting");
 		
 			while(run){	
-				//System.out.println("5");
+				System.out.println("5");
 				
 				
 				music.start();
-				music.loop(music.LOOP_CONTINUOUSLY);
 				
-				/*
+				
 				try {
-					System.out.println("6");
+					//System.out.println("6");
 					Thread.sleep(1400);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					System.out.println("7");
+					//System.out.println("7");
 				}
 				
 				music.stop();
 				System.out.println("8");
-				*/
+				
 			}
 		
 				
