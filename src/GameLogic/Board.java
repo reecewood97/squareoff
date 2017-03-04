@@ -627,6 +627,9 @@ public class Board {
 		}
 		else if(input.contains("Clicked")){
 			//if(this.wep.getInUse()){ I WANT TO WORK OUT IF A WEAPON IS SELECTED HERE?
+				
+				setTargetLine(false);
+				
 				int xs = input.indexOf('x');
 				int xe = input.indexOf(',');
 				String xc = input.substring(xs+2, xe);
@@ -676,6 +679,10 @@ public class Board {
 				
 			}
 			
+		}
+		else if(input.contains("setTar")){
+			
+			setTargetLine(Boolean.parseBoolean(input.substring(8)));
 		}
 		else
 		{

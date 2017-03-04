@@ -65,7 +65,7 @@ public class ScreenBoard extends JPanel{
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d);
 		paintExplosions(board.getExplosion(),g2d);
-		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
+		paintTargetLine(board.getWeapons(),true,g2d);
 	} 		
 	
 	
@@ -210,11 +210,15 @@ public class ScreenBoard extends JPanel{
 		if(b){
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
+			/*
 			g2d.drawLine((int) weapons.get(0).getPos().getX(), 
 					(int) weapons.get(0).getPos().getY(),
 					(int) mousepos.getX(),
 					(int) ((mousepos.getY())-(10*widthratio)));
-		
+			*/
+			
+			g2d.drawLine(30, 30, (int) mousepos.getX(), 
+					(int) (mousepos.getY()-(10*widthratio)));
 		}
 		
 		
