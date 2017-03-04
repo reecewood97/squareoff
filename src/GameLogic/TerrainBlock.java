@@ -20,6 +20,7 @@ public class TerrainBlock extends PhysObject {
 	}
 	
 	public TerrainBlock(TerrainBlock other){
+		//Creates a shallow copy of a TerrainBlock
 		super(other);
 		this.health = other.getHealth();
 		this.type = other.getType();

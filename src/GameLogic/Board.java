@@ -10,27 +10,30 @@ import java.awt.geom.Point2D;
 import java.lang.Math;
 
 public class Board {
+	//Keep track of the current player
 	private int player;
 	private int squareID;
+	private static Square activePlayer;
+	//Keep track of state of the board
+	private String map;
+	private ArrayList<PhysObject> objects;
+	private ArrayList<PhysObject> explosions;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = false;
-	private final boolean debugL = true;
+	private TurnMaster turn;
 	private boolean weaponsopen = false;
-	private ArrayList<PhysObject> objects;
+	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
 	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
-	private static Square activePlayer;
-	private TurnMaster turn;
 	private double XtravelDist = 4;
 	private boolean targetline;
-	private ArrayList<PhysObject> explosions;
-	private String map;
-	
+	//Debug
+	private final boolean debug = false;
+	private final boolean debugL = true;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
 		Scanner scanner = new Scanner(System.in);
 		while(true){
@@ -53,6 +56,7 @@ public class Board {
 	
 	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
+		explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
@@ -75,6 +79,7 @@ public class Board {
 		objects.add(yel);
 		objects.add(grn);
 		
+		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
 			//Draw blocks at bottom of map
 			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
@@ -141,10 +146,9 @@ public class Board {
 		
 		this.player = 0;
 		this.squareID = 0;
-		int x = player + squareID;
-		activePlayer = (Square)objects.get(x);
-		explosions = new ArrayList<PhysObject>();
+		activePlayer = (Square)objects.get(0);
 		
+		//ssshhhh dont tell anyone but im gonna add and delete stuff instead of changing the boolean
 		/*Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
@@ -234,10 +238,11 @@ public class Board {
 	
 	public ArrayList<PhysObject> getExplosion(){
 		
-		return new ArrayList<PhysObject>(explosions);
+		return explosions;
 		
 	}
 	
+	//All these big chunk of functions are for figuring out how far a square is from a block
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -372,6 +377,7 @@ public class Board {
 		}
 	}
 	
+	//Are two PhysObjects currently colliding?
 	private boolean collides(PhysObject obj1, PhysObject obj2) {
 		if(obj1.getSolid()==obj2.getSolid() || !obj1.getInUse() || !obj2.getInUse()){
 			return false;
@@ -407,6 +413,7 @@ public class Board {
 		}
 	}
 	
+	//If two objects are colliding, this method will be called to resolve the collision
 	private void resolveCollision(PhysObject thing, PhysObject block) {
 		if(thing.getName().equals("ExplodeOnImpact")){
 			if(debug) System.out.println("Resolving weapon collision");
@@ -453,6 +460,9 @@ public class Board {
 		}
 	}
 	
+	//For when no player is in control and things are bouncing about
+	//This method simulates a frame, detects collisions and resolves them.
+	//If nothing has changed since the last frame, move on.
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
@@ -512,6 +522,8 @@ public class Board {
 		objects = objs;
 	}
 	
+	
+	//Takes a move and updates one frame.
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim(); // just simulate another frame.

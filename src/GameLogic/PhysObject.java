@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class PhysObject implements Serializable{
 	// This class is meant to be extended by each other physics object
+	// i.e there should not exist an Object that is simply a PhysObject
 	
 	private boolean gravity;
 	private double grav;
@@ -34,8 +35,6 @@ public class PhysObject implements Serializable{
 	}
 	
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
-		//Probably best to use this constructor
-		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
 		this.grav = 2;
 		this.pos = pos;
@@ -53,6 +52,7 @@ public class PhysObject implements Serializable{
 		return inUse;
 	}
 	
+	//Updates one frame for this object
 	public void update() {
 		if(getInUse()){
 			setYvel(getYvel()-getGrav());
@@ -60,11 +60,13 @@ public class PhysObject implements Serializable{
 		}
 	}
 	
+	//Undoes the update for when a collision is detected
 	public void undoUpdate() {
 		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
 		setYvel(getYvel()+getGrav());
 	}
 	
+	//For collision detection
 	public boolean rectIntersect(PhysObject other){
 		double left = getPos().getX();
 		double right = getPos().getX()+getWidth();

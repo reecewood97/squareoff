@@ -15,6 +15,7 @@ public class Weapon extends PhysObject {
 	}
 	
 	public Weapon(Weapon other) {
+		//Creates a shallow copy of a weapon
 		super(other);
 		this.setName("ExplodeOnImpact");
 		this.setXvel(other.getXvel());
