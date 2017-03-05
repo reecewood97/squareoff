@@ -172,7 +172,7 @@ public class PhysObject implements Serializable{
 	@Override
 	public boolean equals(Object anObject) {
 		PhysObject p = (PhysObject)anObject;
-		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
+		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse() && this.getName().equals(p.getName())) {
 			return true;
 		}
 		return false;
