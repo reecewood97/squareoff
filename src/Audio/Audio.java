@@ -12,9 +12,9 @@ import javax.sound.sampled.Clip;
  */
 public class Audio implements Serializable
 {
-	
+	private static final long serialVersionUID = 3690097175800550800L;
 	private boolean sound;
-	private BackgroundMusic music = new BackgroundMusic();
+	private BackgroundMusic music; 
 	
 	/**
 	 * constructor
@@ -22,17 +22,6 @@ public class Audio implements Serializable
 	public Audio(){
 		
 		this.sound = true;
-		
-	}
-	
-	
-	/**
-	 * get background music
-	 * @return music The background music
-	 */
-	public BackgroundMusic getBackgroundMusic() {
-		
-		return music;
 	}
 	
 	/**
@@ -40,6 +29,7 @@ public class Audio implements Serializable
 	 */
 	public void startBackgroundMusic(){
 		
+		music = new BackgroundMusic();
 		music.start();
 	}
 	
@@ -57,24 +47,25 @@ public class Audio implements Serializable
 	 */
 	public void explosion(){
 		
-		try {
-	      
-			//create explosion sound
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-					new File("Files/Audio/EXPLOSION.wav").getAbsoluteFile());
-	        Clip explosion = AudioSystem.getClip();
-	        explosion.open(audioInputStream);
-	       
-	        //play
-	        explosion.start();
-	         
-	    } 
-		catch(Exception ex) {
-	        
-			System.out.println("Error playing sound");
-	        ex.printStackTrace();
-	    }
-		
+		if(sound){
+			try {
+		      
+				//create explosion sound
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+						new File("Files/Audio/EXPLOSION.wav").getAbsoluteFile());
+		        Clip explosion = AudioSystem.getClip();
+		        explosion.open(audioInputStream);
+		       
+		        //play
+		        explosion.start();
+		         
+		    } 
+			catch(Exception ex) {
+		        
+				System.out.println("Error playing sound");
+		        ex.printStackTrace();
+		    }
+		}
 	}
 	
 	/**
@@ -82,22 +73,24 @@ public class Audio implements Serializable
 	 */
 	public void click(){
 		
-		try {
-			
-			//create click sound
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-					new File("Files/Audio/CLICK.wav").getAbsoluteFile());
-	        Clip click = AudioSystem.getClip();
-	        click.open(audioInputStream);
-	       
-	        //play
-	        click.start();
-	        
-		}
-		catch(Exception ex){
-			
-			System.out.println("Error playing sound");
-	        ex.printStackTrace();
+		if(sound){
+			try {
+				
+				//create click sound
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+						new File("Files/Audio/CLICK.wav").getAbsoluteFile());
+		        Clip click = AudioSystem.getClip();
+		        click.open(audioInputStream);
+		       
+		        //play
+		        click.start();
+		        
+			}
+			catch(Exception ex){
+				
+				System.out.println("Error playing sound");
+		        ex.printStackTrace();
+			}
 		}
 	}
 	
@@ -107,22 +100,24 @@ public class Audio implements Serializable
 	 */
 	public void splash(){
 		
-		try {
-			
-			//create splash sound
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-					new File("Files/Audio/splash.wav").getAbsoluteFile());
-	        Clip splash = AudioSystem.getClip();
-	        splash.open(audioInputStream);
-	       
-	        //play
-	        splash.start();
-	        
-		}
-		catch(Exception ex){
-			
-			System.out.println("Error playing sound");
-	        ex.printStackTrace();
+		if(sound){
+			try {
+				
+				//create splash sound
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+						new File("Files/Audio/splash.wav").getAbsoluteFile());
+		        Clip splash = AudioSystem.getClip();
+		        splash.open(audioInputStream);
+		       
+		        //play
+		        splash.start();
+		        
+			}
+			catch(Exception ex){
+				
+				System.out.println("Error playing sound");
+		        ex.printStackTrace();
+			}
 		}
 	}
 	

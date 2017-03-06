@@ -3,33 +3,44 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import GameLogic.Board;
-import UserInterface.mainMenu;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import Audio.*;
 
-
-@SuppressWarnings("serial")
+/**
+ * 
+ * @author Fran
+ *
+ * creates the panel at the top of the game arena for users to toggle sound and quit
+ */
 public class ButtonPanel extends JPanel{
 
+	private static final long serialVersionUID = 1L;
 	private boolean music_on = true;
 	private boolean first = true;
 	private Audio audio;
 	private Board board;
 	private HangerOn listeners;
 	
-	public ButtonPanel(Screen screen, Board board) {
+	/**
+	 * constructor 
+	 * @param screen The screen
+	 * @param board The current board
+	 * @param audio The audio
+	 */
+	public ButtonPanel(Screen screen, Board board, Audio audio) {
 		
 		super();
 		
+		//create main panel
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
 		mainpanel.setBackground(Color.WHITE);
-		//mainpanel.setBounds(0, 0, screenwidth, height);
 		
+		//set attributes
+		this.audio = audio;
 		this.board = board;
 		this.listeners = screen.getHangerOn();
 		
@@ -43,7 +54,6 @@ public class ButtonPanel extends JPanel{
         exit.setOpaque(false);
 		
         //start audio
-        audio = new Audio();
 		audio.startBackgroundMusic();
 		
 		//toggle sound button
@@ -55,7 +65,7 @@ public class ButtonPanel extends JPanel{
 		sound.setFocusPainted(false); 
 		sound.setOpaque(false);
 		
-		//weapons menu button
+		//weapons menu button (only till key pressed used)
 		JButton weapons = new JButton("weapons menu");
 	    weapons.addActionListener(e -> showWeaponsMenu());
 		weapons.setBorderPainted(false); 
@@ -71,26 +81,40 @@ public class ButtonPanel extends JPanel{
 
 	}
 	
-	@SuppressWarnings("static-access")
+	/**
+	 * closes the screen
+	 * 
+	 * @param screen The screen
+	 * @param board The current board
+	 */
 	public void openMainMenu(Screen screen, Board board){
 	
-		board.notifyQuit();
-		
+		board.notifyQuit(); //method not complete
 		screen.setVisible(false);
-		//mainMenu mainmenu = new mainMenu();
-		//mainMenu.showUI();
 		
 	}
-	
+
+	/**
+	 * open weapons menu
+	 * 
+	 */
 	public void showWeaponsMenu(){
 		
+		//click sound
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
+		//open menu
 		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 		menu.open();
 		
 	}
+	
+	/**
+	 * turn background music on and off
+	 * 
+	 * @param button The toggle button
+	 */
 	public void ToggleBackgroundMusic(JButton button){
 		
 		if(first){
@@ -100,15 +124,14 @@ public class ButtonPanel extends JPanel{
 		
 			if(music_on){
 				
-				//System.out.println("music on");
 				button.setOpaque(true);
 				audio.endBackgroundMusic();
 			}
 			else{
 				
-				//System.out.println("music off");
 				button.setOpaque(false);
-				audio = new Audio();
+				audio.endBackgroundMusic();
+				//audio = new Audio();
 				audio.startBackgroundMusic();
 			}
 		}
@@ -117,13 +140,14 @@ public class ButtonPanel extends JPanel{
 		
 	}
 	
+	/**
+	 * change button colour when pressed initially
+	 * @param button
+	 */
 	public void firstOff(JButton button){
-		button.setOpaque(true);
-		audio.getBackgroundMusic().end();
-		first = false;
-	}
-	
-
 		
-	
+		button.setOpaque(true);
+		audio.endBackgroundMusic();
+		first = false;
+	}	
 }

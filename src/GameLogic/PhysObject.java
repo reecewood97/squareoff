@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class PhysObject implements Serializable{
 	// This class is meant to be extended by each other physics object
+	// i.e there should not exist an Object that is simply a PhysObject
 	
 	private boolean gravity;
 	private double grav;
@@ -19,23 +20,21 @@ public class PhysObject implements Serializable{
 	private boolean solid;
 	private boolean inUse;
 	
-	public PhysObject() {
-		//Initiates a new physics object with no values... if you want...
-		this.gravity = false;
-		this.grav = 2;
-		this.pos = new Point2D.Double(0, 0);
-		this.xvel = 0;
-		this.yvel = 0;
-		this.attributes = new ArrayList<String>();
-		this.width = 10;
-		this.height = 10;
-		this.solid = true;
-		this.inUse = true;
+	public PhysObject(PhysObject other) {
+		//Creates a shallow copy
+		this.gravity = other.getGravity();
+		this.grav = other.getGrav();
+		this.pos = other.getPos();
+		this.xvel = other.getXvel();
+		this.yvel = other.getYvel();
+		this.attributes = other.getAttributes();
+		this.width = other.getWidth();
+		this.height = other.getHeight();
+		this.solid = other.getSolid();
+		this.inUse = other.getInUse();
 	}
 	
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
-		//Probably best to use this constructor
-		//If you want to set changed, velocity, or attributes, you have to do it after construction
 		this.gravity = gravity;
 		this.grav = 2;
 		this.pos = pos;
@@ -53,6 +52,7 @@ public class PhysObject implements Serializable{
 		return inUse;
 	}
 	
+	//Updates one frame for this object
 	public void update() {
 		if(getInUse()){
 			setYvel(getYvel()-getGrav());
@@ -60,9 +60,25 @@ public class PhysObject implements Serializable{
 		}
 	}
 	
+	//Undoes the update for when a collision is detected
 	public void undoUpdate() {
 		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
 		setYvel(getYvel()+getGrav());
+	}
+	
+	//For collision detection
+	public boolean rectIntersect(PhysObject other){
+		double left = getPos().getX();
+		double right = getPos().getX()+getWidth();
+		double bottom = getPos().getY();
+		double top = getPos().getY()+getHeight();
+		double otherleft = other.getPos().getX();
+		double otherright = other.getPos().getX()+getWidth();
+		double otherbottom = other.getPos().getY();
+		double othertop = other.getPos().getY()+getHeight();
+		boolean column = (((otherleft<=left) && (left<=otherright)) || ((otherleft<=right) && (right<=otherright)));
+		boolean row = ((otherbottom<=bottom) && (bottom<=othertop) || ((otherbottom<=top) && (top<=othertop)));
+		return(column && row);
 	}
 	
 	public boolean getGravity() {
@@ -156,7 +172,7 @@ public class PhysObject implements Serializable{
 	@Override
 	public boolean equals(Object anObject) {
 		PhysObject p = (PhysObject)anObject;
-		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse()) {
+		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse() && this.getName().equals(p.getName())) {
 			return true;
 		}
 		return false;

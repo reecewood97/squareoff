@@ -11,33 +11,33 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import GameLogic.UserInput;
 import Networking.Queue;
 
+/**
+ * This is a simple listener class meant to seperate the function from the form with the UI
+ */
 public class HangerOn implements KeyListener,MouseListener { 
+	
 	private Queue q;
 	private String name;
-	private boolean targetLine;
+	private ScreenBoard panel;
 	
+	/**
+	 * Constructor
+	 * @param q A blocking queue that's used to hold input ready to be sent to the server
+	 * @param name The client name is used to "sign" the moves they send to the server to discern whos turn it is.
+	 */
 	public HangerOn(Queue q,String name){
 		this.q =q;
 		this.name = name;
-		this.targetLine = false;
-	}
 	
-	 //ArrayBlockingQueue<String> q = new ArrayBlockingQueue<String>(100);		
+	}	
 	 
-	 ScreenBoard panel;
 	 
-//	 public String getMoveStr() throws InterruptedException{
-//		 String ret = q.take();	
-//		 return ret;
-//		 }
 	 
+	 /**
+	  * One of two big listeners, this handles keys pressed on the keyboard, formats them and adds to the queue.
+	  */
 	 @Override
 	 public void keyPressed(KeyEvent e) {
 		 String keyString;
@@ -56,6 +56,11 @@ public class HangerOn implements KeyListener,MouseListener {
 	 public void keyTyped(KeyEvent e) {
 	 } 	
 	 
+	 /**
+	  * This is the method for which the class is named, when given a panel we add our formatted listeners to it.
+	  * @param panel The panel we want to apply listeners to.
+	  * @return The panel with the listeners.
+	  */
 	 public ScreenBoard hangOn2(ScreenBoard panel) {
 		 this.panel = panel;
 		 panel.addKeyListener(this);
@@ -65,7 +70,9 @@ public class HangerOn implements KeyListener,MouseListener {
 		 return panel;
 	 } 
 	 
-	 
+	 /**
+	  * A second listener, deals with formatting and sending mouse input.
+	  */
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
 		 if(e.getButton() == 1){
@@ -76,6 +83,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 }
 		 //panel.grabFocus();
 	 }
+	 
 	 @Override
 	 public void mouseEntered(MouseEvent e) { 		
 	 // TODO Auto-generated method stub
@@ -94,30 +102,45 @@ public class HangerOn implements KeyListener,MouseListener {
 	 //q.offer(releasedEvent);
 	 }
 	 
+	 /**
+	  * A method called in the graphics package, the choice of weapon is worked out by the UI and sent here to be sent to the server
+	  * @param type The type of weapon that was selected.
+	  */
 	 public void setWep(String type){
 		 String setWep = "setWep "+type;
+		 System.out.println(type);
 		 q.offer(setWep);
 	 }
 	 
+	 /**
+	  * A method used for updating graphics explosion animations on the server side.
+	  * @param size The current size of the explosion.
+	  */
 	 public void setExp(String size){
 		 
 		 String setExp = "setExp " + size;
 		 q.offer(setExp);
 	 }
 	 
-	 public void setExpUse(String bool){
+	 
+	 /**
+	  * A method used for updating graphics explosion animations on the server side.
+	  * @param bool Whether the explosion should be shown or not
+	  * @author fran
+	  */
+	 public void setUse(String bool){
 		 
-		 String setExp = "setExpUse " + bool;
-		 q.offer(setExp);
+		 String setUse = "setUse " + bool;
+		 q.offer(setUse);
 	 }
 	 
-	 public void setTargetLine(boolean b){
+	 
+	 
+	 public void setTargetLine(String b){
 		 
-		 this.targetLine = b;
+		 String setTar = "setTar " + b;
+		 q.offer(setTar);
 	 }
 	 
-	 public boolean getTargetLine(){
-		 
-		 return this.targetLine;
-	 }
+	
  }

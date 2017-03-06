@@ -4,37 +4,55 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
-
 import Audio.Audio;
-
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 import java.lang.Math;
 
+//Ideas for weapons in the future; some can be pickup-only, some can be basic.
+//The missile idea sounds cool but very hard to implement :(
+//1. Air-strike; Click to send airplane across top of screen, click again to release multiple bombs.
+//2. TNT; Choose any block. After one full cycle of turns it will explode.
+//3. Grenade with a timer instead of exploding on impact.
+//4. Anti-grav bomb; bomb that falls upwards instead of downwards.
+//5. Dont use any weapon and instead fling your square across the map.
+
+
+//Formula for adding more weapons. All these things need to be implemented.
+//Weapons are no longer all going to extend Weapon, sorry for the confusion.
+//1. Create new class. Modify all necessary methods from PhysObject which would be different.
+//2. Create new get method for this type of weapon.
+//3. Modify collision methods to detect the defining string of the weapon
+//4. update freeSim arrayList copy cases
+//5. update updateFrame weaponMove cases
+//
+
 public class Board {
+	//Keep track of the current player
 	private int player;
 	private int squareID;
+	private static Square activePlayer;
+	//Keep track of state of the board
+	private String map;
+	private ArrayList<PhysObject> objects;
+	private ArrayList<PhysObject> explosions;
 	private int winner = -1;
 	private boolean freeState;
-	private final boolean debug = true;
+	private TurnMaster turn;
 	private boolean weaponsopen = false;
-	private ArrayList<PhysObject> objects;
+	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
 	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
-	private static Square activePlayer;
-	private TurnMaster turn;
 	private double XtravelDist = 4;
 	private boolean targetline;
-	private ArrayList<PhysObject> explosions;
-	
+	//Debug
+	private final boolean debug = true;
+	private final boolean debugL = true;
 
-	public static void main(String[] args) {
-		Board board = new Board();
+	public static void main(String[] args) { //For testing purposes only
+		Board board = new Board("map1");
 		Scanner scanner = new Scanner(System.in);
 		while(true){
 			String input = scanner.nextLine();
@@ -54,12 +72,15 @@ public class Board {
 		}
 	}
 	
-	public Board(){
+	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
+		explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
 		this.targetline = false;
+		this.map = map;
+		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -76,42 +97,77 @@ public class Board {
 		objects.add(blu);
 		objects.add(yel);
 		objects.add(grn);
+		
+		//Which map are we playing on? Initialise the correct one.
+		if(this.map.equals("map1")){
+			//Draw blocks at bottom of map
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
+			
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
+				objects.add(block);
+			}
+			
+			for(int i = 100; i < 700; i+=120){
 				
-		//Draw blocks at bottom of map
-		objects.add(new TerrainBlock(1,1,1,new Point2D.Double(240,180), true));
-		
-		for(int i = 100; i < 700; i+=40) {
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,150), true);
-			objects.add(block);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,225), true);
+				objects.add(block);
+				
+			}
+			
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,300), true);
+				objects.add(block);
+				
+			}
+			
+			for(int i = 50; i < 700; i+=200){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,375), true);
+				objects.add(block);
+				
+			}
 		}
-		
-		for(int i = 100; i < 700; i+=120){
+		else{
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,225), true);
-			objects.add(block);
+			//Draw blocks at bottom of map
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
 			
-		}
-		
-		for(int i = 150; i < 700; i+=160){
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,150), true);
+				objects.add(block);
+			}
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,300), true);
-			objects.add(block);
+			for(int i = 100; i < 700; i+=120){
+				
+				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,200), true);
+				objects.add(block);
+				
+			}
 			
-		}
-		
-		for(int i = 50; i < 700; i+=200){
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,250), true);
+				objects.add(block);
+				
+			}
 			
-			PhysObject block = new TerrainBlock(1, 1, 1,new Point2D.Double(i,375), true);
-			objects.add(block);
+			for(int i = 50; i < 700; i+=200){
+				
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,475), true);
+				objects.add(block);
+				
+			}
+			
 			
 		}
 		
 		this.player = 0;
 		this.squareID = 0;
-		int x = player + squareID;
-		activePlayer = (Square)objects.get(x);
-		explosions = new ArrayList<PhysObject>();
+		activePlayer = (Square)objects.get(0);
 		
+		//ssshhhh dont tell anyone but im gonna add a new wep instead of changing the boolean
 		/*Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
@@ -161,17 +217,23 @@ public class Board {
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
-			
-			if (obj.getName().equals("ExplodeOnImpact")){
-				
+			if (obj.getName().startsWith("Weapon")){
 				weapons.add(obj);
 			}
 		}
-		
 		return weapons;
 	}
 	
-	
+	public ArrayList<PhysObject> getExplodeOnImpact(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("ExplodeOnImpact")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
+		
 	public ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -201,10 +263,11 @@ public class Board {
 	
 	public ArrayList<PhysObject> getExplosion(){
 		
-		return new ArrayList<PhysObject>(explosions);
+		return explosions;
 		
 	}
 	
+	//All these big chunk of functions are for figuring out how far a square is from a block
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -339,70 +402,109 @@ public class Board {
 		}
 	}
 	
+	//Are two PhysObjects currently colliding?
 	private boolean collides(PhysObject obj1, PhysObject obj2) {
 		if(obj1.getSolid()==obj2.getSolid() || !obj1.getInUse() || !obj2.getInUse()){
 			return false;
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
-			if(obj2.getName().equals("ExplodeOnImpact")){
-				if(debug) System.out.println("Weapon collision detected");
+			if(obj2.getName().endsWith("ExplodeOnImpact") || obj2.getName().endsWith("TimedGrenade")){ //All circular objects
+				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
 			}
 		} else {
-			if(obj1.getName().equals("ExplodeOnImpact")){
-				if(debug) System.out.println("Weapon collision detected");
+			if(obj1.getName().endsWith("ExplodeOnImpact") || obj1.getName().endsWith("TimedGrenade")){ //All circular objects
+				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return circle.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			} else {
-				Rectangle2D.Double rect = new Rectangle2D.Double
-						(obj1.getPos().getX()+obj1.getHeight(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				return obj1.rectIntersect(obj2);
+				/*Rectangle2D.Double rect = new Rectangle2D.Double
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects
-						(obj2.getPos().getX()+obj2.getHeight(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());*/
 			}
 		}
 	}
 	
-	private void resolveCollision(PhysObject thing,int lspos, PhysObject block) {
-		if(thing.getName().equals("ExplodeOnImpact")){
-			if(debug) System.out.println("Resolving weapon collision");
+	//If two objects are colliding, this method will be called to resolve the collision
+	private void resolveCollision(PhysObject thing, PhysObject block) {
+		if(thing.getName().endsWith("ExplodeOnImpact")) {
+			if(debug) System.out.println("Resolving impactGrenade collision");
 			thing.setInUse(false);
-			Weapon wep = (Weapon)thing;
-			wep.setInUse(false);
-			wep.setPos(new Point2D.Double(30, 30));
+			explosions.add(new Explosion(new Point2D.Double(thing.getPos().getX(),thing.getPos().getY())));
 			TerrainBlock castedblock = (TerrainBlock)block;
 			castedblock.damage(1);
 			explosions.add(new Explosion(thing.getPos()));
-			//TODO later implement different weapon types, and this doesn't work
 		}
-		else {
-			thing = objects.get(lspos);
+		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
+			}
+			else if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
+			}
+			else if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
+				if(Math.abs(thing.getXvel())<=2){
+					thing.setXvel(0);
+				}
+				else {
+					thing.setXvel(0.9*thing.getXvel());
+				}
+				if(thing.getYvel()>=(-2)) {
+					thing.setYvel(0);
+					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+				}
+				else {
+					thing.setYvel((-0.3)*thing.getYvel());
+				}
+			}
+			else if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+				thing.setYvel((-0.3)*thing.getYvel());
+			}
+			else {
+				thing.setYvel((-0.4)*thing.getYvel());
+				thing.setXvel((-0.4)*thing.getXvel());
+			}
+		}
+		else { // Collisions for squares
+			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
 			}
 			if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
 				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
 			}
 			if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
-				if(debug) System.out.println(thing.getYvel());
-				if(Math.abs(thing.getXvel())<=2.5){
-					if(debug)System.out.println("Sticky X");
+				if(Math.abs(thing.getXvel())<=2){
 					thing.setXvel(0);
 				}
 				else {
 					thing.setXvel(0.6*thing.getXvel());
 				}
-				if(thing.getYvel()>=(-2.5)) {
-					if(debug)System.out.println("Sticky Y");
+				if(thing.getYvel()>=(-2)) {
 					thing.setYvel(0);
 					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
 				}
@@ -416,14 +518,23 @@ public class Board {
 		}
 	}
 	
+	//For when no player is in control and things are bouncing about
+	//This method simulates a frame, detects collisions and resolves them.
+	//If nothing has changed since the last frame, move on.
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
-		System.out.println("freesim starts");
-		ArrayList<PhysObject> objs = new ArrayList<PhysObject>(objects);
+		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
+		for(int i=0; i < objects.size();i++){
+			switch(objects.get(i).getName()) {
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "Square": objs.add(new Square((Square)objects.get(i))); break;
+			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
+			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
+			default: System.out.println("error copying arraylists in freeSim"); break;
+			}
+		}
 		for (PhysObject obj : objs) {
-			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 			obj.update();
-			//if(obj.getName().equals("Square")) {if(debug)System.out.println(obj.getPos().getY());}
 		}
 		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
@@ -438,45 +549,53 @@ public class Board {
 					else {
 						Collision collis = new Collision(objs.get(j), objs.indexOf(objs.get(j)), objs.get(i));
 						if(!list.contains(collis)){
-						list.add(collis);
+							list.add(collis);
 						}
 					}
 				}
 			}
 		}
 		for(Collision collision: list){
+			/*if(collision.getThing().getName().equals("Square")){
+				if(((Square)collision.getThing()).getPlayerID()==1){
+					System.out.println("resolving red square collision with block at: "+
+						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
+				}
+			}*/
 			collision.getThing().undoUpdate();
-			if(debug) System.out.println(collision.getThing().getPos().getY());
-			resolveCollision(collision.getThing(), collision.lspos(), collision.getBlock());
+			resolveCollision(collision.getThing(), collision.getBlock());
 		}
 		boolean same = true;
-		if(debug) System.out.println(objects.size());
-		if(debug) System.out.println(objs.size());
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
+				//System.out.println(objects.get(i).getYvel()+" is changing to "+objs.get(i).getYvel());
 				same = false;
-				System.out.println(objs.get(i).getName()+ "not equal to "+ objects.get(i).getName());
 			}
 		}
 		if(same){
 			if(debug)System.out.println("FreeState exited due to no movement");
 			freeState=false;
-			turn.resetTimer();
 			incrementTurn();
 		}
+		turn.resetTimer();
 		objects = objs;
-		System.out.println("freesim ends");
 	}
 	
+	
+	//Takes a move and updates one frame.
 	public void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
-			freeSim();  // just simulate another frame.
+			freeSim(); // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
-			//get weapon from arraylist
-			//TODO implement other weapon types
-			Weapon wep = new Weapon(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel());
+			PhysObject wep = null;
+			switch(wepMove.wepType()){
+			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
+					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			case "TimedGrenade": wep = new TimedGrenade(
+					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			}
 			freeState = true;
 			objects.add(wep);
 		}
@@ -564,33 +683,15 @@ public class Board {
 				turn.resetTimer();
 				
 			}
+			int x = player+squareID;
+			objects.add(x,activePlayer);
+			objects.remove(x+1);
 		}
-		//if (debug) System.out.println(getActivePlayer().getPos().getX()+", "+getActivePlayer().getPos().getY());
-		//if (debug) System.out.println(player);
-		int x = player+squareID;
-		objects.add(x,activePlayer);
-		objects.remove(x+1);
-	}
-	
-	
-	/**
-	 * Used on the client-side, receiving an update string from the server.
-	 * @param update The update string.
-	 */
-	//This method wont even be needed anymore
-	public void update(Object update) {
-//		System.out.println(update);
-//		String[] updateA = update.split(" ");
-//		Square active = (Square)objects.get(Integer.parseInt(updateA[0]));
-//		Point2D.Double xy = new Point2D.Double(Double.parseDouble(updateA[1]),Double.parseDouble(updateA[2]));
-//		active.setPoint(xy);
-//		objects.remove(Integer.parseInt(updateA[0]));
-//		objects.add(Integer.parseInt(updateA[0]), active);
 	}
 	
 	/**
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
-	 * @param inputs
+	 * @param inputs the formatted string from hangerOn.
 	 */
 	//public void input(Move input){
 	public void input(String input) {
@@ -600,7 +701,6 @@ public class Board {
 			if(input.contains(players[player])){
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
-			String ret = null;
 			Move mv;
 			
 			switch(inputKey){
@@ -627,10 +727,6 @@ public class Board {
 							q.remove();
 						q.add(objects);
 						active.setFacing("Right");
-			//case "L" : //mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
-					   //updateFrame(mv);
-			  //         q.add(objects);
-			    //       weaponsopen = true;
 				break;
 			default : if (input.contains("Space")){
 							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
@@ -639,32 +735,64 @@ public class Board {
 			}
 		}
 		}
-		else if(input.contains("clicked")){
-			//if (weapon in use)
-				//Use it
-			//else
-				//Remind the player to select a weapon
-			WeaponMove wmv;
-			int xs = input.indexOf('x');
-			int xe = input.indexOf(',');
-			String xc = input.substring(xs+2, xe);
-			int ye = input.indexOf(']');
-			String yc = input.substring(xe+3, ye);
-			
-			Double x = Double.parseDouble(xc);
-			Double y =800- Double.parseDouble(yc);
-			Point2D.Double origin = new Point2D.Double(x, y);
-			System.out.println(origin);
-			
-			wmv = new WeaponMove("None",origin,9,4);
-			updateFrame(wmv);
-			if (q.size() > 0)
-				q.remove();
-			q.add(objects);
+		else if(input.contains("Clicked")){
+			//if(this.wep.getInUse()){ I WANT TO WORK OUT IF A WEAPON IS SELECTED HERE?
+				
+				setTargetLine(false);
+				
+				int xs = input.indexOf('x');
+				int xe = input.indexOf(',');
+				String xc = input.substring(xs+2, xe);
+				int ye = input.indexOf(']');
+				String yc = input.substring(xe+3, ye);
+				
+				Double x = Double.parseDouble(xc);
+				Double y =800- Double.parseDouble(yc);
+				Point2D.Double target = new Point2D.Double(x, y);
+				
+				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",active.getPoint(),0,0);
+				//updateFrame(wmv);
+				if (q.size() > 0)
+					q.remove();
+				q.add(objects);
+			//}
+			//else{
+				//Create a weapon error check for the server
+			//}
 		}
 		else if (input.contains("setWep")){
-			//Create a new weapon
-			//Make it in use
+			if(debugL)
+				System.out.println("Now a weapon in use");
+			else{
+				for(PhysObject weapon : this.getWeapons()){
+					
+					weapon.setInUse(true);
+					weapon.setName(input.substring(8));
+					
+				}
+			}
+		}
+		else if (input.contains("setExp")){
+			
+			for(PhysObject exp : this.getExplosion()){
+				
+				((Explosion) exp).setSize(Integer.parseInt(input.substring(8)));
+				
+			}
+				
+		}
+		else if (input.contains("setUse")){
+			
+			for(PhysObject exp : this.getExplosion()){
+				
+				exp.setInUse(Boolean.parseBoolean(input.substring(8)));
+				
+			}
+			
+		}
+		else if(input.contains("setTar")){
+			
+			setTargetLine(Boolean.parseBoolean(input.substring(8)));
 		}
 		else
 		{
@@ -683,10 +811,18 @@ public class Board {
 		return q.take();
 	}
 	
+	/**
+	 * Returns the PhysObject arraylist that tracks all moving parts in the game
+	 * @return the list of objects that are affected by physics.
+	 */
 	public ArrayList<PhysObject> getObjects(){
 		return objects;
 	}
 	
+	/**
+	 * Update the list of objects affected by physics, used on the client version of the boards so they know what changes the server has made.
+	 * @param obj the updated list of objects
+	 */
 	public void  setObjects(ArrayList<PhysObject> obj){
 		this.objects = obj;
 	}
@@ -701,6 +837,9 @@ public class Board {
 		weaponsopen = open;
 	}
 	
+	/**
+	 * Called when the game actually begins, starts the turn timer and fiddles with the player list.
+	 */
 	public void startGame(){
 		this.turn = new TurnMaster(this);
 		turn.start();
@@ -711,6 +850,9 @@ public class Board {
 			}
 		}
 	}
+	/**
+	 * Increments the active player
+	 */
 	public void incrementTurn(){
 		if (player != 3){
 			player = player+1;
@@ -719,7 +861,6 @@ public class Board {
 			//squareID = squareID+1;
 		}
 		setActivePlayer(player,squareID);
-		//System.out.println(player);
 		if (!(activePlayer.getAlive())){
 			incrementTurn();
 		}
@@ -730,6 +871,10 @@ public class Board {
 		numberOfPlayers++;
 	}
 	
+	/**
+	 * Checks the arraylist of Squares to see if any two living squares have different players
+	 * @return True if all living squares are played by the same player, false otherwise.
+	 */
 	private boolean checkForWinner(){
 		ArrayList<PhysObject> chickenDinner = getSquares();
 		
