@@ -1,21 +1,25 @@
 package Networking;
 
+import java.util.ArrayList;
+
 import GameLogic.Board;
+import ai.AI;
 
 public class GameLoop extends Thread {
 	
 	private Board board;
+	private ArrayList<AI> ais;
 	private boolean running;
 	
-	public GameLoop(Board board) {
+	public GameLoop(Board board, ArrayList<AI> ais) {
 		this.board = board;
+		this.ais = ais;
 	}
 	
 	public void run() {
 		running = true;
 		while(running) {
 			board.input("None");
-			System.out.println("update");
 			try {
 				sleep(40);
 			}

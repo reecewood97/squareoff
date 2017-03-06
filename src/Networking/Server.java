@@ -71,7 +71,9 @@ public class Server extends Thread {
 	}
 	
 	public void startGame() {
-		addAIs();
+		
+		ArrayList<AI> ais = new ArrayList<AI>();
+		addAIs(ais);
 	
 		for(ServerReceiver r: table.getReceivers()) {
 			r.startGame();
@@ -79,10 +81,10 @@ public class Server extends Thread {
 		}
 
 		board.startGame();	
-		new GameLoop(board).start();
+		new GameLoop(board, ais).start();
 	}
 	
-	private void addAIs() {
+	private void addAIs(ArrayList<AI> ais) {
 		for(ServerReceiver s: table.getReceivers()) {
 			s.getPlayerName();
 		}
@@ -90,7 +92,8 @@ public class Server extends Thread {
 		int numberOfPlayers = players.size();
 		
 		for(int i = numberOfPlayers; i < maxPlayers; i++) {
-			new AI(i, i, i, board); //Err... I don't know what to do here.
+			AI ai = new AI(i, i, i, board);
+			ais.add(ai);
 			players.add("AI " + (i + 1 - numberOfPlayers));
 		}
 	}
