@@ -48,6 +48,10 @@ public class PhysObject implements Serializable{
 		this.inUse = true;
 	}
 	
+	public int getFrames() {
+		return 1;
+	}
+	
 	public boolean getInUse() {
 		return inUse;
 	}

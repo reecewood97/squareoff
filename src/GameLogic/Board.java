@@ -233,6 +233,16 @@ public class Board {
 		}
 		return weapons;
 	}
+	
+	public ArrayList<PhysObject> getTimedGrenade(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("TimedGrenade")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
 		
 	public ArrayList<PhysObject> getBlocks(){
 		
@@ -438,15 +448,40 @@ public class Board {
 		}
 	}
 	
+	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
+		//for i from x to y, all squares push away, all blocks damage
+		double i = (2*size/5);
+		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("TerrainBlock")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					((TerrainBlock)thing).damage(damage);
+				}
+			}
+		}
+		i = size;
+		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("Square")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					Square square = ((Square)thing);
+					square.setXvel(square.getXvel()+(power/(thing.getPos().getX()-x)));
+					square.setYvel(square.getYvel()+(power/(thing.getPos().getY()-y)));
+				}
+			}
+		}
+		explosions.add(new Explosion(new Point2D.Double(x, y), size));
+	}
+	
 	//If two objects are colliding, this method will be called to resolve the collision
-	private void resolveCollision(PhysObject thing, PhysObject block) {
+	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if(thing.getName().endsWith("ExplodeOnImpact")) {
 			if(debug) System.out.println("Resolving impactGrenade collision");
 			thing.setInUse(false);
-			explosions.add(new Explosion(new Point2D.Double(thing.getPos().getX(),thing.getPos().getY())));
-			TerrainBlock castedblock = (TerrainBlock)block;
-			castedblock.damage(1);
-			explosions.add(new Explosion(thing.getPos()));
+			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
+					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
 		}
 		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
@@ -563,8 +598,21 @@ public class Board {
 				}
 			}*/
 			collision.getThing().undoUpdate();
-			resolveCollision(collision.getThing(), collision.getBlock());
+			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
+		//TODO check if TimedGrenades and other time-related things have run out
+		for(PhysObject obj: objs){
+			switch(obj.getName()){
+			case "WeaponTimedGrenade": 
+				TimedGrenade grenade = (TimedGrenade) obj;
+				grenade.setInUse(false);
+				createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
+					grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
+				break;
+			default: break;
+			}
+		}
+		
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
