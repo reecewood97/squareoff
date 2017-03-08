@@ -37,8 +37,8 @@ public class TimedGrenade extends PhysObject { //This object should be painted c
 	//Undoes the update for when a collision is detected
 	@Override
 	public void undoUpdate() {
-		setPos(new Point2D.Double(getPos().getX()-getXvel(), getPos().getY()-getYvel()));
 		setYvel(getYvel()+getGrav());
+		setPos(new Point2D.Double(getPos().getX()-getXvel(), getPos().getY()-getYvel()));
 		framesLeft = framesLeft+1;
 	}
 	

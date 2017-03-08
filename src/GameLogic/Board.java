@@ -590,6 +590,9 @@ public class Board {
 				}
 			}
 		}
+		System.out.println(list.size());
+		System.out.println(getBlocks().size());
+		System.out.println(objs.size());
 		for(Collision collision: list){
 			/*if(collision.getThing().getName().equals("Square")){
 				if(((Square)collision.getThing()).getPlayerID()==1){
@@ -798,8 +801,9 @@ public class Board {
 				Double y =800- Double.parseDouble(yc);
 				Point2D.Double target = new Point2D.Double(x, y);
 				
-				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",active.getPoint(),0,0);
-				//updateFrame(wmv);
+				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",
+						new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),10,4);
+				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);
