@@ -48,8 +48,8 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean targetline;
 	//Debug
-	private final boolean debug = true;
-	private final boolean debugL = true;
+	private final boolean debug = false;
+	private final boolean debugL = false;
 
 	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
@@ -744,7 +744,6 @@ public class Board {
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs the formatted string from hangerOn.
 	 */
-	//public void input(Move input){
 	public void input(String input) {
 		Square active = (Square)getActivePlayer();
 		
