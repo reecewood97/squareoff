@@ -571,6 +571,21 @@ public class Board {
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
+		
+		for(PhysObject obj: objs){
+			switch(obj.getName()){
+			case "WeaponTimedGrenade": 
+				TimedGrenade grenade = (TimedGrenade) obj;
+				if(grenade.getFrames()==0){
+					grenade.setInUse(false);
+					createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
+						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
+				}
+				break;
+			default: break;
+			}
+		}
+		
 		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
@@ -603,16 +618,17 @@ public class Board {
 			collision.getThing().undoUpdate();
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
-		//TODO check if TimedGrenades and other time-related things have run out
-		for(PhysObject obj: objs){
-			switch(obj.getName()){
-			case "WeaponTimedGrenade": 
-				TimedGrenade grenade = (TimedGrenade) obj;
-				grenade.setInUse(false);
-				createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
-					grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
-				break;
-			default: break;
+		
+		for(PhysObject object: objs){
+			if((object.getPos().getY() < 100) || (object.getPos().getX()<=0) || (object.getPos().getX()>850)){
+				object.setInUse(false);
+				audio.splash();
+				if (checkForWinner()){
+					if(debug)System.out.println("winner?");
+					int won = findPlayer();
+					setWinner(won);
+					turn.endItAll();
+				}
 			}
 		}
 		
