@@ -6,7 +6,7 @@ import GameLogic.Explosion;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
-import GameLogic.Weapon;
+import GameLogic.ExplodeOnImpact;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -75,7 +75,7 @@ public class ScreenBoard extends JPanel{
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
-		paintWeapons(board.getWeapons(),g2d);
+		paintWeapons(board.getExplodeOnImpact(),g2d); //TODO paint other types of weapon, only paints bombs right now
 		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),true,g2d);
 	} 		
@@ -84,7 +84,7 @@ public class ScreenBoard extends JPanel{
 	/**
 	 * paint the blocks onto the panel
 	 * @param blocks The ArrayList of blocks
-	 * @param g2d Graohics 2D
+	 * @param g2d Graphics 2D
 	 */
 	public void paintBlocks(ArrayList<PhysObject> blocks, Graphics2D g2d){
 		
@@ -261,11 +261,11 @@ public class ScreenBoard extends JPanel{
 	 */
 	public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
 		
-			//currently paints on top elft of square
+			//currently paints on top left of square
 			
 			for(PhysObject weapon : weapons){
 				
-				if (((Weapon)weapon).getInUse()){
+				if (((ExplodeOnImpact)weapon).getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
 					int y = (int) weapon.getPos().getY();
@@ -294,18 +294,20 @@ public class ScreenBoard extends JPanel{
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
 		for(PhysObject exp : explosion){
+			//From Reece; I changed this because the x and y co-ordinates for explosions are in the middle
+			//for my own benefit, sorry if I made a mistake.
 			
 			if (((Explosion) exp).getInUse()){
 				
-				int x = (int) exp.getPos().getX();
-				int y = (int) exp.getPos().getY();
+				int x = (int) (exp.getPos().getX()-(exp.getWidth()/2));
+				int y = (int) (exp.getPos().getY()+(exp.getHeight()/2));
 				
 
 				x = (int) (x*widthratio);
 				y = (int) (y*heightratio);
 				y = 450 - y;
 				
-				int size = ((Explosion) exp).getSize();
+				double size = ((Explosion) exp).getSize();
 				
 				int expwidth = (int) (size*widthratio);
 				int expheight = (int) (size*heightratio);
@@ -314,7 +316,7 @@ public class ScreenBoard extends JPanel{
 				g2d.fillOval(x,y,expwidth,expheight);
 				
 				//if reached max size, stop drawing
-				if(size == 30){
+				if(size == (int)exp.getWidth()){
 					
 					hangeron.setExp("1");
 					hangeron.setUse("false");

@@ -9,6 +9,24 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.lang.Math;
 
+//Ideas for weapons in the future; some can be pickup-only, some can be basic.
+//The missile idea sounds cool but very hard to implement :(
+//1. Air-strike; Click to send airplane across top of screen, click again to release multiple bombs.
+//2. TNT; Choose any block. After one full cycle of turns it will explode.
+//3. Grenade with a timer instead of exploding on impact.
+//4. Anti-grav bomb; bomb that falls upwards instead of downwards.
+//5. Dont use any weapon and instead fling your square across the map.
+
+
+//Formula for adding more weapons. All these things need to be implemented.
+//Weapons are no longer all going to extend Weapon, sorry for the confusion.
+//1. Create new class. Modify all necessary methods from PhysObject which would be different.
+//2. Create new get method for this type of weapon.
+//3. Modify collision methods to detect the defining string of the weapon
+//4. update freeSim arrayList copy cases
+//5. update updateFrame weaponMove cases
+//
+
 public class Board {
 	//Keep track of the current player
 	private int player;
@@ -62,6 +80,7 @@ public class Board {
 		this.winner = -1;
 		this.targetline = false;
 		this.map = map;
+		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
@@ -148,7 +167,7 @@ public class Board {
 		this.squareID = 0;
 		activePlayer = (Square)objects.get(0);
 		
-		//ssshhhh dont tell anyone but im gonna add and delete stuff instead of changing the boolean
+		//ssshhhh dont tell anyone but im gonna add a new wep instead of changing the boolean
 		/*Point2D.Double weaponpos = new Point2D.Double(30, 30);
 		PhysObject weapon = new Weapon(weaponpos);
 		objects.add(weapon);
@@ -198,17 +217,33 @@ public class Board {
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
-			
-			if (obj.getName().equals("ExplodeOnImpact")){
-				
+			if (obj.getName().startsWith("Weapon")){
 				weapons.add(obj);
 			}
 		}
-		
 		return weapons;
 	}
 	
+	public ArrayList<PhysObject> getExplodeOnImpact(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("ExplodeOnImpact")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
 	
+	public ArrayList<PhysObject> getTimedGrenade(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("TimedGrenade")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
+		
 	public ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -383,8 +418,8 @@ public class Board {
 			return false;
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
-			if(obj2.getName().equals("ExplodeOnImpact")){
-				if(debug) System.out.println("Weapon collision detected");
+			if(obj2.getName().endsWith("ExplodeOnImpact") || obj2.getName().endsWith("TimedGrenade")){ //All circular objects
+				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return circle.intersects
@@ -397,8 +432,8 @@ public class Board {
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
 			}
 		} else {
-			if(obj1.getName().equals("ExplodeOnImpact")){
-				if(debug) System.out.println("Weapon collision detected");
+			if(obj1.getName().endsWith("ExplodeOnImpact") || obj1.getName().endsWith("TimedGrenade")){ //All circular objects
+				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return circle.intersects
@@ -413,20 +448,78 @@ public class Board {
 		}
 	}
 	
-	//If two objects are colliding, this method will be called to resolve the collision
-	private void resolveCollision(PhysObject thing, PhysObject block) {
-		if(thing.getName().equals("ExplodeOnImpact")){
-			if(debug) System.out.println("Resolving weapon collision");
-			thing.setInUse(false);
-			Weapon wep = (Weapon)thing;
-			wep.setInUse(false);
-			wep.setPos(new Point2D.Double(30, 30));
-			TerrainBlock castedblock = (TerrainBlock)block;
-			castedblock.damage(1);
-			explosions.add(new Explosion(thing.getPos()));
-			//TODO later implement different weapon types, and this doesn't work
+	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
+		//for i from x to y, all squares push away, all blocks damage
+		double i = (2*size/5);
+		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("TerrainBlock")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					((TerrainBlock)thing).damage(damage);
+				}
+			}
 		}
-		else {
+		i = size;
+		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("Square")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					Square square = ((Square)thing);
+					square.setXvel(square.getXvel()+(power/(thing.getPos().getX()-x)));
+					square.setYvel(square.getYvel()+(power/(thing.getPos().getY()-y)));
+				}
+			}
+		}
+		explosions.add(new Explosion(new Point2D.Double(x, y), size));
+	}
+	
+	//If two objects are colliding, this method will be called to resolve the collision
+	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
+		if(thing.getName().endsWith("ExplodeOnImpact")) {
+			if(debug) System.out.println("Resolving impactGrenade collision");
+			thing.setInUse(false);
+			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
+					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
+		}
+		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
+			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
+			}
+			else if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+				thing.setXvel((-0.3)*thing.getXvel());
+				if(thing.getXvel()==0){
+					thing.update();
+				}
+			}
+			else if(thing.getPos().getY()>=block.getPos().getY()+block.getHeight()) { //on top
+				if(Math.abs(thing.getXvel())<=2){
+					thing.setXvel(0);
+				}
+				else {
+					thing.setXvel(0.9*thing.getXvel());
+				}
+				if(thing.getYvel()>=(-2)) {
+					thing.setYvel(0);
+					thing.setPos(new Point2D.Double(thing.getPos().getX(),block.getPos().getY()+block.getHeight()));
+				}
+				else {
+					thing.setYvel((-0.3)*thing.getYvel());
+				}
+			}
+			else if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+				thing.setYvel((-0.3)*thing.getYvel());
+			}
+			else {
+				thing.setYvel((-0.4)*thing.getYvel());
+				thing.setXvel((-0.4)*thing.getXvel());
+			}
+		}
+		else { // Collisions for squares
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
@@ -470,7 +563,8 @@ public class Board {
 			switch(objects.get(i).getName()) {
 			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
-			case "Weapon": objs.add(new Weapon((Weapon)objects.get(i))); break;
+			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
+			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
 			default: System.out.println("error copying arraylists in freeSim"); break;
 			}
 		}
@@ -504,8 +598,21 @@ public class Board {
 				}
 			}*/
 			collision.getThing().undoUpdate();
-			resolveCollision(collision.getThing(), collision.getBlock());
+			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
+		//TODO check if TimedGrenades and other time-related things have run out
+		for(PhysObject obj: objs){
+			switch(obj.getName()){
+			case "WeaponTimedGrenade": 
+				TimedGrenade grenade = (TimedGrenade) obj;
+				grenade.setInUse(false);
+				createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
+					grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
+				break;
+			default: break;
+			}
+		}
+		
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
@@ -530,10 +637,13 @@ public class Board {
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
-			//get weapon from arraylist
-			//TODO implement other weapon types
-			Weapon wep = new Weapon(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel()
-					,true);
+			PhysObject wep = null;
+			switch(wepMove.wepType()){
+			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
+					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			case "TimedGrenade": wep = new TimedGrenade(
+					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			}
 			freeState = true;
 			objects.add(wep);
 		}
@@ -625,7 +735,6 @@ public class Board {
 			objects.add(x,activePlayer);
 			objects.remove(x+1);
 		}
-		System.out.println(activePlayer.getPlayerID());
 	}
 	
 	/**
@@ -689,7 +798,7 @@ public class Board {
 				Point2D.Double target = new Point2D.Double(x, y);
 				
 				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",active.getPoint(),0,0);
-				//updateFrame(wmv);
+				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);
