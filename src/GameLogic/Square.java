@@ -43,6 +43,11 @@ public class Square extends PhysObject {
 		return (getPos().equals(square.getPos()) && getXvel()==square.getXvel() && getYvel()==square.getYvel());
 	}
 	
+	@Override
+	public void setInUse(boolean use){
+		this.alive=use;
+	}
+	
 	public String getFacing(){
 		
 		return facing;

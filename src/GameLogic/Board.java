@@ -48,8 +48,8 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean targetline;
 	//Debug
-	private final boolean debug = true;
-	private final boolean debugL = true;
+	private final boolean debug = false;
+	private final boolean debugL = false;
 
 	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
@@ -228,6 +228,16 @@ public class Board {
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
+	
+	public ArrayList<PhysObject> getTimedGrenade(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("TimedGrenade")){
 				weapons.add(obj);
 			}
 		}
@@ -438,15 +448,40 @@ public class Board {
 		}
 	}
 	
+	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
+		//for i from x to y, all squares push away, all blocks damage
+		double i = (2*size/5);
+		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("TerrainBlock")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					((TerrainBlock)thing).damage(damage);
+				}
+			}
+		}
+		i = size;
+		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("Square")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					Square square = ((Square)thing);
+					square.setXvel(square.getXvel()+(power/(thing.getPos().getX()-x)));
+					square.setYvel(square.getYvel()+(power/(thing.getPos().getY()-y)));
+				}
+			}
+		}
+		explosions.add(new Explosion(new Point2D.Double(x, y), size));
+	}
+	
 	//If two objects are colliding, this method will be called to resolve the collision
-	private void resolveCollision(PhysObject thing, PhysObject block) {
+	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if(thing.getName().endsWith("ExplodeOnImpact")) {
 			if(debug) System.out.println("Resolving impactGrenade collision");
 			thing.setInUse(false);
-			explosions.add(new Explosion(new Point2D.Double(thing.getPos().getX(),thing.getPos().getY())));
-			TerrainBlock castedblock = (TerrainBlock)block;
-			castedblock.damage(1);
-			explosions.add(new Explosion(thing.getPos()));
+			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
+					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
 		}
 		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
@@ -536,6 +571,21 @@ public class Board {
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
+		
+		for(PhysObject obj: objs){
+			switch(obj.getName()){
+			case "WeaponTimedGrenade": 
+				TimedGrenade grenade = (TimedGrenade) obj;
+				if(grenade.getFrames()==0){
+					grenade.setInUse(false);
+					createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
+						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
+				}
+				break;
+			default: break;
+			}
+		}
+		
 		ArrayList<Collision> list = new ArrayList<Collision>();
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = i+1; j < objs.size(); j++) {
@@ -555,6 +605,9 @@ public class Board {
 				}
 			}
 		}
+		System.out.println(list.size());
+		System.out.println(getBlocks().size());
+		System.out.println(objs.size());
 		for(Collision collision: list){
 			/*if(collision.getThing().getName().equals("Square")){
 				if(((Square)collision.getThing()).getPlayerID()==1){
@@ -563,8 +616,22 @@ public class Board {
 				}
 			}*/
 			collision.getThing().undoUpdate();
-			resolveCollision(collision.getThing(), collision.getBlock());
+			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
+		
+		for(PhysObject object: objs){
+			if((object.getPos().getY() < 100) || (object.getPos().getX()<=0) || (object.getPos().getX()>850)){
+				object.setInUse(false);
+				audio.splash();
+				if (checkForWinner()){
+					if(debug)System.out.println("winner?");
+					int won = findPlayer();
+					setWinner(won);
+					turn.endItAll();
+				}
+			}
+		}
+		
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
@@ -693,7 +760,6 @@ public class Board {
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs the formatted string from hangerOn.
 	 */
-	//public void input(Move input){
 	public void input(String input) {
 		Square active = (Square)getActivePlayer();
 		
@@ -750,8 +816,9 @@ public class Board {
 				Double y =800- Double.parseDouble(yc);
 				Point2D.Double target = new Point2D.Double(x, y);
 				
-				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",active.getPoint(),0,0);
-				//updateFrame(wmv);
+				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",
+						new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),10,4);
+				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);

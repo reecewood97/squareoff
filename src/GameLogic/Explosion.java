@@ -5,11 +5,10 @@ import java.awt.geom.Point2D;
 @SuppressWarnings("serial")
 public class Explosion extends PhysObject{
 	
-	private int size;
+	private double size;
 	
-	public Explosion(Point2D.Double pos){
-		
-		super(false, pos, 10, 10, false);
+	public Explosion(Point2D.Double pos, double size){ //POSITION IS MIDDLE OF EXPLOSION
+		super(false, pos, (int)(2*size/5), (int)(2*size/5), false);
 		this.setName("Explosion");
 		this.size = 1;
 	}
@@ -20,7 +19,7 @@ public class Explosion extends PhysObject{
 		
 	}
 	
-	public int getSize(){
+	public double getSize(){
 		
 		return this.size;
 	}

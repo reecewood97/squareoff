@@ -27,8 +27,8 @@ public class ExplodeOnImpact extends PhysObject {
 	@Override
 	public void update() {
 		if(inUse) {
-		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
 		setYvel(getYvel()-getGrav());
+		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
 		}
 	}
 }

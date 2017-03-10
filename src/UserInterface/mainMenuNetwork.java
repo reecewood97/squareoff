@@ -25,18 +25,18 @@ public class mainMenuNetwork {
 		try {
 			address = hostName.split(":");
 			if ((address[0].length()<7) | Integer.parseInt(address[1])!=port) {
-				System.out.println("Incorrect address/port or address too small");
+				//System.out.println("Incorrect address/port or address too small");
 				return false;
 			}
 			if (c.connect(address[0], Integer.parseInt(address[1]))) {
-				Thread.sleep(1000);
+				//Thread.sleep(1000);
 				players = c.getPlayers();
 				return true;
 			}
 			else
 				return false;
 		} catch (Exception e) {
-			System.out.println("Exception caught in mainMenuNetwork");
+			//System.out.println("Exception caught in mainMenuNetwork");
 			//e.printStackTrace();
 			return false;
 		}
@@ -45,13 +45,16 @@ public class mainMenuNetwork {
 	public ArrayList<String> getPlayers() {
 		//Thread.sleep(1000);
 		players = c.getPlayers();
-		System.out.println(players);
+		//System.out.println(players);
 		return players;
 		
 	}
 	
+	public boolean inGame() {
+		return c.inGame();
+	}
+	
 	public void runServer() {
-		System.out.println("Starting the Server - mainMenuNetwork");
 		s.start();
 	}
 	
@@ -60,7 +63,6 @@ public class mainMenuNetwork {
 	}
 
 	public void closeServer() {
-		System.out.println("Closing the Server - mainMenuNetwork");
 		s.close();
 	}
 }
