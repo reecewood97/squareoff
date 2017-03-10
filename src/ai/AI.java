@@ -20,7 +20,7 @@ import Networking.Queue;
  * @author JeffLeung
  *
  */
-public class AI {
+public abstract class AI {
 	
 	private static final double maxVelocity = 100;
 	private static final double gravity = 9.81;
@@ -47,7 +47,7 @@ public class AI {
 		setSquareID(aiSquareID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
-		this.board = board;
+		setBoard(board);
 	}
 	
 //	/**
@@ -169,6 +169,7 @@ public class AI {
 		// More advance: choose enemy standing on a block that has less hp,
 		// 				 then calculate will the grenade able to reach target (through physics engine)
 		//				 if it can, attack, else, choose another target
+		// This is already done for Normal and Difficult AI
 
 	}
 	
@@ -453,9 +454,13 @@ public class AI {
 	}
 	
 	private boolean determineObstacle(Point2D.Double target) {
+		Point2D.Double aiPos = getAIPos();
+		double aiX = aiPos.getX();
+		double aiY = aiPos.getY();
+		
 		double angle = getAngle();
 		double velocity = getVelocity();
-		double range = target.getX();
+		double range = Math.abs(target.getX() - aiPos.getY());
 		
 		//calculate time
 		// x = velocity * cos(angle) * t
@@ -466,12 +471,24 @@ public class AI {
 		// y = velocity * sin(angle) * t - 0.5 * g * t^2
 		double yDis = 0;
 		double xDis = 0;
+		
+		
+		ArrayList<PhysObject> blocks = board.getBlocks();
 		for (int t = 1; t < timeOfFlight; t ++) {
 			yDis = (velocity * Math.sin(angle) * t) - (0.5 * gravity * t * t);
 			xDis = velocity * Math.cos(angle);
 //			if (there are obstacles) { // method determining obstacles need to be made
 //				return true;
 //			}
+			for(PhysObject block:blocks) {
+				double blockX = block.getPos().getX();
+				double blockY = block.getPos().getY();
+				if ((aiX < (blockX + 50)) && (aiX > (blockX-50)) && (aiY < (blockY + 50)) && (aiY > (blockY-50))) {
+					return true;
+				}
+				aiX += xDis;
+				aiY += yDis;
+			}
 		}
 		
 		return false;
@@ -617,77 +634,6 @@ public class AI {
 	 * Choosing target by the shortest displacement (by pythagoras theorem)
 	 * @return the position of the chosen target
 	 */
-	public Point2D.Double getFinalDestination() {
-		// Call functions that get enemy position from board
-		ArrayList<PhysObject> squares = board.getSquares();
-		int numOfPlayers = squares.size();
-		int myX = (int) getAIPos().getX();
-		int myY = (int) getAIPos().getY();
-		int finalX = 0;
-		int finalY = 0;
-		PhysObject finalSquare = null;
-		
-		// Calculation for EasyAI
-		double finalDis = 9999999999999.0;
-		for (int i = 0; i < numOfPlayers; i++) {
-			Square enemySquare = (Square) squares.get(i);
-			if (enemySquare.getPlayerID() != myPlayer) {
-//				System.out.println(enemySquare.getPlayerID());
-//				System.out.println(enemySquare.getPos());
-				// get position of enemies
-				int enemyX = (int) enemySquare.getPos().getX();
-				int enemyY = (int) enemySquare.getPos().getY();
-				double xDis = myX - enemyX;
-				double yDis = myY - enemyY;
-				
-				// calculate shortest displacement by pythagoras theorem
-				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//				System.out.println(displacement);
-				if (displacement < finalDis) {
-					finalDis = displacement;
-					finalX = enemyX;
-					finalY = enemyY;
-					finalSquare = enemySquare;
-				}
-			}
-		}
-		System.out.println(finalSquare);
-		
-		// Calculation for NormalAI & DifficultAI
-		ArrayList<PhysObject> blocks = board.getBlocks();
-		int numOfBlocks = blocks.size();
-		System.out.println(blocks);
-		System.out.println(blocks.get(1).getPos());
-		TerrainBlock targetBlock = null;
-		int targetHealth = 999;
-		for (int i = 0; i < numOfPlayers; i++) {
-//			System.out.println(i);
-			Square targetSquare = (Square) squares.get(i);
-			double targetX = targetSquare.getPos().getX();
-			double targetY = targetSquare.getPos().getY();
-//			System.out.println(targetX);
-//			System.out.println(targetY);
-			for (int j = 0; j < numOfBlocks; j++) {
-				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
-//				System.out.println(oneBlock);
-				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX) && (oneBlock.getPos().getX() <= targetX + 50.0)) {
-//					&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
-					targetBlock = (TerrainBlock) oneBlock;
-				}
-			}
-//			System.out.println(targetBlock);
-			if (targetBlock.getHealth() < targetHealth) {
-				finalSquare = targetSquare;
-				targetHealth = targetBlock.getHealth();
-			}
-			System.out.println(finalSquare);
-		}
-		
-		
-		// return the coordinates
-
-		System.out.println(finalSquare.getPos());
-		return finalSquare.getPos();
-	}
+	public abstract Point2D.Double getFinalDestination();
 	
 }
