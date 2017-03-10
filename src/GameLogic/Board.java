@@ -230,6 +230,8 @@ public class Board {
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
 				weapons.add(obj);
+				if (obj.getInUse())
+					System.out.println(obj.getPos());
 			}
 		}
 		return weapons;
