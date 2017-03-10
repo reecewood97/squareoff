@@ -95,7 +95,7 @@ public class Server extends Thread {
 		int numberOfPlayers = players.size();
 		
 		for(int i = numberOfPlayers + 1; i <= maxPlayers; i++) {
-			AI ai = new NormalAI(i, 0, i, board);
+			AI ai = new EasyAI(i, 0, i, board);
 			ais.add(ai);
 			players.add("AI " + (i + 1 - numberOfPlayers));
 		}
