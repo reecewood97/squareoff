@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
+
+import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.lang.Math;
@@ -820,10 +822,27 @@ public class Board {
 				
 				Double x = Double.parseDouble(xc);
 				Double y =800- Double.parseDouble(yc);
-				Point2D.Double target = new Point2D.Double(x, y);
+				Double x2 = active.getPos().getX();
+				Double y2 = active.getPos().getY();
 				
-				WeaponMove wmv = new WeaponMove(weaponType,
-						new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),10,4);
+				//Use some basic geometry to better work out how a shot is fired
+				WeaponMove wmv;
+				Double dist = Math.sqrt((x2-x)*(x2-x) + (y2-y)*(y2-y));
+				if (Math.abs(y2-y) < 2){
+					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,dist);
+				}else if (Math.abs(x2-x) < 2){
+					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),dist,0);
+				}else{
+				Double tanTheta = Math.abs(y2-y)/Math.abs(x2-x);
+				Double theta = Math.atan(tanTheta);
+				theta = (theta*180)/Math.PI;
+				Double percentY = 90/100D;
+				
+				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
+				Double xVel = dist-yVel;;
+				
+				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),yVel,xVel);
+				}
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
