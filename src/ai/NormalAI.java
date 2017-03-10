@@ -58,25 +58,20 @@ public class NormalAI extends AI {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		int numOfBlocks = blocks.size();
 		System.out.println(blocks);
-		System.out.println(blocks.get(1).getPos());
 		TerrainBlock targetBlock = null;
 		int targetHealth = 999;
 		for (int i = 0; i < numOfPlayers; i++) {
-//			System.out.println(i);
 			Square targetSquare = (Square) squares.get(i);
 			double targetX = targetSquare.getPos().getX();
 			double targetY = targetSquare.getPos().getY();
-//			System.out.println(targetX);
-//			System.out.println(targetY);
 			for (int j = 0; j < numOfBlocks; j++) {
 				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
-//				System.out.println(oneBlock);
 				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX) && (oneBlock.getPos().getX() <= targetX + 50.0)) {
 //					&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
 					targetBlock = (TerrainBlock) oneBlock;
 				}
 			}
-//			System.out.println(targetBlock);
+			System.out.println(targetBlock);
 			if (targetBlock.getHealth() < targetHealth) {
 				finalSquare = targetSquare;
 				targetHealth = targetBlock.getHealth();

@@ -11,27 +11,29 @@ public class AITest {
 	public static void main(String[] args) {
 		Board board = new Board("map1");
 		
-		DifficultAI ai = new DifficultAI(2, 0, 0, board);
+		DifficultAI aid = new DifficultAI(2, 0, 0, board);
+		EasyAI aie = new EasyAI(1, 0, 0, board);
 		
-		ai.changeAIPos();
+		
+		aid.changeAIPos();
 		
 		//ai.getFinalDestination();
-		System.out.println(ai.getAIPos() + " \n");
+		System.out.println(aid.getAIPos() + " \n");
 //		System.out.println(ai.getFinalDestination());
 		
 //		ai.determineState();
-		System.out.println(ai.getAIPos());
+//		System.out.println(ai.getAIPos());
 		
-		ai.determineResult();
+		aid.determineResult();
 		
-		double velocity_chosen = ai.getVelocity();
-		double angle_chosen = ai.getAngle();
+		double velocity_chosen = aid.getVelocity();
+		double angle_chosen = aid.getAngle();
 		System.out.println(velocity_chosen + " " + angle_chosen);
 		
-		ai.alterResult();
+		aid.alterResult();
 		
-		velocity_chosen = ai.getVelocity();
-		angle_chosen = ai.getAngle();
+		velocity_chosen = aid.getVelocity();
+		angle_chosen = aid.getAngle();
 		System.out.println(velocity_chosen + " " + angle_chosen);
 	}
 

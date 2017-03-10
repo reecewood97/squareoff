@@ -20,7 +20,7 @@ import Networking.Queue;
  * @author JeffLeung
  *
  */
-public abstract class AI {
+public abstract class AI extends Thread{
 	
 	private static final double maxVelocity = 100;
 	private static final double gravity = 9.81;
@@ -34,6 +34,7 @@ public abstract class AI {
 	private Queue q;
 	private double mistakeAngle = 0;
 	private double mistakeVelocity = 0;
+	private boolean isAITurn;
 	
 	
 	/**
@@ -107,6 +108,32 @@ public abstract class AI {
 		this.mySquareID = id;
 	}
 	
+	public void setAITurn(boolean isItAITurn) {
+		this.isAITurn = isItAITurn;
+	}
+	
+	public int getSquareID() {
+		return this.mySquareID;
+	}
+	
+	public int getPlayerID() {
+		return this.myPlayer;
+	}
+	
+	public int getColour() {
+		return this.myColour;
+	}
+	
+	public boolean getAITurn() {
+		return this.isAITurn;
+	}
+	
+	public void run() {
+		setAITurn(true);
+		determineState();
+		setAITurn(false);
+	}
+	
 	/**
 	 * Check are there any random items on the board
 	 * @return true if there are, false if there are no items
@@ -120,6 +147,7 @@ public abstract class AI {
 //		}
 		return false;
 	}
+	
 	
 	/**
 	 * Determines whether to move and attack or to pick up items
