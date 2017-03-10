@@ -29,6 +29,7 @@ public abstract class AI extends Thread{
 	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
+	private String myName;
 	private double outAngle;
 	private double outVelocity;
 	private Queue q;
@@ -523,13 +524,17 @@ public abstract class AI extends Thread{
 		return false;
 	}
 	
+	public void setAIName() {
+		this.myName = "AI " + getPlayerID();
+	}
+	
 	/**
 	 * Send move left command
 	 */
 	public void moveLeft() {
 //		Move left = new Move(myColour, myID, "Left", false);
 //		board.updateFrame(left);
-		board.input("Pressed A");
+		board.input("Pressed A " + myName);
 //		q.offer("Pressed A");
 		try {
 			Thread.sleep(100);
