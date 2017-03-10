@@ -20,15 +20,14 @@ public class GameLoop extends Thread {
 		running = true;
 		while(running) {
 			board.input("None");
-			if(!aiRunning()) {
-				for(AI ai: ais) {
-					if(ai.getPlayerID() == ((Square)board.getActivePlayer()).getPlayerID()) {
-						ai.start();
-						break;
-					}
-				}
-			}
-			
+//			if(!aiRunning()) {
+//				for(AI ai: ais) {
+//					if(ai.getPlayerID() == ((Square)board.getActivePlayer()).getPlayerID()) {
+//						ai.start();
+//						break;
+//					}
+//				}
+//			}
 			try {
 				sleep(35);
 			}
