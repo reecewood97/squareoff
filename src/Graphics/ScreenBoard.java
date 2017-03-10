@@ -273,7 +273,9 @@ public class ScreenBoard extends JPanel{
 	
 					x = (int) (x*widthratio);
 					y = (int) (y*heightratio);
-					y = 450 - y;
+					y = 650 - y;
+					
+					System.out.println(x + " " + y);
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);

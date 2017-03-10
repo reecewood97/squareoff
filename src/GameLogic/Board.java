@@ -40,6 +40,7 @@ public class Board {
 	private boolean freeState;
 	private TurnMaster turn;
 	private boolean weaponsopen = false;
+	private String weaponType;
 	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
@@ -560,6 +561,7 @@ public class Board {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
+			System.out.println(objects.get(i).getName());
 			switch(objects.get(i).getName()) {
 			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
@@ -656,12 +658,14 @@ public class Board {
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
+			System.out.println(wepMove.getPos());
 			PhysObject wep = null;
 			switch(wepMove.wepType()){
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			default: System.out.println("Weapon move parsing error"); break;
 			}
 			freeState = true;
 			objects.add(wep);
@@ -802,7 +806,7 @@ public class Board {
 		}
 		}
 		else if(input.contains("Clicked")){
-			//if(this.wep.getInUse()){ I WANT TO WORK OUT IF A WEAPON IS SELECTED HERE?
+			if(weaponsopen){
 				
 				setTargetLine(false);
 				
@@ -816,13 +820,14 @@ public class Board {
 				Double y =800- Double.parseDouble(yc);
 				Point2D.Double target = new Point2D.Double(x, y);
 				
-				WeaponMove wmv = new WeaponMove("ExplodeOnImpact",
+				WeaponMove wmv = new WeaponMove(weaponType,
 						new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),10,4);
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);
-			//}
+				weaponsopen = false;
+			}
 			//else{
 				//Create a weapon error check for the server
 			//}
@@ -831,12 +836,15 @@ public class Board {
 			if(debugL)
 				System.out.println("Now a weapon in use");
 			else{
-				for(PhysObject weapon : this.getWeapons()){
-					
-					weapon.setInUse(true);
-					weapon.setName(input.substring(8));
-					
-				}
+				this.weaponType = input.substring(7);
+				System.out.println(weaponType);
+				weaponsopen = true;
+//				for(PhysObject weapon : this.getWeapons()){
+//					
+//					weapon.setInUse(true);
+//					weapon.setName(input.substring(8));
+//					
+//				}
 			}
 		}
 		else if (input.contains("setExp")){

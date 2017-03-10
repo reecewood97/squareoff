@@ -141,6 +141,13 @@ public class HangerOn implements KeyListener,MouseListener {
 		 String setTar = "setTar " + b;
 		 q.offer(setTar);
 	 }
+
+
+
+	public void grab() {
+		panel.grabFocus();
+		
+	}
 	 
 	
  }
