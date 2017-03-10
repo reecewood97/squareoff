@@ -3,15 +3,18 @@ package Networking;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-
 import GameLogic.Board;
-import ai.AI;
+import ai.*;
 
+/**
+ * The Server. A thread that creates a ServerSocket that clients can connect to. 
+ * @author djs568
+ *
+ */
 public class Server extends Thread {
 
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
-	//public static final int... For other operations.
 	
 	private int port;
 	private Board board;
@@ -55,8 +58,7 @@ public class Server extends Thread {
 			}			
 		}
 		catch (IOException e) {
-			//e.printStackTrace();
-			//System.exit(1);
+			System.out.println("ServerSocket closed.");
 		}
 	}
 	
@@ -92,7 +94,7 @@ public class Server extends Thread {
 		int numberOfPlayers = players.size();
 		
 		for(int i = numberOfPlayers; i < maxPlayers; i++) {
-			AI ai = new AI(i, i, i, board);
+			AI ai = new NormalAI(i, i, i, board);
 			ais.add(ai);
 			players.add("AI " + (i + 1 - numberOfPlayers));
 		}

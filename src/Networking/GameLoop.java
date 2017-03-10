@@ -2,7 +2,7 @@ package Networking;
 
 import java.util.ArrayList;
 
-import GameLogic.Board;
+import GameLogic.*;
 import ai.AI;
 
 public class GameLoop extends Thread {
@@ -20,6 +20,15 @@ public class GameLoop extends Thread {
 		running = true;
 		while(running) {
 			board.input("None");
+			if(!aiRunning()) {
+				for(AI ai: ais) {
+					if(ai.getPlayerID() == ((Square)board.getActivePlayer()).getPlayerID()) {
+						ai.start();
+						break;
+					}
+				}
+			}
+			
 			try {
 				sleep(35); //Cranking up to a dank FPS
 			}
@@ -28,5 +37,11 @@ public class GameLoop extends Thread {
 				System.exit(1);
 			}
 		}
+	}
+	
+	private boolean aiRunning() {
+		boolean b = false;
+		for(AI ai: ais) b |= ai.isMoving();
+		return b;
 	}
 }

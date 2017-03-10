@@ -37,7 +37,7 @@ public class ServerSender extends Thread {
 						ArrayList<PhysObject> temp = new ArrayList<PhysObject>();
 						temp.addAll(board.getUpdate()); 
 						send(temp);
-						sleep(40);
+						sleep(35);
 					}
 				}
 				else {
