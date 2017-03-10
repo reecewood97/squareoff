@@ -30,7 +30,7 @@ public class GameLoop extends Thread {
 			}
 			
 			try {
-				sleep(35); //Cranking up to a dank FPS
+				sleep(35);
 			}
 			catch(InterruptedException e) {
 				e.printStackTrace();
@@ -41,7 +41,7 @@ public class GameLoop extends Thread {
 	
 	private boolean aiRunning() {
 		boolean b = false;
-		for(AI ai: ais) b |= ai.isMoving();
+		for(AI ai: ais) b |= ai.getAITurn();
 		return b;
 	}
 }

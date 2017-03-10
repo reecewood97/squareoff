@@ -8,6 +8,7 @@ import ai.*;
 
 /**
  * The Server. A thread that creates a ServerSocket that clients can connect to. 
+ * Holds an instance of the game board that "copies" of are sent to 
  * @author djs568
  *
  */
