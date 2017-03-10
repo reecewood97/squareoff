@@ -51,6 +51,7 @@ public abstract class AI extends Thread{
 		setPlayer(aiPlayer);
 		setBoard(board);
 		setAITurn(false);
+		setAIName();
 	}
 	
 //	/**
