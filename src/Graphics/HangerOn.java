@@ -46,7 +46,7 @@ public class HangerOn implements KeyListener,MouseListener {
 		 //System.out.println(keyString);
 		 q.offer(keyString);
 		 panel.grabFocus();
-		 } 
+	 } 
 	 
 	 @Override
 	 public void keyReleased(KeyEvent e) { 

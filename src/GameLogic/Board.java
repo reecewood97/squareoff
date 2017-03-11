@@ -942,7 +942,7 @@ public class Board {
 		
 		for (int i = 0; i < 4; i++){
 			if (players[i] == null){
-				players[i] = "meep";
+				players[i] = "";
 			}
 		}
 	}
@@ -994,5 +994,25 @@ public class Board {
 				return ((Square)chickenDinner.get(0)).getPlayerID();
 		}
 		return -1;
+	}
+	
+	/**
+	 * Removes a name from the array of players (way more difficult than necessary, because someone used an array instead of an arraylist!).
+	 * @param name The name to be removed.
+	 */
+	public void removeName(String name) {
+		for(int i = 0; i < numberOfPlayers; i++) {
+			if(players[i].equals(name)) {
+				if(i < numberOfPlayers - 1) {
+					String temp = players[i];
+					players[i] = players[i + 1];
+					players[i + 1] = temp;
+				}
+				else {
+					players[numberOfPlayers - 1] = "";
+					numberOfPlayers--;
+				}
+			}
+		}
 	}
 }

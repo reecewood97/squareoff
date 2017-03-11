@@ -10,13 +10,11 @@ public class ServerSender extends Thread {
 
 	private ObjectOutputStream toClient;
 	private Board board;
-	private ArrayList<String> players;
 	private boolean running, inGame;
 	
-	public ServerSender(ObjectOutputStream toClient, Board board, ArrayList<String> players) {
+	public ServerSender(ObjectOutputStream toClient, Board board) {
 		this.toClient = toClient;
 		this.board = board;
-		this.players = players;
 	}
 	
 	public void run() {
@@ -25,26 +23,20 @@ public class ServerSender extends Thread {
 		
 		try {
 			while(running) {
+				sleep(35);
 				if(inGame) {
 					if(board.getWinner() > -1){
-						//running = false;
 						send(33);
 						System.out.println("Sent the winner");
 						send(board.getWinner());
 						board.setWinner(-1);
+						//TODO
 					}
 					else{
-						ArrayList<PhysObject> temp = new ArrayList<PhysObject>();
-						temp.addAll(board.getUpdate()); 
-						send(temp);
-						sleep(35);
+						ArrayList<PhysObject> dummy = new ArrayList<PhysObject>();
+						dummy.addAll(board.getUpdate()); 
+						send(dummy);
 					}
-				}
-				else {
-					ArrayList<String> temp = new ArrayList<String>();
-					temp.addAll(players);
-					send(temp);
-					sleep(1000);
 				}
 			}
 		}
@@ -61,17 +53,13 @@ public class ServerSender extends Thread {
 			toClient.reset();
 		}
 		catch(IOException e) {
-			//e.printStackTrace();
 			close();
 		}
 	}
 	
-	private void close() {
+	public void close() {
 		running = false;
-	}
-	
-	public boolean inGame() {
-		return inGame;
+		//System.out.println(getName() + " closed.");
 	}
 	
 	public void startGame() {

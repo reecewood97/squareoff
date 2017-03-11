@@ -16,10 +16,11 @@ public class Server extends Thread {
 
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
+	public static final int PLAYERLIST = 3;
 	
 	private int port;
 	private Board board;
-	private boolean running;
+	private boolean running, debug;
 	private ServerSocket socket;
 	private ArrayList<String> players;
 	private ClientTable table;
@@ -30,6 +31,8 @@ public class Server extends Thread {
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();
+		
+		debug = true;
 	}
 	
 	public void run() {
@@ -52,14 +55,14 @@ public class Server extends Thread {
 				sr.start();
 				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
-				ServerSender ss = new ServerSender(toClient, board, players);
+				ServerSender ss = new ServerSender(toClient, board);
 				ss.start();
 				
 				table.add(sr, ss);
 			}			
 		}
 		catch (IOException e) {
-			System.out.println("ServerSocket closed.");
+			if(debug) System.out.println("ServerSocket closed.");
 		}
 	}
 	

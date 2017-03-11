@@ -8,8 +8,8 @@ public class Queue {
 	public Object take() throws InterruptedException {
 		return q.take();
 	}	
-	public void offer(Object move){
-		q.offer(move);
+	public void offer(Object obj){
+		q.offer(obj);
 	}
 }
 

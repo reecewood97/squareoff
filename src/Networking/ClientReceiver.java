@@ -2,7 +2,6 @@ package Networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
@@ -33,25 +32,21 @@ public class ClientReceiver extends Thread {
 		this.board = board;
 		this.ui = ui;
 		this.client = client;
-		players = new ArrayList<String>();
+		players = null;
 	}
 	
 	/**
 	 * Run method for the thread.
 	 */
 	@SuppressWarnings("unchecked")
-	public void run() {
-		
+	public void run() {		
 		running = true;
 		inGame = false;
 		
 		try {
 			Object ob;
-			ArrayList<PhysObject> check = new ArrayList<PhysObject>();
+			ArrayList<String> check = new ArrayList<String>();
 			while(running && (ob = server.readObject()) != null) {
-				if(ob.getClass().isInstance(Server.DISCONNECT) && (int)ob == Server.DISCONNECT) {
-					client.disconnect();
-				}
 				if(inGame) {
 					if(ob.getClass().isInstance(check)) {
 						board.setObjects((ArrayList<PhysObject>) ob);
@@ -65,12 +60,17 @@ public class ClientReceiver extends Thread {
 					}
 				}
 				else {
-					if(ob.getClass().isInstance(players)) {
-						players = (ArrayList<String>) ob;
+					if(ob.getClass().isInstance(0)) {
+						if((int)ob == Server.PLAY) {
+							inGame = true;
+							ui.setVisible();
+						}
+						else if((int)ob == Server.DISCONNECT) {
+							client.disconnect();
+						}
 					}
-					else if((int)ob == Server.PLAY) {
-						inGame = true;
-						ui.setVisible();
+					else if(ob.getClass().isInstance(check)) {
+							players = (ArrayList<String>)ob;
 					}
 				}
 			}
@@ -80,7 +80,6 @@ public class ClientReceiver extends Thread {
 			System.exit(1);
 		}
 		catch(IOException e) {
-			//e.printStackTrace();
 			close();
 		}
 	}
@@ -90,10 +89,22 @@ public class ClientReceiver extends Thread {
 	 */
 	private void close() {
 		running = false;
+		//System.out.println(getName() + " closed.");
 	}
 	
 	public ArrayList<String> getPlayers() {
-		return players;
+		while(players == null) {
+			try {
+				sleep(10);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+		ArrayList<String> newPlayers = players;
+		players = null;
+		return newPlayers;
 	}
 	
 	public boolean inGame() {

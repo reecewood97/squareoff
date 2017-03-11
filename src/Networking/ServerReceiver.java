@@ -3,9 +3,8 @@ package Networking;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-
 import GameLogic.Board;
-import GameLogic.Move;
+
 
 public class ServerReceiver extends Thread {
 	
@@ -41,20 +40,24 @@ public class ServerReceiver extends Thread {
 				//table.get(this).send(Server.DISCONNECT);
 			}
 			
-			Object input;
-			while(running && (input = fromClient.readObject()) != null) {
-				if(inGame) {
-					if(input.getClass().isInstance("A String")) {
-						board.input((String)input);
-					}
+			setName(name + ": server receiver");
+			table.get(this).setName(name + ": server sender");
+			
+			Object obj;
+			while(running && (obj = fromClient.readObject()) != null) {
+				if(inGame && obj.getClass().isInstance("")) {
+					board.input((String)obj);
 				}
-				else {
-					//TODO
+				else if(obj.getClass().isInstance(0)) {
+					if((int)obj == Server.PLAYERLIST) {
+						ArrayList<String> dummy = new ArrayList<String>();
+						dummy.addAll(players);
+						table.get(this).send(dummy);
+					}
 				}
 			}
 		}
 		catch(IOException e) {
-			//e.printStackTrace();
 			close();
 		} 
 		catch (ClassNotFoundException e) {
@@ -70,7 +73,16 @@ public class ServerReceiver extends Thread {
 	private void close() {
 		running = false;
 		players.remove(name);
+		board.removeName(name);
+		table.get(this).send("I close the server sender.");
+		try {
+			table.get(this).join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		table.remove(this);
+		//System.out.println(getName() + " closed.");
 	}
 	
 	public String getPlayerName() {

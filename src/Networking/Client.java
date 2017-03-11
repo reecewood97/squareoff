@@ -2,10 +2,8 @@ package Networking;
 
 import java.net.*;
 import java.util.ArrayList;
-
 import GameLogic.Board;
 import Graphics.Screen;
-import Graphics.SplashSplash;
 
 import java.io.*;
 
@@ -38,7 +36,6 @@ public class Client {
 		q = new Queue();
 		board = new Board("map1");
 		ui = new Screen(board, q, name);
-		
 	}
 	
 	/**
@@ -65,11 +62,16 @@ public class Client {
 		}
 		
 		//Creates and starts the  client-side threads to communicate with the server.
-		sender = new ClientSender(toServer, q, name);
+		sender = new ClientSender(toServer, q);
 		receiver = new ClientReceiver(fromServer, board, ui, this);
+		
+		sender.setName(name + ": client sender");
+		receiver.setName(name + ": client receiver");
 		
 		sender.start();
 		receiver.start();
+		
+		sender.send(name);
 		
 		return true;
 	}
@@ -83,8 +85,7 @@ public class Client {
 		ui.setInvisible();
 		
 		//Do nothing if the client is not connected.
-		if(socket == null || socket.isClosed()) return;
-		
+		if(!isConnected()) return;
 		
 		//Close the socket - this should join all the threads.
 		try {
@@ -94,27 +95,20 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		q.offer("I close the ClientSender.");
-		
-		socket = null;
-		toServer = null;
-		fromServer = null;
+		q.offer("I close the Client sender.");
 	}
 	
 	public ArrayList<String> getPlayers() {
-		while(!receiver.getPlayers().contains(name)) {
-			try {
-				Thread.sleep(50);
-			}
-			catch(InterruptedException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
- 		}
+		if(!isConnected()) return null;
+		sender.send(Server.PLAYERLIST);
 		return receiver.getPlayers();
 	}
 	
 	public boolean inGame() {
 		return receiver.inGame();
+	}
+	
+	public boolean isConnected() {
+		return socket != null && !socket.isClosed();
 	}
 }
