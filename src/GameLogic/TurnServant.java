@@ -9,17 +9,19 @@ public class TurnServant extends Thread {
 
 	public void run() {
 		int i = 0;
-		try {
-			sleep(40);
-			i = i + 1;
-			board.setTime(i);
-			System.out.println(i/25);
-			if (i >= 500) { // Should be 500? changed it for ease of testing
-				i = 0;
+		boolean running = true;
+		while (running) {
+			try {
+				sleep(40);
+				i = i + 1;
+				board.setTime(i);
+				//System.out.println(i / 25);
+				if (i >= 500) { // Should be 500? changed it for ease of testing
+					running = false;
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
-
 }

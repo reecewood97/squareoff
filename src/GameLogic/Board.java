@@ -1020,10 +1020,11 @@ public class Board {
 	}
 	public void startLocalTimer(){
 		this.servant = new TurnServant(this);
-		servant.run();
+		servant.start();
 	}
 	public void restartLocalTimer(){
-		servant.run();
+		System.out.println("Restarted the timer");
+		servant.start();
 	}
 	
 	public void setTime(int time){

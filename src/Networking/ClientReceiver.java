@@ -59,7 +59,7 @@ public class ClientReceiver extends Thread {
 						ui = new Screen(board,q,"");
 					}
 					else if ((int)ob == 34){
-						board.restartLocalTimer();
+						board.startLocalTimer();
 					}
 				}
 				else {
