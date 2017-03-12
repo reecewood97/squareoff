@@ -43,6 +43,8 @@ public class Board {
 	private TurnMaster turn;
 	private boolean weaponsopen = false;
 	private String weaponType;
+	private int time = 0;
+	private TurnServant servant = new TurnServant(this);
 	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
@@ -50,6 +52,7 @@ public class Board {
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
 	private boolean targetline;
+	private boolean turnChangedFlag = true;
 	//Debug
 	private final boolean debug = false;
 	private final boolean debugL = false;
@@ -1014,5 +1017,25 @@ public class Board {
 				}
 			}
 		}
+	}
+	public void startLocalTimer(){
+		this.servant = new TurnServant(this);
+		servant.run();
+	}
+	public void restartLocalTimer(){
+		servant.run();
+	}
+	
+	public void setTime(int time){
+		this.time = time/40;
+	}
+	public int getTime(){
+		return time;
+	}
+	public void setTurnFlag(boolean set){
+		this.turnChangedFlag = set;
+	}
+	public boolean getTurnFlag(){
+		return turnChangedFlag;
 	}
 }
