@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class mainMenu extends Application {
 	static int width = 960;
@@ -36,6 +37,7 @@ public class mainMenu extends Application {
 	static Audio a = new Audio();
 	static Stage ps;
 	static Scene ogScene;
+	static Stage temps;
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -58,14 +60,25 @@ public class mainMenu extends Application {
      * Method to hide the UI at anytime
      */
     public static void hideUI() {
+    	//ps.toBack();
+    	ps.setOnHiding( e -> {  temps = new Stage();
+    							temps.initStyle(StageStyle.UTILITY);
+    							temps.setMaxHeight(0);
+    							temps.setMaxWidth(0);
+    							temps.setX(Double.MAX_VALUE);
+    							temps.show();
+        }  );
     	ps.hide();
+    	
     }
     
     /**
      * Method to show the UI at anytime
      */
     public static void showUI() {
-    	ps.show();
+    	//ps.toFront();
+    	temps.setOnHiding( e -> {  ps.show(); }  );
+    	temps.hide();
     }
     
     /**
@@ -83,7 +96,7 @@ public class mainMenu extends Application {
      */
     public void start(Stage primaryStage) throws Exception {
     	ps = primaryStage;
-        primaryStage.setTitle("Square-Off: Start Menu");
+    	ps.setTitle("Square-Off: Start Menu");
         
         Button btn = new Button("Host Game");
         btn.setMinWidth(75);
@@ -111,14 +124,14 @@ public class mainMenu extends Application {
         Scene scene1 = new Scene(grid, width, height);
         ogScene = scene1;
         
-        btn.setOnAction( e -> { a.click(); lobbyWindow(scene1, "Host", (new mainMenuNetwork()) ); } );
-        btn2.setOnAction( e -> { a.click(); jgWindow(scene1); } );
-        btn3.setOnAction( e -> { a.click(); oWindow(scene1); } );
-        btn5.setOnAction( e -> { a.click(); helpWindow(scene1); } );
+        btn.setOnAction( e -> { a.click(); lobbyWindow("Host", (new mainMenuNetwork()) ); } );
+        btn2.setOnAction( e -> { a.click(); jgWindow(); } );
+        btn3.setOnAction( e -> { a.click(); oWindow(); } );
+        btn5.setOnAction( e -> { a.click(); helpWindow(); } );
         btn4.setOnAction( e -> { a.click(); stop(); } );
         
-        primaryStage.setScene(scene1);
-        primaryStage.show();
+        ps.setScene(scene1);
+        ps.show();
                 
     }
     
@@ -145,24 +158,23 @@ public class mainMenu extends Application {
     /**
      * This method creates the lobby for the host (one with a start button)
      * It is run whenever a new player joins the lobby - refreshing the lobby
-     * @param scene1 main menu scene - used whenever returning to the main menu
      * @param net class which handles the networking of the player (both server and client sides)
      */
     @SuppressWarnings({ "rawtypes" })
-    public static void refreshHLobby(Scene scene1, mainMenuNetwork net) {
+    public static void refreshHLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
     	
     	Button btn4 = new Button("Refresh");
     	btn4.setMinWidth(120);
-        btn4.setOnAction( e -> { a.click(); refreshHLobby(scene1, net); } );
+        btn4.setOnAction( e -> { a.click(); refreshHLobby(net); } );
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); net.closeServer(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); net.closeServer(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.startGame(); } );
+        btn6.setOnAction( e -> { a.click(); net.startGame(); } ); //hideUI(); } );
         
         TableView table = lobbyTable(net);
         
@@ -194,20 +206,19 @@ public class mainMenu extends Application {
     /**
      * This method creates the lobby for the client (one without a start button)
      * It is run whenever a new player joins the lobby - refreshing the lobby
-     * @param scene1 main menu scene - used whenever returning to the main menu
      * @param net class which handles the networking of the player (just the client side)
      */
     @SuppressWarnings({ "rawtypes" })
-    public static void refreshCLobby(Scene scene1, mainMenuNetwork net) {
+    public static void refreshCLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
     	
     	Button btn4 = new Button("Refresh");
     	btn4.setMinWidth(120);
-        btn4.setOnAction( e -> { a.click(); refreshCLobby(scene1, net); } );
+        btn4.setOnAction( e -> { a.click(); refreshCLobby(net); } );
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         TableView table = lobbyTable(net);
         
@@ -236,11 +247,10 @@ public class mainMenu extends Application {
     /**
      * This method is run when entering a lobby
      * It determines whether you're a host or client and sets up the lobby accordingly
-     * @param scene1 main menu scene - used whenever returning to the main menu
      * @param type string used to determine whether the player is a host or client
      * @param net class which handles the networking of the player
      */
-	public static void lobbyWindow(Scene scene1, String type, mainMenuNetwork net) {
+	public static void lobbyWindow(String type, mainMenuNetwork net) {
     	//ArrayList<String> playerArrayList = new ArrayList();
     	
     	if (type.equals("Host")) {
@@ -248,7 +258,7 @@ public class mainMenu extends Application {
     		String name = hostUsername();
     		
     		if (name==null) {
-    			ps.setScene(scene1);
+    			ps.setScene(ogScene);
     			ps.setTitle("Square-Off: Start Menu");
     			//net.closeServer();
     			return;
@@ -260,7 +270,7 @@ public class mainMenu extends Application {
     		net.runServer();
     		net.connectToHost("127.0.0.1:4444", name);
     		
-    		refreshHLobby(scene1, net);
+    		refreshHLobby(net);
     		/*
     		while (!net.inGame()) {
     			refreshHLobby(scene1, net);
@@ -274,7 +284,7 @@ public class mainMenu extends Application {
     		*/
     	}
     	else {
-    		refreshCLobby(scene1, net);
+    		refreshCLobby(net);
     	}
     }
     
@@ -326,9 +336,8 @@ public class mainMenu extends Application {
      * Handles incorrect names and invalid addresses appropriately
      * @param hostAddress address the client is trying to join 
      * @param name name of the client
-     * @param scene1 main menu scene - used whenever returning to the main menu
      */
-    public static void tryToJoin(String hostAddress, String name, Scene scene1) {
+    public static void tryToJoin(String hostAddress, String name) {
     	mainMenuNetwork net = new mainMenuNetwork();
 
     	if (name.equals("")) {
@@ -342,7 +351,7 @@ public class mainMenu extends Application {
     	}
     	else {
     		if (net.connectToHost(hostAddress, name))
-				lobbyWindow(scene1, "Client", net);
+				lobbyWindow("Client", net);
 			else {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -357,9 +366,8 @@ public class mainMenu extends Application {
     
     /**
      * The method is run when trying to join a lobby
-     * @param scene1 main menu scene - used whenever returning to the main menu
      */
-	public static void jgWindow(Scene scene1) {
+	public static void jgWindow() {
 		ps.setTitle("Square-Off: Client");
     	
     	Label label1 = new Label("Address:");
@@ -372,11 +380,11 @@ public class mainMenu extends Application {
         
     	Button btn5 = new Button("Click to Join");
     	btn5.setMinWidth(90);
-        btn5.setOnAction( e -> { a.click(); tryToJoin(textField.getText(), textField2.getText(), scene1); } );
+        btn5.setOnAction( e -> { a.click(); tryToJoin(textField.getText(), textField2.getText()); } );
     	
     	Button btn6 = new Button("Back to Main Menu");
     	btn6.setMinWidth(140);
-        btn6.setOnAction( e -> { a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
+        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         hb.getChildren().addAll(label1, textField, btn5);
         hb.setAlignment(Pos.CENTER);
@@ -406,9 +414,8 @@ public class mainMenu extends Application {
     
 	/**
 	 * Options menu for the game, handles video/audio options
-	 * @param scene1 main menu scene - used whenever returning to the main menu
 	 */
-    public static void oWindow(Scene scene1) {
+    public static void oWindow() {
     	ps.setTitle("Square-Off: Options");
     	
     	Button btn6 = new Button("Back to Main Menu");
@@ -432,9 +439,9 @@ public class mainMenu extends Application {
         
         Scene scene4 = new Scene(grid4, width, height);
         
-        btn6.setOnAction( e -> { a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
-        btn7.setOnAction( e -> { a.click(); videoWindow(scene4, width, height); ps.setTitle("Square-Off: Video Options"); } );
-        btn8.setOnAction( e -> { a.click(); audioWindow(scene4); ps.setTitle("Square-Off: Audio Options"); } );
+        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn7.setOnAction( e -> { a.click(); videoWindow(width, height); ps.setTitle("Square-Off: Video Options"); } );
+        btn8.setOnAction( e -> { a.click(); audioWindow(); ps.setTitle("Square-Off: Audio Options"); } );
         
         ps.setScene(scene4);
         ps.show();
@@ -459,13 +466,12 @@ public class mainMenu extends Application {
     
     /**
      * Audio options window
-     * @param scene1 main menu scene - used whenever returning to the main menu
      */
-    public static void audioWindow(Scene scene1) {
+    public static void audioWindow() {
     	
     	Button btn9 = new Button("Back to Options");
     	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Options"); } );
+        btn9.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Options"); } );
         
         Slider slider = new Slider();
         slider.setMin(0);
@@ -502,15 +508,14 @@ public class mainMenu extends Application {
     
     /**
      * Video options window
-     * @param scene1 main menu scene - used whenever returning to the main menu
      * @param w new width of window
      * @param h new height of window
      */
-    public static void videoWindow(Scene scene1, double w, double h) {
+    public static void videoWindow(double w, double h) {
     	
     	Button btn9 = new Button("Back to Options");
     	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { a.click(); width = (int) w; height = (int) h; ps.setScene(scene1); ps.setTitle("Square-Off: Options"); } );
+        btn9.setOnAction( e -> { a.click(); width = (int) w; height = (int) h; ps.setScene(ogScene); ps.setTitle("Square-Off: Options"); } );
         
         Slider slider = new Slider();
         slider.setMin(480);
@@ -538,7 +543,7 @@ public class mainMenu extends Application {
         HBox hb = new HBox(10);
     	Button btn10 = new Button("Set Resolution");
     	btn10.setMinWidth(140);
-        btn10.setOnAction( e -> { a.click(); videoWindow(scene1, ((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
+        btn10.setOnAction( e -> { a.click(); videoWindow(((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
         
         hb.getChildren().addAll(slider, btn10);
         hb.setAlignment(Pos.CENTER);
@@ -560,9 +565,8 @@ public class mainMenu extends Application {
     
     /**
      * Help window - controls etc
-     * @param scene1 main menu scene - used whenever returning to the main menu
      */
-    public static void helpWindow(Scene scene1) {
+    public static void helpWindow() {
     	ps.setTitle("Square-Off: Help");
     	
     	Button btn6 = new Button("Back to Main Menu");
@@ -577,7 +581,7 @@ public class mainMenu extends Application {
         
         Scene scene4 = new Scene(grid4, width, height);
         
-        btn6.setOnAction( e -> { a.click(); ps.setScene(scene1); ps.setTitle("Square-Off: Start Menu"); } );
+        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         ps.setScene(scene4);
         ps.show();
