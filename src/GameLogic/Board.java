@@ -772,8 +772,8 @@ public class Board {
 	public void input(String input) {
 		Square active = (Square)getActivePlayer();
 		
-		if(input.contains("Pressed")){
-			if(input.contains(players[player])){
+		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
+			if(input.substring(10, input.length()).equals(players[player])){
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			Move mv;

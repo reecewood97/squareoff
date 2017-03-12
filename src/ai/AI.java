@@ -20,7 +20,7 @@ import Networking.Queue;
  * @author JeffLeung
  *
  */
-public abstract class AI extends Thread{
+public abstract class AI {
 	
 	private static final double maxVelocity = 100;
 	private static final double gravity = 9.81;
@@ -35,8 +35,6 @@ public abstract class AI extends Thread{
 	private Queue q;
 	private double mistakeAngle = 0;
 	private double mistakeVelocity = 0;
-	private boolean isAITurn;
-	
 	
 	/**
 	 * Constructor that set up AI player
@@ -50,7 +48,6 @@ public abstract class AI extends Thread{
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		setBoard(board);
-		setAITurn(false);
 		setAIName();
 	}
 	
@@ -111,10 +108,6 @@ public abstract class AI extends Thread{
 		this.mySquareID = id;
 	}
 	
-	public void setAITurn(boolean isItAITurn) {
-		this.isAITurn = isItAITurn;
-	}
-	
 	public int getSquareID() {
 		return this.mySquareID;
 	}
@@ -125,16 +118,6 @@ public abstract class AI extends Thread{
 	
 	public int getColour() {
 		return this.myColour;
-	}
-	
-	public boolean getAITurn() {
-		return this.isAITurn;
-	}
-	
-	public void run() {
-		setAITurn(true);
-		determineState();
-		setAITurn(false);
 	}
 	
 	/**
@@ -551,7 +534,7 @@ public abstract class AI extends Thread{
 	public void moveRight() {
 //		Move right = new Move(myColour, myID, "Right", false);
 //		board.updateFrame(right);
-		board.input("Pressed D");
+		board.input("Pressed D " + myName);
 //		q.offer("Pressed D");
 		try {
 			Thread.sleep(100);
@@ -566,7 +549,7 @@ public abstract class AI extends Thread{
 	public void moveUp() {
 //		Move up = new Move(myColour, myID, "None", true);
 //		board.updateFrame(up);
-		board.input("Pressed W");
+		board.input("Pressed W " + myName);
 //		q.offer("Pressed W");
 		try {
 			Thread.sleep(100);

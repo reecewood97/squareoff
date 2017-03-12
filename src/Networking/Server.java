@@ -8,7 +8,8 @@ import ai.*;
 
 /**
  * The Server. A thread that creates a ServerSocket that clients can connect to. 
- * Holds an instance of the game board that "copies" of are sent to 
+ * Holds an instance of the game board that "copies" of are sent to all connected
+ * clients when the game starts.
  * @author djs568
  *
  */
@@ -17,8 +18,11 @@ public class Server extends Thread {
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
 	public static final int PLAYERLIST = 3;
+	public static final int EASY_AI = 11;
+	public static final int NORMAL_AI = 12;
+	public static final int HARD_AI = 13;
 	
-	private int port;
+	private int port, aiDifficulty;
 	private Board board;
 	private boolean running;
 	private ServerSocket socket;
@@ -32,6 +36,7 @@ public class Server extends Thread {
 		socket = null;
 		table = new ClientTable();
 		running = false;
+		aiDifficulty = EASY_AI;
 	}
 	
 	public void run() {
@@ -97,9 +102,18 @@ public class Server extends Thread {
 		int numberOfPlayers = players.size();
 		
 		for(int i = numberOfPlayers + 1; i <= maxPlayers; i++) {
-			AI ai = new EasyAI(i, 0, i, board);
+			AI ai;
+			switch(aiDifficulty) {
+				case NORMAL_AI: ai = new NormalAI(i, 0, i, board);
+					break;
+				case HARD_AI: ai = new DifficultAI(i, 0, i, board);	
+					break;
+				default: ai = new EasyAI(i, 0, i, board);
+			}
 			ais.add(ai);
-			players.add("AI" + (i - numberOfPlayers));
+			String name = "AI " + i;
+			players.add(name);
+			board.addName(name);
 		}
 		
 		return ais;
@@ -117,5 +131,9 @@ public class Server extends Thread {
 	
 	public ArrayList<String> getPlayers() {
 		return players;
+	}
+	
+	public void setAIDifficulty(int aiDifficulty) {
+		this.aiDifficulty = aiDifficulty;
 	}
 }

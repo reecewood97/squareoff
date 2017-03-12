@@ -1,9 +1,6 @@
 package Networking;
 
-import java.util.ArrayList;
-
 import GameLogic.*;
-import ai.AI;
 
 public class GameLoop extends Thread {
 	

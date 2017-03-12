@@ -14,6 +14,7 @@ public class AIManager extends Thread {
 	public AIManager(Board board) {
 		ais = new ArrayList<AI>();
 		running = false;
+		this.board = board;
 	}
 	
 	public void add(AI ai) {
@@ -22,28 +23,23 @@ public class AIManager extends Thread {
 	
 	public void run() {
 		running = true;
-		boolean aiTurn = false;
+		int playerTurn;
 		while(running) {
-			int playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
-			while(!aiTurn) {
-				for(AI ai: ais) {
-					if(ai.getPlayerID() == playerTurn) {
-						aiTurn = true;
-						ai.determineState();
-						break;
-					}
-				}
-				try {
-					sleep(50);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					System.exit(1);
+			playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
+			for(AI ai: ais) {
+				if(ai.getPlayerID() == playerTurn) {
+					ai.determineState();
+					board.incrementTurn();
+					break;
 				}
 			}
-			if(playerTurn == ((Square)board.getActivePlayer()).getPlayerID()) {
-				board.incrementTurn();
+			try {
+				sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
 			}
+	
 		}
-		
 	}
 }
