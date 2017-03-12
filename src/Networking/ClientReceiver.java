@@ -59,6 +59,9 @@ public class ClientReceiver extends Thread {
 						board.setWinner(winner);
 						ui = new Screen(board,q,"");
 					}
+					else if ((int)ob == 34){
+						board.startLocalTimer();
+					}
 				}
 				else {
 					if(ob.getClass().isInstance(0)) {

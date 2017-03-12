@@ -32,7 +32,10 @@ public class ServerSender extends Thread {
 						send(board.getWinner());
 						board.setWinner(-1);
 						//TODO
-					}
+					}else if(board.getTurnFlag()) {
+						send(34);
+						board.setTurnFlag(false);
+						}
 					else{
 						ArrayList<PhysObject> dummy = new ArrayList<PhysObject>();
 						dummy.addAll(board.getUpdate()); 
