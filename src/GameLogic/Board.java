@@ -755,8 +755,6 @@ public class Board {
 					turn.endItAll();
 				}
 				incrementTurn();
-				turn.resetTimer();
-				
 			}
 			int x = player+squareID;
 			objects.add(x,activePlayer);
@@ -959,6 +957,9 @@ public class Board {
 		setActivePlayer(player,squareID);
 		if (!(activePlayer.getAlive())){
 			incrementTurn();
+		}
+		else {
+			turn.resetTimer();
 		}
 	}
 	

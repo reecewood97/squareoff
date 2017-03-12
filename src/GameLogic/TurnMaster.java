@@ -14,7 +14,7 @@ public class TurnMaster extends Thread {
 		this.i = 0;
 		while(running){
 			try {
-				sleep(40);
+				sleep(35);
 				i = i+1;
 				if(i >= 500){ //Should be 500? changed it for ease of testing
 					board.setFreeState(true);

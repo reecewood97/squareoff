@@ -21,6 +21,7 @@ public class ClientSender extends Thread {
 	public ClientSender(ObjectOutputStream server, Queue q) {
 		this.server = server;
 		this.q = q;
+		running = false;
 	}
 	
 	public void run() {

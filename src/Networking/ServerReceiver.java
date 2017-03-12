@@ -21,6 +21,7 @@ public class ServerReceiver extends Thread {
 		this.players = players; 
 		this.table = table;
 		name = "";
+		running = false;
 	}
 	
 	public void run() {

@@ -20,7 +20,7 @@ public class Server extends Thread {
 	
 	private int port;
 	private Board board;
-	private boolean running, debug;
+	private boolean running;
 	private ServerSocket socket;
 	private ArrayList<String> players;
 	private ClientTable table;
@@ -31,8 +31,7 @@ public class Server extends Thread {
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();
-		
-		debug = true;
+		running = false;
 	}
 	
 	public void run() {
@@ -62,7 +61,7 @@ public class Server extends Thread {
 			}			
 		}
 		catch (IOException e) {
-			if(debug) System.out.println("ServerSocket closed.");
+			System.out.println("ServerSocket closed.");
 		}
 	}
 	
@@ -78,8 +77,7 @@ public class Server extends Thread {
 	
 	public void startGame() {
 		
-		ArrayList<AI> ais = new ArrayList<AI>();
-		addAIs(ais);
+		AIManager ais = addAIs();
 	
 		for(ServerReceiver r: table.getReceivers()) {
 			r.startGame();
@@ -90,7 +88,8 @@ public class Server extends Thread {
 		new GameLoop(board, ais).start();
 	}
 	
-	private void addAIs(ArrayList<AI> ais) {
+	private AIManager addAIs() {
+		AIManager ais = new AIManager(board);
 		for(ServerReceiver s: table.getReceivers()) {
 			s.getPlayerName();
 		}
@@ -100,8 +99,10 @@ public class Server extends Thread {
 		for(int i = numberOfPlayers + 1; i <= maxPlayers; i++) {
 			AI ai = new EasyAI(i, 0, i, board);
 			ais.add(ai);
-			players.add("AI " + (i + 1 - numberOfPlayers));
+			players.add("AI" + (i - numberOfPlayers));
 		}
+		
+		return ais;
 	}
 	
 	public boolean kick(String name) {
@@ -112,5 +113,9 @@ public class Server extends Thread {
 			}
 		}
 		return false;
+	}
+	
+	public ArrayList<String> getPlayers() {
+		return players;
 	}
 }

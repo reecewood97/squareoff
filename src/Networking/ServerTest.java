@@ -10,14 +10,9 @@ public class ServerTest {
 		server.start();
 		
 		Client bob = new Client("Bob");
+		bob.connect("127.0.0.1", 4444);
 		
-		for(int i = 0; i < 50; i++) {
-			bob.connect("127.0.0.1", 4444);
-			System.out.println(bob.getPlayers());
-			bob.disconnect();
-		}
-		
-		//server.startGame();
+		server.startGame();
 	}	
 
 }

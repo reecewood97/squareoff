@@ -15,6 +15,7 @@ public class ServerSender extends Thread {
 	public ServerSender(ObjectOutputStream toClient, Board board) {
 		this.toClient = toClient;
 		this.board = board;
+		running = false;
 	}
 	
 	public void run() {

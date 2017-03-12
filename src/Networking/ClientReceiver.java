@@ -32,6 +32,7 @@ public class ClientReceiver extends Thread {
 		this.board = board;
 		this.ui = ui;
 		this.client = client;
+		running = false;
 		players = null;
 	}
 	
@@ -45,10 +46,10 @@ public class ClientReceiver extends Thread {
 		
 		try {
 			Object ob;
-			ArrayList<String> check = new ArrayList<String>();
+			ArrayList<String> anArrayList = new ArrayList<String>();
 			while(running && (ob = server.readObject()) != null) {
 				if(inGame) {
-					if(ob.getClass().isInstance(check)) {
+					if(ob.getClass().isInstance(anArrayList)) {
 						board.setObjects((ArrayList<PhysObject>) ob);
 						ui.updateSBoard();
 					}
@@ -69,7 +70,7 @@ public class ClientReceiver extends Thread {
 							client.disconnect();
 						}
 					}
-					else if(ob.getClass().isInstance(check)) {
+					else if(ob.getClass().isInstance(anArrayList)) {
 							players = (ArrayList<String>)ob;
 					}
 				}
