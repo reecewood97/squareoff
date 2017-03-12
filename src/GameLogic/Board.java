@@ -1027,7 +1027,7 @@ public class Board {
 	}
 	
 	public void setTime(int time){
-		this.time = time/40;
+		this.time = time/25;
 	}
 	public int getTime(){
 		return time;

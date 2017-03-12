@@ -13,6 +13,7 @@ public class TurnServant extends Thread {
 			sleep(40);
 			i = i + 1;
 			board.setTime(i);
+			System.out.println(i/25);
 			if (i >= 500) { // Should be 500? changed it for ease of testing
 				i = 0;
 			}
