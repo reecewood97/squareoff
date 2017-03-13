@@ -769,47 +769,58 @@ public class Board {
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs the formatted string from hangerOn.
 	 */
-	public void input(String input) {
+	public void input(String input) {		
 		Square active = (Square)getActivePlayer();
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
-			if(!(input.substring(10, input.length()).equals(players[player]))){
+			if(!(input.substring(11, input.length()).equals(players[player]))){
 				return;
 			}
-			String inputKey = input.substring(8,9);
+			String input1 = input.substring(8, 9);
+			String input2 = input.substring(9, 10);
+		
 			//System.out.println(inputKey);
-			Move mv;
+			if(input1.equals(" ")) input1 = "None";
+			else if(input1.equals("A")) input1 = "Left";
+			else if(input1.equals("D")) input1 = "Right";
+			active.setFacing(input1);
+			Move mv = new Move(active.getColour(),active.getSquareID(), input1, input2.equals("W"));
+			updateFrame(mv);
+			if (q.size() > 0)
+				q.remove();
+			q.add(objects);
+
 			
-			switch(inputKey){
-			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
-							//System.out.println("Hey left sorta works");
-							updateFrame(mv);
-							if (q.size() > 0)
-								q.remove();
-							q.add(objects);
-							
-				break;
-			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
-						//System.out.println("Hey left sorta works");
-						updateFrame(mv);
-						if (q.size() > 0)
-							q.remove();
-						q.add(objects);
-						active.setFacing("Left");
-			case "S" : //duck?
-				break;
-			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
-						updateFrame(mv);
-						if (q.size() > 0)
-							q.remove();
-						q.add(objects);
-						active.setFacing("Right");
-				break;
-			default : if (input.contains("Space")){
-							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
-							mv.setWeapon(true);
-				}
-			}
+//			switch(inputKey){
+//			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
+//							//System.out.println("Hey left sorta works");
+//							updateFrame(mv);
+//							if (q.size() > 0)
+//								q.remove();
+//							q.add(objects);
+//							
+//				break;
+//			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
+//						//System.out.println("Hey left sorta works");
+//						updateFrame(mv);
+//						if (q.size() > 0)
+//							q.remove();
+//						q.add(objects);
+//						active.setFacing("Left");
+//			case "S" : //duck?
+//				break;
+//			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
+//						updateFrame(mv);
+//						if (q.size() > 0)
+//							q.remove();
+//						q.add(objects);
+//						active.setFacing("Right");
+//				break;
+//			default : if (input.contains("Space")){
+//							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
+//							mv.setWeapon(true);
+//				}
+//			}
 		}
 		else if(input.contains("Clicked")){
 			//System.out.println(input.substring(36));
@@ -967,6 +978,7 @@ public class Board {
 			incrementTurn();
 		}
 		else {
+			servant.end();
 			turn.resetTimer();
 		}
 		setTurnFlag(true);
@@ -1035,7 +1047,7 @@ public class Board {
 //	}
 	
 	public void setTime(int time){
-		this.time = time/25;
+		this.time = time;
 	}
 	public int getTime(){
 		return time;

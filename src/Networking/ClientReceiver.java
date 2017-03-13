@@ -16,7 +16,6 @@ public class ClientReceiver extends Thread {
 		
 	private ObjectInputStream server;
 	private Board board; //Client-side board.
-	private Queue q;
 	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
@@ -85,7 +84,7 @@ public class ClientReceiver extends Thread {
 						//running = false;
 						int winner = 3;//This needs to be a read in
 						board.setWinner(winner);
-						ui = new Screen(board,q,"");
+						//ui.winScreen();
 					}
 					//Not sure...
 					else if ((int)ob == 34){
