@@ -31,6 +31,7 @@ public class Screen extends JFrame {
 	private double heightratio;
 	private ScreenBoard sboard;
 	private HangerOn listeners;
+	private ButtonPanel controls;
 	
 	public Screen(Board newboard,Queue q,String name){
 		
@@ -50,10 +51,11 @@ public class Screen extends JFrame {
 		setLayout(new BorderLayout());
 		
 		this.listeners = new HangerOn(q,name);
+		listeners.start();
 		
 		//create button panel
-		ButtonPanel controls = new ButtonPanel(this,newboard, new Audio());
-		controls.setBackground(lightblue);
+		this.controls = new ButtonPanel(this,newboard, new Audio());
+		this.controls.setBackground(lightblue);
 		
 		//show screen board if no winner
 		if(newboard.getWinner() == -1){
@@ -115,8 +117,17 @@ public class Screen extends JFrame {
 	 * repaint screen board
 	 */
 	public void updateSBoard(){
+		
+		
 		sboard.repaint();
-	}  
+		this.repaint(); 
+		
+	}
+	
+	public void startMusic(){
+		
+		controls.startMusic();
+	}
 	
 	/**
 	 * get hanger on associated with this screen

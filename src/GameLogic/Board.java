@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
+import Graphics.TargetLine;
 
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -15,7 +16,6 @@ import java.lang.Math;
 //The missile idea sounds cool but very hard to implement :(
 //1. Air-strike; Click to send airplane across top of screen, click again to release multiple bombs.
 //2. TNT; Choose any block. After one full cycle of turns it will explode.
-//3. Grenade with a timer instead of exploding on impact.
 //4. Anti-grav bomb; bomb that falls upwards instead of downwards.
 //5. Dont use any weapon and instead fling your square across the map.
 
@@ -45,13 +45,13 @@ public class Board {
 	private String weaponType;
 	private int time = 0;
 	private TurnServant servant = new TurnServant(this);
+	private boolean playing = false;
 	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
 	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
-	private boolean targetline;
 	private boolean turnChangedFlag = true;
 	//Debug
 	private final boolean debug = true;
@@ -84,7 +84,6 @@ public class Board {
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
-		this.targetline = false;
 		this.map = map;
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
@@ -103,6 +102,11 @@ public class Board {
 		objects.add(blu);
 		objects.add(yel);
 		objects.add(grn);
+		
+		
+		PhysObject targetline = new TargetLine();
+		targetline.setInUse(false);
+		objects.add(targetline);
 		
 		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
@@ -208,17 +212,16 @@ public class Board {
 		activePlayer = (Square)objects.get(x);
 	}
 	
-	public void setTargetLine(boolean b){
-		this.targetline = b;
-	}
 	
-	public boolean getTargetLine(){
-		return this.targetline;
-	}
 	
 	public PhysObject getActivePlayer() {
 		return activePlayer;
 	}
+	
+	public boolean getPlaying() {
+		return this.playing;
+	}
+	
 	
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
@@ -228,6 +231,16 @@ public class Board {
 			}
 		}
 		return weapons;
+	}
+	
+	public ArrayList<PhysObject> getTargetLine(){
+		ArrayList<PhysObject> target = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().startsWith("Target")){
+				target.add(obj);
+			}
+		}
+		return target;
 	}
 	
 	public ArrayList<PhysObject> getExplodeOnImpact(){
@@ -252,6 +265,17 @@ public class Board {
 		return weapons;
 	}
 		
+	
+	public ArrayList<PhysObject> getMissile(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("Missile")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
+	
 	public ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -769,47 +793,58 @@ public class Board {
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs the formatted string from hangerOn.
 	 */
-	public void input(String input) {
+	public void input(String input) {		
 		Square active = (Square)getActivePlayer();
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
-			if(!(input.substring(10, input.length()).equals(players[player]))){
+			if(!(input.substring(11, input.length()).equals(players[player]))){
 				return;
 			}
-			String inputKey = input.substring(8,9);
+			String input1 = input.substring(8, 9);
+			String input2 = input.substring(9, 10);
+		
 			//System.out.println(inputKey);
-			Move mv;
+			if(input1.equals(" ")) input1 = "None";
+			else if(input1.equals("A")) input1 = "Left";
+			else if(input1.equals("D")) input1 = "Right";
+			active.setFacing(input1);
+			Move mv = new Move(active.getColour(),active.getSquareID(), input1, input2.equals("W"));
+			updateFrame(mv);
+			if (q.size() > 0)
+				q.remove();
+			q.add(objects);
+
 			
-			switch(inputKey){
-			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
-							//System.out.println("Hey left sorta works");
-							updateFrame(mv);
-							if (q.size() > 0)
-								q.remove();
-							q.add(objects);
-							
-				break;
-			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
-						//System.out.println("Hey left sorta works");
-						updateFrame(mv);
-						if (q.size() > 0)
-							q.remove();
-						q.add(objects);
-						active.setFacing("Left");
-			case "S" : //duck?
-				break;
-			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
-						updateFrame(mv);
-						if (q.size() > 0)
-							q.remove();
-						q.add(objects);
-						active.setFacing("Right");
-				break;
-			default : if (input.contains("Space")){
-							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
-							mv.setWeapon(true);
-				}
-			}
+//			switch(inputKey){
+//			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
+//							//System.out.println("Hey left sorta works");
+//							updateFrame(mv);
+//							if (q.size() > 0)
+//								q.remove();
+//							q.add(objects);
+//							
+//				break;
+//			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
+//						//System.out.println("Hey left sorta works");
+//						updateFrame(mv);
+//						if (q.size() > 0)
+//							q.remove();
+//						q.add(objects);
+//						active.setFacing("Left");
+//			case "S" : //duck?
+//				break;
+//			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
+//						updateFrame(mv);
+//						if (q.size() > 0)
+//							q.remove();
+//						q.add(objects);
+//						active.setFacing("Right");
+//				break;
+//			default : if (input.contains("Space")){
+//							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
+//							mv.setWeapon(true);
+//				}
+//			}
 		}
 		else if(input.contains("Clicked")){
 			//System.out.println(input);
@@ -827,7 +862,13 @@ public class Board {
 			//}
 			if(weaponsopen){
 				
-				setTargetLine(false);
+				for( PhysObject obj : objects){
+					
+					if(obj.getName().contains("Target")){
+						
+						obj.setInUse(false);
+					}
+				}
 				
 				int xs = input.indexOf('x');
 				int xe = input.indexOf(',');
@@ -902,7 +943,13 @@ public class Board {
 		}
 		else if(input.contains("setTar")){
 			
-			setTargetLine(Boolean.parseBoolean(input.substring(8)));
+			for(PhysObject obj : objects){
+				
+				if ( obj.getName().contains("Target")){
+					
+					obj.setInUse(Boolean.parseBoolean(input.substring(8)));
+				}
+			}
 		}
 		else
 		{
@@ -951,6 +998,9 @@ public class Board {
 	 * Called when the game actually begins, starts the turn timer and fiddles with the player list.
 	 */
 	public void startGame(){
+		
+		this.playing = true;
+		
 		this.turn = new TurnMaster(this);
 		turn.start();
 		
@@ -975,6 +1025,7 @@ public class Board {
 			incrementTurn();
 		}
 		else {
+			servant.end();
 			turn.resetTimer();
 		}
 		setTurnFlag(true);
@@ -1043,7 +1094,7 @@ public class Board {
 //	}
 	
 	public void setTime(int time){
-		this.time = time/25;
+		this.time = time;
 	}
 	public int getTime(){
 		return time;
