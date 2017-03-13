@@ -15,9 +15,11 @@ import ai.*;
  */
 public class Server extends Thread {
 
+	public static final int BASE = 0;
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
-	public static final int PLAYERLIST = 3;
+	public static final int ACCEPTED = 3;
+	public static final int PLAYERLIST = 4;
 	public static final int EASY_AI = 11;
 	public static final int NORMAL_AI = 12;
 	public static final int HARD_AI = 13;
@@ -71,6 +73,7 @@ public class Server extends Thread {
 	}
 	
 	public void close() {
+		table.sendAll(Server.DISCONNECT);
 		running = false;
 		try {
 			socket.close();
@@ -95,9 +98,12 @@ public class Server extends Thread {
 	
 	private AIManager addAIs() {
 		AIManager ais = new AIManager(board);
+		
+		//Wait for all players to be in the lobby.
 		for(ServerReceiver s: table.getReceivers()) {
 			s.getPlayerName();
 		}
+		
 		int maxPlayers = 4;
 		int numberOfPlayers = players.size();
 		
@@ -111,7 +117,6 @@ public class Server extends Thread {
 				default: ai = new EasyAI(i, 0, i, board);
 			}
 			ais.add(ai);
-			String name = "AI " + i;
 			players.add("AI " + (i - numberOfPlayers));
 		}
 		
@@ -122,6 +127,15 @@ public class Server extends Thread {
 		for(ServerReceiver r: table.getReceivers()) {
 			if(r.getPlayerName().equals(name)) {
 				table.get(r).send(Server.DISCONNECT);
+				while(players.contains(name)) {
+					try {
+						sleep(50);
+					}
+					catch(InterruptedException e) {
+						e.printStackTrace();
+						System.exit(1);
+					}
+				}
 				return true;
 			}
 		}

@@ -13,7 +13,7 @@ import Graphics.Screen;
  *
  */
 public class ClientReceiver extends Thread {
-	
+		
 	private ObjectInputStream server;
 	private Board board;
 	private Queue q;
@@ -21,6 +21,7 @@ public class ClientReceiver extends Thread {
 	private Screen ui;
 	private ArrayList<String> players;
 	private Client client;
+	private int state;
 
 	
 	/**
@@ -34,6 +35,7 @@ public class ClientReceiver extends Thread {
 		this.client = client;
 		running = false;
 		players = null;
+		state = Server.BASE;
 	}
 	
 	/**
@@ -48,6 +50,19 @@ public class ClientReceiver extends Thread {
 			Object ob;
 			ArrayList<String> anArrayList = new ArrayList<String>();
 			while(running && (ob = server.readObject()) != null) {
+				if(ob.getClass().isInstance(0)) {
+					if((int)ob == Server.PLAY && !inGame) {
+						inGame = true;
+						ui.setVisible();
+					}
+					else if((int)ob == Server.ACCEPTED) {
+						state = Server.ACCEPTED;
+					}
+					else if((int)ob == Server.DISCONNECT) {
+						state = Server.DISCONNECT;
+						client.disconnect();
+					}
+				}
 				if(inGame) {
 					if(ob.getClass().isInstance(anArrayList)) {
 						board.setObjects((ArrayList<PhysObject>) ob);
@@ -64,16 +79,7 @@ public class ClientReceiver extends Thread {
 					}
 				}
 				else {
-					if(ob.getClass().isInstance(0)) {
-						if((int)ob == Server.PLAY) {
-							inGame = true;
-							ui.setVisible();
-						}
-						else if((int)ob == Server.DISCONNECT) {
-							client.disconnect();
-						}
-					}
-					else if(ob.getClass().isInstance(anArrayList)) {
+					if(ob.getClass().isInstance(anArrayList)) {
 							players = (ArrayList<String>)ob;
 					}
 				}
@@ -99,8 +105,8 @@ public class ClientReceiver extends Thread {
 	public ArrayList<String> getPlayers() {
 		while(players == null) {
 			try {
-				sleep(10);
-			}
+				sleep(50);
+			}	
 			catch(InterruptedException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -113,6 +119,19 @@ public class ClientReceiver extends Thread {
 	
 	public boolean inGame() {
 		return inGame;
+	}
+	
+	public boolean waitForAccept() {
+		while(state == Server.BASE) {
+			try {
+				sleep(50);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+		return state == Server.ACCEPTED;
 	}
 }
 

@@ -20,7 +20,7 @@ public class ServerReceiver extends Thread {
 		this.board = board;
 		this.players = players; 
 		this.table = table;
-		name = "";
+		name = null;
 		running = false;
 	}
 	
@@ -31,21 +31,26 @@ public class ServerReceiver extends Thread {
 		try {
 			name = (String)fromClient.readObject();
 			if(players.contains(name)) {
+				name = null;
 				table.get(this).send(Server.DISCONNECT);
 			}
 			else if(players.size() < 4){ 
+				table.get(this).send(Server.ACCEPTED);
 				players.add(name);
 				board.addName(name);
 			}
 			else {
 				//table.get(this).send(Server.DISCONNECT);
+				table.get(this).send(Server.ACCEPTED);
 			}
 			
 			setName(name + ": server receiver");
 			table.get(this).setName(name + ": server sender");
 			
 			Object obj;
-			while(running && (obj = fromClient.readObject()) != null) {
+			while(running) {
+				obj = fromClient.readObject();
+				//System.out.println(obj);
 				if(inGame && obj.getClass().isInstance("")) {
 					board.input((String)obj);
 				}
@@ -71,26 +76,20 @@ public class ServerReceiver extends Thread {
 		inGame = true;
 	}
 	
-	private void close() {
+	public void close() {
 		running = false;
 		players.remove(name);
 		board.removeName(name);
-		table.get(this).send("I close the server sender.");
-		try {
-			table.get(this).join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		table.get(this).send("");
 		table.remove(this);
 		//System.out.println(getName() + " closed.");
 	}
 	
 	public String getPlayerName() {
-		while(name.equals("")) {
+		while(name == null) {
 			try {
-				Thread.sleep(100);
-			}
+				sleep(50);
+			}	
 			catch(InterruptedException e) {
 				e.printStackTrace();
 				System.exit(1);

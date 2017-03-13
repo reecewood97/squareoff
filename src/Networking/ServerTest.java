@@ -9,13 +9,8 @@ public class ServerTest {
 		Client bob = new Client("Bob");
 		bob.connect("127.0.0.1", 4444);
 		
-//		Client jerry = new Client("Jerry");
-//		jerry.connect("127.0.0.1", 4444);
-
-		bob.getPlayers(); //Blocks, allowing bob to join before the game starts.
 		server.startGame();
 	}	
-
 }
 
 
