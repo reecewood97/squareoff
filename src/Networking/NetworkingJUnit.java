@@ -74,19 +74,16 @@ public class NetworkingJUnit {
 		
 		//ImposterBob fails to connect to the server.
 		System.err.println(6);
-		assertTrue(imposterBob.connect("127.0.0.1", 4444));
-		wait(500);
+		assertFalse(imposterBob.connect("127.0.0.1", 4444));
 		assertFalse(imposterBob.isConnected());
 		
 		expectedPlayers.remove("Bob");
 		
 		//Bob is kicked from the server.
 		System.err.println(7);
-		assertTrue(server.kick("Bob"));
-		assertEquals(expectedPlayers, jerry.getPlayers());
-		wait(500);
+		assertTrue(server.kick("Bob"));	
 		assertFalse(bob.isConnected());
-		
+		assertEquals(expectedPlayers, jerry.getPlayers());
 	}
 	
 	private void wait(int millis) {

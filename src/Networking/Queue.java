@@ -11,6 +11,10 @@ public class Queue {
 	public void offer(Object obj){
 		q.offer(obj);
 	}
+	
+	public void clear() {
+		q.clear();
+	}
 }
 
 
