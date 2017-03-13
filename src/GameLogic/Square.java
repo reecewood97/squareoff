@@ -22,7 +22,7 @@ public class Square extends PhysObject {
 		this.point = pos;
 		this.alive = true;
 		this.setName("Square");
-		this.facing = "Right";
+		this.facing = "At you!";
 	}
 	
 	public Square(Square other) {

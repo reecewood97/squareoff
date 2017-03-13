@@ -75,15 +75,15 @@ public class ScreenBoard extends JPanel{
 		
 		
 		g2d.setColor(Color.WHITE);
-		g2d.drawString("Player " + board.getActivePlayer() + "'s turn",
-				(int) (80*widthratio), (int) (80*heightratio));
-		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (80*heightratio));
+		g2d.drawString("Player " + (((Square) (board.getActivePlayer())).getPlayerID()) +
+				"'s turn", (int) (80*widthratio), (int) (10*heightratio));
+		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (10*heightratio));
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d); //DOING //TODO paint other types of weapon, only paints bombs right now
 		paintExplosions(board.getExplosion(),g2d);
-		paintTargetLine(board.getWeapons(),true,g2d);
+		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 	} 		
 	
 	
@@ -197,14 +197,18 @@ public class ScreenBoard extends JPanel{
 					eye1frontstartx = (int) ((x+10)*widthratio);
 					eye2frontstartx = (int) ((x+24)*widthratio);
 				}
-				else{
+				else if(((Square) square).getFacing().equals("Left")){
 					
 					eye1backstartx = (int) ((x)*widthratio);
-					eye2backstartx = (int) ((x+16)*widthratio);
-	
+					eye2backstartx = (int) ((x+16)*widthratio);	
 					eye1frontstartx = (int) ((x+2)*widthratio);
 					eye2frontstartx = (int) ((x+18)*widthratio);
-					
+				}
+				else {
+					eye1backstartx = (int) ((x+4)*widthratio);
+					eye2backstartx = (int) ((x+19)*widthratio);	
+					eye1frontstartx = (int) ((x+6)*widthratio);
+					eye2frontstartx = (int) ((x+21)*widthratio);
 				}
 				
 				int eye1backstarty = (int) ((y + 10)*heightratio);
@@ -239,11 +243,13 @@ public class ScreenBoard extends JPanel{
 	 * @param b Whether line is shown or not  - true or false
 	 * @param g2d Graphics
 	 */
-	public void paintTargetLine(ArrayList<PhysObject> weapons, boolean b, Graphics2D g2d){
+	public void paintTargetLine(ArrayList<PhysObject> weapons,
+			ArrayList<PhysObject> targetline, Graphics2D g2d){
 	
 		//TO DO
 		
-		if(b){
+		if(targetline.get(0).getInUse()){
+			
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
 			/*
@@ -292,8 +298,8 @@ public class ScreenBoard extends JPanel{
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}
-					else{
-						
+					else if(weapon.getName().contains("TimedGrenade")){
+					
 						g2d.setColor(Color.GRAY);
 						g2d.fillRect(x, y, weaponwidth, weaponheight);
 					}

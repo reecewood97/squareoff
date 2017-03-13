@@ -16,11 +16,12 @@ import Networking.Queue;
 /**
  * This is a simple listener class meant to seperate the function from the form with the UI
  */
-public class HangerOn implements KeyListener,MouseListener { 
+public class HangerOn extends Thread implements KeyListener,MouseListener { 
 	
 	private Queue q;
-	private String name;
+	private String name, input;
 	private ScreenBoard panel;
+	private boolean running;
 	
 	/**
 	 * Constructor
@@ -30,26 +31,63 @@ public class HangerOn implements KeyListener,MouseListener {
 	public HangerOn(Queue q,String name){
 		this.q =q;
 		this.name = name;
+		input = "Pressed    " + name;
 	
 	}	
-	 
-	 
-	 
+	
+	/**
+	 * Thread run method.
+	 */
+	public void run() {
+		running = true;
+		
+		try {
+			while(running) {
+				q.offer(input);
+				sleep(40);
+			}
+		}
+		catch(InterruptedException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
 	 /**
 	  * One of two big listeners, this handles keys pressed on the keyboard, formats them and adds to the queue.
 	  */
 	 @Override
 	 public void keyPressed(KeyEvent e) {
-		 String keyString;
-		 int keyCode = e.getKeyCode();
-		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode) + " " + name;
-		 //System.out.println(keyString);
-		 q.offer(keyString);
+		 switch(KeyEvent.getKeyText(e.getKeyCode())) {
+		 	case "W": input = "Pressed " + input.substring(8,9) + "W " + name;
+		 		break;
+		 	case "A": input = "Pressed " + "A" + input.substring(9, input.length());
+	 			break;
+		 	case "D": input = "Pressed " + "D" + input.substring(9, input.length());
+ 				break;
+ 			default: 
+ 				break;
+	 		
+		 }
+//		 int keyCode = e.getKeyCode();
+//		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode) + " " + name;
+//		 //System.out.println(keyString);
+//		 q.offer(keyString);
 		 panel.grabFocus();
 	 } 
 	 
 	 @Override
 	 public void keyReleased(KeyEvent e) { 
+		 switch(KeyEvent.getKeyText(e.getKeyCode())) {
+		 	case "W": input = "Pressed " + input.substring(8,9) + "  " + name;
+		 		break;
+		 	case "A": input = "Pressed " + " " + input.substring(9, input.length());
+	 			break;
+		 	case "D": input = "Pressed " + " " + input.substring(9, input.length());
+				break;
+			default: 
+				break;
+		 }
 	 }
 	 
 	 @Override

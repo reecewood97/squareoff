@@ -2,26 +2,26 @@ package GameLogic;
 
 public class TurnServant extends Thread {
 	private Board board;
+	private boolean running;
 
 	public TurnServant(Board board) {
 		this.board = board;
 	}
 
 	public void run() {
-		int i = 0;
-		boolean running = true;
-		while (running) {
-			try {
+		running = true;
+		try {
+			for(int i = 0; i < 20 && running; i++) {
 				sleep(1000);
-				i = i + 1;
 				board.setTime(i);
-				//System.out.println(i / 25);
-				if (i >= 20) { // Should be 500? changed it for ease of testing
-					running = false;
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			} 
 		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void end() {
+		running = false;
 	}
 }
