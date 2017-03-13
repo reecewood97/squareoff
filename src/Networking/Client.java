@@ -8,10 +8,10 @@ import Graphics.Screen;
 import java.io.*;
 
 /**
- * The class client class that can connect to a specified server.
- * Creates the client-side version of the game and creates threads that 
- * communicate with the server. Additionally creates the Game's user interface.
- * @author djs568
+ * This can connect to a specified server.
+ * Creates the client-side version of the game and also threads that 
+ * communicate with the server. Additionally creates the game's user interface.
+ * @author David
  *
  */
 public class Client {
@@ -49,11 +49,12 @@ public class Client {
 	public boolean connect(String ip, int port) {
 		if(isConnected()) return false;
 		
-		//Creates a socket connecting to the server and then creates methods to communicate with the server.
+		//Creates a socket connecting to the server and then creates threads to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
 		}
 		catch(IOException e) {
+			//Cannot find the server.
 			return false;
 		}
 		try {
@@ -65,27 +66,29 @@ public class Client {
 			System.exit(1);
 		}
 		
-		//Creates and starts the  client-side threads to communicate with the server.
 		q.clear();
+		
 		sender = new ClientSender(toServer, q);
 		receiver = new ClientReceiver(fromServer, board, ui, this);
 		
+		//For testing purposes.
 		sender.setName(name + ": client sender");
 		receiver.setName(name + ": client receiver");
 		
 		sender.start();
 		receiver.start();
 		
+		//Send the client's name to the server.
 		sender.send(name);
 
+		//Waits for the server to respond to the client.
 		return isConnected();
 	}
 	
 	/**
-	 * Disconnects the client from a server if it is connected.
+	 * Disconnects the client from a server.
 	 */
 	public void disconnect() {
-		
 		//Makes the UI invisible. Doesn't turn off the music however.
 		ui.setInvisible();
 		
@@ -100,19 +103,33 @@ public class Client {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		q.offer("I close the client sender.");
+		q.offer("I kill the client sender.");
+		
+		socket = null;
 	}
 	
+	/**
+	 * Gets the current list of players from the server.
+	 * @return The current list of players or null if the client is not connected.
+	 */
 	public ArrayList<String> getPlayers() {
 		if(!isConnected()) return null;
 		sender.send(Server.PLAYERLIST);
 		return receiver.getPlayers();
 	}
 	
+	/**
+	 * Tests if the client in the game.
+	 * @return True if the client is in a game or false if they are in a lobby or not connected to a server.
+	 */
 	public boolean inGame() {
 		return receiver.inGame();
 	}
 	
+	/**
+	 * Tests if the client is connected to a server. If it has just connected, it will wait until the server has responded.
+	 * @return If the client is connected to a server.
+	 */
 	public boolean isConnected() {
 		return socket != null && !socket.isClosed() && receiver.waitForAccept();
 	}

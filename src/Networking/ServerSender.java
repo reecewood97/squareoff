@@ -2,22 +2,34 @@ package Networking;
 
 import java.io.*;
 import java.util.ArrayList;
-
 import GameLogic.Board;
 import GameLogic.PhysObject;
 
+/**
+ * This Thread sends objects to the client.
+ * @author David
+ *
+ */
 public class ServerSender extends Thread {
 
 	private ObjectOutputStream toClient;
 	private Board board;
 	private boolean running, inGame;
 	
+	/**
+	 * Creates a new Server Sender.
+	 * @param toClient The ObjectOutputStream to the Client.
+	 * @param board The server-side board.
+	 */
 	public ServerSender(ObjectOutputStream toClient, Board board) {
 		this.toClient = toClient;
 		this.board = board;
 		running = false;
 	}
 	
+	/**
+	 * Thread run method.
+	 */
 	public void run() {
 		inGame = false;
 		running = true;
@@ -26,17 +38,21 @@ public class ServerSender extends Thread {
 			while(running) {
 				sleep(35);
 				if(inGame) {
+					//Checks if the game is over.
 					if(board.getWinner() > -1){
 						send(33);
 						System.out.println("Sent the winner");
 						send(board.getWinner());
 						board.setWinner(-1);
 						//TODO
-					}else if(board.getTurnFlag()) {
+					}
+					//Not sure what this is...
+					else if(board.getTurnFlag()) {
 						send(34);
 						board.setTurnFlag(false);
-						}
-					else{
+					}
+					//Sends a "copy" of the game to the client.
+					else {
 						ArrayList<PhysObject> dummy = new ArrayList<PhysObject>();
 						dummy.addAll(board.getUpdate()); 
 						send(dummy);
@@ -50,6 +66,10 @@ public class ServerSender extends Thread {
 		}
 	}
 	
+	/**
+	 * Sends an object to the client.
+	 * @param ob The object to be sent.
+	 */
 	public void send(Object ob) {
 		try {
 			toClient.writeObject(ob);
@@ -57,15 +77,13 @@ public class ServerSender extends Thread {
 			toClient.reset();
 		}
 		catch(IOException e) {
-			close();
+			//The connection broke.
 		}
 	}
 	
-	public void close() {
-		running = false;
-		//System.out.println(getName() + " closed.");
-	}
-	
+	/**
+	 * Called when the game is starting. Tells the client threads that the game is starting.
+	 */
 	public void startGame() {
 		send(Server.PLAY);
 		inGame = true;

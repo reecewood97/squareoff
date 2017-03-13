@@ -35,7 +35,7 @@ public class AIManager extends Thread {
 	}
 	
 	/**
-	 * Run method of the Thread.
+	 * Thread run method.
 	 */
 	public void run() {
 		running = true;

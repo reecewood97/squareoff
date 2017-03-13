@@ -1,21 +1,26 @@
 package Networking;
 
-import GameLogic.*;
+import GameLogic.Board;
 
+/**
+ * Sends a "None" move to the server-side board every frame to force-update it.
+ * @author David
+ *
+ */
 public class GameLoop extends Thread {
 	
 	private Board board;
-	private AIManager ais;
 	private boolean running;
 	
-	public GameLoop(Board board, AIManager ais) {
+	public GameLoop(Board board) {
 		this.board = board;
-		this.ais = ais;
 	}
 	
+	/**
+	 * Thread run method.
+	 */
 	public void run() {
 		running = true;
-		ais.start();
 		while(running) {
 			board.input("None");
 			try {
@@ -26,5 +31,12 @@ public class GameLoop extends Thread {
 				System.exit(1);
 			}
 		}
+	}
+	
+	/**
+	 * Kills the thread.
+	 */
+	public void close() {
+		running = false;
 	}
 }

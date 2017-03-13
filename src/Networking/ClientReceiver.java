@@ -8,25 +8,28 @@ import GameLogic.PhysObject;
 import Graphics.Screen;
 
 /**
- * The client receiver class. This is a thread that waits for a message from the server before relaying it to the Board.
- * @author djs568
+ * Receives information from the server and uses this to update the game.
+ * @author David
  *
  */
 public class ClientReceiver extends Thread {
 		
 	private ObjectInputStream server;
-	private Board board;
+	private Board board; //Client-side board.
 	private Queue q;
 	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
 	private Client client;
-	private int state;
+	private int state; //Whether the server has accepted the client.
 
 	
 	/**
-	 * Constructor.
-	 * @param server
+	 * Creates a new Client Receiver.
+	 * @param server The ObjectInput stream from the server.
+	 * @param board The client-side board.
+	 * @param ui The UI.
+	 * @param client The client.
 	 */
 	public ClientReceiver(ObjectInputStream server, Board board, Screen ui, Client client) {
 		this.server = server;
@@ -39,7 +42,7 @@ public class ClientReceiver extends Thread {
 	}
 	
 	/**
-	 * Run method for the thread.
+	 * Thread run method.
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() {		
@@ -49,36 +52,49 @@ public class ClientReceiver extends Thread {
 		try {
 			Object ob;
 			ArrayList<String> anArrayList = new ArrayList<String>();
-			while(running && (ob = server.readObject()) != null) {
+			while(running) {
+				//Reads in an object from the server.
+				ob = server.readObject();
+				
+				//Ints from the server tell say what to do.
 				if(ob.getClass().isInstance(0)) {
+					//Start the game.
 					if((int)ob == Server.PLAY && !inGame) {
 						inGame = true;
 						ui.setVisible();
 					}
+					//Client has connected to a server.
 					else if((int)ob == Server.ACCEPTED) {
 						state = Server.ACCEPTED;
 					}
+					//Server has told the client to disconnect.
 					else if((int)ob == Server.DISCONNECT) {
 						state = Server.DISCONNECT;
 						client.disconnect();
 					}
 				}
+				//Specific objects whilst in-game.
 				if(inGame) {
+					//The ArrayList to update the board with.
 					if(ob.getClass().isInstance(anArrayList)) {
 						board.setObjects((ArrayList<PhysObject>) ob);
 						ui.updateSBoard();
 					}
+					//If the game has finished.
 					else if ((int)ob == 33){
 						//running = false;
 						int winner = 3;//This needs to be a read in
 						board.setWinner(winner);
 						ui = new Screen(board,q,"");
 					}
+					//Not sure...
 					else if ((int)ob == 34){
 						board.startLocalTimer();
 					}
 				}
+				//Whilst not in-game.
 				else {
+					//The current list of players in the lobby.
 					if(ob.getClass().isInstance(anArrayList)) {
 							players = (ArrayList<String>)ob;
 					}
@@ -90,19 +106,16 @@ public class ClientReceiver extends Thread {
 			System.exit(1);
 		}
 		catch(IOException e) {
-			close();
+			//The socket has closed.
 		}
 	}
-
-	/**
-	 * Terminates the while loop that checks for a new line from the server and closes the BufferedReader.
-	 */
-	private void close() {
-		running = false;
-		//System.out.println(getName() + " closed.");
-	}
 	
+	/**
+	 * Waits for the current list of players from the server. Will cause dead-lock if server doesn't send the list.
+	 * @return The list of players from the server.
+	 */
 	public ArrayList<String> getPlayers() {
+		//Waits for the list.
 		while(players == null) {
 			try {
 				sleep(50);
@@ -117,10 +130,19 @@ public class ClientReceiver extends Thread {
 		return newPlayers;
 	}
 	
+	/**
+	 * Returns if the client is in a game currently.
+	 * @return If the client is in a game.
+	 */
 	public boolean inGame() {
 		return inGame;
 	}
 	
+	/**
+	 * Waits for the server to accept a client if it hasn't already. Returns false if the server rejects the client.
+	 * Will dead-lock if server doesn't respond.
+	 * @return If the client has been accepted by the server.
+	 */
 	public boolean waitForAccept() {
 		while(state == Server.BASE) {
 			try {

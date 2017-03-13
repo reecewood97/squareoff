@@ -7,15 +7,15 @@ import GameLogic.Board;
 import ai.*;
 
 /**
- * The Server. A thread that creates a ServerSocket that clients can connect to. 
- * Holds an instance of the game board that "copies" of are sent to all connected
- * clients when the game starts.
+ * The server which clients can connect to. Contains a "master" copy of the game which
+ * are sent to all the clients when playing.
+ * 
  * @author djs568
  *
  */
 public class Server extends Thread {
 
-	public static final int BASE = 0;
+	public static final int BASE = 0; 
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
 	public static final int ACCEPTED = 3;
@@ -31,6 +31,10 @@ public class Server extends Thread {
 	private ArrayList<String> players;
 	private ClientTable table;
 	
+	/**
+	 * Creates a new Server.
+	 * @param port The port.
+	 */
 	public Server(int port) {
 		this.port = port;
 		board = new Board("map1");
@@ -41,6 +45,9 @@ public class Server extends Thread {
 		aiDifficulty = EASY_AI;
 	}
 	
+	/**
+	 * Thread run method.
+	 */
 	public void run() {
 		try {
 			socket = new ServerSocket(port);
@@ -54,8 +61,10 @@ public class Server extends Thread {
 		
 		try {
 			while(running) {
+				//Allows clients to connect to the server.
 				Socket s = socket.accept();
 
+				//Creates Threads to communicate with a client that has connected.
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
 				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table);
 				sr.start();
@@ -64,17 +73,35 @@ public class Server extends Thread {
 				ServerSender ss = new ServerSender(toClient, board);
 				ss.start();
 				
+				//Adds Threads to a Client Table.
 				table.add(sr, ss);
 			}			
 		}
 		catch (IOException e) {
-			System.out.println("ServerSocket closed.");
+			//Server Socket closed.
 		}
 	}
 	
+	/**
+	 * Closes the Server Socket. Will become dead-locked if clients fail to disconnect.
+	 */
 	public void close() {
+		//Tell everyone to disconnect.
 		table.sendAll(Server.DISCONNECT);
 		running = false;
+		
+		//Wait for everyone to disconnct.
+		while(table.size() > 0) {
+			try {
+			     sleep(50);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+		
+		//Close the Server Socket.
 		try {
 			socket.close();
 		} catch (IOException e) {
@@ -83,19 +110,29 @@ public class Server extends Thread {
 		}
 	}
 	
+	/**
+	 * Starts the game with AIs.
+	 */
 	public void startGame() {
-		
+		//Adds AIs.
 		AIManager ais = addAIs();
 	
+		//Tells everyone that the game is starting.
 		for(ServerReceiver r: table.getReceivers()) {
 			r.startGame();
 			table.get(r).startGame();
 		}
 
+		//Start the board, the GameLoop and the AIs.
 		board.startGame();	
-		new GameLoop(board, ais).start();
+		new GameLoop(board).start();
+		ais.start();
 	}
 	
+	/**
+	 * Creates an AIManager with AIs in it.
+	 * @return An AIManager with AIs in it
+	 */
 	private AIManager addAIs() {
 		AIManager ais = new AIManager(board);
 		
@@ -107,6 +144,7 @@ public class Server extends Thread {
 		int maxPlayers = 4;
 		int numberOfPlayers = players.size();
 		
+		//Fills remaining spots in the game with AIs of a certain difficulty.
 		for(int i = numberOfPlayers + 1; i <= maxPlayers; i++) {
 			AI ai;
 			switch(aiDifficulty) {
@@ -119,14 +157,26 @@ public class Server extends Thread {
 			ais.add(ai);
 			players.add("AI " + (i - numberOfPlayers));
 		}
-		
+
 		return ais;
 	}
 	
+	/**
+	 * Kicks a client from the server. Will become dead-locked if client exists but doesn't disconnect.
+	 * @param name The name of the client to be kicked.
+	 * @return If the client was successfully kicked.
+	 */
 	public boolean kick(String name) {
+		//Iterate through the Server Receivers.
 		for(ServerReceiver r: table.getReceivers()) {
+			
+			//Finds the client with that name.			
 			if(r.getPlayerName().equals(name)) {
+				
+				//Tells them to disconnect.				
 				table.get(r).send(Server.DISCONNECT);
+				
+				//Waits for them to disconnect.
 				while(players.contains(name)) {
 					try {
 						sleep(50);
@@ -142,10 +192,18 @@ public class Server extends Thread {
 		return false;
 	}
 	
+	/**
+	 * Returns the current player list.
+	 * @return The current player list.
+	 */
 	public ArrayList<String> getPlayers() {
 		return players;
 	}
 	
+	/**
+	 * Sets the AI difficulty.
+	 * @param aiDifficulty The new AI difficulty.
+	 */
 	public void setAIDifficulty(int aiDifficulty) {
 		this.aiDifficulty = aiDifficulty;
 	}
