@@ -34,7 +34,10 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 		input = "Pressed    " + name;
 	
 	}	
-	 
+	
+	/**
+	 * Thread run method.
+	 */
 	public void run() {
 		running = true;
 		

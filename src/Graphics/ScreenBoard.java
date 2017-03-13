@@ -197,14 +197,18 @@ public class ScreenBoard extends JPanel{
 					eye1frontstartx = (int) ((x+10)*widthratio);
 					eye2frontstartx = (int) ((x+24)*widthratio);
 				}
-				else{
+				else if(((Square) square).getFacing().equals("Left")){
 					
 					eye1backstartx = (int) ((x)*widthratio);
-					eye2backstartx = (int) ((x+16)*widthratio);
-	
+					eye2backstartx = (int) ((x+16)*widthratio);	
 					eye1frontstartx = (int) ((x+2)*widthratio);
 					eye2frontstartx = (int) ((x+18)*widthratio);
-					
+				}
+				else {
+					eye1backstartx = (int) ((x+4)*widthratio);
+					eye2backstartx = (int) ((x+19)*widthratio);	
+					eye1frontstartx = (int) ((x+6)*widthratio);
+					eye2frontstartx = (int) ((x+21)*widthratio);
 				}
 				
 				int eye1backstarty = (int) ((y + 10)*heightratio);

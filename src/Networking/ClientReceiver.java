@@ -60,8 +60,7 @@ public class ClientReceiver extends Thread {
 					//Start the game.
 					if((int)ob == Server.PLAY && !inGame) {
 						inGame = true;
-						ui.startMusic();
-						ui.setVisible();
+						ui.startGame();
 					}
 					//Client has connected to a server.
 					else if((int)ob == Server.ACCEPTED) {

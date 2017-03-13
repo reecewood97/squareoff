@@ -51,7 +51,6 @@ public class Screen extends JFrame {
 		setLayout(new BorderLayout());
 		
 		this.listeners = new HangerOn(q,name);
-		listeners.start();
 		
 		//create button panel
 		this.controls = new ButtonPanel(this,newboard, new Audio());
@@ -136,5 +135,14 @@ public class Screen extends JFrame {
 	public HangerOn getHangerOn(){
 		
 		return listeners;
+	}
+	
+	/**
+	 * Set the UI to become visible, starts the music and starts the listeners.
+	 */
+	public void startGame() {
+		setVisible();
+		startMusic();
+		listeners.start();
 	}
 }

@@ -1017,10 +1017,11 @@ public class Board {
 			incrementTurn();
 		}
 		else {
-			servant.end();
-			turn.resetTimer();
+
 		}
 		setTurnFlag(true);
+		servant.end();
+		turn.resetTimer();
 	}
 	
 	public void addName(String name){
