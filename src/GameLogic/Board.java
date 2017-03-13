@@ -773,7 +773,9 @@ public class Board {
 		Square active = (Square)getActivePlayer();
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
-			if(input.substring(10, input.length()).equals(players[player])){
+			if(!(input.substring(10, input.length()).equals(players[player]))){
+				return;
+			}
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			Move mv;
@@ -809,8 +811,11 @@ public class Board {
 				}
 			}
 		}
-		}
 		else if(input.contains("Clicked")){
+			//System.out.println(input.substring(36));
+			if(!(input.substring(36, input.length()).equals(players[player]))){
+				return;
+			}
 			if(weaponsopen){
 				
 				setTargetLine(false);
