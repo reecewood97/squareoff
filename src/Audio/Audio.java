@@ -88,8 +88,8 @@ public class Audio implements Serializable
 			}
 			catch(Exception ex){
 				
-				System.out.println("Error playing sound");
-		        ex.printStackTrace();
+				//System.out.println("Error playing sound");
+		        //ex.printStackTrace();
 			}
 		}
 	}

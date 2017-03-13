@@ -54,8 +54,8 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean turnChangedFlag = true;
 	//Debug
-	private final boolean debug = false;
-	private final boolean debugL = false;
+	private final boolean debug = true;
+	private final boolean debugL = true;
 
 	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
@@ -248,8 +248,8 @@ public class Board {
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
 				weapons.add(obj);
-				if (obj.getInUse())
-					System.out.println(obj.getPos());
+				//if (obj.getInUse())
+					//System.out.println(obj.getPos());
 			}
 		}
 		return weapons;
@@ -446,16 +446,18 @@ public class Board {
 	
 	//Are two PhysObjects currently colliding?
 	private boolean collides(PhysObject obj1, PhysObject obj2) {
-		if(obj1.getSolid()==obj2.getSolid() || !obj1.getInUse() || !obj2.getInUse()){
+		if((obj1.getSolid()==obj2.getSolid()) || (!obj1.getInUse()) || (!obj2.getInUse())){
 			return false;
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
 			if(obj2.getName().endsWith("ExplodeOnImpact") || obj2.getName().endsWith("TimedGrenade")){ //All circular objects
-				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
-				return circle.intersects
-						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
+				if(circle.intersects
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
+					System.out.println("Circular object collision detected");
+					return true;
+				} else {return false;}
 			} else {
 				return obj1.rectIntersect(obj2);
 				/*Rectangle2D.Double rect = new Rectangle2D.Double
@@ -465,11 +467,13 @@ public class Board {
 			}
 		} else {
 			if(obj1.getName().endsWith("ExplodeOnImpact") || obj1.getName().endsWith("TimedGrenade")){ //All circular objects
-				if(debug) System.out.println("Circular object collision detected");
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
-				return circle.intersects
-						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				if(circle.intersects
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
+					System.out.println("Circular object collision detected");
+					return true;
+				} else {return false;}
 			} else {
 				return obj1.rectIntersect(obj2);
 				/*Rectangle2D.Double rect = new Rectangle2D.Double
@@ -510,7 +514,7 @@ public class Board {
 	//If two objects are colliding, this method will be called to resolve the collision
 	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if(thing.getName().endsWith("ExplodeOnImpact")) {
-			if(debug) System.out.println("Resolving impactGrenade collision");
+			if(debug) System.out.println("Resolving impactGrenade collision at: " + thing.getPos());
 			thing.setInUse(false);
 			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
 					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
@@ -592,7 +596,6 @@ public class Board {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
-			System.out.println(objects.get(i).getName());
 			switch(objects.get(i).getName()) {
 			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
@@ -638,9 +641,6 @@ public class Board {
 				}
 			}
 		}
-		System.out.println(list.size());
-		System.out.println(getBlocks().size());
-		System.out.println(objs.size());
 		for(Collision collision: list){
 			/*if(collision.getThing().getName().equals("Square")){
 				if(((Square)collision.getThing()).getPlayerID()==1){
@@ -683,13 +683,13 @@ public class Board {
 	
 	
 	//Takes a move and updates one frame.
-	public void updateFrame(Move move) {
+	public synchronized void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim(); // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
-			System.out.println(wepMove.getPos());
+			System.out.println("Weapon spawning at: " + wepMove.getPos());
 			PhysObject wep = null;
 			switch(wepMove.wepType()){
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
@@ -847,10 +847,19 @@ public class Board {
 //			}
 		}
 		else if(input.contains("Clicked")){
-			//System.out.println(input.substring(36));
-			if(!(input.substring(36, input.length()).equals(players[player]))){
+			//System.out.println(input);
+			
+			String[] inputArray = new String[3];
+			inputArray = input.split(" ");
+			
+			System.out.println(inputArray[2]);
+			
+			if( !(inputArray[2].equals(players[player]))  ){
 				return;
 			}
+			//if(!(input.substring(36, input.length()).equals(players[player]))){
+				//return;
+			//}
 			if(weaponsopen){
 				
 				for( PhysObject obj : objects){
@@ -888,7 +897,10 @@ public class Board {
 				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
 				Double xVel = dist-yVel;;
 				
-				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),yVel,xVel);
+				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),yVel,xVel);
+				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
+				System.out.println("wep xvel is: " + xVel);
+				System.out.println("wep yvel is: " + yVel);
 				}
 				updateFrame(wmv);
 				if (q.size() > 0)
@@ -901,11 +913,8 @@ public class Board {
 			//}
 		}
 		else if (input.contains("setWep")){
-			if(debugL)
-				System.out.println("Now a weapon in use");
-			else{
+			if(debugL) System.out.println("Now a weapon in use");
 				this.weaponType = input.substring(7);
-				System.out.println(weaponType);
 				weaponsopen = true;
 //				for(PhysObject weapon : this.getWeapons()){
 //					
@@ -913,7 +922,6 @@ public class Board {
 //					weapon.setName(input.substring(8));
 //					
 //				}
-			}
 		}
 		else if (input.contains("setExp")){
 			
