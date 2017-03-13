@@ -964,6 +964,7 @@ public class Board {
 		else {
 			turn.resetTimer();
 		}
+		setTurnFlag(true);
 	}
 	
 	public void addName(String name){
@@ -1020,13 +1021,13 @@ public class Board {
 		}
 	}
 	public void startLocalTimer(){
+		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 	}
-	public void restartLocalTimer(){
-		System.out.println("Restarted the timer");
-		servant.start();
-	}
+//	public void restartLocalTimer(){
+//		servant.start();
+//	}
 	
 	public void setTime(int time){
 		this.time = time/25;

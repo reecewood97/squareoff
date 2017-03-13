@@ -18,6 +18,7 @@ public class TurnServant extends Thread {
 				//System.out.println(i / 25);
 				if (i >= 500) { // Should be 500? changed it for ease of testing
 					running = false;
+					//board.setTurnFlag(true);
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
