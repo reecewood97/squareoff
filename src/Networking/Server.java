@@ -112,8 +112,7 @@ public class Server extends Thread {
 			}
 			ais.add(ai);
 			String name = "AI " + i;
-			players.add(name);
-			board.addName(name);
+			players.add("AI " + (i - numberOfPlayers));
 		}
 		
 		return ais;

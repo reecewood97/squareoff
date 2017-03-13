@@ -510,6 +510,7 @@ public abstract class AI {
 	
 	public void setAIName() {
 		this.myName = "AI " + getPlayerID();
+		board.addName(myName);
 	}
 	
 	/**
