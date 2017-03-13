@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
+import Graphics.TargetLine;
 
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -51,7 +52,6 @@ public class Board {
 	private int numberOfPlayers = 0;
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
-	private boolean targetline;
 	private boolean turnChangedFlag = true;
 	//Debug
 	private final boolean debug = false;
@@ -84,7 +84,6 @@ public class Board {
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
-		this.targetline = false;
 		this.map = map;
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
@@ -103,6 +102,11 @@ public class Board {
 		objects.add(blu);
 		objects.add(yel);
 		objects.add(grn);
+		
+		
+		PhysObject targetline = new TargetLine();
+		targetline.setInUse(false);
+		objects.add(targetline);
 		
 		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
@@ -208,13 +212,7 @@ public class Board {
 		activePlayer = (Square)objects.get(x);
 	}
 	
-	public void setTargetLine(boolean b){
-		this.targetline = b;
-	}
 	
-	public boolean getTargetLine(){
-		return this.targetline;
-	}
 	
 	public PhysObject getActivePlayer() {
 		return activePlayer;
@@ -233,6 +231,16 @@ public class Board {
 			}
 		}
 		return weapons;
+	}
+	
+	public ArrayList<PhysObject> getTargetLine(){
+		ArrayList<PhysObject> target = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().startsWith("Target")){
+				target.add(obj);
+			}
+		}
+		return target;
 	}
 	
 	public ArrayList<PhysObject> getExplodeOnImpact(){
@@ -834,7 +842,13 @@ public class Board {
 			}
 			if(weaponsopen){
 				
-				setTargetLine(false);
+				for( PhysObject obj : objects){
+					
+					if(obj.getName().contains("Target")){
+						
+						obj.setInUse(false);
+					}
+				}
 				
 				int xs = input.indexOf('x');
 				int xe = input.indexOf(',');
@@ -910,7 +924,13 @@ public class Board {
 		}
 		else if(input.contains("setTar")){
 			
-			setTargetLine(Boolean.parseBoolean(input.substring(8)));
+			for(PhysObject obj : objects){
+				
+				if ( obj.getName().contains("Target")){
+					
+					obj.setInUse(Boolean.parseBoolean(input.substring(8)));
+				}
+			}
 		}
 		else
 		{

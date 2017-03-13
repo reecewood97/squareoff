@@ -79,12 +79,6 @@ public class ButtonPanel extends JPanel{
 		mainpanel.add(exit, BorderLayout.EAST);
 		mainpanel.add(weapons, BorderLayout.CENTER);
 		
-		//NEW
-		if(board.getPlaying()){
-			
-			audio.startBackgroundMusic();
-		}
-
 
 	}
 	
@@ -115,6 +109,11 @@ public class ButtonPanel extends JPanel{
 		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 		menu.open();
 		
+	}
+	
+	public void startMusic(){
+		
+		audio.startBackgroundMusic();
 	}
 	
 	/**
