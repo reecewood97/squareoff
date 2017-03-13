@@ -37,6 +37,56 @@ public class NormalAI extends AI {
 		this.myColour = aiColour;
 		this.board = board;
 	}
+	
+	public void aiMove() {
+		// Stage 2:
+		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
+		// Usually places that has higher hp (defense), or, there is a clear shooting path (ai and enemy on the same level(y axis))
+		determineResult();
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		ArrayList<PhysObject> squares = board.getSquares();
+
+		int aiX = (int) getAIPos().getX();
+		int aiY = (int) getAIPos().getY();
+		int finalX = 0;
+		int finalY = 0;
+		double targetX = aiX;
+		double targetY = aiY;
+		PhysObject finalSquare = null;
+		
+		// Calculation for EasyAI
+		double finalDis = 9999999999999.0;
+		if (thereAreObstacles()) {
+			for (PhysObject player:squares) {
+				Square enemySquare = (Square) player;
+				if (enemySquare.getPlayerID() != myPlayer) {
+//							System.out.println(enemySquare.getPlayerID());
+//							System.out.println(enemySquare.getPos());
+					// get position of enemies
+					int enemyX = (int) enemySquare.getPos().getX();
+					int enemyY = (int) enemySquare.getPos().getY();
+					double xDis = aiX - enemyX;
+					double yDis = aiY - enemyY;
+					// calculate shortest displacement by pythagoras theorem
+					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
+//							System.out.println(displacement);
+					if (displacement < finalDis) {
+						finalDis = displacement;
+						finalX = enemyX;
+						finalY = enemyY;
+						finalSquare = enemySquare;
+					}
+				}
+			}
+			for (PhysObject block:blocks) {
+				if (((finalSquare.getPos().getY() - 30.0 <= block.getPos().getY() + 100.0) || (finalSquare.getPos().getY() - 30.0 >= block.getPos().getY() -100.0)) && ((finalSquare.getPos().getX() <= block.getPos().getX() +400.0) || (finalSquare.getPos().getY() >= block.getPos().getX() -400.0))) {
+					targetX = block.getPos().getX();
+					targetY = block.getPos().getY();
+					aiMoveCal(targetX, targetY);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Determine a target to attack and calculate the position of the target
@@ -66,7 +116,7 @@ public class NormalAI extends AI {
 			double targetY = targetSquare.getPos().getY();
 			for (int j = 0; j < numOfBlocks; j++) {
 				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
-				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX) && (oneBlock.getPos().getX() <= targetX + 50.0)) {
+				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX - 50.0) && (oneBlock.getPos().getX() <= targetX + 100.0)) {
 //					&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
 					targetBlock = (TerrainBlock) oneBlock;
 				}
