@@ -31,7 +31,7 @@ public class NewWeaponsMenu extends JFrame {
 	    private Audio audio;
 	   // private double framewidth = 800;
 	    //private double frameHeight = 450;
-	    private String[] weaponArray = {"Bomb","Ball","Grenade"};
+	    private String[] weaponArray = {"Bomb","Missile","Grenade"};
 	    private int currentWeapon = 0;
 	    private JButton image;
 	    private Board board;

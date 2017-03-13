@@ -73,9 +73,15 @@ public class ScreenBoard extends JPanel{
 			g2d.fillOval(i, b-5, 40, 40);
 		}
 		
+		
+		g2d.setColor(Color.WHITE);
+		g2d.drawString("Player " + board.getActivePlayer() + "'s turn",
+				(int) (80*widthratio), (int) (80*heightratio));
+		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (80*heightratio));
+		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
-		paintWeapons(board.getExplodeOnImpact(),g2d); //TODO paint other types of weapon, only paints bombs right now
+		paintWeapons(board.getWeapons(),g2d); //DOING //TODO paint other types of weapon, only paints bombs right now
 		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),true,g2d);
 	} 		
@@ -265,7 +271,7 @@ public class ScreenBoard extends JPanel{
 			
 			for(PhysObject weapon : weapons){
 				
-				if (((ExplodeOnImpact)weapon).getInUse()){
+				if (weapon.getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
 					int y = (int) weapon.getPos().getY();
@@ -280,9 +286,18 @@ public class ScreenBoard extends JPanel{
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
-					g2d.setColor(Color.BLACK);
-					g2d.fillOval(x,y,weaponwidth,weaponheight);
-				
+					
+					if(weapon.getName().contains("ExplodeOnImpact")){
+						
+						g2d.setColor(Color.BLACK);
+						g2d.fillOval(x,y,weaponwidth,weaponheight);
+					}
+					else{
+						
+						g2d.setColor(Color.GRAY);
+						g2d.fillRect(x, y, weaponwidth, weaponheight);
+					}
+					
 				}
 			}
 		
