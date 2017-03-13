@@ -75,9 +75,9 @@ public class ScreenBoard extends JPanel{
 		
 		
 		g2d.setColor(Color.WHITE);
-		g2d.drawString("Player " + board.getActivePlayer() + "'s turn",
-				(int) (80*widthratio), (int) (80*heightratio));
-		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (80*heightratio));
+		g2d.drawString("Player " + (((Square) (board.getActivePlayer())).getPlayerID()) +
+				"'s turn", (int) (80*widthratio), (int) (10*heightratio));
+		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (10*heightratio));
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
@@ -292,8 +292,8 @@ public class ScreenBoard extends JPanel{
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}
-					else{
-						
+					else if(weapon.getName().contains("TimedGrenade")){
+					
 						g2d.setColor(Color.GRAY);
 						g2d.fillRect(x, y, weaponwidth, weaponheight);
 					}

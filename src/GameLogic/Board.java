@@ -15,7 +15,6 @@ import java.lang.Math;
 //The missile idea sounds cool but very hard to implement :(
 //1. Air-strike; Click to send airplane across top of screen, click again to release multiple bombs.
 //2. TNT; Choose any block. After one full cycle of turns it will explode.
-//3. Grenade with a timer instead of exploding on impact.
 //4. Anti-grav bomb; bomb that falls upwards instead of downwards.
 //5. Dont use any weapon and instead fling your square across the map.
 
@@ -45,6 +44,7 @@ public class Board {
 	private String weaponType;
 	private int time = 0;
 	private TurnServant servant = new TurnServant(this);
+	private boolean playing = false;
 	//Miscellaneous
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
@@ -220,6 +220,11 @@ public class Board {
 		return activePlayer;
 	}
 	
+	public boolean getPlaying() {
+		return this.playing;
+	}
+	
+	
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -252,6 +257,17 @@ public class Board {
 		return weapons;
 	}
 		
+	
+	public ArrayList<PhysObject> getMissile(){
+		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			if (obj.getName().endsWith("Missile")){
+				weapons.add(obj);
+			}
+		}
+		return weapons;
+	}
+	
 	public ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -943,6 +959,9 @@ public class Board {
 	 * Called when the game actually begins, starts the turn timer and fiddles with the player list.
 	 */
 	public void startGame(){
+		
+		this.playing = true;
+		
 		this.turn = new TurnMaster(this);
 		turn.start();
 		

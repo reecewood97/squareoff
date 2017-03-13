@@ -53,8 +53,9 @@ public class ButtonPanel extends JPanel{
         exit.setFocusPainted(false); 
         exit.setOpaque(false);
 		
+        
         //start audio
-		audio.startBackgroundMusic();
+		//audio.startBackgroundMusic();
 		
 		//toggle sound button
         ImageIcon image3 = new ImageIcon("Files/Images/speaker1.png");
@@ -77,6 +78,12 @@ public class ButtonPanel extends JPanel{
 		mainpanel.add(sound,BorderLayout.WEST);
 		mainpanel.add(exit, BorderLayout.EAST);
 		mainpanel.add(weapons, BorderLayout.CENTER);
+		
+		//NEW
+		if(board.getPlaying()){
+			
+			audio.startBackgroundMusic();
+		}
 
 
 	}

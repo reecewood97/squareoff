@@ -115,7 +115,11 @@ public class Screen extends JFrame {
 	 * repaint screen board
 	 */
 	public void updateSBoard(){
+		
+		
 		sboard.repaint();
+		this.repaint(); 
+		
 	}  
 	
 	/**
