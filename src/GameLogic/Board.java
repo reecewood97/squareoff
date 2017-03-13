@@ -773,7 +773,9 @@ public class Board {
 		Square active = (Square)getActivePlayer();
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
-			if(input.substring(10, input.length()).equals(players[player])){
+			if(!(input.substring(10, input.length()).equals(players[player]))){
+				return;
+			}
 			String inputKey = input.substring(8,9);
 			//System.out.println(inputKey);
 			Move mv;
@@ -809,8 +811,11 @@ public class Board {
 				}
 			}
 		}
-		}
 		else if(input.contains("Clicked")){
+			//System.out.println(input.substring(36));
+			if(!(input.substring(36, input.length()).equals(players[player]))){
+				return;
+			}
 			if(weaponsopen){
 				
 				setTargetLine(false);
@@ -964,6 +969,7 @@ public class Board {
 		else {
 			turn.resetTimer();
 		}
+		setTurnFlag(true);
 	}
 	
 	public void addName(String name){
@@ -1020,13 +1026,13 @@ public class Board {
 		}
 	}
 	public void startLocalTimer(){
+		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 	}
-	public void restartLocalTimer(){
-		System.out.println("Restarted the timer");
-		servant.start();
-	}
+//	public void restartLocalTimer(){
+//		servant.start();
+//	}
 	
 	public void setTime(int time){
 		this.time = time/25;

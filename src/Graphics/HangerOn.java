@@ -76,7 +76,7 @@ public class HangerOn implements KeyListener,MouseListener {
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
 		 if(e.getButton() == 1){
-			 String clickedEvent = "Clicked " + e.getPoint();
+			 String clickedEvent = "Clicked " + e.getPoint() + " " + name;
 			 q.offer(clickedEvent);
 			 //System.out.println("works!");
 			 panel.grabFocus();
