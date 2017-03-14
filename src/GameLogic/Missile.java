@@ -7,7 +7,7 @@ public class Missile extends PhysObject {
 	private boolean inUse;
 	
 	public Missile(Point2D.Double pos, double xvel, double yvel, boolean inUse) {
-		super(true, pos, 10, 10, false);
+		super(false, pos, 10, 10, false);
 		this.setName("WeaponMissile");
 		this.setXvel(xvel);
 		this.setYvel(yvel);
@@ -22,7 +22,6 @@ public class Missile extends PhysObject {
 		this.setYvel(other.getYvel());
 		this.inUse = other.getInUse();
 	}
-	
 	
 	@Override
 	public void update() {

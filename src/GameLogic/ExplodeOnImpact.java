@@ -3,15 +3,14 @@ package GameLogic;
 import java.awt.geom.Point2D;
 
 public class ExplodeOnImpact extends PhysObject {
-	
-	private boolean inUse;
+
 	
 	public ExplodeOnImpact(Point2D.Double pos, double xvel, double yvel, boolean inUse) {
 		super(true, pos, 10, 10, false);
 		this.setName("WeaponExplodeOnImpact");
 		this.setXvel(xvel);
 		this.setYvel(yvel);
-		this.inUse = inUse;
+		this.setInUse(inUse);
 	}
 	
 	public ExplodeOnImpact(ExplodeOnImpact other) {
@@ -20,13 +19,13 @@ public class ExplodeOnImpact extends PhysObject {
 		this.setName("WeaponExplodeOnImpact");
 		this.setXvel(other.getXvel());
 		this.setYvel(other.getYvel());
-		this.inUse = other.getInUse();
+		this.setInUse(other.getInUse());
 	}
 	
 	
 	@Override
 	public void update() {
-		if(inUse) {
+		if(getInUse()) {
 		setYvel(getYvel()-getGrav());
 		setPos(new Point2D.Double(this.getPos().getX()+this.getXvel(), this.getPos().getY()+this.getYvel()));
 		}

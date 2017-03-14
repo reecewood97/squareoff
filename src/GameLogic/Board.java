@@ -12,22 +12,16 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.lang.Math;
 
-//Ideas for weapons in the future; some can be pickup-only, some can be basic.
-//The missile idea sounds cool but very hard to implement :(
-//1. Air-strike; Click to send airplane across top of screen, click again to release multiple bombs.
-//2. TNT; Choose any block. After one full cycle of turns it will explode.
-//4. Anti-grav bomb; bomb that falls upwards instead of downwards.
-//5. Dont use any weapon and instead fling your square across the map.
+//1. Missile
+//2. Dont use any weapon and instead fling your square across the map.
 
 
 //Formula for adding more weapons. All these things need to be implemented.
 //Weapons are no longer all going to extend Weapon, sorry for the confusion.
 //1. Create new class. Modify all necessary methods from PhysObject which would be different.
-//2. Create new get method for this type of weapon.
-//3. Modify collision methods to detect the defining string of the weapon
-//4. update freeSim arrayList copy cases
-//5. update updateFrame weaponMove cases
-//
+//2. Modify collision methods to detect the defining string of the weapon
+//3. update freeSim arrayList copy cases
+//4. update updateFrame weaponMove cases
 
 public class Board {
 	//Keep track of the current player
@@ -54,7 +48,7 @@ public class Board {
 	private double XtravelDist = 4;
 	private boolean turnChangedFlag = true;
 	//Debug
-	private final boolean debug = true;
+	private final boolean debug = false;
 	private final boolean debugL = true;
 
 	public static void main(String[] args) { //For testing purposes only
@@ -177,11 +171,11 @@ public class Board {
 		this.squareID = 0;
 		activePlayer = (Square)objects.get(0);
 		
-		Point2D.Double weaponpos = new Point2D.Double(30, 30);
+		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
 		objects.add(weapon);
 		
-		Point2D.Double explosionpos = new Point2D.Double(40,40);
+		Point2D.Double explosionpos = new Point2D.Double(150,150);
 		PhysObject explosion = new Explosion(explosionpos, 0);
 		explosions.add(explosion);
 	}
@@ -514,8 +508,8 @@ public class Board {
 	
 	//If two objects are colliding, this method will be called to resolve the collision
 	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
-		if(thing.getName().endsWith("ExplodeOnImpact")) {
-			if(debug) System.out.println("Resolving impactGrenade collision between thing at: " + thing.getPos()
+		if(thing.getName().endsWith("ExplodeOnImpact") || thing.getName().endsWith("Missile")) {
+			if(debug) System.out.println("Resolving " + thing.getName() + "collision between thing at: " + thing.getPos()
 			+ ", and block at: " + block.getPos());
 			thing.setInUse(false);
 			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
@@ -603,6 +597,7 @@ public class Board {
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
+			case "WeaponMissile": objs.add(new Missile((Missile)objects.get(i))); break;
 			case "TargetLine": objs.add(new TargetLine((TargetLine)objects.get(i))); break;
 			default: System.out.println("error copying arraylists in freeSim: " + objects.get(i).getName()); break;
 			}
@@ -696,7 +691,7 @@ public class Board {
 	//Takes a move and updates one frame.
 	public synchronized void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
-			freeSim(); // just simulate another frame.
+			freeSim();  // just simulate another frame.
 		}
 		else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove)move;
@@ -707,9 +702,16 @@ public class Board {
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			case "Missile": wep = new Missile(
+					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			default: System.out.println("Weapon move parsing error"); break;
 			}
 			freeState = true;
+			for(int i=0;i<objects.size();i++){
+				if(objects.get(i).getName().startsWith("Weapon")){
+					objects.remove(0);
+				}
+			}
 			objects.add(wep);
 		}
 		else { //Not in freeState, change active player depending on move
@@ -937,7 +939,6 @@ public class Board {
 		else if (input.contains("setExp")){
 			
 			for(PhysObject exp : this.getExplosion()){
-				
 				((Explosion) exp).setSize(Integer.parseInt(input.substring(8)));
 				
 			}
