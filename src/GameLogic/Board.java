@@ -595,24 +595,28 @@ public class Board {
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
+		int as = 0;
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); as = i; break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
-			default: System.out.println("error copying arraylists in freeSim"); break;
+			case "TargetLine": objs.add(new TargetLine((TargetLine)objects.get(i))); break;
+			default: System.out.println("error copying arraylists in freeSim: " + objects.get(i).getName()); break;
 			}
 		}
+		
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
 		
+		//Explode objects on a timer if they have run out
 		for(PhysObject obj: objs){
 			switch(obj.getName()){
 			case "WeaponTimedGrenade": 
 				TimedGrenade grenade = (TimedGrenade) obj;
-				if(grenade.getFrames()==0){
+				if((grenade.getFrames()==0) && (grenade.getInUse()==true)){
 					grenade.setInUse(false);
 					createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
 						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
@@ -650,10 +654,14 @@ public class Board {
 			}*/
 			collision.getThing().undoUpdate();
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
+			if(collision.getThing().getName().equals("WeaponExplodeOnImpact")){
+				System.out.println("Bomb colliding with block at: " + collision.getBlock().getPos()
+						+ ", inUse is: " + collision.getBlock().getInUse());
+			}
 		}
 		
 		for(PhysObject object: objs){
-			if((object.getPos().getY() < 100) || (object.getPos().getX()<=0) || (object.getPos().getX()>850)){
+			if((object.getPos().getY() < 100) || (object.getPos().getX()<(-40)) || (object.getPos().getX()>850)){
 				object.setInUse(false);
 				audio.splash();
 				if (checkForWinner()){

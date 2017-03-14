@@ -128,8 +128,8 @@ public class PhysObject implements Serializable{
 		return solid;
 	}
 	
-	public void setInUse(boolean hi){
-		inUse = hi;
+	public void setInUse(boolean inUse){
+		this.inUse = inUse;
 	}
 	
 	public void setGravity(boolean gravity) {

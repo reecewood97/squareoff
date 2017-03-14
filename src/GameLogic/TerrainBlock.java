@@ -25,6 +25,7 @@ public class TerrainBlock extends PhysObject {
 		this.health = other.getHealth();
 		this.type = other.getType();
 		this.visible = other.isVisible();
+		this.setInUse(other.getInUse());
 		this.pos = other.getPos();
 		this.setName("TerrainBlock");
 	}
@@ -38,6 +39,7 @@ public class TerrainBlock extends PhysObject {
 		this.health = this.health-damage;
 		if(health<1) {
 			this.visible = false;
+			this.setInUse(false);
 		}
 	}
 	
@@ -53,6 +55,7 @@ public class TerrainBlock extends PhysObject {
 		return visible;
 	}
 	
+	@Override
 	public boolean getInUse() {
 		return visible;
 	}
@@ -61,6 +64,7 @@ public class TerrainBlock extends PhysObject {
 		this.health = newHealth;
 		if(newHealth < 1) {
 			visible = false;
+			this.setInUse(false);
 		}
 	}
 }
