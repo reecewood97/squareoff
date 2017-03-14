@@ -177,14 +177,13 @@ public class Board {
 		this.squareID = 0;
 		activePlayer = (Square)objects.get(0);
 		
-		//ssshhhh dont tell anyone but im gonna add a new wep instead of changing the boolean
-		/*Point2D.Double weaponpos = new Point2D.Double(30, 30);
-		PhysObject weapon = new Weapon(weaponpos);
+		Point2D.Double weaponpos = new Point2D.Double(30, 30);
+		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
 		objects.add(weapon);
 		
 		Point2D.Double explosionpos = new Point2D.Double(40,40);
-		PhysObject explosion = new Explosion(explosionpos);
-		objects.add(explosion);*/
+		PhysObject explosion = new Explosion(explosionpos, 0);
+		explosions.add(explosion);
 	}
 	
 	public void setFreeState(boolean free) {
@@ -508,13 +507,16 @@ public class Board {
 				}
 			}
 		}
+		explosions.remove(0);
 		explosions.add(new Explosion(new Point2D.Double(x, y), size));
+		//explosions.add(new Explosion(new Point2D.Double(x, y), size));
 	}
 	
 	//If two objects are colliding, this method will be called to resolve the collision
 	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if(thing.getName().endsWith("ExplodeOnImpact")) {
-			if(debug) System.out.println("Resolving impactGrenade collision at: " + thing.getPos());
+			if(debug) System.out.println("Resolving impactGrenade collision between thing at: " + thing.getPos()
+			+ ", and block at: " + block.getPos());
 			thing.setInUse(false);
 			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
 					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
@@ -595,10 +597,9 @@ public class Board {
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
-		int as = 0;
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); as = i; break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
@@ -661,14 +662,16 @@ public class Board {
 		}
 		
 		for(PhysObject object: objs){
-			if((object.getPos().getY() < 100) || (object.getPos().getX()<(-40)) || (object.getPos().getX()>850)){
-				object.setInUse(false);
-				audio.splash();
-				if (checkForWinner()){
-					if(debug)System.out.println("winner?");
-					int won = findPlayer();
-					setWinner(won);
-					turn.endItAll();
+			if(object.getInUse()){
+				if((object.getPos().getY() < 100) || (object.getPos().getX()<(-40)) || (object.getPos().getX()>850)){
+					object.setInUse(false);
+					audio.splash();
+					if (checkForWinner()){
+						if(debug)System.out.println("winner?");
+						int won = findPlayer();
+						setWinner(won);
+						turn.endItAll();
+					}
 				}
 			}
 		}
