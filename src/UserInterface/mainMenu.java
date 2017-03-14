@@ -28,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -119,10 +120,9 @@ public class mainMenu extends Application {
         grid.add(btn5, 0, 14);
         grid.add(btn4, 0, 15);
         grid.setAlignment(Pos.CENTER);
+        grid.setStyle("-fx-background-color: transparent;");
         
-        
-        Scene scene1 = new Scene(grid, width, height);
-        ogScene = scene1;
+        ogScene = new Scene(grid, width, height, Color.LIGHTBLUE);
         
         btn.setOnAction( e -> { a.click(); lobbyWindow("Host", (new mainMenuNetwork()) ); } );
         btn2.setOnAction( e -> { a.click(); jgWindow(); } );
@@ -130,7 +130,7 @@ public class mainMenu extends Application {
         btn5.setOnAction( e -> { a.click(); helpWindow(); } );
         btn4.setOnAction( e -> { a.click(); stop(); } );
         
-        ps.setScene(scene1);
+        ps.setScene(ogScene);
         ps.show();
                 
     }
@@ -190,6 +190,9 @@ public class mainMenu extends Application {
         
         GridPane grid3 = new GridPane();
         
+        grid3.setAlignment(Pos.CENTER);
+        grid3.setStyle("-fx-background-color: transparent;");
+        
         Label label3 = new Label("");
         
         grid3.add(label3, 1, 0);
@@ -198,7 +201,7 @@ public class mainMenu extends Application {
         
         ps.setOnCloseRequest( e -> net.closeServer() ); 
         
-        Scene scene2 = new Scene(grid3, width, height);
+        Scene scene2 = new Scene(grid3, width, height, Color.LIGHTBLUE);
         ps.setScene(scene2);
         ps.show();
     }
@@ -239,7 +242,10 @@ public class mainMenu extends Application {
         grid3.add(vbox, 0, 0);
         grid3.setAlignment(Pos.CENTER);
         
-        Scene scene2 = new Scene(grid3, width, height);
+        grid3.setAlignment(Pos.CENTER);
+        grid3.setStyle("-fx-background-color: transparent;");
+        
+        Scene scene2 = new Scene(grid3, width, height, Color.LIGHTBLUE);
         ps.setScene(scene2);
         ps.show();
     } 
@@ -405,8 +411,10 @@ public class mainMenu extends Application {
         grid3.add(vbox, 0, 19);
         grid3.setAlignment(Pos.CENTER);
         
+        grid3.setAlignment(Pos.CENTER);
+        grid3.setStyle("-fx-background-color: transparent;");
         
-        Scene scene3 = new Scene(grid3, width, height);
+        Scene scene3 = new Scene(grid3, width, height, Color.LIGHTBLUE);
         ps.setScene(scene3);
         ps.show();
     }
@@ -436,8 +444,10 @@ public class mainMenu extends Application {
         grid4.add(btn6, 0, 19);
         grid4.setAlignment(Pos.CENTER);
         
+        grid4.setAlignment(Pos.CENTER);
+        grid4.setStyle("-fx-background-color: transparent;");
         
-        Scene scene4 = new Scene(grid4, width, height);
+        Scene scene4 = new Scene(grid4, width, height, Color.LIGHTBLUE);
         
         btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         btn7.setOnAction( e -> { a.click(); videoWindow(width, height); ps.setTitle("Square-Off: Video Options"); } );
@@ -500,8 +510,10 @@ public class mainMenu extends Application {
         grid5.add(btn9, 0, 20);
         grid5.setAlignment(Pos.CENTER);
         
+        grid5.setAlignment(Pos.CENTER);
+        grid5.setStyle("-fx-background-color: transparent;");
         
-        Scene scene5 = new Scene(grid5, width, height);
+        Scene scene5 = new Scene(grid5, width, height, Color.LIGHTBLUE);
         ps.setScene(scene5);
         ps.show();
     }
@@ -557,8 +569,11 @@ public class mainMenu extends Application {
         grid5.add(btn9, 0, 18);
         grid5.setAlignment(Pos.CENTER);
         
+        grid5.setAlignment(Pos.CENTER);
+        grid5.setStyle("-fx-background-color: transparent;");
         
-        Scene scene5 = new Scene(grid5, (int) w, (int) h);
+        
+        Scene scene5 = new Scene(grid5, (int) w, (int) h, Color.LIGHTBLUE);
         ps.setScene(scene5);
         ps.show();
     }    
@@ -577,9 +592,11 @@ public class mainMenu extends Application {
         
         grid4.add(btn6, 0, 23);
         grid4.setAlignment(Pos.CENTER);
+
+        grid4.setAlignment(Pos.CENTER);
+        grid4.setStyle("-fx-background-color: transparent;");
         
-        
-        Scene scene4 = new Scene(grid4, width, height);
+        Scene scene4 = new Scene(grid4, width, height, Color.LIGHTBLUE);
         
         btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
