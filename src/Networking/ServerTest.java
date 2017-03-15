@@ -9,6 +9,10 @@ public class ServerTest {
 		Client bob = new Client("Bob");
 		bob.connect("127.0.0.1", 4444);
 		
+		//System.out.println(server.kick("Bob"));
+		
+		System.out.println(bob.resetConnection());
+		
 		server.startGame();
 		
 //		server.close();

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import Networking.Queue;
 
 /**
@@ -19,7 +20,7 @@ import Networking.Queue;
 public class HangerOn extends Thread implements KeyListener,MouseListener { 
 	
 	private Queue q;
-	private String name, input;
+	private String name, input, keysPressed;
 	private ScreenBoard panel;
 	private boolean running;
 	
@@ -32,15 +33,15 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 		this.q =q;
 		this.name = name;
 		input = "Pressed    " + name;
-	
+		keysPressed = "";
 	}	
 	
 	/**
 	 * Thread run method.
 	 */
 	public void run() {
+		panel.grabFocus();
 		running = true;
-		
 		try {
 			while(running) {
 				q.offer(input);
@@ -53,37 +54,65 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 		}
 	}
 	
+	/**
+	 * Kills the thread.
+	 */
+	public void end() {
+		running = false;
+	}
+	
 	 /**
 	  * One of two big listeners, this handles keys pressed on the keyboard, formats them and adds to the queue.
 	  */
 	 @Override
 	 public void keyPressed(KeyEvent e) {
 		 switch(KeyEvent.getKeyText(e.getKeyCode())) {
-		 	case "W": input = "Pressed " + input.substring(8,9) + "W " + name;
+		 	case "W": 
+		 		input = "Pressed " + input.substring(8,9) + "W " + name;
 		 		break;
-		 	case "A": input = "Pressed " + "A" + input.substring(9, input.length());
+		 	case "A": 
+		 		input = "Pressed " + "A" + input.substring(9, input.length());
+		 		if(!keysPressed.contains("A")) {
+		 			keysPressed += "A";
+		 		}
 	 			break;
-		 	case "D": input = "Pressed " + "D" + input.substring(9, input.length());
+		 	case "D": 
+		 		input = "Pressed " + "D" + input.substring(9, input.length());
+		 		if(!keysPressed.contains("D")) {
+		 			keysPressed += "D";
+		 		}
  				break;
  			default: 
  				break;
 	 		
 		 }
-//		 int keyCode = e.getKeyCode();
-//		 keyString = "Pressed " +KeyEvent.getKeyText(keyCode) + " " + name;
-//		 //System.out.println(keyString);
-//		 q.offer(keyString);
+		 
 		 panel.grabFocus();
 	 } 
 	 
 	 @Override
 	 public void keyReleased(KeyEvent e) { 
 		 switch(KeyEvent.getKeyText(e.getKeyCode())) {
-		 	case "W": input = "Pressed " + input.substring(8,9) + "  " + name;
+		 	case "W": 
+		 		input = "Pressed " + input.substring(8,9) + "  " + name;
 		 		break;
-		 	case "A": input = "Pressed " + " " + input.substring(9, input.length());
+		 	case "A": 
+		 		keysPressed = keysPressed.replace("A", "");
+		 		if(keysPressed.contains("D")) {
+		 			input = "Pressed " + "D" + input.substring(9, input.length());
+		 		}
+		 		else {
+		 			input = "Pressed " + " " + input.substring(9, input.length());
+		 		}
 	 			break;
-		 	case "D": input = "Pressed " + " " + input.substring(9, input.length());
+		 	case "D": 
+		 		keysPressed = keysPressed.replace("D", "");
+		 		if(keysPressed.contains("A")) {
+		 			input = "Pressed " + "A" + input.substring(9, input.length());
+		 		}
+		 		else {
+		 			input = "Pressed " + " " + input.substring(9, input.length());
+		 		}
 				break;
 			default: 
 				break;

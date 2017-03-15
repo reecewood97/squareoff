@@ -22,14 +22,14 @@ public class Audio implements Serializable
 	public Audio(){
 		
 		this.sound = true;
+		music = new BackgroundMusic();
 	}
 	
 	/**
 	 * plays background music
 	 */
 	public void startBackgroundMusic(){
-		
-		music = new BackgroundMusic();
+	
 		music.start();
 	}
 	

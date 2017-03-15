@@ -16,15 +16,16 @@ import java.io.*;
  */
 public class Client {
 	
-	private String name; //Client nickname.
+	private String name;
+	private int port;
 	private Socket socket;
 	private ObjectOutputStream toServer;
 	private ObjectInputStream fromServer;
 	private ClientSender sender;
 	private ClientReceiver receiver;
-	private Board board; //Client-side version of the game.
-	private Queue q; //A queue of objects to be sent to the server.
-	private Screen ui; //The game UI.
+	private Board board; 
+	private Queue q; 
+	private Screen ui;
 	
 	/**
 	 * Creates a new Client.
@@ -32,6 +33,7 @@ public class Client {
 	 */
 	public Client(String name) {
 		this.name = name;
+		port = -1;
 		socket = null;
 		toServer = null;
 		fromServer = null;
@@ -47,8 +49,11 @@ public class Client {
 	 * @return True if connection was successful and false otherwise.
 	 */
 	public boolean connect(String ip, int port) {
+		//Checks that the client isn't already connected.
 		if(isConnected()) return false;
 		
+		this.port = port;
+	
 		//Creates a socket connecting to the server and then creates threads to communicate with the server.
 		try {
 			socket = new Socket(ip, port);
@@ -90,7 +95,7 @@ public class Client {
 	 */
 	public void disconnect() {
 		//Makes the UI invisible. Doesn't turn off the music however.
-		ui.setInvisible();
+		ui.end();
 		
 		//Do nothing if the client is not connected.
 		if(socket == null) return;
@@ -133,4 +138,31 @@ public class Client {
 	public boolean isConnected() {
 		return socket != null && !socket.isClosed() && receiver.waitForAccept();
 	}
+	
+	/**
+	 * Disconnects from a server and then reconnects to it.
+	 * @return If the connection was successfully reset.
+	 */
+	public boolean resetConnection() {
+		//Checks that the client is connected to a server.
+		if(!isConnected()) return false;
+		
+		//Gets the ip address.
+		String ip = socket.getInetAddress().getHostAddress();
+		
+		//Disconnects from the server.
+		disconnect();
+		
+		//Reconnects.
+		return connect(ip, port);
+	}
 }
+
+
+
+
+
+
+
+
+

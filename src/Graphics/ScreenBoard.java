@@ -82,7 +82,7 @@ public class ScreenBoard extends JPanel{
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d); //DOING //TODO paint other types of weapon, only paints bombs right now
-		paintExplosions(board.getExplosion(),g2d);
+		//paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 	} 		
 	

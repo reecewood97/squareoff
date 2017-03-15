@@ -123,9 +123,15 @@ public class Screen extends JFrame {
 		
 	}
 	
-	public void startMusic(){
-		
+	public void startMusic(){	
 		controls.startMusic();
+	}
+	
+	/**
+	 * Stops the music.
+	 */
+	public void stopMusic() {
+		controls.stopMusic();;
 	}
 	
 	/**
@@ -140,9 +146,15 @@ public class Screen extends JFrame {
 	/**
 	 * Set the UI to become visible, starts the music and starts the listeners.
 	 */
-	public void startGame() {
+	public void start() {
 		setVisible();
 		startMusic();
 		listeners.start();
+	}
+	
+	public void end() {
+		setInvisible();
+		stopMusic();
+		listeners.end();
 	}
 }

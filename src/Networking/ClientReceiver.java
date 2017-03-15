@@ -57,20 +57,38 @@ public class ClientReceiver extends Thread {
 				
 				//Ints from the server tell say what to do.
 				if(ob.getClass().isInstance(0)) {
-					//Start the game.
-					if((int)ob == Server.PLAY && !inGame) {
-						inGame = true;
-						ui.startGame();
+					switch((int)ob) {
+						case Server.PLAY: 						
+							inGame = true;
+							ui.start();
+							break;
+						case Server.ACCEPTED:
+							state = Server.ACCEPTED;
+							break;
+						case Server.DISCONNECT:
+							state = Server.DISCONNECT;
+							client.disconnect();
+							break;
+						case Server.RESET_CONNECTION:
+							client.resetConnection();
+							break;
+						
+							
 					}
-					//Client has connected to a server.
-					else if((int)ob == Server.ACCEPTED) {
-						state = Server.ACCEPTED;
-					}
-					//Server has told the client to disconnect.
-					else if((int)ob == Server.DISCONNECT) {
-						state = Server.DISCONNECT;
-						client.disconnect();
-					}
+//					//Start the game.
+//					if((int)ob == Server.PLAY && !inGame) {
+//						inGame = true;
+//						ui.startGame();
+//					}
+//					//Client has connected to a server.
+//					else if((int)ob == Server.ACCEPTED) {
+//						state = Server.ACCEPTED;
+//					}
+//					//Server has told the client to disconnect.
+//					else if((int)ob == Server.DISCONNECT) {
+//						state = Server.DISCONNECT;
+//						client.disconnect();
+//					}
 				}
 				//Specific objects whilst in-game.
 				if(inGame) {

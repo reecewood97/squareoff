@@ -117,6 +117,13 @@ public class ButtonPanel extends JPanel{
 	}
 	
 	/**
+	 * Stops the music.
+	 */
+	public void stopMusic() {
+		audio.endBackgroundMusic();
+	}
+	
+	/**
 	 * turn background music on and off
 	 * 
 	 * @param button The toggle button

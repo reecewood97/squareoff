@@ -19,7 +19,10 @@ public class Server extends Thread {
 	public static final int PLAY = 1;
 	public static final int DISCONNECT = 2;
 	public static final int ACCEPTED = 3;
-	public static final int PLAYERLIST = 4;
+	public static final int RESET_CONNECTION = 4;
+	
+	public static final int PLAYERLIST = 5;
+	
 	public static final int EASY_AI = 11;
 	public static final int NORMAL_AI = 12;
 	public static final int HARD_AI = 13;
