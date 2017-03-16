@@ -8,6 +8,7 @@ import GameLogic.Square;
 import GameLogic.TerrainBlock;
 import GameLogic.ExplodeOnImpact;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -75,11 +76,12 @@ public class ScreenBoard extends JPanel{
 			g2d.fillOval(i, b-5, 40, 40);
 		}
 		
-		
-		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Arial", Font.PLAIN, 20)); 
+		g2d.setColor(Color.BLACK);
 		g2d.drawString("Player " + (((Square) (board.getActivePlayer())).getPlayerID()) +
 				"'s turn", (int) (80*widthratio), (int) (10*heightratio));
-		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),(int) (10*heightratio));
+		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),
+				(int) (10*heightratio));
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
