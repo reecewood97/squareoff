@@ -27,6 +27,7 @@ public class ScreenBoard extends JPanel{
 	private double heightratio;
 	private double widthratio;
 	private HangerOn hangeron;
+	private boolean drawexplosions;
 	
 	/**
 	 * 
@@ -42,6 +43,7 @@ public class ScreenBoard extends JPanel{
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
 		this.hangeron = h;
+		this.drawexplosions = false;
 		
 	}
 	
@@ -323,6 +325,8 @@ public class ScreenBoard extends JPanel{
 			
 			if (((Explosion) exp).getInUse()){
 				
+				drawexplosions = true;
+				
 				int x = (int) (exp.getPos().getX()-(exp.getWidth()/2));
 				int y = (int) (exp.getPos().getY()+(exp.getHeight()/2));
 				
@@ -340,7 +344,9 @@ public class ScreenBoard extends JPanel{
 				g2d.fillOval(x,y,expwidth,expheight);
 				
 				//if reached max size, stop drawing
-				if(size == (int)exp.getWidth()){
+				if((size == (int)exp.getWidth()) && drawexplosions == true){
+					
+					drawexplosions = false;
 					
 					hangeron.setExp("1");
 					hangeron.setUse("false");
@@ -349,8 +355,10 @@ public class ScreenBoard extends JPanel{
 				//otherwise increase size by one
 				else{
 					
-					size++;
-					hangeron.setExp(size + "");
+					if (drawexplosions){
+						size++;
+						hangeron.setExp(size + "");
+					}
 					
 				}
 			

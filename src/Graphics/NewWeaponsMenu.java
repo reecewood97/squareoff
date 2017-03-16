@@ -220,7 +220,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	
 	    	//TODO notify board of weapon choice
 	    	listeners.setWep("ExplodeOnImpact");
-	    	listeners.setTargetLine("true");
+	    	listeners.setTargetLine("true",true);
 	    	//repaint();
 	    	
 	    }

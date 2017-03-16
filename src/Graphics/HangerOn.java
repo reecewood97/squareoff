@@ -22,7 +22,8 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	private Queue q;
 	private String name, input, keysPressed;
 	private ScreenBoard panel;
-	private boolean running;
+	private boolean running,targetInUse;
+	
 	
 	/**
 	 * Constructor
@@ -32,6 +33,7 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	public HangerOn(Queue q,String name){
 		this.q =q;
 		this.name = name;
+		this.targetInUse = false;
 		input = "Pressed    " + name;
 		keysPressed = "";
 	}	
@@ -114,6 +116,13 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 		 			input = "Pressed " + " " + input.substring(9, input.length());
 		 		}
 				break;
+		 	case "L":
+		 		
+		 		if(targetInUse){
+		 			//	keysPressed = keysPressed.replace("L", "");
+		 			//	input = 
+		 			targetInUse = false;
+		 		}
 			default: 
 				break;
 		 }
@@ -143,6 +152,7 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
 		 if(e.getButton() == 1){
+			 
 			 String clickedEvent = "Clicked " + e.getPoint() + " " + name;
 			 q.offer(clickedEvent);
 			 //System.out.println("works!");
@@ -203,13 +213,13 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	 
 	 
 	 
-	 public void setTargetLine(String b){
+	 public void setTargetLine(String b,boolean b2){
 		 
+		 this.targetInUse = b2;
 		 String setTar = "setTar " + b;
 		 q.offer(setTar);
 	 }
-
-
+	 
 
 	public void grab() {
 		panel.grabFocus();
