@@ -143,6 +143,9 @@ public class ClientReceiver extends Thread {
 			}
 		}
 		ArrayList<String> newPlayers = players;
+		String[] playerArray = new String[4];
+		playerArray = newPlayers.toArray(playerArray);
+		board.setPlayers(playerArray);
 		players = null;
 		return newPlayers;
 	}

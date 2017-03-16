@@ -97,11 +97,6 @@ public class Board {
 		objects.add(yel);
 		objects.add(grn);
 		
-		
-		PhysObject targetline = new TargetLine();
-		targetline.setInUse(false);
-		objects.add(targetline);
-		
 		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
 			//Draw blocks at bottom of map
@@ -178,6 +173,10 @@ public class Board {
 		Point2D.Double explosionpos = new Point2D.Double(150,150);
 		PhysObject explosion = new Explosion(explosionpos, 0);
 		explosions.add(explosion);
+		
+		PhysObject targetline = new TargetLine();
+		targetline.setInUse(false);
+		objects.add(targetline);
 	}
 	
 	public void setFreeState(boolean free) {
@@ -202,10 +201,8 @@ public class Board {
 		this.player = newPlayer;
 		this.squareID = newID;
 		int x = player + squareID;
-		activePlayer = (Square)objects.get(x);
+		activePlayer = (Square)getSquares().get(x);
 	}
-	
-	
 	
 	public PhysObject getActivePlayer() {
 		return activePlayer;
@@ -214,7 +211,6 @@ public class Board {
 	public boolean getPlaying() {
 		return this.playing;
 	}
-	
 	
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
@@ -715,7 +711,7 @@ public class Board {
 			freeState = true;
 			for(int i=0;i<objects.size();i++){
 				if(objects.get(i).getName().startsWith("Weapon")){
-					objects.remove(0);
+					objects.remove(i);
 				}
 			}
 			objects.add(wep);
@@ -1104,6 +1100,19 @@ public class Board {
 			}
 		}
 	}
+	
+	/**
+	 * Sets the array of players.
+	 * @param players The new array.
+	 */
+	public void setPlayers(String[] players) {
+		this.players = players;
+	}
+	
+	public String[] getPlayers() {
+		return players;
+	}
+	
 	public void startLocalTimer(){
 		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
