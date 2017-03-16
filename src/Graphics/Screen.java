@@ -32,6 +32,7 @@ public class Screen extends JFrame {
 	private ScreenBoard sboard;
 	private HangerOn listeners;
 	private ButtonPanel controls;
+	private String playername;
 	
 	public Screen(Board newboard,Queue q,String name){
 		
@@ -50,7 +51,10 @@ public class Screen extends JFrame {
 		setUndecorated(false);//CHANGE ME BEFORE FINAL RELEASE
 		setLayout(new BorderLayout());
 		
+		//set attributes
 		this.listeners = new HangerOn(q,name);
+		this.playername = name;
+		System.out.println(this.playername);
 		
 		//create button panel
 		this.controls = new ButtonPanel(this,newboard, new Audio());
