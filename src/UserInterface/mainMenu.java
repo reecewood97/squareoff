@@ -323,7 +323,17 @@ public class mainMenu extends Application {
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
-    			        	refreshCLobby(net);
+    			        	//refreshCLobby(net);
+    			        	///*
+    			        	try {
+    			        		refreshCLobby(net);
+    			        	}
+    			        	catch (NullPointerException e) {
+    			        		inLobby = false;
+    			        		ps.setScene(ogScene);
+    			        		ps.setTitle("Square-Off: Start Menu");
+    			        	}
+    			        	//*/
     			        }
     			      });
     			      Thread.sleep(500);
