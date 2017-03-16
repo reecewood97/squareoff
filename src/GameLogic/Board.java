@@ -74,7 +74,7 @@ public class Board {
 	
 	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
-		explosions = new ArrayList<PhysObject>();
+		this.explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
@@ -444,7 +444,8 @@ public class Board {
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
-					System.out.println("Circular object collision detected");
+					System.out.println("Circular object collision detected between wep at " + obj2.getPos() +
+							" and block at " + obj1.getPos());
 					return true;
 				} else {return false;}
 			} else {
@@ -460,7 +461,8 @@ public class Board {
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
-					System.out.println("Circular object collision detected");
+					System.out.println("Circular object collision detected between wep at " + obj1.getPos() +
+							"and block at " + obj2.getPos());
 					return true;
 				} else {return false;}
 			} else {
@@ -593,7 +595,11 @@ public class Board {
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i)));
+			if(!objects.get(i).getInUse()){
+			System.out.println("original block inUse is " + objects.get(i).getInUse() + 
+					", copied block is " + objs.get(i).getInUse() + " at " + objects.get(i).getPos());
+			} break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
