@@ -311,6 +311,7 @@ public class Board {
 	}
 	
 	private double wallDistLOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return 100;}
 		double guyleft = guy.getPos().getX();
 		double guydown = guy.getPos().getY();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -345,6 +346,7 @@ public class Board {
 	}
 	
 	private double wallDistROne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return 100;}
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyup = guy.getPos().getY()+guy.getHeight();
 		double guydown = guy.getPos().getY();
@@ -379,6 +381,7 @@ public class Board {
 	}
 	
 	private boolean onFloorOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return false;}
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
@@ -412,6 +415,7 @@ public class Board {
 	}
 	
 	private boolean onCeilingOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return false;}
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyleft = guy.getPos().getX();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -520,6 +524,7 @@ public class Board {
 					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
 		}
 		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
+			thing.undoUpdate();
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
@@ -556,6 +561,7 @@ public class Board {
 			}
 		}
 		else { // Collisions for squares
+			thing.undoUpdate();
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
@@ -656,7 +662,6 @@ public class Board {
 						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
 				}
 			}*/
-			collision.getThing().undoUpdate();
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 			if(collision.getThing().getName().equals("WeaponExplodeOnImpact")){
 				System.out.println("Bomb colliding with block at: " + collision.getBlock().getPos()
