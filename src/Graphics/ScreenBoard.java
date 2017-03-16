@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -261,14 +262,22 @@ public class ScreenBoard extends JPanel{
 			
 	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
-		
-			/*
-			g2d.drawLine((int) weapons.get(0).getPos().getX(), 
-					(int) weapons.get(0).getPos().getY(),
-					(int) mousepos.getX(),
-					(int) ((mousepos.getY())-(10*widthratio)));
-			*/
-			g2d.fillRect(30, 30, (int) mousepos.getX(), 
+			Point2D.Double playerpos = new Point2D.Double(0, 0);
+			
+			for(PhysObject square : board.getSquares()){
+				
+				if(square.getActivePlayer()){
+					
+					
+					playerpos = square.getPos();
+					
+				}
+				
+				
+			}
+			
+			g2d.fillRect((int) playerpos.getX(), (int) playerpos.getY(), 
+					(int) mousepos.getX(), 
 					(int) (mousepos.getY()-(10*widthratio)));
 		}
 		
