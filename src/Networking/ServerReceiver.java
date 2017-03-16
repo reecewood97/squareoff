@@ -19,6 +19,7 @@ public class ServerReceiver extends Thread {
 	private ArrayList<String> players;
 	private ClientTable table;
 	private String name;
+	private AIManager ais;
 	
 	/**
 	 * Creates a new Server Receiver.
@@ -26,12 +27,14 @@ public class ServerReceiver extends Thread {
 	 * @param board The server-side board.
 	 * @param players The list of players connected to the server.
 	 * @param table The table Server Receivers and Server Senders of all the clients.
+	 * @param ais The AIManager of the server.
 	 */
-	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players, ClientTable table) {
+	public ServerReceiver(ObjectInputStream fromClient, Board board, ArrayList<String> players, ClientTable table, AIManager ais) {
 		this.fromClient = fromClient;
 		this.board = board;
 		this.players = players; 
 		this.table = table;
+		this.ais = ais;
 		name = null;
 		running = false;
 	}
@@ -102,7 +105,6 @@ public class ServerReceiver extends Thread {
 	 */
 	public void startGame() {
 		inGame = true;
-		mainMenu.hideUI();
 	}
 	
 	/**
@@ -114,7 +116,9 @@ public class ServerReceiver extends Thread {
 		board.removeName(name);
 		table.get(this).send("I kill the Server sender.");
 		table.remove(this);
-		//System.out.println(getName() + " closed.");
+		if(inGame) {
+			ais.addAIs(1);
+		}
 	}
 	
 	/**

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.Square;
 import ai.AI;
+import ai.DifficultAI;
+import ai.EasyAI;
+import ai.NormalAI;
 
 /**
  * Contains an arraylist of all the AIs in a game and manages when they take their turns.
@@ -12,26 +15,41 @@ import ai.AI;
  */
 public class AIManager extends Thread {
 	
-	private ArrayList<AI> ais; //ArrayList of AIs to be managed.
-	private boolean running; //Whether the thread is currently running.
-	private Board board; //The server-side board.
+	private ArrayList<AI> ais; 
+	private boolean running; 
+	private Board board; 
+	private int difficulty;
+	private ArrayList<String> players;
 	
 	/**
 	 * Creates a new AIManager with no AIs.
 	 * @param board The server-side board.
 	 */
-	public AIManager(Board board) {
+	public AIManager(Board board, ArrayList<String> players) {
 		ais = new ArrayList<AI>();
 		running = false;
 		this.board = board;
+		this.difficulty = Server.EASY_AI;
+		this.players = players;
 	}
 	
 	/**
-	 * Adds an AI to the AIManager.
-	 * @param ai The AI being added.
+	 * Adds AIs to the AIManager.
+	 * @param n The number of AIs to be added.
 	 */
-	public void add(AI ai) {
-		ais.add(ai);
+	public void addAIs(int n) {
+		for(int i = 1; i <= n; i++) {
+			AI ai;
+			switch(difficulty) {
+				case Server.NORMAL_AI: ai = new NormalAI(i, 0, i, board);
+					break;
+				case Server.HARD_AI: ai = new DifficultAI(i, 0, i, board);	
+					break;
+				default: ai = new EasyAI(i, 0, i, board);
+			}
+			ais.add(ai);
+			players.add("AI " + i);
+		}
 	}
 	
 	/**
@@ -58,6 +76,10 @@ public class AIManager extends Thread {
 			}
 	
 		}
+	}
+	
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
 	}
 	
 	/**

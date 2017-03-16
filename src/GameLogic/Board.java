@@ -48,7 +48,7 @@ public class Board {
 	private boolean turnChangedFlag = true;
 	//Debug
 	private final boolean debug = false;
-	private final boolean debugL = true;
+	private final boolean debugL = false;
 
 	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");

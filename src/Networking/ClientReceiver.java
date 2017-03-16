@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import Graphics.Screen;
+import UserInterface.mainMenu;
 
 /**
  * Receives information from the server and uses this to update the game.
@@ -61,6 +62,7 @@ public class ClientReceiver extends Thread {
 						case Server.PLAY: 						
 							inGame = true;
 							ui.start();
+							mainMenu.hideUI();
 							break;
 						case Server.ACCEPTED:
 							state = Server.ACCEPTED;
@@ -169,7 +171,7 @@ public class ClientReceiver extends Thread {
 			try {
 				sleep(50);
 			}
-			catch(InterruptedException e) {
+			catch(InterruptedException e) {							
 				e.printStackTrace();
 				System.exit(1);
 			}
