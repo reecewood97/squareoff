@@ -978,11 +978,18 @@ public class Board {
 		}
 		else if(input.contains("setTar")){
 			
+			System.out.println("SET TAR SET TAR!");
+			
 			for(PhysObject obj : objects){
 				
 				if ( obj.getName().contains("Target")){
 					
+					
+					System.out.println("HELLO: " + input.substring(7));
+					
 					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
+					
+					System.out.println("HELLO2: " + obj.getInUse());
 				}
 			}
 		}
