@@ -291,7 +291,7 @@ public class ScreenBoard extends JPanel{
 					int x = (int) weapon.getPos().getX();
 					int y = (int) weapon.getPos().getY();
 					//y += weapon.getHeight();
-					System.out.println(x + " " + y + "helllllooooooooo");
+					//System.out.println(x + " " + y + "helllllooooooooo");
 					
 					x = (int) (x*widthratio);
 					
@@ -303,7 +303,7 @@ public class ScreenBoard extends JPanel{
 					int weaponheight = (int) (10*heightratio);
 					
 					if(weapon.getName().contains("ExplodeOnImpact")){
-						System.out.println(x + " " + y + "Where the wep is being doodled");
+						//System.out.println(x + " " + y + "Where the wep is being doodled");
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}
