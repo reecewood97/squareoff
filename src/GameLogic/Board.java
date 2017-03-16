@@ -478,10 +478,6 @@ public class Board {
 	}
 	
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
-		
-		//explosion noise
-		audio.explosion();
-		
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
@@ -1110,6 +1106,10 @@ public class Board {
 		this.players = players;
 	}
 	
+	/**
+	 * Returns and array of the players.
+	 * @return The players.
+	 */
 	public String[] getPlayers() {
 		return players;
 	}
