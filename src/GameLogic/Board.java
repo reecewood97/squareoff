@@ -73,7 +73,7 @@ public class Board {
 	
 	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
-		explosions = new ArrayList<PhysObject>();
+		this.explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
@@ -310,6 +310,7 @@ public class Board {
 	}
 	
 	private double wallDistLOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return 100;}
 		double guyleft = guy.getPos().getX();
 		double guydown = guy.getPos().getY();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -344,6 +345,7 @@ public class Board {
 	}
 	
 	private double wallDistROne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return 100;}
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyup = guy.getPos().getY()+guy.getHeight();
 		double guydown = guy.getPos().getY();
@@ -378,6 +380,7 @@ public class Board {
 	}
 	
 	private boolean onFloorOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return false;}
 		double guyleft = guy.getPos().getX();
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guydown = guy.getPos().getY();
@@ -411,6 +414,7 @@ public class Board {
 	}
 	
 	private boolean onCeilingOne(Square guy, PhysObject block) {
+		if(!block.getInUse()) {return false;}
 		double guyright = guy.getPos().getX()+guy.getWidth();
 		double guyleft = guy.getPos().getX();
 		double guyup = guy.getPos().getY()+guy.getHeight();
@@ -443,7 +447,8 @@ public class Board {
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
-					System.out.println("Circular object collision detected");
+					System.out.println("Circular object collision detected between wep at " + obj2.getPos() +
+							" and block at " + obj1.getPos());
 					return true;
 				} else {return false;}
 			} else {
@@ -459,7 +464,8 @@ public class Board {
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
-					System.out.println("Circular object collision detected");
+					System.out.println("Circular object collision detected between wep at " + obj1.getPos() +
+							"and block at " + obj2.getPos());
 					return true;
 				} else {return false;}
 			} else {
@@ -475,10 +481,10 @@ public class Board {
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
 		//explosion noise
-		audio.endBackgroundMusic();
-		audio.explosion();
-		audio.startBackgroundMusic();
-		
+//		audio.endBackgroundMusic();
+//		audio.explosion();
+//		audio.startBackgroundMusic();
+
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
@@ -517,6 +523,7 @@ public class Board {
 					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
 		}
 		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
+			thing.undoUpdate();
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
@@ -553,6 +560,7 @@ public class Board {
 			}
 		}
 		else { // Collisions for squares
+			thing.undoUpdate();
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
@@ -594,7 +602,11 @@ public class Board {
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i)));
+			if(!objects.get(i).getInUse()){
+			System.out.println("original block inUse is " + objects.get(i).getInUse() + 
+					", copied block is " + objs.get(i).getInUse() + " at " + objects.get(i).getPos());
+			} break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
@@ -649,7 +661,6 @@ public class Board {
 						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
 				}
 			}*/
-			collision.getThing().undoUpdate();
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 			if(collision.getThing().getName().equals("WeaponExplodeOnImpact")){
 				System.out.println("Bomb colliding with block at: " + collision.getBlock().getPos()
@@ -698,7 +709,8 @@ public class Board {
 			WeaponMove wepMove = (WeaponMove)move;
 			System.out.println("Weapon spawning at: " + wepMove.getPos());
 			PhysObject wep = null;
-			switch(wepMove.wepType()){
+			//switch(wepMove.wepType()){
+			switch(weaponType){
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
@@ -895,13 +907,22 @@ public class Board {
 				Double x2 = active.getPos().getX();
 				Double y2 = active.getPos().getY();
 				
+				Double factor; //Need to check if the value is behind the player.
+				if (x < x2){
+					factor = -1.0;
+				}else{
+					factor = 1.0;
+				}
+				
 				//Use some basic geometry to better work out how a shot is fired
 				WeaponMove wmv;
 				Double dist = Math.sqrt((x2-x)*(x2-x) + (y2-y)*(y2-y));
+				Double percent = dist/918; //918 being the longest diagonal line you can draw on 400 * 850
+				dist = 30*percent;
 				if (Math.abs(y2-y) < 2){
-					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,dist);
+					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),25,0);
 				}else if (Math.abs(x2-x) < 2){
-					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),dist,0);
+					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,25);
 				}else{
 				Double tanTheta = Math.abs(y2-y)/Math.abs(x2-x);
 				Double theta = Math.atan(tanTheta);
@@ -911,8 +932,8 @@ public class Board {
 				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
 				Double xVel = dist-yVel;;
 				
-				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),yVel,xVel);
-				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
+				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel*factor,yVel);
+				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
 				}
@@ -1108,6 +1129,10 @@ public class Board {
 		this.players = players;
 	}
 	
+	/**
+	 * Returns and array of the players.
+	 * @return The players.
+	 */
 	public String[] getPlayers() {
 		return players;
 	}
