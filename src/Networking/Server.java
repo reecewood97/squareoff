@@ -34,6 +34,7 @@ public class Server extends Thread {
 	private ArrayList<String> players;
 	private ClientTable table;
 	private AIManager ais;
+	private GameLoop gl;
 	
 	/**
 	 * Creates a new Server.
@@ -47,12 +48,15 @@ public class Server extends Thread {
 		table = new ClientTable();
 		running = false;
 		ais = new AIManager(board, players);
+		gl = new GameLoop(board);
 	}
 	
 	/**
 	 * Thread run method.
 	 */
 	public void run() {
+		
+		//Create a new ServerSocket.
 		try {
 			socket = new ServerSocket(port);
 		}
@@ -94,7 +98,7 @@ public class Server extends Thread {
 		table.sendAll(Server.DISCONNECT);
 		running = false;
 		
-		//Wait for everyone to disconnct.
+		//Wait for everyone to disconnect.
 		while(table.size() > 0) {
 			try {
 			     sleep(50);
@@ -112,12 +116,19 @@ public class Server extends Thread {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		//Kill the AIManager and GameLoop threads.
+		ais.close();
+		gl.close();
 	}
 
 	/**
 	 * Starts the game with AIs.
 	 */
 	public void startGame() {
+		
+		//Do nothing if server isn't running.
+		if(!running) return;
 		
 		//Wait for all players to be in the lobby.
 		for(ServerReceiver s: table.getReceivers()) {
@@ -137,7 +148,7 @@ public class Server extends Thread {
 
 		//Start the board, the GameLoop and the AIs.
 		board.startGame();	
-		new GameLoop(board).start();
+		gl.start();
 		ais.start();
 	}
 	

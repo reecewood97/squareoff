@@ -94,11 +94,11 @@ public class Client {
 	 * Disconnects the client from a server.
 	 */
 	public void disconnect() {
-		//Makes the UI invisible. Doesn't turn off the music however.
-		ui.end();
-		
 		//Do nothing if the client is not connected.
 		if(socket == null) return;
+		
+		//Makes the GameUI invisible.
+		ui.end();
 		
 		//Close the socket - this should join all the threads.
 		try {
