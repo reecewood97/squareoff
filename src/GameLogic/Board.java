@@ -917,27 +917,29 @@ public class Board {
 				
 				//Use some basic geometry to better work out how a shot is fired
 				WeaponMove wmv;
-				Double dist = Math.sqrt((x2-x)*(x2-x) + (y2-y)*(y2-y));
-				Double percent = dist/918; //918 being the longest diagonal line you can draw on 400 * 850
-				dist = 30*percent;
-				if (Math.abs(y2-y) < 2){
-					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),25,0);
-				}else if (Math.abs(x2-x) < 2){
-					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,25);
-				}else{
-				Double tanTheta = Math.abs(y2-y)/Math.abs(x2-x);
-				Double theta = Math.atan(tanTheta);
-				theta = (theta*180)/Math.PI;
-				Double percentY = 90/100D;
-				
-				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
-				Double xVel = dist-yVel;;
+//				Double dist = Math.sqrt((x2-x)*(x2-x) + (y2-y)*(y2-y));
+//				Double percent = dist/918; //918 being the longest diagonal line you can draw on 400 * 850
+//				dist = 30*percent;
+//				if (Math.abs(y2-y) < 2){
+//					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),25,0);
+//				}else if (Math.abs(x2-x) < 2){
+//					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,25);
+//				}else{
+//				Double tanTheta = Math.abs(y2-y)/Math.abs(x2-x);
+//				Double theta = Math.atan(tanTheta);
+//				theta = (theta*180)/Math.PI;
+//				Double percentY = theta/90;
+//				
+//				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
+//				Double xVel = dist-yVel;;
+				Double xVel = (Math.abs(x2-x)/800)*30;
+				Double yVel = (Math.abs(y2-y)/450)*30;
 				
 				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel*factor,yVel);
 				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
-				}
+				
 				getTargetLine().get(0).setInUse(false);
 				updateFrame(wmv);
 				if (q.size() > 0)
