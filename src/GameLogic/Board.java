@@ -480,7 +480,9 @@ public class Board {
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
 		//explosion noise
+		audio.endBackgroundMusic();
 		audio.explosion();
+		audio.startBackgroundMusic();
 		
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
@@ -919,6 +921,7 @@ public class Board {
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
 				}
+				getTargetLine().get(0).setInUse(false);
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
@@ -943,7 +946,7 @@ public class Board {
 		else if (input.contains("setExp")){
 			
 			for(PhysObject exp : this.getExplosion()){
-				((Explosion) exp).setSize(Integer.parseInt(input.substring(8)));
+				((Explosion) exp).setSize(Integer.parseInt(input.substring(7)));
 				
 			}
 				
@@ -952,7 +955,7 @@ public class Board {
 			
 			for(PhysObject exp : this.getExplosion()){
 				
-				exp.setInUse(Boolean.parseBoolean(input.substring(8)));
+				exp.setInUse(Boolean.parseBoolean(input.substring(7)));
 				
 			}
 			
@@ -963,7 +966,7 @@ public class Board {
 				
 				if ( obj.getName().contains("Target")){
 					
-					obj.setInUse(Boolean.parseBoolean(input.substring(8)));
+					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
 				}
 			}
 		}
@@ -1105,11 +1108,15 @@ public class Board {
 		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
+		
+//		if (player != 3){
+//			player = player+1;
+//		}else{
+//			player = 0;
+//		}
+//		setActivePlayer(player,squareID);
 	}
-//	public void restartLocalTimer(){
-//		servant.start();
-//	}
-	
+
 	public void setTime(int time){
 		this.time = time;
 	}

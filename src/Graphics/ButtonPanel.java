@@ -3,6 +3,8 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import GameLogic.Board;
+import UserInterface.mainMenu;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -92,6 +94,7 @@ public class ButtonPanel extends JPanel{
 	
 		board.notifyQuit(); //method not complete
 		screen.setVisible(false);
+		mainMenu.showUI();
 		
 	}
 
