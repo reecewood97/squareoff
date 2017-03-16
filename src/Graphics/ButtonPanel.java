@@ -31,7 +31,7 @@ public class ButtonPanel extends JPanel{
 	 * @param board The current board
 	 * @param audio The audio
 	 */
-	public ButtonPanel(Screen screen, Board board, Audio audio) {
+	public ButtonPanel(Screen screen, Board board, Audio audio,String name) {
 		
 		super();
 		
@@ -39,8 +39,48 @@ public class ButtonPanel extends JPanel{
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
-		mainpanel.setBackground(Color.WHITE);
 		
+		/*
+		String[] players = board.getPlayers();
+		int colournum = 0;
+		
+		for(int i = 0; i < 4; i++){
+			
+			System.out.println(players[i]);
+			
+			if(players[i].equals(name)){
+				
+				colournum = i+1;
+				
+				
+			}
+		}
+		*/
+		
+		/*
+		//set backgroudn colour according to player id num
+		if(colournum == 1){
+			
+			mainpanel.setBackground(Color.RED);
+			
+		}
+		else if(colournum == 2){
+			
+			mainpanel.setBackground(Color.BLUE);
+		}
+		else if(colournum == 3){
+			
+			mainpanel.setBackground(Color.YELLOW);
+			
+		}
+		else if(colournum == 4){
+			
+			mainpanel.setBackground(Color.GREEN);
+		}
+		else{
+			mainpanel.setBackground(Color.WHITE);
+		}
+			*/
 		//set attributes
 		this.audio = audio;
 		this.board = board;

@@ -5,7 +5,6 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
-import Graphics.TargetLine;
 
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -961,7 +960,7 @@ public class Board {
 //				for(PhysObject weapon : this.getWeapons()){
 //					
 //					weapon.setInUse(true);
-//					weapon.setName(input.substring(8));
+//					weapon.setName(input.substring(7));
 //					
 //				}
 		}
@@ -984,11 +983,18 @@ public class Board {
 		}
 		else if(input.contains("setTar")){
 			
+			System.out.println("SET TAR SET TAR!");
+			
 			for(PhysObject obj : objects){
 				
 				if ( obj.getName().contains("Target")){
 					
+					
+					System.out.println("HELLO: " + input.substring(7));
+					
 					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
+					
+					System.out.println("HELLO2: " + obj.getInUse());
 				}
 			}
 		}

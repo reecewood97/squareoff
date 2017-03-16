@@ -114,7 +114,7 @@ public class ScreenBoard extends JPanel{
 			boolean visible = ((TerrainBlock) block).isVisible(); 
 			
 			//check if visible
-			if(visible){
+			if(block.getInUse()){
 				
 				//shading
 				g2d.setColor(Color.DARK_GRAY);
@@ -251,7 +251,13 @@ public class ScreenBoard extends JPanel{
 	
 		//TO DO
 		
-		if(targetline.get(0).getInUse() && weapons.get(0).getInUse()){
+		System.out.println("PAINTING");
+		System.out.println("in use??:" + targetline.get(0).getInUse());
+		
+		
+		if(targetline.get(0).getInUse()){
+			
+			System.out.println("WEAPONS AND TARGET IN USE");
 			
 	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
@@ -262,8 +268,7 @@ public class ScreenBoard extends JPanel{
 					(int) mousepos.getX(),
 					(int) ((mousepos.getY())-(10*widthratio)));
 			*/
-			
-			g2d.drawLine(30, 30, (int) mousepos.getX(), 
+			g2d.fillRect(30, 30, (int) mousepos.getX(), 
 					(int) (mousepos.getY()-(10*widthratio)));
 		}
 		
