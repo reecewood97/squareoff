@@ -145,11 +145,23 @@ public class PhysObject implements Serializable{
 	}
 	
 	public void setXvel(double vel) {
-		this.xvel = vel;
+		if(vel > 30){
+			this.xvel = 30;
+		} else if (vel < (-30)){
+			this.xvel = (-30);
+		} else {
+			this.xvel = vel;
+		}
 	}
 	
 	public void setYvel(double vel) {
-		this.yvel = vel;
+		if(vel > 30){
+			this.yvel = 30;
+		} else if (vel < (-30)){
+			this.yvel = (-30);
+		} else {
+			this.yvel = vel;
+		}
 	}
 	
 	public void addAttribute(String att) {

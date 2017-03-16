@@ -7,6 +7,7 @@ public class TargetLine extends PhysObject {
 	
 	public TargetLine(){
 		super(false, new Point2D.Double(10,10), 10, 10, false);
+		this.setInUse(false);
 		this.setName("TargetLine");
 		this.setInUse(false);
 	}
@@ -16,6 +17,4 @@ public class TargetLine extends PhysObject {
 		this.setName(other.getName());
 		
 	}
-
-	
 }

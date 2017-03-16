@@ -12,6 +12,7 @@ public class Square extends PhysObject {
 	private Point2D.Double point;
 	private boolean alive;
 	private String facing;
+	private boolean activePlayer;
 	
 	//What is the point of colour? I thought that was the same as the player that owned it
 	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
@@ -23,6 +24,7 @@ public class Square extends PhysObject {
 		this.alive = true;
 		this.setName("Square");
 		this.facing = "At you!";
+		this.activePlayer = false;
 	}
 	
 	public Square(Square other) {
@@ -35,6 +37,15 @@ public class Square extends PhysObject {
 		this.alive = other.getAlive();
 		this.setName("Square");
 		this.facing = other.getFacing();
+		this.activePlayer = other.getActivePlayer();
+	}
+	
+	public boolean getActivePlayer(){
+		return this.activePlayer;
+	}
+	
+	public void setActivePlayer(boolean active){
+		this.activePlayer = active;
 	}
 	
 	@Override
