@@ -40,6 +40,7 @@ public class ButtonPanel extends JPanel{
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
 		
+		/*
 		String[] players = board.getPlayers();
 		int colournum = 0;
 		
@@ -54,7 +55,9 @@ public class ButtonPanel extends JPanel{
 				
 			}
 		}
+		*/
 		
+		/*
 		//set backgroudn colour according to player id num
 		if(colournum == 1){
 			
@@ -77,7 +80,7 @@ public class ButtonPanel extends JPanel{
 		else{
 			mainpanel.setBackground(Color.WHITE);
 		}
-			
+			*/
 		//set attributes
 		this.audio = audio;
 		this.board = board;
