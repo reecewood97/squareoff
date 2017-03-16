@@ -57,7 +57,7 @@ public class Screen extends JFrame {
 		System.out.println(this.playername);
 		
 		//create button panel
-		this.controls = new ButtonPanel(this,newboard, new Audio());
+		this.controls = new ButtonPanel(this,newboard, new Audio(),name);
 		this.controls.setBackground(lightblue);
 		
 		//show screen board if no winner

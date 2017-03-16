@@ -115,7 +115,7 @@ public class ScreenBoard extends JPanel{
 			boolean visible = ((TerrainBlock) block).isVisible(); 
 			
 			//check if visible
-			if(visible){
+			if(block.getInUse()){
 				
 				//shading
 				g2d.setColor(Color.DARK_GRAY);

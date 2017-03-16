@@ -1,9 +1,7 @@
-package Graphics;
+package GameLogic;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-
-import GameLogic.PhysObject;
 
 public class TargetLine extends PhysObject {
 	
