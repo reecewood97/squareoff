@@ -6,7 +6,6 @@ import GameLogic.Explosion;
 import GameLogic.PhysObject;
 import GameLogic.Square;
 import GameLogic.TerrainBlock;
-import GameLogic.ExplodeOnImpact;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -286,20 +285,20 @@ public class ScreenBoard extends JPanel{
 					
 					int x = (int) weapon.getPos().getX();
 					int y = (int) weapon.getPos().getY();
-					y += weapon.getHeight();
-					//System.out.println(x + " " + y);
+					//y += weapon.getHeight();
+					System.out.println(x + " " + y + "helllllooooooooo");
 					
 					x = (int) (x*widthratio);
-					y = (int) (y*heightratio);
-					y = 450 - y;
 					
-					System.out.println(x + " " + y);
+					y = 450 - y;
+					y = (int) (y*heightratio);
+					//System.out.println(x + " " + y);
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
 					
 					if(weapon.getName().contains("ExplodeOnImpact")){
-						
+						System.out.println(x + " " + y + "Where the wep is being doodled");
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}

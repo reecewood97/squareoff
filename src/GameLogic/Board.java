@@ -482,9 +482,9 @@ public class Board {
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
 		//explosion noise
-		audio.endBackgroundMusic();
-		audio.explosion();
-		audio.startBackgroundMusic();
+//		audio.endBackgroundMusic();
+//		audio.explosion();
+//		audio.startBackgroundMusic();
 
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
@@ -710,7 +710,8 @@ public class Board {
 			WeaponMove wepMove = (WeaponMove)move;
 			System.out.println("Weapon spawning at: " + wepMove.getPos());
 			PhysObject wep = null;
-			switch(wepMove.wepType()){
+			//switch(wepMove.wepType()){
+			switch(weaponType){
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
