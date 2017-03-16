@@ -11,8 +11,10 @@ import java.util.Optional;
 import Audio.Audio;
 import Graphics.SplashSplash;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -39,6 +41,7 @@ public class mainMenu extends Application {
 	static Stage ps;
 	static Scene ogScene;
 	static Stage temps;
+	static boolean inLobby = false;
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -170,11 +173,11 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); net.closeServer(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); inLobby=false; net.closeServer(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.startGame(); } ); //hideUI(); } );
+        btn6.setOnAction( e -> { a.click();  inLobby=false; net.startGame(); } ); //hideUI(); } );
         
         TableView table = lobbyTable(net);
         
@@ -221,7 +224,7 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); inLobby=false; ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         TableView table = lobbyTable(net);
         
@@ -276,7 +279,7 @@ public class mainMenu extends Application {
     		net.runServer();
     		net.connectToHost("127.0.0.1:4444", name);
     		
-    		refreshHLobby(net);
+    		//refreshHLobby(net);
     		/*
     		while (!net.inGame()) {
     			refreshHLobby(scene1, net);
@@ -288,9 +291,49 @@ public class mainMenu extends Application {
 				}
     		}
     		*/
+    		inLobby = true;
+    		
+    		Task task = new Task<Void>() {
+    			  @Override
+    			  public Void call() throws Exception {
+    			    while (inLobby) {
+    			      Platform.runLater(new Runnable() {
+    			        @Override
+    			        public void run() {
+    			        	refreshHLobby(net);
+    			        }
+    			      });
+    			      Thread.sleep(500);
+    			    }
+					return null;
+    			  }
+    			};
+    			Thread th = new Thread(task);
+    			th.setDaemon(true);
+    			th.start();
+    			
     	}
     	else {
-    		refreshCLobby(net);
+    		inLobby = true;
+    		
+    		Task task = new Task<Void>() {
+    			  @Override
+    			  public Void call() throws Exception {
+    			    while (inLobby) {
+    			      Platform.runLater(new Runnable() {
+    			        @Override
+    			        public void run() {
+    			        	refreshCLobby(net);
+    			        }
+    			      });
+    			      Thread.sleep(500);
+    			    }
+					return null;
+    			  }
+    			};
+    			Thread th = new Thread(task);
+    			th.setDaemon(true);
+    			th.start();
     	}
     }
     
