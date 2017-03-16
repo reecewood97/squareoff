@@ -202,6 +202,11 @@ public class Board {
 		this.squareID = newID;
 		int x = player + squareID;
 		activePlayer = (Square)getSquares().get(x);
+		for(PhysObject phys : getSquares()) {
+			Square square = (Square)phys;
+			square.setActivePlayer(false);
+		}
+		activePlayer.setActivePlayer(true);
 	}
 	
 	public PhysObject getActivePlayer() {
