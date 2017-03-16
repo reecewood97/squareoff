@@ -97,11 +97,6 @@ public class Board {
 		objects.add(yel);
 		objects.add(grn);
 		
-		
-		PhysObject targetline = new TargetLine();
-		targetline.setInUse(false);
-		objects.add(targetline);
-		
 		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
 			//Draw blocks at bottom of map
@@ -178,6 +173,10 @@ public class Board {
 		Point2D.Double explosionpos = new Point2D.Double(150,150);
 		PhysObject explosion = new Explosion(explosionpos, 0);
 		explosions.add(explosion);
+		
+		PhysObject targetline = new TargetLine();
+		targetline.setInUse(false);
+		objects.add(targetline);
 	}
 	
 	public void setFreeState(boolean free) {
@@ -202,10 +201,8 @@ public class Board {
 		this.player = newPlayer;
 		this.squareID = newID;
 		int x = player + squareID;
-		activePlayer = (Square)objects.get(x);
+		activePlayer = (Square)getSquares().get(x);
 	}
-	
-	
 	
 	public PhysObject getActivePlayer() {
 		return activePlayer;
@@ -214,7 +211,6 @@ public class Board {
 	public boolean getPlaying() {
 		return this.playing;
 	}
-	
 	
 	public ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
@@ -480,8 +476,10 @@ public class Board {
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
 		//explosion noise
+		audio.endBackgroundMusic();
 		audio.explosion();
-		
+		audio.startBackgroundMusic();
+
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
@@ -713,7 +711,7 @@ public class Board {
 			freeState = true;
 			for(int i=0;i<objects.size();i++){
 				if(objects.get(i).getName().startsWith("Weapon")){
-					objects.remove(0);
+					objects.remove(i);
 				}
 			}
 			objects.add(wep);
@@ -928,6 +926,7 @@ public class Board {
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
 				}
+				getTargetLine().get(0).setInUse(false);
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
@@ -952,7 +951,7 @@ public class Board {
 		else if (input.contains("setExp")){
 			
 			for(PhysObject exp : this.getExplosion()){
-				((Explosion) exp).setSize(Integer.parseInt(input.substring(8)));
+				((Explosion) exp).setSize(Integer.parseInt(input.substring(7)));
 				
 			}
 				
@@ -961,7 +960,7 @@ public class Board {
 			
 			for(PhysObject exp : this.getExplosion()){
 				
-				exp.setInUse(Boolean.parseBoolean(input.substring(8)));
+				exp.setInUse(Boolean.parseBoolean(input.substring(7)));
 				
 			}
 			
@@ -972,7 +971,7 @@ public class Board {
 				
 				if ( obj.getName().contains("Target")){
 					
-					obj.setInUse(Boolean.parseBoolean(input.substring(8)));
+					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
 				}
 			}
 		}
@@ -1119,6 +1118,10 @@ public class Board {
 		this.players = players;
 	}
 	
+	/**
+	 * Returns and array of the players.
+	 * @return The players.
+	 */
 	public String[] getPlayers() {
 		return players;
 	}
@@ -1127,11 +1130,15 @@ public class Board {
 		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
+		
+//		if (player != 3){
+//			player = player+1;
+//		}else{
+//			player = 0;
+//		}
+//		setActivePlayer(player,squareID);
 	}
-//	public void restartLocalTimer(){
-//		servant.start();
-//	}
-	
+
 	public void setTime(int time){
 		this.time = time;
 	}

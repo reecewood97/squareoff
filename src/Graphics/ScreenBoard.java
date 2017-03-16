@@ -86,7 +86,7 @@ public class ScreenBoard extends JPanel{
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
 		paintWeapons(board.getWeapons(),g2d); //DOING //TODO paint other types of weapon, only paints bombs right now
-		//paintExplosions(board.getExplosion(),g2d);
+		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 	} 		
 	
@@ -252,8 +252,9 @@ public class ScreenBoard extends JPanel{
 	
 		//TO DO
 		
-		if(targetline.get(0).getInUse()){
+		if(targetline.get(0).getInUse() && weapons.get(0).getInUse()){
 			
+	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 		
 			/*
@@ -339,6 +340,8 @@ public class ScreenBoard extends JPanel{
 				
 				double size = ((Explosion) exp).getSize();
 				
+				int sizeint = (int) size;
+				
 				int expwidth = (int) (size*widthratio);
 				int expheight = (int) (size*heightratio);
 				
@@ -346,7 +349,7 @@ public class ScreenBoard extends JPanel{
 				g2d.fillOval(x,y,expwidth,expheight);
 				
 				//if reached max size, stop drawing
-				if((size == (int)exp.getWidth()) && drawexplosions == true){
+				if((sizeint == exp.getWidth()) && drawexplosions == true){
 					
 					drawexplosions = false;
 					
@@ -358,8 +361,8 @@ public class ScreenBoard extends JPanel{
 				else{
 					
 					if (drawexplosions){
-						size++;
-						hangeron.setExp(size + "");
+						sizeint = sizeint + 1;
+						hangeron.setExp(sizeint + "");
 					}
 					
 				}

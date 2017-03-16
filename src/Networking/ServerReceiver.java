@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import GameLogic.Board;
+import UserInterface.mainMenu;
 
 /**
  * The Server Receiver receives inputs a client and controls what action is taken.
@@ -101,6 +102,7 @@ public class ServerReceiver extends Thread {
 	 */
 	public void startGame() {
 		inGame = true;
+		mainMenu.hideUI();
 	}
 	
 	/**
