@@ -5,7 +5,6 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
-import Graphics.TargetLine;
 
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -956,7 +955,7 @@ public class Board {
 //				for(PhysObject weapon : this.getWeapons()){
 //					
 //					weapon.setInUse(true);
-//					weapon.setName(input.substring(8));
+//					weapon.setName(input.substring(7));
 //					
 //				}
 		}
