@@ -1097,6 +1097,19 @@ public class Board {
 			}
 		}
 	}
+	
+	/**
+	 * Sets the array of players.
+	 * @param players The new array.
+	 */
+	public void setPlayers(String[] players) {
+		this.players = players;
+	}
+	
+	public String[] getPlayers() {
+		return players;
+	}
+	
 	public void startLocalTimer(){
 		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
