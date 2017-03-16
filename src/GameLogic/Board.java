@@ -952,8 +952,8 @@ public class Board {
 		}
 		else if (input.contains("setWep")){
 			if(debugL) System.out.println("Now a weapon in use");
-				this.weaponType = input.substring(7);
-				weaponsopen = true;
+			this.weaponType = input.substring(7);
+			weaponsopen = true;
 //				for(PhysObject weapon : this.getWeapons()){
 //					
 //					weapon.setInUse(true);
@@ -1051,6 +1051,7 @@ public class Board {
 	 * Increments the active player
 	 */
 	public void incrementTurn(){
+		weaponsopen = false;
 		if (player != 3){
 			player = player+1;
 		}else{
