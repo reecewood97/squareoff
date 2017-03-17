@@ -7,12 +7,12 @@ public class ServerTest {
 		server.start();
 		
 		Client bob = new Client("Bob");
-		System.out.println(bob.connect("127.0.0.1", 4444));
+		//System.out.println(bob.connect("127.0.0.1", 4444));
 
 		
-		server.startGame();
+		//server.startGame();
 		
-		System.out.println(server.getPlayers());
+		//System.out.println(server.getPlayers());
 		
 	}	
 }
