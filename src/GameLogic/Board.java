@@ -242,8 +242,6 @@ public class Board {
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
 				weapons.add(obj);
-				//if (obj.getInUse())
-					//System.out.println(obj.getPos());
 			}
 		}
 		return weapons;
@@ -608,11 +606,7 @@ public class Board {
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i)));
-			if(!objects.get(i).getInUse()){
-			System.out.println("original block inUse is " + objects.get(i).getInUse() + 
-					", copied block is " + objs.get(i).getInUse() + " at " + objects.get(i).getPos());
-			} break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
@@ -661,17 +655,7 @@ public class Board {
 			}
 		}
 		for(Collision collision: list){
-			/*if(collision.getThing().getName().equals("Square")){
-				if(((Square)collision.getThing()).getPlayerID()==1){
-					System.out.println("resolving red square collision with block at: "+
-						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
-				}
-			}*/
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
-			if(collision.getThing().getName().equals("WeaponExplodeOnImpact")){
-				System.out.println("Bomb colliding with block at: " + collision.getBlock().getPos()
-						+ ", inUse is: " + collision.getBlock().getInUse());
-			}
 		}
 		
 		for(PhysObject object: objs){
@@ -692,7 +676,6 @@ public class Board {
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
-				//System.out.println(objects.get(i).getYvel()+" is changing to "+objs.get(i).getYvel());
 				same = false;
 			}
 		}
@@ -830,6 +813,20 @@ public class Board {
 	public void input(String input) {		
 		Square active = (Square)getActivePlayer();
 		
+		if (input.contains("AItakesashotx86")){
+			String[] AIatk = input.split(",");
+			int xVel = Integer.parseInt(AIatk[0]);
+			int yVel = Integer.parseInt(AIatk[1]);
+			if (AIatk[2].equals(players[player])) {
+				WeaponMove wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel,yVel);
+				updateFrame(wmv);
+				if (q.size() > 0)
+					q.remove();
+				q.add(objects);
+			}
+			else return;
+		}
+		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
 				return;
@@ -848,37 +845,7 @@ public class Board {
 				q.remove();
 			q.add(objects);
 
-			
-//			switch(inputKey){
-//			case "W" : mv = new Move(active.getColour(),active.getSquareID(),"None",true);
-//							//System.out.println("Hey left sorta works");
-//							updateFrame(mv);
-//							if (q.size() > 0)
-//								q.remove();
-//							q.add(objects);
-//							
-//				break;
-//			case "A" : mv = new Move(active.getColour(),active.getSquareID(),"Left",false);
-//						//System.out.println("Hey left sorta works");
-//						updateFrame(mv);
-//						if (q.size() > 0)
-//							q.remove();
-//						q.add(objects);
-//						active.setFacing("Left");
-//			case "S" : //duck?
-//				break;
-//			case "D" : mv = new Move(active.getColour(),active.getSquareID(),"Right",false);
-//						updateFrame(mv);
-//						if (q.size() > 0)
-//							q.remove();
-//						q.add(objects);
-//						active.setFacing("Right");
-//				break;
-//			default : if (input.contains("Space")){
-//							mv = new Move(active.getColour(),active.getSquareID(),"None",false);
-//							mv.setWeapon(true);
-//				}
-//			}
+
 		}
 		else if(input.contains("Clicked")){
 			//System.out.println(input);
@@ -915,6 +882,9 @@ public class Board {
 				Double x2 = active.getPos().getX();
 				Double y2 = active.getPos().getY();
 				
+				System.out.println("ActivePlayer is at: " + active.getPos());
+				System.out.println("Mouse press is at: " + x + ", " + y);
+				
 				Double factor; //Need to check if the value is behind the player.
 				if (x < x2){
 					factor = -1.0;
@@ -924,24 +894,10 @@ public class Board {
 				
 				//Use some basic geometry to better work out how a shot is fired
 				WeaponMove wmv;
-//				Double dist = Math.sqrt((x2-x)*(x2-x) + (y2-y)*(y2-y));
-//				Double percent = dist/918; //918 being the longest diagonal line you can draw on 400 * 850
-//				dist = 30*percent;
-//				if (Math.abs(y2-y) < 2){
-//					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),25,0);
-//				}else if (Math.abs(x2-x) < 2){
-//					wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),0,25);
-//				}else{
-//				Double tanTheta = Math.abs(y2-y)/Math.abs(x2-x);
-//				Double theta = Math.atan(tanTheta);
-//				theta = (theta*180)/Math.PI;
-//				Double percentY = theta/90;
-//				
-//				Double yVel = dist*percentY;//Currently just takes a % of how close the angle is to 90 degrees and sets the Y there.
-//				Double xVel = dist-yVel;;
 				Double xVel = (Math.abs(x2-x)/800)*30;
 				Double yVel = (Math.abs(y2-y)/450)*30;
 				
+
 				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX()+10, active.getPos().getY()+10),xVel*factor,yVel);
 				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
@@ -1156,7 +1112,7 @@ public class Board {
 	}
 	
 	public void startLocalTimer(){
-		System.out.println("Restarted the timer");
+		//System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 		

@@ -43,16 +43,21 @@ public class AIManager extends Thread {
 		for(int i = 0; i < n && (playerNumber = players.size()) < maxNumberOfPlayers; i++) {
 			playerNumber = players.size() + 1;
 			AI ai;
+			String name = "AI " + (ais.size() + 1);
 			switch(difficulty) {
-				case Server.NORMAL_AI: ai = new NormalAI(playerNumber, 0, playerNumber, board);
+				case Server.NORMAL_AI: ai = new NormalAI(playerNumber, 0, playerNumber, board, name);
 					break;
-				case Server.HARD_AI: ai = new DifficultAI(playerNumber, 0, playerNumber, board);	
+				case Server.HARD_AI: ai = new DifficultAI(playerNumber, 0, playerNumber, board, name);	
 					break;
-				default: ai = new EasyAI(playerNumber, 0, playerNumber, board);
+				default: ai = new EasyAI(playerNumber, 0, playerNumber, board, name);
 			}
 			ais.add(ai);
+
 			players.add("AI " + (ais.size() + 1));
 			
+			players.add(name);
+			board.addName(name);
+
 		}
 	}
 	
