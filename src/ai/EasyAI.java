@@ -22,19 +22,21 @@ public class EasyAI extends AI{
 	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
+	private String myName;
 	private double outAngle;
 	private double outVelocity;
 	private Queue q;
 	private final double mistakeAngle = 7;
 	private final double mistakeVelocity = 10;
 
-	public EasyAI(int aiPlayer, int aiSquareID, int aiColour, Board board) {
-		super(aiPlayer, aiSquareID, aiColour, board);
+	public EasyAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
+		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
 		this.mySquareID = aiSquareID;
 		this.myPlayer = aiPlayer;
 		this.myColour = aiColour;
 		this.board = board;
+		this.myName = name;
 	}
 	
 	public void aiMove() {
@@ -88,7 +90,7 @@ public class EasyAI extends AI{
 				}
 			}
 		}
-		aiMoveCal(targetX, targetY);
+		aiMoveCal((targetX + 100.0), targetY);
 	}
 	
 	/**

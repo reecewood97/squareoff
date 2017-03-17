@@ -50,6 +50,14 @@ public class mainMenuNetwork {
 		
 	}
 	
+	public void Disconnect() {
+		c.disconnect();
+	}
+	
+	public boolean isConnected() {
+		return c.isConnected();
+	}
+	
 	public boolean inGame() {
 		return c.inGame();
 	}
