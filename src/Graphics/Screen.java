@@ -9,7 +9,8 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit; 
 import javax.swing.JFrame;
 import Audio.Audio;
-import GameLogic.Board; 
+import GameLogic.Board;
+import Networking.Client;
 import Networking.Queue; 
 
 /**
@@ -32,9 +33,9 @@ public class Screen extends JFrame {
 	private ScreenBoard sboard;
 	private HangerOn listeners;
 	private ButtonPanel controls;
-	private String playername;
+	private Client client;
 	
-	public Screen(Board newboard,Queue q,String name){
+	public Screen(Board newboard,Queue q,String name, Client client){
 		
 		//set window size
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -43,6 +44,7 @@ public class Screen extends JFrame {
 		heightratio = screenheight/frameheight;
 		widthratio = screenwidth/framewidth;
 		setBounds(0,0,(int)screenwidth,(int)screenheight);
+		this.client = client;
 		
 		//set background colour to light blue
 		Color lightblue = new Color(135,206,250);
@@ -53,7 +55,6 @@ public class Screen extends JFrame {
 		
 		//set attributes
 		this.listeners = new HangerOn(q,name,heightratio,widthratio);
-		this.playername = name;
 		
 		//create button panel
 		this.controls = new ButtonPanel(this,newboard, new Audio(),name);

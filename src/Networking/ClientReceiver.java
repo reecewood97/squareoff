@@ -84,10 +84,8 @@ public class ClientReceiver extends Thread {
 					}
 					//If the game has finished.
 					else if ((int)ob == 33){
-						//running = false;
-						int winner = 3;//This needs to be a read in
+						int winner = 3;
 						board.setWinner(winner);
-						//ui.winScreen();
 					}
 					//Not sure...
 					else if ((int)ob == 34){

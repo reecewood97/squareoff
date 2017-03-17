@@ -39,7 +39,7 @@ public class Client {
 		fromServer = null;
 		board = new Board("map1");
 		q = new Queue();
-		ui = new Screen(board, q, name);
+		ui = new Screen(board, q, name, this);
 	}
 	
 	/**
