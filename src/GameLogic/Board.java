@@ -663,7 +663,7 @@ public class Board {
 				if((object.getPos().getY() < 100) || (object.getPos().getX()<(-40)) || (object.getPos().getX()>850)){
 					object.setInUse(false);
 					audio.splash();
-					if (checkForWinner()){
+					if (checkForWinner() != -1){
 						if(debug)System.out.println("winner?");
 						int won = findPlayer();
 						setWinner(won);
@@ -792,7 +792,7 @@ public class Board {
 				
 				activePlayer.setDead();
 				audio.splash();
-				if (checkForWinner()){
+				if (checkForWinner() != -1){
 					if(debug)System.out.println("winner?");
 					int won = findPlayer();
 					setWinner(won);
@@ -1050,17 +1050,29 @@ public class Board {
 	 * Checks the arraylist of Squares to see if any two living squares have different players
 	 * @return True if all living squares are played by the same player, false otherwise.
 	 */
-	private boolean checkForWinner(){
+	private int checkForWinner(){
 		ArrayList<PhysObject> chickenDinner = getSquares();
+		int winner = -1;
 		
 		for(int i=0; i< chickenDinner.size()-1;i++){
 			Square first = ((Square)chickenDinner.get(i));
 			Square second = ((Square)chickenDinner.get(i+1));
+			
 			if((first.getAlive() && second.getAlive()))
-				if(first.getPlayerID() != second.getPlayerID())
-					return false;
+			
+				winner = first.getPlayerID();
+				
+				if(first.getPlayerID() != second.getPlayerID()){
+					return -1;
+				}
+				else{
+					
+					winner = first.getPlayerID();
+					
+				}
 		}
-		return true;
+		
+		return winner;
 		
 	}
 	
