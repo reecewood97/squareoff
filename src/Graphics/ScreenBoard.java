@@ -252,13 +252,13 @@ public class ScreenBoard extends JPanel{
 	
 		//TO DO
 		
-		System.out.println("PAINTING");
-		System.out.println("in use??:" + targetline.get(0).getInUse());
+		//System.out.println("PAINTING");
+		//System.out.println("in use??:" + targetline.get(0).getInUse());
 		
 		
 		if(targetline.get(0).getInUse()){
 			
-			System.out.println("WEAPONS AND TARGET IN USE");
+			//System.out.println("WEAPONS AND TARGET IN USE");
 			
 	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
@@ -266,7 +266,7 @@ public class ScreenBoard extends JPanel{
 			
 			for(PhysObject square : board.getSquares()){
 				
-				if(square.getActivePlayer()){
+				if(((Square)square).getActivePlayer()){
 					
 					
 					playerpos = square.getPos();
