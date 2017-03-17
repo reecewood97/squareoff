@@ -594,8 +594,10 @@ public abstract class AI {
 	 * @param velocity velocity to attack
 	 */
 	public void sendAttack(double angle, double velocity){
-		String command = angle + ", " + velocity;
-//		q.offer(command);
+		double xVel = velocity * Math.cos(angle);
+		double yVel = velocity * Math.cos(angle);
+		String command = angle + ", " + xVel + " " + yVel;
+		
 		board.input(command);
 		try {
 			Thread.sleep(100);
