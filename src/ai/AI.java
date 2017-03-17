@@ -572,7 +572,7 @@ public abstract class AI {
 	 * @param velocity velocity to attack
 	 */
 	public void sendAttack(double angle, double velocity){
-		String command = angle + ", " + velocity;
+		String command = angle + ", " + velocity + ", " + myName + ", AItakesashotx86";
 //		q.offer(command);
 		board.input(command);
 		try {
