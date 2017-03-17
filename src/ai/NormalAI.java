@@ -23,19 +23,21 @@ public class NormalAI extends AI {
 	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
+	private String myName;
 	private double outAngle;
 	private double outVelocity;
 	private Queue q;
 	private final double mistakeAngle = 4;
 	private final double mistakeVelocity = 6;
 	
-	public NormalAI(int aiPlayer, int aiSquareID, int aiColour, Board board) {
-		super(aiPlayer, aiSquareID, aiColour, board);
+	public NormalAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
+		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
 		this.mySquareID = aiSquareID;
 		this.myPlayer = aiPlayer;
 		this.myColour = aiColour;
 		this.board = board;
+		this.myName = name;
 	}
 	
 	public void aiMove() {
@@ -54,7 +56,6 @@ public class NormalAI extends AI {
 		double targetY = aiY;
 		PhysObject finalSquare = null;
 		
-		// Calculation for EasyAI
 		double finalDis = 9999999999999.0;
 		if (thereAreObstacles()) {
 			for (PhysObject player:squares) {
@@ -82,9 +83,12 @@ public class NormalAI extends AI {
 				if (((finalSquare.getPos().getY() - 30.0 <= block.getPos().getY() + 100.0) || (finalSquare.getPos().getY() - 30.0 >= block.getPos().getY() -100.0)) && ((finalSquare.getPos().getX() <= block.getPos().getX() +400.0) || (finalSquare.getPos().getY() >= block.getPos().getX() -400.0))) {
 					targetX = block.getPos().getX();
 					targetY = block.getPos().getY();
-					aiMoveCal(targetX, targetY);
 				}
 			}
+			aiMoveCal(targetX, targetY);
+		}
+		else {
+			
 		}
 	}
 

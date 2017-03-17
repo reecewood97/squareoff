@@ -23,19 +23,21 @@ public class DifficultAI extends AI {
 	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
+	private String myName;
 	private double outAngle;
 	private double outVelocity;
 	private Queue q;
 	private final int mistakeAngle = 2;
 	private final int mistakeVelocity = 3;
 
-	public DifficultAI(int aiPlayer, int aiSquareID, int aiColour, Board board) {
-		super(aiPlayer, aiSquareID, aiColour, board);
+	public DifficultAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
+		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
 		this.mySquareID = aiSquareID;
 		this.myPlayer = aiPlayer;
 		this.myColour = aiColour;
 		this.board = board;
+		this.myName = name;
 	}
 	
 	/**
@@ -55,7 +57,6 @@ public class DifficultAI extends AI {
 		double targetY = aiY;
 		PhysObject finalSquare = null;
 		
-		// Calculation for EasyAI
 		double finalDis = 9999999999999.0;
 		if (thereAreObstacles()) {
 			for (PhysObject player:squares) {
