@@ -241,8 +241,6 @@ public class Board {
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
 				weapons.add(obj);
-				//if (obj.getInUse())
-					//System.out.println(obj.getPos());
 			}
 		}
 		return weapons;
@@ -607,11 +605,7 @@ public class Board {
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for(int i=0; i < objects.size();i++){
 			switch(objects.get(i).getName()) {
-			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i)));
-			if(!objects.get(i).getInUse()){
-			System.out.println("original block inUse is " + objects.get(i).getInUse() + 
-					", copied block is " + objs.get(i).getInUse() + " at " + objects.get(i).getPos());
-			} break;
+			case "TerrainBlock": objs.add(new TerrainBlock((TerrainBlock)objects.get(i))); break;
 			case "Square": objs.add(new Square((Square)objects.get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)objects.get(i))); break;
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
@@ -660,17 +654,7 @@ public class Board {
 			}
 		}
 		for(Collision collision: list){
-			/*if(collision.getThing().getName().equals("Square")){
-				if(((Square)collision.getThing()).getPlayerID()==1){
-					System.out.println("resolving red square collision with block at: "+
-						collision.getBlock().getPos().getX()+", "+collision.getBlock().getPos().getY());
-				}
-			}*/
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
-			if(collision.getThing().getName().equals("WeaponExplodeOnImpact")){
-				System.out.println("Bomb colliding with block at: " + collision.getBlock().getPos()
-						+ ", inUse is: " + collision.getBlock().getInUse());
-			}
 		}
 		
 		for(PhysObject object: objs){
@@ -691,7 +675,6 @@ public class Board {
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
-				//System.out.println(objects.get(i).getYvel()+" is changing to "+objs.get(i).getYvel());
 				same = false;
 			}
 		}
@@ -897,6 +880,9 @@ public class Board {
 				Double y =800- Double.parseDouble(yc);
 				Double x2 = active.getPos().getX();
 				Double y2 = active.getPos().getY();
+				
+				System.out.println("ActivePlayer is at: " + active.getPos());
+				System.out.println("Mouse press is at: " + x + ", " + y);
 				
 				Double factor; //Need to check if the value is behind the player.
 				if (x < x2){
