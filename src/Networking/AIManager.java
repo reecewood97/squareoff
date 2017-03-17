@@ -52,6 +52,7 @@ public class AIManager extends Thread {
 			}
 			ais.add(ai);
 			players.add("AI " + (ais.size() + 1));
+			
 		}
 	}
 	
