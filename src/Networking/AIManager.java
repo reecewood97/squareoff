@@ -52,8 +52,12 @@ public class AIManager extends Thread {
 				default: ai = new EasyAI(playerNumber, 0, playerNumber, board, name);
 			}
 			ais.add(ai);
+
+			players.add("AI " + (ais.size() + 1));
+			
 			players.add(name);
 			board.addName(name);
+
 		}
 	}
 	
