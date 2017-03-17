@@ -7,6 +7,7 @@ This is a buddy for the UI - create an istance of this class wherever you make t
  * * more generic to just return whatever kind of component is needed.*/
 package Graphics;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,8 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	private String name, input, keysPressed;
 	private ScreenBoard panel;
 	private boolean running,targetInUse;
+	private double xr;
+	private double yr;
 	
 	
 	/**
@@ -30,12 +33,14 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	 * @param q A blocking queue that's used to hold input ready to be sent to the server
 	 * @param name The client name is used to "sign" the moves they send to the server to discern whos turn it is.
 	 */
-	public HangerOn(Queue q,String name){
+	public HangerOn(Queue q,String name, Double xr, Double yr){
 		this.q =q;
 		this.name = name;
 		this.targetInUse = false;
 		input = "Pressed    " + name;
 		keysPressed = "";
+		this.xr = xr;
+		this.yr = yr;
 	}	
 	
 	/**
@@ -152,8 +157,10 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
 		 if(e.getButton() == 1){
+			 int x = (int) (e.getPoint().getX()*xr);
+			 int y = (int) (e.getPoint().getY()*yr);
 			 
-			 String clickedEvent = "Clicked " + e.getPoint() + " " + name;
+			 String clickedEvent = "Clicked " + (new Point(x,y)) + " " + name;
 			 q.offer(clickedEvent);
 			 //System.out.println("works!");
 			 panel.grabFocus();

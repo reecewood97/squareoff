@@ -266,7 +266,7 @@ public class ScreenBoard extends JPanel{
 			
 			for(PhysObject square : board.getSquares()){
 				
-				if(square.getActivePlayer()){
+				if(((Square) square).getActivePlayer()){
 					
 					
 					playerpos = square.getPos();
