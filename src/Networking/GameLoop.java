@@ -3,7 +3,7 @@ package Networking;
 import GameLogic.Board;
 
 /**
- * Sends a "None" move to the server-side board every frame to force-update it.
+ * Sends a "None" move to the server-side board every frame to force it to update.
  * @author David
  *
  */

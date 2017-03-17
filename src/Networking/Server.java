@@ -27,12 +27,14 @@ public class Server extends Thread {
 	public static final int NORMAL_AI = 12;
 	public static final int HARD_AI = 13;
 	
-	private int port, aiDifficulty;
+	private int port;
 	private Board board;
 	private boolean running;
 	private ServerSocket socket;
 	private ArrayList<String> players;
 	private ClientTable table;
+	private AIManager ais;
+	private GameLoop gl;
 	
 	/**
 	 * Creates a new Server.
@@ -45,13 +47,16 @@ public class Server extends Thread {
 		socket = null;
 		table = new ClientTable();
 		running = false;
-		aiDifficulty = EASY_AI;
+		ais = new AIManager(board, players, 4);
+		gl = new GameLoop(board);
 	}
 	
 	/**
 	 * Thread run method.
 	 */
 	public void run() {
+		
+		//Create a new ServerSocket.
 		try {
 			socket = new ServerSocket(port);
 		}
@@ -69,7 +74,7 @@ public class Server extends Thread {
 
 				//Creates Threads to communicate with a client that has connected.
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
-				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table);
+				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table, ais);
 				sr.start();
 				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
@@ -93,7 +98,7 @@ public class Server extends Thread {
 		table.sendAll(Server.DISCONNECT);
 		running = false;
 		
-		//Wait for everyone to disconnct.
+		//Wait for everyone to disconnect.
 		while(table.size() > 0) {
 			try {
 			     sleep(50);
@@ -111,14 +116,29 @@ public class Server extends Thread {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		//Kill the AIManager and GameLoop threads.
+		ais.close();
+		gl.close();
 	}
-	
+
 	/**
 	 * Starts the game with AIs.
 	 */
 	public void startGame() {
+		
+		//Do nothing if server isn't running.
+		if(!running) return;
+		
+		//Wait for all players to be in the lobby.
+		for(ServerReceiver s: table.getReceivers()) {
+			s.getPlayerName();
+		}
+		
+		int maxNumberOfPlayers = 4;
+		
 		//Adds AIs.
-		AIManager ais = addAIs();
+		ais.addAIs(maxNumberOfPlayers - players.size());
 	
 		//Tells everyone that the game is starting.
 		for(ServerReceiver r: table.getReceivers()) {
@@ -128,40 +148,8 @@ public class Server extends Thread {
 
 		//Start the board, the GameLoop and the AIs.
 		board.startGame();	
-		new GameLoop(board).start();
+		gl.start();
 		ais.start();
-	}
-	
-	/**
-	 * Creates an AIManager with AIs in it.
-	 * @return An AIManager with AIs in it
-	 */
-	private AIManager addAIs() {
-		AIManager ais = new AIManager(board);
-		
-		//Wait for all players to be in the lobby.
-		for(ServerReceiver s: table.getReceivers()) {
-			s.getPlayerName();
-		}
-		
-		int maxPlayers = 4;
-		int numberOfPlayers = players.size();
-		
-		//Fills remaining spots in the game with AIs of a certain difficulty.
-		for(int i = numberOfPlayers + 1; i <= maxPlayers; i++) {
-			AI ai;
-			switch(aiDifficulty) {
-				case NORMAL_AI: ai = new NormalAI(i, 0, i, board);
-					break;
-				case HARD_AI: ai = new DifficultAI(i, 0, i, board);	
-					break;
-				default: ai = new EasyAI(i, 0, i, board);
-			}
-			ais.add(ai);
-			players.add("AI " + (i - numberOfPlayers));
-		}
-
-		return ais;
 	}
 	
 	/**
@@ -207,7 +195,7 @@ public class Server extends Thread {
 	 * Sets the AI difficulty.
 	 * @param aiDifficulty The new AI difficulty.
 	 */
-	public void setAIDifficulty(int aiDifficulty) {
-		this.aiDifficulty = aiDifficulty;
+	public void setAIDifficulty(int difficulty) {
+		ais.setDifficulty(difficulty);
 	}
 }

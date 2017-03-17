@@ -46,12 +46,12 @@ public abstract class AI {
 	 * @param aiPlayer player ID of this Square
 	 * @param board Board of the current game
 	 */
-	public AI(int aiPlayer, int aiSquareID, int aiColour, Board board) {
+	public AI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
 		setSquareID(aiSquareID);
 		setColour(aiColour);
 		setPlayer(aiPlayer);
 		setBoard(board);
-		setAIName();
+		setAIName(name);
 	}
 	
 	
@@ -175,6 +175,14 @@ public abstract class AI {
 		return this.myPos;
 	}
 	
+	public void setAIName(String name) {
+		this.myName = name;
+		board.addName(myName);
+	}
+	
+	public String getAIName() {
+		return this.myName;
+	}
 	
 	
 	
@@ -254,12 +262,24 @@ public abstract class AI {
 		//}
 		
 		int i = 0;
+		boolean jump = false;
 		while ((xPos < targetX) || (xPos > targetX + 15.0) || yPos != targetY) {
 			if (xPos < targetX) {
 				System.out.println(xPos);
-				Point2D nextblock = new Point2D.Double(xPos + 26.0, yPos);
-				if (!blocks.contains(nextblock)) {
-					moveUpRight();
+				for (PhysObject block:blocks) {
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if(yPos < targetY) {
+						if (((xPos <= blockX - 50.1) || (xPos >= blockX - 74.9)) && (blockY == yPos)) {
+							jump = false;
+							break;
+						}
+					}
+					jump = true;
+				}
+				if (jump) {
+					moveUpLeft();
+					jump = false;
 				}
 				moveRight();
 				System.out.println("move Right");
@@ -271,12 +291,21 @@ public abstract class AI {
 				System.out.println("Right " + i);
 			}
 			else {
-				Point2D nextblock = new Point2D.Double(xPos - 26.0, yPos);
 				System.out.println(xPos);
-				if (!blocks.contains(nextblock)) {
-					//moveUpLeft();
-					System.out.println("moveUp");
-					moveUpLeft();
+				for (PhysObject block:blocks) {
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if(yPos < targetY) {
+						if (((xPos <= blockX - 50.1) || (xPos >= blockX - 74.9)) && (blockY == yPos)) {
+							jump = false;
+							break;
+						}
+					}
+					jump = true;
+				}
+				if (jump) {
+					moveUpRight();
+					jump = false;
 				}
 				moveLeft();
 				System.out.println("move Left");
@@ -295,7 +324,6 @@ public abstract class AI {
 	
 	/**
 	 * Movement of the Square of the AI player
-	 * Current Stage: if the current block standing has less than 2 health, move to other position
 	 */
 	public abstract void aiMove();
 
@@ -497,11 +525,6 @@ public abstract class AI {
 		}
 		
 		setObstacles(false);
-	}
-	
-	public void setAIName() {
-		this.myName = "AI " + getPlayerID();
-		board.addName(myName);
 	}
 	
 	/**

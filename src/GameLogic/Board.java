@@ -48,7 +48,7 @@ public class Board {
 	private boolean turnChangedFlag = true;
 	//Debug
 	private final boolean debug = false;
-	private final boolean debugL = true;
+	private final boolean debugL = false;
 
 	public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
@@ -723,6 +723,8 @@ public class Board {
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "Missile": wep = new Missile(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			case "LongJump": wep = getWeapons().get(0); activePlayer.setYvel(wepMove.getYvel());
+					activePlayer.setXvel(wepMove.getXvel()); break;
 			default: System.out.println("Weapon move parsing error"); break;
 			}
 			freeState = true;
@@ -884,7 +886,7 @@ public class Board {
 			String[] inputArray = new String[3];
 			inputArray = input.split(" ");
 			
-			System.out.println(inputArray[2]);
+			//System.out.println(inputArray[2]);
 			
 			if( !(inputArray[2].equals(players[player]))  ){
 				return;
@@ -940,7 +942,7 @@ public class Board {
 				Double xVel = (Math.abs(x2-x)/800)*30;
 				Double yVel = (Math.abs(y2-y)/450)*30;
 				
-				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel*factor,yVel);
+				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX()+10, active.getPos().getY()+10),xVel*factor,yVel);
 				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
@@ -986,18 +988,18 @@ public class Board {
 		}
 		else if(input.contains("setTar")){
 			
-			System.out.println("SET TAR SET TAR!");
+			//System.out.println("SET TAR SET TAR!");
 			
 			for(PhysObject obj : objects){
 				
 				if ( obj.getName().contains("Target")){
 					
 					
-					System.out.println("HELLO: " + input.substring(7));
+					//System.out.println("HELLO: " + input.substring(7));
 					
 					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
 					
-					System.out.println("HELLO2: " + obj.getInUse());
+					//System.out.println("HELLO2: " + obj.getInUse());
 				}
 			}
 		}

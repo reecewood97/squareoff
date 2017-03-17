@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.Square;
 import ai.AI;
+import ai.DifficultAI;
+import ai.EasyAI;
+import ai.NormalAI;
 
 /**
  * Contains an arraylist of all the AIs in a game and manages when they take their turns.
@@ -12,26 +15,44 @@ import ai.AI;
  */
 public class AIManager extends Thread {
 	
-	private ArrayList<AI> ais; //ArrayList of AIs to be managed.
-	private boolean running; //Whether the thread is currently running.
-	private Board board; //The server-side board.
+	private ArrayList<AI> ais; 
+	private boolean running; 
+	private Board board; 
+	private int difficulty, maxNumberOfPlayers;
+	private ArrayList<String> players;
 	
 	/**
 	 * Creates a new AIManager with no AIs.
 	 * @param board The server-side board.
 	 */
-	public AIManager(Board board) {
+	public AIManager(Board board, ArrayList<String> players, int maxNumberOfPlayers) {
 		ais = new ArrayList<AI>();
 		running = false;
 		this.board = board;
+		this.difficulty = Server.EASY_AI;
+		this.players = players;
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
 	}
 	
 	/**
-	 * Adds an AI to the AIManager.
-	 * @param ai The AI being added.
+	 * Adds AIs to the AIManager.
+	 * @param n The number of AIs to be added.
 	 */
-	public void add(AI ai) {
-		ais.add(ai);
+	public void addAIs(int n) {
+		int playerNumber;
+		for(int i = 0; i < n && (playerNumber = players.size()) < maxNumberOfPlayers; i++) {
+			playerNumber = players.size() + 1;
+			AI ai;
+			switch(difficulty) {
+				case Server.NORMAL_AI: ai = new NormalAI(playerNumber, 0, playerNumber, board);
+					break;
+				case Server.HARD_AI: ai = new DifficultAI(playerNumber, 0, playerNumber, board);	
+					break;
+				default: ai = new EasyAI(playerNumber, 0, playerNumber, board);
+			}
+			ais.add(ai);
+			players.add("AI " + (ais.size() + 1));
+		}
 	}
 	
 	/**
@@ -58,6 +79,14 @@ public class AIManager extends Thread {
 			}
 	
 		}
+	}
+	
+	/**
+	 * Sets the difficulty.
+	 * @param difficulty The new difficulty.
+	 */
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
 	}
 	
 	/**

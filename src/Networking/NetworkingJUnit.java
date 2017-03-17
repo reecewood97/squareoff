@@ -25,7 +25,7 @@ public class NetworkingJUnit {
 
 	@After
 	public void tearDown() throws Exception {
-		
+		server.close();
 	}
 
 	@Test
@@ -45,6 +45,7 @@ public class NetworkingJUnit {
 		assertTrue(bob.connect("127.0.0.1", 4444));
 		assertTrue(bob.isConnected());
 		assertEquals(expectedPlayers, bob.getPlayers());
+		assertEquals(expectedPlayers, server.getPlayers());
 		
 		expectedPlayers.add("Jerry");
 		
@@ -62,15 +63,17 @@ public class NetworkingJUnit {
 		bob.disconnect();
 		assertFalse(bob.isConnected());
 		assertEquals(expectedPlayers, jerry.getPlayers());
+		assertNull(bob.getPlayers());
 
 		expectedPlayers.add("Bob");
 		
 		//Bob rejoins the server.
 		System.err.println(5);
 		assertTrue(bob.connect("127.0.0.1", 4444));
-//		assertTrue(bob.isConnected());
-//		assertEquals(expectedPlayers, bob.getPlayers());
-//		assertEquals(expectedPlayers, jerry.getPlayers());
+		assertTrue(bob.isConnected());
+		assertEquals(expectedPlayers, bob.getPlayers());
+		assertEquals(expectedPlayers, jerry.getPlayers());
+
 		
 		//ImposterBob fails to connect to the server.
 		System.err.println(6);
@@ -84,8 +87,34 @@ public class NetworkingJUnit {
 		assertTrue(server.kick("Bob"));	
 		assertFalse(bob.isConnected());
 		assertEquals(expectedPlayers, jerry.getPlayers());
+		
+		//Reset Jerry's connection.
+		System.err.println(8);
+		assertTrue(jerry.resetConnection());
+		assertTrue(jerry.isConnected());
+		assertEquals(expectedPlayers, jerry.getPlayers());
+		
+		assertTrue(bob.connect("127.0.0.1", 4444));
+		
+		//Close the server.
+		System.err.println(9);
+		server.close();
+		assertFalse(bob.isConnected());
+		assertFalse(jerry.isConnected());
+		
+		//New Server created and Bob and Jerry reconnect.
+		System.err.println(10);
+		server = new Server(4444);
+		server.start();
+		assertTrue(bob.connect("127.0.0.1", 4444));
+		assertTrue(jerry.connect("127.0.0.1", 4444));
+		
 	}
 	
+	/**
+	 * Just in case.
+	 * @param millis How long to wait.
+	 */
 	private void wait(int millis) {
 		try {
 			Thread.sleep(millis);

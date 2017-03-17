@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import GameLogic.Board;
 import GameLogic.PhysObject;
 import Graphics.Screen;
+import UserInterface.mainMenu;
 
 /**
  * Receives information from the server and uses this to update the game.
@@ -15,12 +16,12 @@ import Graphics.Screen;
 public class ClientReceiver extends Thread {
 		
 	private ObjectInputStream server;
-	private Board board; //Client-side board.
+	private Board board; 
 	private boolean running, inGame;
 	private Screen ui;
 	private ArrayList<String> players;
 	private Client client;
-	private int state; //Whether the server has accepted the client.
+	private int state; 
 
 	
 	/**
@@ -72,23 +73,7 @@ public class ClientReceiver extends Thread {
 						case Server.RESET_CONNECTION:
 							client.resetConnection();
 							break;
-						
-							
 					}
-//					//Start the game.
-//					if((int)ob == Server.PLAY && !inGame) {
-//						inGame = true;
-//						ui.startGame();
-//					}
-//					//Client has connected to a server.
-//					else if((int)ob == Server.ACCEPTED) {
-//						state = Server.ACCEPTED;
-//					}
-//					//Server has told the client to disconnect.
-//					else if((int)ob == Server.DISCONNECT) {
-//						state = Server.DISCONNECT;
-//						client.disconnect();
-//					}
 				}
 				//Specific objects whilst in-game.
 				if(inGame) {
@@ -169,7 +154,7 @@ public class ClientReceiver extends Thread {
 			try {
 				sleep(50);
 			}
-			catch(InterruptedException e) {
+			catch(InterruptedException e) {							
 				e.printStackTrace();
 				System.exit(1);
 			}
