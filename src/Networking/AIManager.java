@@ -18,19 +18,20 @@ public class AIManager extends Thread {
 	private ArrayList<AI> ais; 
 	private boolean running; 
 	private Board board; 
-	private int difficulty;
+	private int difficulty, maxNumberOfPlayers;
 	private ArrayList<String> players;
 	
 	/**
 	 * Creates a new AIManager with no AIs.
 	 * @param board The server-side board.
 	 */
-	public AIManager(Board board, ArrayList<String> players) {
+	public AIManager(Board board, ArrayList<String> players, int maxNumberOfPlayers) {
 		ais = new ArrayList<AI>();
 		running = false;
 		this.board = board;
 		this.difficulty = Server.EASY_AI;
 		this.players = players;
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
 	}
 	
 	/**
@@ -38,17 +39,19 @@ public class AIManager extends Thread {
 	 * @param n The number of AIs to be added.
 	 */
 	public void addAIs(int n) {
-		for(int i = 1; i <= n; i++) {
+		int playerNumber;
+		for(int i = 0; i < n && (playerNumber = players.size()) < maxNumberOfPlayers; i++) {
+			playerNumber = players.size() + 1;
 			AI ai;
 			switch(difficulty) {
-				case Server.NORMAL_AI: ai = new NormalAI(i, 0, i, board);
+				case Server.NORMAL_AI: ai = new NormalAI(playerNumber, 0, playerNumber, board);
 					break;
-				case Server.HARD_AI: ai = new DifficultAI(i, 0, i, board);	
+				case Server.HARD_AI: ai = new DifficultAI(playerNumber, 0, playerNumber, board);	
 					break;
-				default: ai = new EasyAI(i, 0, i, board);
+				default: ai = new EasyAI(playerNumber, 0, playerNumber, board);
 			}
 			ais.add(ai);
-			players.add("AI " + i);
+			players.add("AI " + (ais.size() + 1));
 		}
 	}
 	
@@ -78,6 +81,10 @@ public class AIManager extends Thread {
 		}
 	}
 	
+	/**
+	 * Sets the difficulty.
+	 * @param difficulty The new difficulty.
+	 */
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
 	}
