@@ -450,8 +450,9 @@ public class Board {
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
-					System.out.println("Circular object collision detected between wep at " + obj2.getPos() +
-							" and block at " + obj1.getPos());
+					System.out.println("Circular object collision detected between wep at "+obj2.getPos()+"with height "
+							+obj2.getHeight()+"and width "+obj2.getWidth()+" and block at "
+							+obj1.getPos()+" with height "+obj1.getHeight()+" and width "+obj1.getWidth());
 					return true;
 				} else {return false;}
 			} else {
@@ -467,8 +468,9 @@ public class Board {
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
-					System.out.println("Circular object collision detected between wep at " + obj1.getPos() +
-							"and block at " + obj2.getPos());
+					System.out.println("Circular object collision detected between wep at "+obj1.getPos()+"with height "
+							+obj1.getHeight()+"and width "+obj1.getWidth()+" and block at "
+							+obj2.getPos()+" with height "+obj2.getHeight()+" and width "+obj2.getWidth());
 					return true;
 				} else {return false;}
 			} else {
