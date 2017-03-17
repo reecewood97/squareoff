@@ -62,7 +62,6 @@ public class ClientReceiver extends Thread {
 						case Server.PLAY: 						
 							inGame = true;
 							ui.start();
-							mainMenu.hideUI();
 							break;
 						case Server.ACCEPTED:
 							state = Server.ACCEPTED;

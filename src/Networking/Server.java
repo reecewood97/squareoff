@@ -47,7 +47,7 @@ public class Server extends Thread {
 		socket = null;
 		table = new ClientTable();
 		running = false;
-		ais = new AIManager(board, players);
+		ais = new AIManager(board, players, 4);
 		gl = new GameLoop(board);
 	}
 	
