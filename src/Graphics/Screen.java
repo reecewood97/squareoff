@@ -61,7 +61,7 @@ public class Screen extends JFrame {
 		this.controls.setBackground(lightblue);
 		
 		//show screen board if no winner
-		if(newboard.getWinner() == -1){
+		if(newboard.checkForWinner() == -1){
 			
 			this.sboard = new ScreenBoard(newboard, heightratio, widthratio, listeners);
 			sboard.setBackground(lightblue);
@@ -72,7 +72,7 @@ public class Screen extends JFrame {
 		//show winner board if there is a winner
 		else{
 			
-			WinnerBoard wboard = new WinnerBoard(newboard.getWinner());
+			WinnerBoard wboard = new WinnerBoard(newboard.checkForWinner());
 			wboard.setBackground(Color.BLACK);
 			controls.setBackground(Color.BLACK);
 			add(wboard, BorderLayout.CENTER);
