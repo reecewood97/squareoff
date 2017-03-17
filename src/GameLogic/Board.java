@@ -815,16 +815,16 @@ public class Board {
 		
 		if (input.contains("AItakesashotx86")){
 			String[] AIatk = input.split(",");
-			int xVel = Integer.parseInt(AIatk[0]);
-			int yVel = Integer.parseInt(AIatk[1]);
-			if (AIatk[2].equals(players[player])) {
+			Double xVel = Double.parseDouble(AIatk[0]);
+			Double yVel = Double.parseDouble(AIatk[1]);
+			//if (AIatk[2].equals(players[player])) {
 				WeaponMove wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel,yVel);
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
 				q.add(objects);
-			}
-			else return;
+			//}
+			//else return;
 		}
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
