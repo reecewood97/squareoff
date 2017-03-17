@@ -1050,7 +1050,7 @@ public class Board {
 	 * Checks the arraylist of Squares to see if any two living squares have different players
 	 * @return True if all living squares are played by the same player, false otherwise.
 	 */
-	private int checkForWinner(){
+	public int checkForWinner(){
 		ArrayList<PhysObject> chickenDinner = getSquares();
 		int winner = -1;
 		
