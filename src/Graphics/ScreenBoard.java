@@ -255,7 +255,6 @@ public class ScreenBoard extends JPanel{
 		//System.out.println("PAINTING");
 		//System.out.println("in use??:" + targetline.get(0).getInUse());
 		
-		
 		if(targetline.get(0).getInUse()){
 			
 			//System.out.println("WEAPONS AND TARGET IN USE");
