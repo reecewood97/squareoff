@@ -177,7 +177,6 @@ public abstract class AI {
 	
 	public void setAIName(String name) {
 		this.myName = name;
-		board.addName(myName);
 	}
 	
 	public String getAIName() {
