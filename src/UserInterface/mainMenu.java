@@ -224,7 +224,7 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); inLobby=false; ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); inLobby=false; net.Disconnect(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         TableView table = lobbyTable(net);
         
@@ -247,6 +247,8 @@ public class mainMenu extends Application {
         
         grid3.setAlignment(Pos.CENTER);
         grid3.setStyle("-fx-background-color: transparent;");
+        
+        ps.setOnCloseRequest( e -> net.Disconnect() ); 
         
         Scene scene2 = new Scene(grid3, width, height, Color.LIGHTBLUE);
         ps.setScene(scene2);
@@ -300,10 +302,11 @@ public class mainMenu extends Application {
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
-    			        	refreshHLobby(net);
+    			        	if ( net.isConnected() ) 
+    			        		refreshHLobby(net);
     			        }
     			      });
-    			      Thread.sleep(500);
+    			      Thread.sleep(750);
     			    }
 					return null;
     			  }
@@ -323,8 +326,14 @@ public class mainMenu extends Application {
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
-    			        	//refreshCLobby(net);
-    			        	///*
+    			        	if ( net.isConnected() )
+    			        		refreshCLobby(net);
+    			        	else {
+    			        		inLobby = false;
+    			        		ps.setScene(ogScene);
+    			        		ps.setTitle("Square-Off: Start Menu");
+    			        	}
+    			        	/*
     			        	try {
     			        		refreshCLobby(net);
     			        	}
@@ -333,10 +342,10 @@ public class mainMenu extends Application {
     			        		ps.setScene(ogScene);
     			        		ps.setTitle("Square-Off: Start Menu");
     			        	}
-    			        	//*/
+    			        	*/
     			        }
     			      });
-    			      Thread.sleep(500);
+    			      Thread.sleep(750);
     			    }
 					return null;
     			  }
