@@ -24,7 +24,7 @@ public class GameLoop extends Thread {
 		while(running) {
 			board.input("None");
 			try {
-				sleep(35);
+				sleep(33);
 			}
 			catch(InterruptedException e) {
 				e.printStackTrace();
