@@ -266,7 +266,7 @@ public class ScreenBoard extends JPanel{
 			
 			for(PhysObject square : board.getSquares()){
 				
-				if(square.getActivePlayer()){
+				if(((Square)square).getActivePlayer()){
 					
 					
 					playerpos = square.getPos();
@@ -276,9 +276,14 @@ public class ScreenBoard extends JPanel{
 				
 			}
 			
-			g2d.fillRect((int) playerpos.getX(), (int) playerpos.getY(), 
-					(int) mousepos.getX(), 
-					(int) (mousepos.getY()-(10*widthratio)));
+			int mousepos_x = (int) ((mousepos.getX()));
+			int mousepos_y = (int) ((450 - mousepos.getY()-10));
+			int pp_x = (int) ((playerpos.getX()+30) * widthratio);
+			int pp_y = (int) ((450 - playerpos.getY()) * heightratio);
+			
+			g2d.setColor(Color.BLACK);
+			g2d.drawLine(pp_x, pp_y, mousepos_x, mousepos_y);
+	
 		}
 		
 		

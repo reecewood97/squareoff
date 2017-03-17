@@ -85,6 +85,7 @@ public class Board {
 		//Initialise the placements of the 4 teams.
 		Point2D.Double redpos = new Point2D.Double(100, 180);
 		PhysObject red = new Square(1 ,0, 0, redpos);
+		((Square)red).setActivePlayer(true);
 		Point2D.Double blupos = new Point2D.Double(300, 180);
 		PhysObject blu = new Square(2 ,0, 0, blupos);
 		Point2D.Double yelpos = new Point2D.Double(400, 180);
