@@ -116,7 +116,7 @@ public class ClientReceiver extends Thread {
 	 */
 	public ArrayList<String> getPlayers() {
 		//Waits for the list.
-		while(players == null) {
+		while(players == null && waitForAccept()) {
 			try {
 				sleep(50);
 			}	

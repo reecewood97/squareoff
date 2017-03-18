@@ -1,12 +1,9 @@
 package GameLogic;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
-
-import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.lang.Math;
@@ -50,7 +47,7 @@ public class Board {
 	private final boolean debug = false;
 	private final boolean debugL = false;
 
-	public static void main(String[] args) { //For testing purposes only
+	/*public static void main(String[] args) { //For testing purposes only
 		Board board = new Board("map1");
 		Scanner scanner = new Scanner(System.in);
 		while(true){
@@ -69,7 +66,7 @@ public class Board {
 						new Point2D.Double(activePlayer.getPos().getX(), activePlayer.getPos().getY()+5),0,0));
 			}
 		}
-	}
+	}*/
 	
 	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
@@ -816,6 +813,7 @@ public class Board {
 		Square active = (Square)getActivePlayer();
 		
 		if (input.contains("AItakesashotx86")){
+			weaponsopen = true;
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);
@@ -917,15 +915,16 @@ public class Board {
 			//}
 		}
 		else if (input.contains("setWep")){
+			String[] wepA = input.split(",");
+			//System.out.println(wepA[2] +"contents of array");
+			if (!(wepA[2].equals(players[player]))){
+				return;
+			}
 			if(debugL) System.out.println("Now a weapon in use");
-			this.weaponType = input.substring(7);
+			this.weaponType = wepA[1];
 			weaponsopen = true;
-//				for(PhysObject weapon : this.getWeapons()){
-//					
-//					weapon.setInUse(true);
-//					weapon.setName(input.substring(7));
-//					
-//				}
+
+			
 		}
 		else if (input.contains("setExp")){
 			
