@@ -49,7 +49,7 @@ public class ServerReceiver extends Thread {
 		try {
 			//Reads the name of the client.
 			name = (String)fromClient.readObject();
-			
+			System.out.println(players);
 			//Checks if a client with that nickname is already connected.
 			if(players.contains(name)) {
 				name = null;
@@ -113,11 +113,11 @@ public class ServerReceiver extends Thread {
 		running = false;
 		players.remove(name);
 		board.removeName(name);
-		table.get(this).send("I kill the Server sender.");
-		table.remove(this);
 		if(inGame) {
 			ais.addAIs(1);
 		}
+		table.get(this).send("I kill the Server sender.");
+		table.remove(this);
 	}
 	
 	/**
@@ -135,5 +135,13 @@ public class ServerReceiver extends Thread {
 			}
 		}
 		return name;
+	}
+	
+	/**
+	 * Set inGame. Used for when the server is reset.
+	 * @param b The new inGame value;
+	 */
+	public void setInGame(boolean b) {
+		inGame = b;
 	}
 }
