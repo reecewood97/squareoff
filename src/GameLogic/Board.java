@@ -295,8 +295,16 @@ public class Board {
 	
 	public ArrayList<PhysObject> getExplosion(){
 		
-		return explosions;
+		ArrayList<PhysObject> exp = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("Explosion")){
+				
+				exp.add(obj);
+			}
+		}
 		
+		return exp;
 	}
 	
 	//All these big chunk of functions are for figuring out how far a square is from a block
@@ -512,9 +520,12 @@ public class Board {
 				}
 			}
 		}
-		explosions.remove(0);
-		explosions.add(new Explosion(new Point2D.Double(x, y)));
-		//explosions.add(new Explosion(new Point2D.Double(x, y), size));
+		for(int hah=0;i<objects.size();hah++){
+			if(objects.get(hah).getName().equals("Explosion")){
+				objects.remove(hah);
+			}
+		}
+		objects.add(new Explosion(new Point2D.Double(x, y)));
 	}
 	
 	//If two objects are colliding, this method will be called to resolve the collision
@@ -612,6 +623,7 @@ public class Board {
 			case "WeaponTimedGrenade": objs.add(new TimedGrenade((TimedGrenade)objects.get(i))); break;
 			case "WeaponMissile": objs.add(new Missile((Missile)objects.get(i))); break;
 			case "TargetLine": objs.add(new TargetLine((TargetLine)objects.get(i))); break;
+			case "Explosion": objs.add(new Explosion((Explosion)objects.get(i))); break;
 			default: System.out.println("error copying arraylists in freeSim: " + objects.get(i).getName()); break;
 			}
 		}
@@ -676,7 +688,9 @@ public class Board {
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i))) {
-				same = false;
+				if(objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse()) {
+					same = false;
+				}
 			}
 		}
 		if(same){
@@ -700,7 +714,9 @@ public class Board {
 			PhysObject wep = null;
 			//switch(wepMove.wepType()){
 			switch(weaponType){
-			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
+			//case "ExplodeOnImpact": wep = new ExplodeOnImpact(
+					//wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			case "ExplodeOnImpact":  wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;

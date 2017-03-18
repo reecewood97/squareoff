@@ -13,6 +13,12 @@ public class Explosion extends PhysObject{
 		this.size = 1;
 	}
 	
+	public Explosion(Explosion other) {
+		super(false, other.getPos(), 1, 1, false);
+		this.setName("Explosion");
+		this.size = other.getSize();
+	}
+	
 	public void setSize(int expsize){
 		
 		this.size = expsize;
