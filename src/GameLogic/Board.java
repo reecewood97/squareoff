@@ -492,6 +492,8 @@ public class Board {
 	
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
+		
+		System.out.println("CREATING EXPLOSION***************************");
 		//explosion noise
 //		audio.endBackgroundMusic();
 //		audio.explosion();
@@ -526,6 +528,13 @@ public class Board {
 			}
 		}
 		objects.add(new Explosion(new Point2D.Double(x, y)));
+		
+		/*System.out.println("here ***************************");
+		
+		Explosion exp = new Explosion(new Point2D.Double(x, y));
+		System.out.println("INUSE?" + exp.getInUse());
+		
+		System.out.println("GETTING FROM ARRAYLIST" + explosions.get(0).getInUse());*/
 	}
 	
 	//If two objects are colliding, this method will be called to resolve the collision
