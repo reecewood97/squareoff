@@ -49,7 +49,6 @@ public class ServerReceiver extends Thread {
 		try {
 			//Reads the name of the client.
 			name = (String)fromClient.readObject();
-			System.out.println(players);
 			//Checks if a client with that nickname is already connected.
 			if(players.contains(name)) {
 				name = null;
