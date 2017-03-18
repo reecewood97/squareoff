@@ -75,12 +75,13 @@ public class Server extends Thread {
 				//Creates Threads to communicate with a client that has connected.
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
 				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table, ais);
-				sr.start();
+				
 				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
 				ServerSender ss = new ServerSender(toClient, board);
 				ss.start();
-				
+				sr.start();
+
 				//Adds Threads to a Client Table.
 				table.add(sr, ss);
 			}			
