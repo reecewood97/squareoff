@@ -236,6 +236,11 @@ public abstract class AI {
 	public void determineState() {
 		changeAIPos();
 		aiMove();
+		try {
+			Thread.sleep(150);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		aiAttack();
 		return;
 	}
@@ -257,20 +262,6 @@ public abstract class AI {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
-		
-		//if ( current block has low hp) {
-			//	find closest blocks that has a higher hp
-			//	while ( approaching target block) {
-					//if ( end of platform ) {
-					//		moveUP();
-					//		moveRight() / moveLeft() at the same time with moveUP();
-					//	}
-					//	else {
-					//		keep moving
-					//	}
-			//	}
-			
-		//}
 		
 		int i = 0;
 		boolean jumpLeft = false;
@@ -301,12 +292,12 @@ public abstract class AI {
 				
 				if (jumpLeft) {
 					moveUpLeft();
-					System.out.println("Detected Edge. Jump Left");
+					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
 				if (jumpRight) {
 					moveUpRight();
-					System.out.println("Detected Edge. Jump Right");
+					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 				}
 				
@@ -316,14 +307,14 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpRight();
-							System.out.println("Jump Right");
+							System.out.println(myName + "Jump Right");
 							break;
 						}
 					}
 				}
 				
 				moveRight();
-				System.out.println("move Right");
+				System.out.println(myName + "move Right");
 
 //				Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
 //				setPos(newPos);
@@ -356,12 +347,12 @@ public abstract class AI {
 				
 				if (jumpLeft) {
 					moveUpLeft();
-					System.out.println("Detected Edge. Jump Left");
+					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
 				if (jumpRight) {
 					moveUpRight();
-					System.out.println("Detected Edge. Jump Right");
+					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 				}
 				
@@ -371,14 +362,14 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpLeft();
-							System.out.println("Jump Left");
+							System.out.println(myName + "Jump Left");
 							break;
 						}
 					}
 				}
 				
 				moveLeft();
-				System.out.println("move Left");
+				System.out.println(myName + "move Left");
 //				xPos -= 2;
 
 //				Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
@@ -600,10 +591,10 @@ public abstract class AI {
 	/**
 	 * Send move left command
 	 */
-	public void moveLeft() {
+	private void moveLeft() {
 		board.input("Pressed A  " + myName);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -612,10 +603,10 @@ public abstract class AI {
 	/**
 	 * Send move right command
 	 */
-	public void moveRight() {
+	private void moveRight() {
 		board.input("Pressed D  " + myName);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -624,10 +615,10 @@ public abstract class AI {
 	/**
 	 * Send jump command
 	 */
-	public void moveUp() {
+	private void moveUp() {
 		board.input("Pressed  W " + myName);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -640,7 +631,7 @@ public abstract class AI {
 	private void moveUpRight() {
 		board.input("Pressed AW  " + myName);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -653,7 +644,7 @@ public abstract class AI {
 	private void moveUpLeft() {
 		board.input("Pressed DW  " + myName);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -664,7 +655,7 @@ public abstract class AI {
 	 * @param angle angle to attack
 	 * @param velocity velocity to attack
 	 */
-	public void sendAttack(double angle, double velocity){
+	private void sendAttack(double angle, double velocity){
 		double xVel = velocity * Math.cos(angle);
 		double yVel = velocity * Math.cos(angle);
 		
