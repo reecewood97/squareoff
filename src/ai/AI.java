@@ -97,14 +97,26 @@ public abstract class AI {
 		this.mySquareID = id;
 	}
 	
+	/**
+	 * Get the SquareID of the AI Player
+	 * @return SquareID
+	 */
 	public int getSquareID() {
 		return this.mySquareID;
 	}
 	
+	/**
+	 * Get the PlayerID of the AI Player
+	 * @return PlayerID
+	 */
 	public int getPlayerID() {
 		return this.myPlayer;
 	}
 	
+	/**
+	 * Get the Colour of AI
+	 * @return colour
+	 */
 	public int getColour() {
 		return this.myColour;
 	}
@@ -144,10 +156,20 @@ public abstract class AI {
 		return this.outVelocity;
 	}
 	
+	
+	
+	/**
+	 * Get will there be obstacle
+	 * @return true if there are obstacles, false if shooting path is clear
+	 */
 	public boolean thereAreObstacles() {
 		return this.haveObstacles;
 	}
 	
+	/**
+	 * Set will there be obstacle
+	 * @param thereAreObstacles true if there are obstacles, false if shooting path is clear
+	 */
 	public void setObstacles(boolean thereAreObstacles) {
 		this.haveObstacles = thereAreObstacles;
 	}
@@ -175,10 +197,17 @@ public abstract class AI {
 		return this.myPos;
 	}
 	
+	/**
+	 * Set name of AI
+	 * @param name Name of AI
+	 */
 	public void setAIName(String name) {
 		this.myName = name;
 	}
 	
+	/**Get name of AI
+	 * @return Name of AI
+	 */
 	public String getAIName() {
 		return this.myName;
 	}
@@ -208,37 +237,19 @@ public abstract class AI {
 		changeAIPos();
 		aiMove();
 		aiAttack();
-//		for (int i = 0; i < 100; i++) {
-//			moveRight();
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		return;
 	}
 	
 	/**
 	 * Send out the final velocity and angle chosen for attack
 	 */
 	public void aiAttack() {
-		// choose the closest target at this moment (get it from server copy)
-		//Point2D.Double finalCoor = getFinalDestination();
 		alterResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
-		sendAttack(angle_chosen, velocity_chosen);
+		sendAttack(angle_chosen, velocity_chosen);  // by sending power, angle chosen to methods in other class.
 		
-		// attack the provided coordinate
-		// 		by sending power, angle chosen to methods in other class.
-		
-		
-		// More advance: choose enemy standing on a block that has less hp,
-		// 				 then calculate will the grenade able to reach target (through physics engine)
-		//				 if it can, attack, else, choose another target
-		// This is already done for Normal and Difficult AI
-
+		return ;
 	}
 	
 	public void aiMoveCal(double targetX, double targetY) {
@@ -264,7 +275,7 @@ public abstract class AI {
 		int i = 0;
 		boolean jumpLeft = false;
 		boolean jumpRight = false;
-		while ((xPos < targetX) || (xPos > targetX + 15.0) || yPos != targetY) {
+		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
 			if (xPos < targetX) {
 				System.out.println(xPos);
 				
