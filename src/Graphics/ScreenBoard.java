@@ -48,6 +48,8 @@ public class ScreenBoard extends JPanel{
 		this.hangeron = h;
 		this.drawexplosions = false;
 		
+		System.out.println("height ratio is " + heightratio);
+		
 	}
 	
 	/**
@@ -277,16 +279,16 @@ public class ScreenBoard extends JPanel{
 				
 			}
 			
-			int mousepos_x = (int) ((mousepos.getX()));
-			int mousepos_y = (int) ((mousepos.getY()));
-			int difference = (int) (40*heightratio);
-			mousepos_y = mousepos_y - difference;
+			int mousepos_x = (int) (this.getMousePosition().getX());
+			int mousepos_y = (int) (this.getMousePosition().getY());
+			
 			int pp_x = (int) ((playerpos.getX()+15) * widthratio);
 			int pp_y = (int) ((450 - playerpos.getY()+15) * heightratio);
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine(pp_x, pp_y, mousepos_x, mousepos_y);
+			
 	
 		}
 		
@@ -348,20 +350,24 @@ public class ScreenBoard extends JPanel{
 			//From Reece; I changed this because the x and y co-ordinates for explosions are in the middle
 			//for my own benefit, sorry if I made a mistake.
 			
-			System.out.println("In explosions");
+			//System.out.println("In explosions");
+			//System.out.println("" + ((Explosion) exp).getInUse());
+			
 			if (((Explosion) exp).getInUse()){
 				
-				System.out.println("Explosion in use");
+				//System.out.println("Explosion in useeeeeeeeeeeeeeeeee");
 				
 				drawexplosions = true;
 				
-				int x = (int) (exp.getPos().getX()-(exp.getWidth()/2));
-				int y = (int) (exp.getPos().getY()+(exp.getHeight()/2));
+				int x = (int) (exp.getPos().getX());
+				int y = (int) (exp.getPos().getY());
 				
 
 				x = (int) (x*widthratio);
-				y = (int) (y*heightratio);
+			
 				y = 450 - y;
+				y = (int) (y*heightratio);
+				
 				
 				double size = ((Explosion) exp).getSize();
 				
@@ -374,13 +380,13 @@ public class ScreenBoard extends JPanel{
 				g2d.fillOval(x,y,expwidth,expheight);
 				
 				
-				System.out.println(size);
+				//System.out.println(size);
 				
 				//if reached max size, stop drawing
-				if((sizeint == exp.getWidth()) && drawexplosions == true){
+				if((sizeint == 100) && drawexplosions == true){
 					
 					
-					System.out.println("Reached max");
+					//System.out.println("Reached max");
 					
 					drawexplosions = false;
 					
@@ -391,9 +397,9 @@ public class ScreenBoard extends JPanel{
 				//otherwise increase size by one
 				else{
 					
-					System.out.println("Not Max");
+					//System.out.println("Not Max");
 					
-					System.out.println("draw explosions: " + drawexplosions);
+					//System.out.println("draw explosions: " + drawexplosions);
 					
 					if (drawexplosions){
 						sizeint = sizeint + 1;

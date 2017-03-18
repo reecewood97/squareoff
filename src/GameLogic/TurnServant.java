@@ -11,7 +11,7 @@ public class TurnServant extends Thread {
 	public void run() {
 		running = true;
 		try {
-			for(int i = 0; i < 20 && running; i++) {
+			for(int i = 0; i < 17 && running; i++) {
 				sleep(1000);
 				board.setTime(i);
 			} 
