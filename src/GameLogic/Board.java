@@ -447,7 +447,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
-						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
+						(obj1.getPos().getX(), obj1.getPos().getY()/*+obj1.getHeight()*/, obj1.getWidth(), obj1.getHeight())){
 					System.out.println("Circular object collision detected between wep at "+obj2.getPos()+"with height "
 							+obj2.getHeight()+"and width "+obj2.getWidth()+" and block at "
 							+obj1.getPos()+" with height "+obj1.getHeight()+" and width "+obj1.getWidth());
@@ -465,7 +465,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
-						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
+						(obj2.getPos().getX(), obj2.getPos().getY()/*+obj2.getHeight()*/, obj2.getWidth(), obj2.getHeight())){
 					System.out.println("Circular object collision detected between wep at "+obj1.getPos()+"with height "
 							+obj1.getHeight()+"and width "+obj1.getWidth()+" and block at "
 							+obj2.getPos()+" with height "+obj2.getHeight()+" and width "+obj2.getWidth());
@@ -895,13 +895,20 @@ public class Board {
 					factor = 1.0;
 				}
 				
+				Double yfactor;
+				if(y < y2){
+					yfactor = -1.0;
+				} else{
+					yfactor = 1.0;
+				}
+				
 				//Use some basic geometry to better work out how a shot is fired
 				WeaponMove wmv;
 				Double xVel = (Math.abs(x2-x)/800)*30;
 				Double yVel = (Math.abs(y2-y)/450)*30;
 				
 
-				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX()+10, active.getPos().getY()+10),xVel*factor,yVel);
+				wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX()+10, active.getPos().getY()+10),xVel*factor,yVel*yfactor);
 				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);

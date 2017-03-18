@@ -76,11 +76,11 @@ public class Server extends Thread {
 				ObjectInputStream fromClient = new ObjectInputStream(s.getInputStream());
 				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table, ais);
 				
-				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
 				ServerSender ss = new ServerSender(toClient, board);
-				ss.start();
+				
 				sr.start();
+				ss.start();
 
 				//Adds Threads to a Client Table.
 				table.add(sr, ss);
@@ -198,5 +198,12 @@ public class Server extends Thread {
 	 */
 	public void setAIDifficulty(int difficulty) {
 		ais.setDifficulty(difficulty);
+	}
+	
+	/**
+	 * Disconnects all clients from the server and then reconnects them.
+	 */
+	public void reset() {
+		table.sendAll(Server.RESET_CONNECTION);
 	}
 }

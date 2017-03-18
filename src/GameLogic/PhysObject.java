@@ -36,7 +36,7 @@ public class PhysObject implements Serializable{
 	
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
 		this.gravity = gravity;
-		this.grav = 2;
+		this.grav = 0.5;
 		this.pos = pos;
 		this.xvel = 0;
 		this.yvel = 0;
@@ -145,20 +145,20 @@ public class PhysObject implements Serializable{
 	}
 	
 	public void setXvel(double vel) {
-		if(vel > 30){
-			this.xvel = 30;
-		} else if (vel < (-30)){
-			this.xvel = (-30);
+		if(vel > 10){
+			this.xvel = 10;
+		} else if (vel < (-10)){
+			this.xvel = (-10);
 		} else {
 			this.xvel = vel;
 		}
 	}
 	
 	public void setYvel(double vel) {
-		if(vel > 30){
-			this.yvel = 30;
-		} else if (vel < (-30)){
-			this.yvel = (-30);
+		if(vel > 10){
+			this.yvel = 10;
+		} else if (vel < (-10)){
+			this.yvel = (-10);
 		} else {
 			this.yvel = vel;
 		}
