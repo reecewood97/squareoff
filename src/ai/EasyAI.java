@@ -40,6 +40,11 @@ public class EasyAI extends AI{
 	}
 	
 	public void aiMove() {
+		
+		if (getEndTurn()) {
+			return ;
+		}
+		
 		// go to the best position to attack target
 		// checks the best position through physics engine (get coordinates)
 		// move to the provided coordinate
@@ -138,6 +143,7 @@ public class EasyAI extends AI{
 		// return the coordinates
 
 		System.out.println(finalSquare.getPos());
+		setObstacles(false);
 		return finalSquare.getPos();
 	}
 	
