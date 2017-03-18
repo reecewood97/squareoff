@@ -54,7 +54,7 @@ public class Screen extends JFrame {
 		setLayout(new BorderLayout());
 		
 		//set attributes
-		this.listeners = new HangerOn(q,name,heightratio,widthratio);
+		this.listeners = new HangerOn(q,name,widthratio,heightratio);
 		
 		//create button panel
 		this.controls = new ButtonPanel(this,newboard, new Audio(),name);

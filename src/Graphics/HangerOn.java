@@ -160,7 +160,7 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 			 System.out.println(e);
 		 if(e.getButton() == 1){
 			 int x = (int) (e.getPoint().getX()/xr);
-			 int y = (int) ((e.getPoint().getY()-(40*yr))/yr);
+			 int y = (int) (((450*yr)-(e.getPoint().getY())+70)/yr);
 			 
 			 String clickedEvent = "Clicked " + x+ " " +y + " " + name;
 			 q.offer(clickedEvent);
