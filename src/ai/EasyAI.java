@@ -90,7 +90,7 @@ public class EasyAI extends AI{
 				}
 			}
 		}
-		aiMoveCal((targetX + 100.0), targetY);
+		aiMoveCal((targetX + 50), targetY);
 	}
 	
 	/**
