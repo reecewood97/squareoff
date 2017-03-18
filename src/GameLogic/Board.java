@@ -839,13 +839,26 @@ public class Board {
 	 */
 	public void input(String input) {		
 		
-	
-		if((getExplosion().size() > 0) && (getExplosion().get(0).getInUse()) 
-				&& !(input.equals("None") && !(input.contains("setExp")))){
+		
+		if (getExplosion().size()>0){
 			
-			System.out.println("IM IN ERE");
 			
-			return;
+				if(!input.contains("setExp")){
+					
+					if(!input.contains("setUse")){
+						
+						if(!input.contains("None")){
+							
+						
+							if (getExplosion().get(0).getInUse()){
+								
+							
+								return;
+							}
+						}
+					}
+				}
+			
 		}
 		
 		Square active = (Square)getActivePlayer();

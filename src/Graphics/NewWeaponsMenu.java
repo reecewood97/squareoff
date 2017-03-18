@@ -218,7 +218,6 @@ public class NewWeaponsMenu extends JFrame {
 	    	//click sound
 	    	audio.click();
 	    	
-	    	System.out.println("YOU SELECTED!!!!!!!!!!!!");
 	    	
 	    	//TODO notify board of weapon choice
 	    	listeners.setWep("ExplodeOnImpact");
