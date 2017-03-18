@@ -279,11 +279,13 @@ public class ScreenBoard extends JPanel{
 			
 			int mousepos_x = (int) ((mousepos.getX()));
 			int mousepos_y = (int) ((mousepos.getY()));
+			System.out.println("mousepos_y = "+mousepos_y);
 			int difference = (int) (40*heightratio);
+			System.out.println("difference = "+difference);
 			mousepos_y = mousepos_y - difference;
 			int pp_x = (int) ((playerpos.getX()+15) * widthratio);
 			int pp_y = (int) ((450 - playerpos.getY()+15) * heightratio);
-			
+			System.out.println("mousepos at: " + mousepos_x + ", " + mousepos_y);
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine(pp_x, pp_y, mousepos_x, mousepos_y);
