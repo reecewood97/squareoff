@@ -3,6 +3,7 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import GameLogic.Board;
+import Networking.Client;
 import UserInterface.mainMenu;
 
 import javax.swing.ImageIcon;
@@ -24,6 +25,7 @@ public class ButtonPanel extends JPanel{
 	private Audio audio;
 	private Board board;
 	private HangerOn listeners;
+	private Client client;
 	
 	/**
 	 * constructor 
@@ -31,7 +33,7 @@ public class ButtonPanel extends JPanel{
 	 * @param board The current board
 	 * @param audio The audio
 	 */
-	public ButtonPanel(Screen screen, Board board, Audio audio,String name) {
+	public ButtonPanel(Screen screen, Board board, Audio audio,String name, Client client) {
 		
 		super();
 		
@@ -85,6 +87,7 @@ public class ButtonPanel extends JPanel{
 		this.audio = audio;
 		this.board = board;
 		this.listeners = screen.getHangerOn();
+		this.client = client;
 		
 		//exit button
         ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
@@ -132,6 +135,7 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void openMainMenu(Screen screen, Board board){
 	
+		client.disconnect();
 		board.notifyQuit(); //method not complete
 		screen.setVisible(false);
 		mainMenu.showUI();

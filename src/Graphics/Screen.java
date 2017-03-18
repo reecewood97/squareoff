@@ -44,7 +44,7 @@ public class Screen extends JFrame {
 		heightratio = screenheight/frameheight;
 		widthratio = screenwidth/framewidth;
 		setBounds(0,0,(int)screenwidth,(int)screenheight);
-		this.client = client;
+	
 		
 		//set background colour to light blue
 		Color lightblue = new Color(135,206,250);
@@ -55,9 +55,10 @@ public class Screen extends JFrame {
 		
 		//set attributes
 		this.listeners = new HangerOn(q,name,heightratio,widthratio);
+		this.client = client;
 		
 		//create button panel
-		this.controls = new ButtonPanel(this,newboard, new Audio(),name);
+		this.controls = new ButtonPanel(this,newboard, new Audio(),name,client);
 		this.controls.setBackground(lightblue);
 		
 		//show screen board if no winner

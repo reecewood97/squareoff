@@ -348,7 +348,10 @@ public class ScreenBoard extends JPanel{
 			//From Reece; I changed this because the x and y co-ordinates for explosions are in the middle
 			//for my own benefit, sorry if I made a mistake.
 			
+			System.out.println("In explosions");
 			if (((Explosion) exp).getInUse()){
+				
+				System.out.println("Explosion in use");
 				
 				drawexplosions = true;
 				
@@ -370,8 +373,14 @@ public class ScreenBoard extends JPanel{
 				g2d.setColor(Color.ORANGE);
 				g2d.fillOval(x,y,expwidth,expheight);
 				
+				
+				System.out.println(size);
+				
 				//if reached max size, stop drawing
 				if((sizeint == exp.getWidth()) && drawexplosions == true){
+					
+					
+					System.out.println("Reached max");
 					
 					drawexplosions = false;
 					
@@ -381,6 +390,10 @@ public class ScreenBoard extends JPanel{
 				}
 				//otherwise increase size by one
 				else{
+					
+					System.out.println("Not Max");
+					
+					System.out.println("draw explosions: " + drawexplosions);
 					
 					if (drawexplosions){
 						sizeint = sizeint + 1;
