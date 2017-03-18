@@ -522,7 +522,7 @@ public class Board {
 				}
 			}
 		}
-		for(int hah=0;i<things.size();hah++){
+		for(int hah=0;hah<things.size();hah++){
 			if(things.get(hah).getName().equals("Explosion")){
 				things.remove(hah);
 			}
@@ -836,6 +836,16 @@ public class Board {
 	 * @param inputs the formatted string from hangerOn.
 	 */
 	public void input(String input) {		
+		
+	
+		if((getExplosion().size() > 0) && (getExplosion().get(0).getInUse()) 
+				&& !(input.equals("None") && !(input.contains("setExp")))){
+			
+			System.out.println("IM IN ERE");
+			
+			return;
+		}
+		
 		Square active = (Square)getActivePlayer();
 		
 		if (input.contains("AItakesashotx86")){
@@ -1002,6 +1012,8 @@ public class Board {
 			updateFrame(mv);
 			q.offer(objects);
 		};
+	
+	
 	}
 	
 	/**

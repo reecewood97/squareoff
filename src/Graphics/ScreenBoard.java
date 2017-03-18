@@ -267,6 +267,7 @@ public class ScreenBoard extends JPanel{
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
 			
+			/*
 			for(PhysObject square : board.getSquares()){
 				
 				if(((Square)square).getActivePlayer()){
@@ -278,12 +279,15 @@ public class ScreenBoard extends JPanel{
 				
 				
 			}
+			*/
+			
+			Square square = (Square) board.getActivePlayer();
 			
 			int mousepos_x = (int) (this.getMousePosition().getX());
 			int mousepos_y = (int) (this.getMousePosition().getY());
 			
-			int pp_x = (int) ((playerpos.getX()+15) * widthratio);
-			int pp_y = (int) ((450 - playerpos.getY()+15) * heightratio);
+			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
+			int pp_y = (int) ((450 - square.getPos().getY()+15) * heightratio);
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
@@ -382,6 +386,7 @@ public class ScreenBoard extends JPanel{
 				
 				System.out.println(size);
 				
+					
 				//if reached max size, stop drawing
 				if((sizeint == 100) && drawexplosions == true){
 					
