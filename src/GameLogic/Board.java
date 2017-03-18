@@ -723,10 +723,10 @@ public class Board {
 			PhysObject wep = null;
 			//switch(wepMove.wepType()){
 			switch(weaponType){
-			//case "ExplodeOnImpact": wep = new ExplodeOnImpact(
-					//wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
-			case "ExplodeOnImpact":  wep = new TimedGrenade(
+			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			//case "ExplodeOnImpact":  wep = new TimedGrenade(
+			//		wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "Missile": wep = new Missile(

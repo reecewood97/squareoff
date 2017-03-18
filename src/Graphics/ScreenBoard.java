@@ -359,13 +359,15 @@ public class ScreenBoard extends JPanel{
 				
 				drawexplosions = true;
 				
-				int x = (int) (exp.getPos().getX()-(exp.getWidth()/2));
-				int y = (int) (exp.getPos().getY()+(exp.getHeight()/2));
+				int x = (int) (exp.getPos().getX());
+				int y = (int) (exp.getPos().getY());
 				
 
 				x = (int) (x*widthratio);
-				y = (int) (y*heightratio);
+			
 				y = 450 - y;
+				y = (int) (y*heightratio);
+				
 				
 				double size = ((Explosion) exp).getSize();
 				
@@ -381,7 +383,7 @@ public class ScreenBoard extends JPanel{
 				System.out.println(size);
 				
 				//if reached max size, stop drawing
-				if((sizeint == exp.getWidth()) && drawexplosions == true){
+				if((sizeint == 100) && drawexplosions == true){
 					
 					
 					System.out.println("Reached max");
