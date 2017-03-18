@@ -107,6 +107,7 @@ public class NetworkingJUnit {
 		System.err.println(10);
 		server = new Server(4444);
 		server.start();
+		wait(1000);
 		assertTrue(bob.connect("127.0.0.1", 4444));
 		assertTrue(jerry.connect("127.0.0.1", 4444));
 		

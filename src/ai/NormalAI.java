@@ -41,6 +41,11 @@ public class NormalAI extends AI {
 	}
 	
 	public void aiMove() {
+		
+		if (getEndTurn()) {
+			return ;
+		}
+		
 		// Stage 2:
 		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
 		// Usually places that has higher hp (defense), or, there is a clear shooting path (ai and enemy on the same level(y axis))

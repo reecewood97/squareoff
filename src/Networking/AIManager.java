@@ -54,8 +54,6 @@ public class AIManager extends Thread {
 			ais.add(ai);
 			players.add(name);
 			board.addName(name);
-			
-			System.out.println(ais);
 		}
 	}
 	

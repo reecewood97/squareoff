@@ -36,7 +36,7 @@ public abstract class AI {
 	private double mistakeAngle = 0;
 	private double mistakeVelocity = 0;
 	private boolean haveObstacles = false;
-	
+	private boolean timesUp = false;	
 	
 	
 	/**
@@ -228,6 +228,13 @@ public abstract class AI {
 		return false;
 	}
 	
+	public void setEndTurn(boolean isTimesUp) {
+		this.timesUp = isTimesUp;
+	}
+	
+	public boolean getEndTurn() {
+		return this.timesUp;
+	}
 	
 	/**
 	 * Determines whether to move and attack or to pick up items
@@ -241,7 +248,13 @@ public abstract class AI {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
+			return;
+		}
 		aiAttack();
+		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
+			return;
+		}
 		return;
 	}
 	
@@ -249,6 +262,9 @@ public abstract class AI {
 	 * Send out the final velocity and angle chosen for attack
 	 */
 	public void aiAttack() {
+		if (board.getTime() >= 20 * 1000) {
+			return;
+		}
 		alterResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
@@ -262,11 +278,16 @@ public abstract class AI {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
-		
+		moveUpLeft();
+		moveUp();
+		moveUpRight();
 		int i = 0;
 		boolean jumpLeft = false;
 		boolean jumpRight = false;
 		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
+			if (board.getTime() >= 15 * 1000) {
+				return;
+			}
 			if (xPos < targetX) {
 				System.out.println(xPos);
 				
@@ -401,7 +422,7 @@ public abstract class AI {
 	 */
 	public void determineResult(){
 		Point2D.Double target = getFinalDestination();
-		// double xdis = Math.abs(getAIPos().getX() - target.getX());
+		double xdis = target.getX() - getAIPos().getX();
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
 		double acc_angle = 45.0;
 		double acc_velocity = maxVelocity/2;
@@ -461,6 +482,11 @@ public abstract class AI {
 						}
 					}
 				}
+			}
+			
+			if(xdis < 0) {
+				acc_angle = 0 - acc_angle;
+				acc_velocity *= -1;
 			}
 
 			setAngle(acc_angle);

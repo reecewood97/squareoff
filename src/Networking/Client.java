@@ -152,7 +152,7 @@ public class Client {
 		
 		//Disconnects from the server.
 		disconnect();
-		
+	
 		//Reconnects.
 		return connect(ip, port);
 	}
