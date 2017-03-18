@@ -41,6 +41,7 @@ public class mainMenu extends Application {
 	static Stage ps;
 	static Scene ogScene;
 	static Stage temps;
+	static boolean isHidden = false;
 	static boolean inLobby = false;
 	
 	/**
@@ -64,26 +65,30 @@ public class mainMenu extends Application {
      * Method to hide the UI at anytime
      */
     public static void hideUI() {
-    	ps.toBack();
-    	/*
-    	ps.setOnHiding( e -> {  temps = new Stage();
-    							temps.initStyle(StageStyle.UTILITY);
-    							temps.setMaxHeight(0);
-    							temps.setMaxWidth(0);
-    							temps.setX(Double.MAX_VALUE);
-    							temps.show();
-        }  );
-    	ps.hide();
-    	*/
+    	if ( !isHidden ) {
+        	ps.setOnHiding( e -> {  temps = new Stage();
+			temps.initStyle(StageStyle.UTILITY);
+			temps.setMaxHeight(0);
+			temps.setMaxWidth(0);
+			temps.setX(Double.MAX_VALUE);
+			temps.show();
+        	}  );
+        	ps.hide();
+    		isHidden = true;
+    	}
     }
     
     /**
      * Method to show the UI at anytime
      */
     public static void showUI() {
-    	ps.toFront();
-    	//temps.setOnHiding( e -> {  ps.show(); }  );
-    	//temps.hide();
+    	if ( isHidden ) {
+        	temps.setOnHiding( e -> {  ps.show(); }  );
+        	temps.hide();
+    		isHidden = false;
+    	}
+    	
+
     }
     
     /**
@@ -174,11 +179,11 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); inLobby=false; net.closeServer(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { a.click(); inLobby=false; net.closeServer(); showUI(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click();  inLobby=false; net.startGame(); } ); //hideUI(); } );
+        btn6.setOnAction( e -> { a.click(); net.startGame(); } ); //hideUI(); } );
         
         TableView table = lobbyTable(net);
         
@@ -281,7 +286,7 @@ public class mainMenu extends Application {
 
     		net.runServer();
     		//net.connectToHost("127.0.0.1:4444", name);
-    		net.connectToHost("127.0.0.1", name);
+    		net.connectToHost("localhost", name);
     		
     		//refreshHLobby(net);
     		/*
@@ -304,8 +309,22 @@ public class mainMenu extends Application {
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
-    			        	if ( net.isConnected() ) 
+    			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		showUI();
     			        		refreshHLobby(net);
+    			        		System.out.println("host if");
+    			        	}
+    			        	else if ( net.isConnected() && net.inGame() ) {
+    			        		hideUI();
+    			        		System.out.println("host else if");
+    			        	}
+    			        	else {
+    			        		net.resetServer();
+    			        		showUI();
+    			        		System.out.println("host else");
+    			        		System.out.println("host isConnected: " + net.isConnected());
+    			        		System.out.println("host inGame: " + net.inGame());
+    			        	}
     			        }
     			      });
     			      Thread.sleep(750);
@@ -328,12 +347,23 @@ public class mainMenu extends Application {
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
-    			        	if ( net.isConnected() )
+    			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		showUI();
     			        		refreshCLobby(net);
+    			        		System.out.println("client if");
+    			        	}
+    			        	else if ( net.isConnected() && net.inGame() ) {
+    			        		hideUI();
+    			        		System.out.println("client else if");
+    			        	}
     			        	else {
-    			        		inLobby = false;
-    			        		ps.setScene(ogScene);
-    			        		ps.setTitle("Square-Off: Start Menu");
+    			        		//inLobby = false;
+    			        		showUI();
+    			        		//ps.setScene(ogScene);
+    			        		//ps.setTitle("Square-Off: Start Menu");
+    			        		System.out.println("client else");
+    			        		System.out.println("client isConnected: " + net.isConnected());
+    			        		System.out.println("client inGame: " + net.inGame());
     			        	}
     			        	/*
     			        	try {

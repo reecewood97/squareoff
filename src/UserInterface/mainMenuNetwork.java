@@ -56,6 +56,10 @@ public class mainMenuNetwork {
 		
 	}
 	
+	public void resetServer() {
+		s.reset();
+	}
+	
 	public void Disconnect() {
 		c.disconnect();
 	}
