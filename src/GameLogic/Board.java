@@ -452,7 +452,7 @@ public class Board {
 			return false;
 		}
 		if(obj1.getName().equals("TerrainBlock")) {
-			if(obj2.getName().endsWith("ExplodeOnImpact") || obj2.getName().endsWith("TimedGrenade")){ //All circular objects
+			if(obj2.getName().endsWith("ExplodeOnImpact")/* || obj2.getName().endsWith("TimedGrenade")*/){ //All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
@@ -470,7 +470,7 @@ public class Board {
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
 			}
 		} else {
-			if(obj1.getName().endsWith("ExplodeOnImpact") || obj1.getName().endsWith("TimedGrenade")){ //All circular objects
+			if(obj1.getName().endsWith("ExplodeOnImpact")/* || obj1.getName().endsWith("TimedGrenade")*/){ //All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
@@ -522,12 +522,12 @@ public class Board {
 				}
 			}
 		}
-		for(int hah=0;i<objects.size();hah++){
-			if(objects.get(hah).getName().equals("Explosion")){
-				objects.remove(hah);
+		for(int hah=0;i<things.size();hah++){
+			if(things.get(hah).getName().equals("Explosion")){
+				things.remove(hah);
 			}
 		}
-		objects.add(new Explosion(new Point2D.Double(x, y)));
+		things.add(new Explosion(new Point2D.Double(x, y)));
 		
 		/*System.out.println("here ***************************");
 		
@@ -546,7 +546,7 @@ public class Board {
 			createExplosion(things, thing.getPos().getX()+(thing.getWidth()/2),
 					thing.getPos().getY()+(thing.getHeight()/2), 150, 50, 1);
 		}
-		else if(thing.getName().endsWith("TimedGrenade")){ //Collisions for circular objects
+		else if(thing.getName().endsWith("TimedGrenadeDONT USE")){ //Collisions for circular objects
 			thing.undoUpdate();
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
 				thing.setXvel((-0.3)*thing.getXvel());
@@ -646,7 +646,7 @@ public class Board {
 			switch(obj.getName()){
 			case "WeaponTimedGrenade": 
 				TimedGrenade grenade = (TimedGrenade) obj;
-				if((grenade.getFrames()==0) && (grenade.getInUse()==true)){
+				if((grenade.getFrames()<=0) && (grenade.getInUse()==true)){
 					grenade.setInUse(false);
 					createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
 						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
@@ -696,10 +696,9 @@ public class Board {
 		
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
-			if (!objs.get(i).equals(objects.get(i))) {
-				if(objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse()) {
+			if (!objs.get(i).equals(objects.get(i)) || 
+					(objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse())) {
 					same = false;
-				}
 			}
 		}
 		if(same){
@@ -726,6 +725,7 @@ public class Board {
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			//case "ExplodeOnImpact":  wep = new TimedGrenade(
+
 			//		wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
