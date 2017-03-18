@@ -52,12 +52,10 @@ public class AIManager extends Thread {
 				default: ai = new EasyAI(playerNumber, 0, playerNumber, board, name);
 			}
 			ais.add(ai);
-
-			players.add("AI " + (ais.size() + 1));
-			
 			players.add(name);
 			board.addName(name);
-
+			
+			System.out.println(ais);
 		}
 	}
 	
@@ -74,7 +72,6 @@ public class AIManager extends Thread {
 				if(ai.getPlayerID() == playerTurn) {
 					//Activates the AI whose turn it is, then ends the AI's turn.
 					ai.determineState();
-					board.incrementTurn();
 				}
 			}
 			try {

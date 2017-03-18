@@ -813,6 +813,7 @@ public class Board {
 		Square active = (Square)getActivePlayer();
 		
 		if (input.contains("AItakesashotx86")){
+			weaponsopen = true;
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);
@@ -914,15 +915,16 @@ public class Board {
 			//}
 		}
 		else if (input.contains("setWep")){
+			String[] wepA = input.split(",");
+			//System.out.println(wepA[2] +"contents of array");
+			if (!(wepA[2].equals(players[player]))){
+				return;
+			}
 			if(debugL) System.out.println("Now a weapon in use");
-			this.weaponType = input.substring(7);
+			this.weaponType = wepA[1];
 			weaponsopen = true;
-//				for(PhysObject weapon : this.getWeapons()){
-//					
-//					weapon.setInUse(true);
-//					weapon.setName(input.substring(7));
-//					
-//				}
+
+			
 		}
 		else if (input.contains("setExp")){
 			
