@@ -7,8 +7,8 @@ public class Explosion extends PhysObject{
 	
 	private double size;
 	
-	public Explosion(Point2D.Double pos, double size){ //POSITION IS MIDDLE OF EXPLOSION
-		super(false, pos, (int)(2*size/5), (int)(2*size/5), false);
+	public Explosion(Point2D.Double pos){ //POSITION IS MIDDLE OF EXPLOSION
+		super(false, pos, 1, 1, false);
 		this.setName("Explosion");
 		this.size = 1;
 	}

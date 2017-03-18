@@ -168,7 +168,8 @@ public class Board {
 		objects.add(weapon);
 		
 		Point2D.Double explosionpos = new Point2D.Double(150,150);
-		PhysObject explosion = new Explosion(explosionpos, 0);
+		PhysObject explosion = new Explosion(explosionpos);
+		explosion.setInUse(false);
 		explosions.add(explosion);
 		
 		PhysObject targetline = new TargetLine();
@@ -512,7 +513,7 @@ public class Board {
 			}
 		}
 		explosions.remove(0);
-		explosions.add(new Explosion(new Point2D.Double(x, y), size));
+		explosions.add(new Explosion(new Point2D.Double(x, y)));
 		//explosions.add(new Explosion(new Point2D.Double(x, y), size));
 	}
 	
