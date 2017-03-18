@@ -295,8 +295,16 @@ public class Board {
 	
 	public ArrayList<PhysObject> getExplosion(){
 		
-		return explosions;
+		ArrayList<PhysObject> exp = new ArrayList<PhysObject>();
+		for(PhysObject obj : objects){
+			
+			if (obj.getName().equals("Explosion")){
+				
+				exp.add(obj);
+			}
+		}
 		
+		return exp;
 	}
 	
 	//All these big chunk of functions are for figuring out how far a square is from a block
@@ -484,6 +492,8 @@ public class Board {
 	
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
+		
+		System.out.println("CREATING EXPLOSION***************************");
 		//explosion noise
 //		audio.endBackgroundMusic();
 //		audio.explosion();
@@ -512,9 +522,16 @@ public class Board {
 				}
 			}
 		}
+		
+		System.out.println("here ***************************");
+		
 		explosions.remove(0);
-		explosions.add(new Explosion(new Point2D.Double(x, y)));
+		Explosion exp = new Explosion(new Point2D.Double(x, y));
+		System.out.println("INUSE?" + exp.getInUse());
+		explosions.add(exp);
 		//explosions.add(new Explosion(new Point2D.Double(x, y), size));
+		
+		System.out.println("GETTING FROM ARRAYLIST" + explosions.get(0).getInUse());
 	}
 	
 	//If two objects are colliding, this method will be called to resolve the collision
