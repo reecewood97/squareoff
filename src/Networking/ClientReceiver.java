@@ -126,11 +126,14 @@ public class ClientReceiver extends Thread {
 			}
 		}
 		
+		//Sets the client-side playerlist to the new playerlist if it isn't null.
 		ArrayList<String> newPlayers = players;
-		String[] playerArray = new String[4];
-		playerArray = newPlayers.toArray(playerArray);
-		board.setPlayers(playerArray);
-		players = null;
+		if(newPlayers != null) {
+			String[] playerArray = new String[4];
+			playerArray = newPlayers.toArray(playerArray);
+			board.setPlayers(playerArray);
+			players = null;
+		}
 		return newPlayers;
 	}
 	
