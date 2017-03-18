@@ -156,11 +156,13 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	  */
 	 @Override
 	 public void mouseClicked(MouseEvent e) {
+		 if (e.getButton() == 2)
+			 System.out.println(e);
 		 if(e.getButton() == 1){
-			 int x = (int) (e.getPoint().getX()*xr);
-			 int y = (int) (e.getPoint().getY()*yr);
+			 int x = (int) (e.getPoint().getX());
+			 int y = (int) (e.getPoint().getY()-(40*yr));
 			 
-			 String clickedEvent = "Clicked " + (new Point(x,y)) + " " + name;
+			 String clickedEvent = "Clicked " + x+ " " +y + " " + name;
 			 q.offer(clickedEvent);
 			 //System.out.println("works!");
 			 panel.grabFocus();

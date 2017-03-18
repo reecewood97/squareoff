@@ -64,7 +64,8 @@ public class mainMenu extends Application {
      * Method to hide the UI at anytime
      */
     public static void hideUI() {
-    	//ps.toBack();
+    	ps.toBack();
+    	/*
     	ps.setOnHiding( e -> {  temps = new Stage();
     							temps.initStyle(StageStyle.UTILITY);
     							temps.setMaxHeight(0);
@@ -73,16 +74,16 @@ public class mainMenu extends Application {
     							temps.show();
         }  );
     	ps.hide();
-    	
+    	*/
     }
     
     /**
      * Method to show the UI at anytime
      */
     public static void showUI() {
-    	//ps.toFront();
-    	temps.setOnHiding( e -> {  ps.show(); }  );
-    	temps.hide();
+    	ps.toFront();
+    	//temps.setOnHiding( e -> {  ps.show(); }  );
+    	//temps.hide();
     }
     
     /**
@@ -103,15 +104,15 @@ public class mainMenu extends Application {
     	ps.setTitle("Square-Off: Start Menu");
         
         Button btn = new Button("Host Game");
-        btn.setMinWidth(75);
+        btn.setMinWidth(100);
         Button btn2 = new Button("Join Game");
-        btn2.setMinWidth(75);
+        btn2.setMinWidth(100);
         Button btn3 = new Button("Options");
-        btn3.setMinWidth(75);
+        btn3.setMinWidth(100);
         Button btn5 = new Button("Help");
-        btn5.setMinWidth(75);
+        btn5.setMinWidth(100);
         Button btn4 = new Button("Quit Game");
-        btn4.setMinWidth(75);
+        btn4.setMinWidth(100);
         
         GridPane grid = new GridPane();
         
@@ -279,7 +280,8 @@ public class mainMenu extends Application {
     		}
 
     		net.runServer();
-    		net.connectToHost("127.0.0.1:4444", name);
+    		//net.connectToHost("127.0.0.1:4444", name);
+    		net.connectToHost("127.0.0.1", name);
     		
     		//refreshHLobby(net);
     		/*
