@@ -855,7 +855,7 @@ public class Board {
 			
 			//System.out.println(inputArray[2]);
 			
-			if( !(inputArray[2].equals(players[player]))  ){
+			if( !(inputArray[3].equals(players[player]))  ){
 				return;
 			}
 			//if(!(input.substring(36, input.length()).equals(players[player]))){
@@ -873,12 +873,15 @@ public class Board {
 				
 				int xs = input.indexOf('x');
 				int xe = input.indexOf(',');
-				String xc = input.substring(xs+2, xe);
+				//String xc = input.substring(xs+2, xe);
+				String xc = input.split(" ")[1];
 				int ye = input.indexOf(']');
-				String yc = input.substring(xe+3, ye);
+				//String yc = input.substring(xe+3, ye);
+				String yc = input.split(" ")[2];
+				System.out.println("xc = " + xc + "and yc = " + yc);
 				
 				Double x = Double.parseDouble(xc);
-				Double y =800- Double.parseDouble(yc);
+				Double y = Double.parseDouble(yc);
 				Double x2 = active.getPos().getX();
 				Double y2 = active.getPos().getY();
 				
