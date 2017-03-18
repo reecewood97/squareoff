@@ -205,6 +205,8 @@ public class Board {
 			square.setActivePlayer(false);
 		}
 		activePlayer.setActivePlayer(true);
+		objects.remove(x);
+		objects.add(x, activePlayer);
 	}
 	
 	public PhysObject getActivePlayer() {
