@@ -56,7 +56,7 @@ public class ServerReceiver extends Thread {
 				table.get(this).send(Server.DISCONNECT);
 			}
 			//Allows the client to join if there aren't too many clients already joined.
-			else if(players.size() < 4){ 
+			else if(players.size() < 4){
 				table.get(this).send(Server.ACCEPTED);
 				players.add(name);
 				board.addName(name);
