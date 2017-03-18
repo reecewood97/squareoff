@@ -63,8 +63,7 @@ public class ServerReceiver extends Thread {
 			}
 			//Currently if more than 4 clients join, they can spectate.
 			else {
-				//table.get(this).send(Server.DISCONNECT);
-				table.get(this).send(Server.ACCEPTED);
+				table.get(this).send(Server.DISCONNECT);
 			}
 			
 			//For testing.

@@ -42,6 +42,7 @@ public class NetworkingJUnit {
 		//A server is started and Bob successfully joins it.
 		System.err.println(2);
 		server.start();
+		wait(1000);
 		assertTrue(bob.connect("127.0.0.1", 4444));
 		assertTrue(bob.isConnected());
 		assertEquals(expectedPlayers, bob.getPlayers());
