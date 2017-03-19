@@ -17,6 +17,7 @@ public class Explosion extends PhysObject{
 		super(false, other.getPos(), 1, 1, false);
 		this.setName("Explosion");
 		this.size = other.getSize();
+		this.setInUse(other.getInUse());
 	}
 	
 	public void setSize(int expsize){
