@@ -41,7 +41,7 @@ public class ServerSender extends Thread {
 						send(33);
 						System.out.println("Sent the winner");
 						send(board.getWinner());
-						board.setWinner(-1);
+						board.setWinner(5);
 						//TODO
 					}
 					//Not sure what this is...

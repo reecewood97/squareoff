@@ -685,11 +685,13 @@ public class Board {
 						
 						object.setInUse(false);
 						//audio.splash();
-						if (checkForWinner() != -1){
-							if(debug)System.out.println("winner?");
-							int won = findPlayer();
-							setWinner(won);
-							turn.interrupt();
+						if (winner != 5){
+							if (checkForWinner() != -1){
+								if(debug)System.out.println("winner?");
+								int won = findPlayer();
+								setWinner(won);
+								turn.interrupt();
+							}
 						}
 					}
 				}
@@ -854,11 +856,13 @@ public class Board {
 				
 				activePlayer.setDead();
 				audio.splash();
-				if (checkForWinner() != -1){
-					if(debug)System.out.println("winner?");
-					int won = findPlayer();
-					setWinner(won);
-					turn.endItAll();
+				if (winner != 5){
+					if (checkForWinner() != -1){
+						if(debug)System.out.println("winner?");
+						int won = findPlayer();
+						setWinner(won);
+						turn.interrupt();
+					}
 				}
 				incrementTurn();
 			}
