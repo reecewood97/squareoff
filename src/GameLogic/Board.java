@@ -496,11 +496,7 @@ public class Board {
 		
 		
 		System.out.println("CREATING EXPLOSION***************************");
-		//explosion noise
-//		audio.endBackgroundMusic();
-//		audio.explosion();
-//		audio.startBackgroundMusic();
-
+		
 		//for i from x to y, all squares push away, all blocks damage
 		double i = (2*size/5);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
@@ -684,25 +680,64 @@ public class Board {
 		for(PhysObject object: objs){
 			if(object.getInUse()){
 				if((object.getPos().getY() < 100) || (object.getPos().getX()<(-40)) || (object.getPos().getX()>850)){
-					object.setInUse(false);
-					audio.splash();
-					if (checkForWinner() != -1){
-						if(debug)System.out.println("winner?");
-						int won = findPlayer();
-						setWinner(won);
-						turn.interrupt();
+					
+					if(object.getInUse()){
+						
+						object.setInUse(false);
+						//audio.splash();
+						if (checkForWinner() != -1){
+							if(debug)System.out.println("winner?");
+							int won = findPlayer();
+							setWinner(won);
+							turn.interrupt();
+						}
 					}
 				}
 			}
 		}
 		
+		ArrayList<PhysObject> explos = new ArrayList<PhysObject>();
+		for(PhysObject one: objs){
+			if(one.getName().equals("Explosion")){
+				explos.add(one);
+			}
+		}
+		for(PhysObject exp : explos){
+			
+			Explosion explo = (Explosion) exp;
+			
+			
+			if(explo.getInUse()){
+				
+				if(explo.getSize()>20){
+					
+					audio.explosion();
+				}
+				
+				if(explo.getSize() > 60){
+						
+					explo.setInUse(false);
+				}
+				else{
+						
+					explo.setSize((int)explo.getSize()+6);
+				}
+						
+			}
+			
+		}
+		
 		boolean same = true;
 		for(int i = 0;i<objects.size();i++){
 			if (!objs.get(i).equals(objects.get(i)) || 
-					(objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse())) {
+					(objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse()) ||
+					(objs.get(i).getName().equals("Explosion") && objs.get(i).getInUse())) {
 					same = false;
 			}
 		}
+		
+		
+		
 		if(same){
 			if(debug)System.out.println("FreeState exited due to no movement");
 			freeState=false;
@@ -843,9 +878,9 @@ public class Board {
 		if (getExplosion().size()>0){
 			
 			
-				if(!input.contains("setExp")){
+				//if(!input.contains("setExp")){
 					
-					if(!input.contains("setUse")){
+					//if(!input.contains("setUse")){
 						
 						if(!input.contains("None")){
 							
@@ -856,8 +891,8 @@ public class Board {
 								return;
 							}
 						}
-					}
-				}
+					//}
+				//}
 			
 		}
 		
@@ -996,6 +1031,12 @@ public class Board {
 				
 		}
 		else if (input.contains("setUse")){
+			
+			
+			System.out.println("hello*******");
+			System.out.println("size of this.getexp() " + this.getExplosion().size());
+			
+			
 			
 			for(PhysObject exp : this.getExplosion()){
 				

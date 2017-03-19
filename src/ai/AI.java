@@ -182,8 +182,7 @@ public abstract class AI {
 		ArrayList<PhysObject> squares = board.getSquares();
 		int numOfPlayers = squares.size();
 		for (int i = 0; i < numOfPlayers; i++) {
-			if (((Square) squares.get(i)).getSquareID() == mySquareID && ((Square) squares.get(i)).getPlayerID() == myPlayer) {
-//				System.out.println("Square ID match.");
+			if (((Square) squares.get(i)).getPlayerID() == myPlayer) {
 				setPos(squares.get(i).getPos());
 			}
 		}
@@ -241,21 +240,36 @@ public abstract class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
-			return;
+		ArrayList<PhysObject> squares = board.getSquares();
+		for (PhysObject player:squares) {
+			if (((Square) player).getPlayerID() == myPlayer) {
+				if (player.getInUse()) {
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					changeAIPos();
+					
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					aiMove();
+					
+					try {
+						Thread.sleep(150);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					aiAttack();
+				}
+			}
 		}
 		
-		if (((Square)board.getActivePlayer()).getPlayerID() == myPlayer) {
-			changeAIPos();
-			aiMove();
-			
-			try {
-				Thread.sleep(150);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			aiAttack();
-		}
 		return;
 	}
 	
@@ -285,6 +299,22 @@ public abstract class AI {
 		boolean jumpLeft = false;
 		boolean jumpRight = false;
 		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
+			
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			ArrayList<PhysObject> squares = board.getSquares();
+			for (PhysObject player:squares) {
+				if (((Square) player).getPlayerID() == myPlayer) {
+					if (!((Square)player).getAlive()) {
+						return;
+					}
+				}
+			}
+			
 			if (board.getTime() >= 15 * 1000) {
 				return;
 			}
@@ -322,31 +352,20 @@ public abstract class AI {
 				}
 				
 				if (jumpLeft && !jumpRight) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
-					
+					for (int j = 0; j < 10; j++) {
+						moveUpLeft();
+						moveLeft();
+					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
-				
-				if (jumpRight && !jumpLeft) {
-					moveUpRight();
-					moveRight();
-					moveRight();
-					moveRight();
+				else if (jumpRight && !jumpLeft) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
-				}
-				
-				if(jumpRight && jumpLeft) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
-					jumpRight = false;
-					jumpLeft = false;
 				}
 				else {
 					jumpRight = false;
@@ -403,30 +422,20 @@ public abstract class AI {
 				}
 				
 				if (jumpLeft && !jumpRight) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
+					for (int j = 0; j < 10; j++) {
+						moveUpLeft();
+						moveLeft();
+					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
-				
-				if (jumpRight && !jumpLeft) {
-					moveUpRight();
-					moveRight();
-					moveRight();
-					moveRight();
+				else if (jumpRight && !jumpLeft) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
-				}
-				
-				if(jumpRight && jumpLeft) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
-					jumpRight = false;
-					jumpLeft = false;
 				}
 				else {
 					jumpRight = false;
@@ -537,8 +546,18 @@ public abstract class AI {
 				}
 			}
 			
-			if(xdis < 0) {
-				acc_angle = 0 - acc_angle;
+			boolean enemyOnRight = false;
+			ArrayList<PhysObject> squares = board.getSquares();
+			for (PhysObject square:squares) {
+				if (getAIPos().getX() > square.getPos().getX()) {
+					enemyOnRight = true;
+					continue;
+				}
+				enemyOnRight = false;
+			}
+			
+			if(xdis < 0 || enemyOnRight) {
+				acc_angle = acc_angle * (-1);
 				acc_velocity *= -1;
 			}
 
@@ -629,7 +648,7 @@ public abstract class AI {
 	
 	public void determineObstacle(Point2D.Double target, Point2D.Double aiPos) {
 		double aiX = aiPos.getX();
-		double aiY = aiPos.getY();
+		double aiY = aiPos.getY() + 30.0;
 		
 		double angle = getAngle();
 		double velocity = getVelocity();

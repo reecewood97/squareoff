@@ -355,19 +355,24 @@ public class ScreenBoard extends JPanel{
 	 */
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
+		//System.out.println("size of explosions:  " + explosion.size());
+		
 		for(PhysObject exp : explosion){
 		
+			//System.out.println("in use? " + ((Explosion) exp).getInUse());
+			
 			
 			if (((Explosion) exp).getInUse()){
 				
-				
-				drawexplosions = true;
+				//drawexplosions = true;
 				
 				int x = (int) (exp.getPos().getX());
 				int y = (int) (exp.getPos().getY());
 				
 
 				double size = ((Explosion) exp).getSize();
+				System.out.println("size of exp: " + size);
+				
 				
 				x = (int) (x*widthratio);
 				y = 450 - y;
@@ -395,10 +400,11 @@ public class ScreenBoard extends JPanel{
 						image = ImageIO.read(new File("Files/Images/exp2.png"));
 						g2d.drawImage(image,(int) (x - 40*widthratio), 
 								(int) (y - 40*heightratio), null);
-						} catch (IOException e) {
-						// TODO Auto-generated catch block
+					} 
+					catch (IOException e) {
+						
 						e.printStackTrace();
-						}
+					}
 					
 					
 				}
@@ -418,19 +424,11 @@ public class ScreenBoard extends JPanel{
 					
 				}
 				
-		
+				/*
 				
 				//if reached max size, stop drawing
 				if((sizeint > 60) && drawexplosions == true){
-					
-					
-					System.out.println("Reached max***************");
-					
-					drawexplosions = false;
-					
-					hangeron.setExp("1");
-					hangeron.setUse("false");
-					
+					drawexplosions = false;	
 				}
 				//otherwise increase size by one
 				else{
@@ -441,6 +439,8 @@ public class ScreenBoard extends JPanel{
 					}
 					
 				}
+				
+				*/
 			
 			}
 		}
