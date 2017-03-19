@@ -274,7 +274,7 @@ public abstract class AI {
 	}
 	
 	public void aiMoveCal(double targetX, double targetY) {
-		System.out.println(targetX + " " + targetY);
+		//System.out.println(targetX + " " + targetY);
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
@@ -289,7 +289,7 @@ public abstract class AI {
 				return;
 			}
 			if (xPos < targetX) {
-				System.out.println(xPos);
+				//System.out.println(xPos);
 				
 				//detect edge
 				for (PhysObject block:blocks) {
@@ -313,12 +313,12 @@ public abstract class AI {
 				
 				if (jumpLeft) {
 					moveUpLeft();
-					System.out.println(myName + "Detected Edge. Jump Left");
+					//System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
 				if (jumpRight) {
 					moveUpRight();
-					System.out.println(myName + "Detected Edge. Jump Right");
+					//System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 				}
 				
@@ -328,23 +328,23 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpRight();
-							System.out.println(myName + "Jump Right");
+							//System.out.println(myName + "Jump Right");
 							break;
 						}
 					}
 				}
 				
 				moveRight();
-				System.out.println(myName + "move Right");
+				//System.out.println(myName + "move Right");
 
 //				Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
 //				setPos(newPos);
 //				xPos += 2;
 				i++;
-				System.out.println("Right " + i);
+				//System.out.println("Right " + i);
 			}
 			else {
-				System.out.println(xPos);
+				//System.out.println(xPos);
 				
 				// detect edge
 				for (PhysObject block:blocks) {
@@ -368,12 +368,12 @@ public abstract class AI {
 				
 				if (jumpLeft) {
 					moveUpLeft();
-					System.out.println(myName + "Detected Edge. Jump Left");
+					//System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
 				if (jumpRight) {
 					moveUpRight();
-					System.out.println(myName + "Detected Edge. Jump Right");
+					//System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 				}
 				
@@ -383,20 +383,20 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpLeft();
-							System.out.println(myName + "Jump Left");
+							//System.out.println(myName + "Jump Left");
 							break;
 						}
 					}
 				}
 				
 				moveLeft();
-				System.out.println(myName + "move Left");
+				//System.out.println(myName + "move Left");
 //				xPos -= 2;
 
 //				Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
 //				setPos(newPos);
 				i++;
-				System.out.println("Left " + i);
+				//System.out.println("Left " + i);
 			}
 			changeAIPos();
 			xPos = getAIPos().getX();
