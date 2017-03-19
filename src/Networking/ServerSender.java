@@ -14,7 +14,7 @@ public class ServerSender extends Thread {
 
 	private ObjectOutputStream toClient;
 	private Board board;
-	private boolean running, inGame;
+	private boolean inGame;
 	
 	/**
 	 * Creates a new Server Sender.
@@ -24,7 +24,6 @@ public class ServerSender extends Thread {
 	public ServerSender(ObjectOutputStream toClient, Board board) {
 		this.toClient = toClient;
 		this.board = board;
-		running = false;
 	}
 	
 	/**
@@ -32,10 +31,9 @@ public class ServerSender extends Thread {
 	 */
 	public void run() {
 		inGame = false;
-		running = true;
 		
 		try {
-			while(running) {
+			while(true) {
 				sleep(35);
 				if(inGame) {
 					//Checks if the game is over.
@@ -61,8 +59,7 @@ public class ServerSender extends Thread {
 			}
 		}
 		catch(InterruptedException e) {
-			e.printStackTrace();
-			System.exit(1);
+			//Thread killed.
 		}
 	}
 	

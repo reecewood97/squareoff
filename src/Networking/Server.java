@@ -78,12 +78,12 @@ public class Server extends Thread {
 				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
 				ServerSender ss = new ServerSender(toClient, board);
-				
-				sr.start();
-				ss.start();
 
 				//Adds Threads to a Client Table.
 				table.add(sr, ss);
+				
+				ss.start();
+				sr.start();
 			}			
 		}
 		catch (IOException e) {
@@ -119,8 +119,8 @@ public class Server extends Thread {
 		}
 		
 		//Kill the AIManager and GameLoop threads.
-		ais.close();
-		gl.close();
+		ais.interrupt();
+		gl.interrupt();
 	}
 
 	/**
@@ -212,7 +212,9 @@ public class Server extends Thread {
 		
 		//Reset and close everything.
 		board = new Board("map1");
-		ais.close();
-		gl.close();
+		ais.interrupt();
+		ais = new AIManager(board, players, 4);
+		gl.interrupt();
+		gl = new GameLoop(board);
 	}
 }

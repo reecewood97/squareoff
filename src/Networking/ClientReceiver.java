@@ -17,7 +17,7 @@ public class ClientReceiver extends Thread {
 		
 	private ObjectInputStream server;
 	private Board board; 
-	private boolean running, inGame;
+	private boolean inGame;
 	private Screen ui;
 	private ArrayList<String> players;
 	private Client client;
@@ -36,7 +36,6 @@ public class ClientReceiver extends Thread {
 		this.board = board;
 		this.ui = ui;
 		this.client = client;
-		running = false;
 		players = null;
 		state = Server.BASE;
 	}
@@ -46,13 +45,12 @@ public class ClientReceiver extends Thread {
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() {		
-		running = true;
 		inGame = false;
 		
 		try {
 			Object ob;
 			ArrayList<String> anArrayList = new ArrayList<String>();
-			while(running) {
+			while(true) {
 				//Reads in an object from the server.
 				ob = server.readObject();
 				
