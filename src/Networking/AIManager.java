@@ -54,8 +54,6 @@ public class AIManager extends Thread {
 			ais.add(ai);
 			players.add(name);
 			board.addName(name);
-			
-			System.out.println(ais);
 		}
 	}
 	
@@ -64,14 +62,20 @@ public class AIManager extends Thread {
 	 */
 	public void run() {
 		running = true;
-		int playerTurn;
+		int playerTurn = 5;
+		boolean turnTaken = true;
 		while(running) {
-			playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
+			if (playerTurn != ((Square)board.getActivePlayer()).getPlayerID()){
+				turnTaken = false;
+				playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
+			}
 			//Iterates through the AIs and checks if it's one of their turns.
 			for(AI ai: ais) {
-				if(ai.getPlayerID() == playerTurn) {
+				if(ai.getPlayerID() == playerTurn && !turnTaken) {
 					//Activates the AI whose turn it is, then ends the AI's turn.
 					ai.determineState();
+					turnTaken = true;
+					break;
 				}
 			}
 			try {

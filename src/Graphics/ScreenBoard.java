@@ -1,5 +1,6 @@
 package Graphics;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import GameLogic.Board;
 import GameLogic.Explosion;
@@ -16,6 +17,9 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -47,6 +51,8 @@ public class ScreenBoard extends JPanel{
 		this.widthratio = widthratio;
 		this.hangeron = h;
 		this.drawexplosions = false;
+		
+		System.out.println("height ratio is " + heightratio);
 		
 	}
 	
@@ -85,9 +91,10 @@ public class ScreenBoard extends JPanel{
 		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),
 				(int) (10*heightratio));
 		
+		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
-		paintWeapons(board.getWeapons(),g2d); //DOING //TODO paint other types of weapon, only paints bombs right now
+		paintWeapons(board.getWeapons(),g2d); //paint other weps
 		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 	} 		
@@ -265,6 +272,7 @@ public class ScreenBoard extends JPanel{
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
 			
+			/*
 			for(PhysObject square : board.getSquares()){
 				
 				if(((Square)square).getActivePlayer()){
@@ -276,17 +284,20 @@ public class ScreenBoard extends JPanel{
 				
 				
 			}
+			*/
 			
-			int mousepos_x = (int) ((mousepos.getX()));
-			int mousepos_y = (int) ((mousepos.getY()));
-			int difference = (int) (40*heightratio);
-			mousepos_y = mousepos_y - difference;
-			int pp_x = (int) ((playerpos.getX()+15) * widthratio);
-			int pp_y = (int) ((450 - playerpos.getY()+15) * heightratio);
+			Square square = (Square) board.getActivePlayer();
+			
+			int mousepos_x = (int) (this.getMousePosition().getX());
+			int mousepos_y = (int) (this.getMousePosition().getY());
+			
+			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
+			int pp_y = (int) ((450 - square.getPos().getY()+15) * heightratio);
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine(pp_x, pp_y, mousepos_x, mousepos_y);
+			
 	
 		}
 		
@@ -345,42 +356,75 @@ public class ScreenBoard extends JPanel{
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
 		for(PhysObject exp : explosion){
-			//From Reece; I changed this because the x and y co-ordinates for explosions are in the middle
-			//for my own benefit, sorry if I made a mistake.
+		
 			
-			System.out.println("In explosions");
 			if (((Explosion) exp).getInUse()){
 				
-				System.out.println("Explosion in use");
 				
 				drawexplosions = true;
 				
-				int x = (int) (exp.getPos().getX()-(exp.getWidth()/2));
-				int y = (int) (exp.getPos().getY()+(exp.getHeight()/2));
+				int x = (int) (exp.getPos().getX());
+				int y = (int) (exp.getPos().getY());
 				
 
-				x = (int) (x*widthratio);
-				y = (int) (y*heightratio);
-				y = 450 - y;
-				
 				double size = ((Explosion) exp).getSize();
 				
-				int sizeint = (int) size;
+				x = (int) (x*widthratio);
+				y = 450 - y;
+				y = (int) (y*heightratio);
 				
-				int expwidth = (int) (size*widthratio);
-				int expheight = (int) (size*heightratio);
+				int sizeint = (int) size;	
 				
-				g2d.setColor(Color.ORANGE);
-				g2d.fillOval(x,y,expwidth,expheight);
+				BufferedImage image;
 				
+				if(sizeint < 20){
+					try {
+					image = ImageIO.read(new File("Files/Images/exp1.png"));
+					g2d.drawImage(image, (int) (x - 20*widthratio), 
+							(int) (y - 20*heightratio), null);
+				} 
+				catch (IOException e) {
 				
-				System.out.println(size);
+					e.printStackTrace();
+				}
+				 
+				}
+				else if (sizeint >=20 && sizeint < 40){
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/exp2.png"));
+						g2d.drawImage(image,(int) (x - 40*widthratio), 
+								(int) (y - 40*heightratio), null);
+						} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						}
+					
+					
+				}
+				else{
+					
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/EXP3.png"));
+						g2d.drawImage(image,(int) (x - 60*widthratio), 
+								(int) (y - 60*heightratio), null);
+					} 
+					catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				}
+				
+		
 				
 				//if reached max size, stop drawing
-				if((sizeint == exp.getWidth()) && drawexplosions == true){
+				if((sizeint > 60) && drawexplosions == true){
 					
 					
-					System.out.println("Reached max");
+					System.out.println("Reached max***************");
 					
 					drawexplosions = false;
 					
@@ -390,13 +434,9 @@ public class ScreenBoard extends JPanel{
 				}
 				//otherwise increase size by one
 				else{
-					
-					System.out.println("Not Max");
-					
-					System.out.println("draw explosions: " + drawexplosions);
-					
+						
 					if (drawexplosions){
-						sizeint = sizeint + 1;
+						sizeint = sizeint + 6;
 						hangeron.setExp(sizeint + "");
 					}
 					

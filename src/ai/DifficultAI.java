@@ -45,6 +45,11 @@ public class DifficultAI extends AI {
 	 * Current Stage: if the current block standing has less than 2 health, move to other position
 	 */
 	public void aiMove() {
+		
+		if (getEndTurn()) {
+			return ;
+		}
+		
 		determineResult();
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();

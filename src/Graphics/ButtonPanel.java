@@ -37,6 +37,8 @@ public class ButtonPanel extends JPanel{
 		
 		super();
 		
+		System.out.println("HEIGHT OF PANEL: "  + this.getBounds().getHeight());
+		
 		//create main panel
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
