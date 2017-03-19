@@ -14,7 +14,7 @@ public class TurnMaster extends Thread {
 		this.i = 0;
 		while(running){
 			try {
-				sleep(35);
+				sleep(40);
 				i = i+1;
 				board.setTime(i);
 				if(i >= 500){ //Should be 500? changed it for ease of testing
