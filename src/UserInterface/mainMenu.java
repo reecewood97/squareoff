@@ -32,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class mainMenu extends Application {
 	static int width = 960;
@@ -42,6 +43,7 @@ public class mainMenu extends Application {
 	static Stage temps;
 	static boolean isHidden = false;
 	static boolean inLobby = false;
+	static boolean trial = false;
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -301,7 +303,7 @@ public class mainMenu extends Application {
     		*/
     		inLobby = true;
     		
-    		Task task = new Task<Void>() {
+    		Task<Void> task = new Task<Void>() {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
@@ -309,16 +311,22 @@ public class mainMenu extends Application {
     			        @Override
     			        public void run() {
     			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		trial = false;
     			        		showUI();
     			        		refreshHLobby(net);
     			        		System.out.println("host if");
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
+    			        		trial = false;
     			        		hideUI();
     			        		System.out.println("host else if");
     			        	}
     			        	else {
-    			        		net.resetServer();
+    			        		if (!trial){
+    			        			net.resetServer();
+    			        			net.connectToHost("localhost", name);
+    			        			trial = true;
+    			        		}
     			        		showUI();
     			        		System.out.println("host else");
     			        		System.out.println("host isConnected: " + net.isConnected());
@@ -339,7 +347,7 @@ public class mainMenu extends Application {
     	else {
     		inLobby = true;
     		
-    		Task task = new Task<Void>() {
+    		Task<Void> task = new Task<Void>() {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
@@ -356,13 +364,13 @@ public class mainMenu extends Application {
     			        		System.out.println("client else if");
     			        	}
     			        	else {
-    			        		//inLobby = false;
+    			        		inLobby = false;
     			        		showUI();
-    			        		//ps.setScene(ogScene);
-    			        		//ps.setTitle("Square-Off: Start Menu");
+    			        		ps.setScene(ogScene);
+    			        		ps.setTitle("Square-Off: Start Menu");
     			        		System.out.println("client else");
     			        		System.out.println("client isConnected: " + net.isConnected());
-    			        		System.out.println("client inGame: " + net.inGame());
+    			        		System.out.println("client inGame: " + net.inGame() + "should be irrelevent now");
     			        	}
     			        	/*
     			        	try {
