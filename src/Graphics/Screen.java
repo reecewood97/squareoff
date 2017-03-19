@@ -50,7 +50,7 @@ public class Screen extends JFrame {
 		Color lightblue = new Color(135,206,250);
 
 		//set design
-		setUndecorated(true);//CHANGE ME BEFORE FINAL RELEASE
+		setUndecorated(false);//CHANGE ME BEFORE FINAL RELEASE
 		setLayout(new BorderLayout());
 		
 		//set attributes

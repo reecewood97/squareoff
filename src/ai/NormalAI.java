@@ -90,7 +90,7 @@ public class NormalAI extends AI {
 					targetY = block.getPos().getY();
 				}
 			}
-			aiMoveCal(targetX, targetY);
+			aiMoveCal(targetX +50, targetY);
 		}
 		else {
 			

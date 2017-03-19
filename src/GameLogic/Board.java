@@ -32,7 +32,7 @@ public class Board {
 	private boolean freeState;
 	private TurnMaster turn;
 	private boolean weaponsopen = false;
-	private String weaponType;
+	private String weaponType = "ExplodeOnImpact";
 	private int time = 0;
 	private TurnServant servant = new TurnServant(this);
 	private boolean playing = false;
@@ -1142,7 +1142,7 @@ public class Board {
 
 		}
 		setTurnFlag(true);
-		servant.end();
+		//servant.interrupt();
 		turn.resetTimer();
 	}
 	
@@ -1229,16 +1229,11 @@ public class Board {
 	}
 	
 	public void startLocalTimer(){
-		//System.out.println("Restarted the timer");
+		servant.interrupt();
+		System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 		
-//		if (player != 3){
-//			player = player+1;
-//		}else{
-//			player = 0;
-//		}
-//		setActivePlayer(player,squareID);
 	}
 
 	public void setTime(int time){
