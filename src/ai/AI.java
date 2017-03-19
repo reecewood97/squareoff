@@ -241,19 +241,20 @@ public abstract class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		changeAIPos();
-		aiMove();
-		try {
-			Thread.sleep(150);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
 			return;
 		}
-		aiAttack();
-		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
-			return;
+		
+		if (((Square)board.getActivePlayer()).getPlayerID() == myPlayer) {
+			changeAIPos();
+			aiMove();
+			
+			try {
+				Thread.sleep(150);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			aiAttack();
 		}
 		return;
 	}
@@ -274,12 +275,11 @@ public abstract class AI {
 	}
 	
 	public void aiMoveCal(double targetX, double targetY) {
-		//System.out.println(targetX + " " + targetY);
+		System.out.println(targetX + " " + targetY);
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
 		moveUpLeft();
-		moveUp();
 		moveUpRight();
 		int i = 0;
 		boolean jumpLeft = false;
@@ -288,8 +288,18 @@ public abstract class AI {
 			if (board.getTime() >= 15 * 1000) {
 				return;
 			}
+			
+			changeAIPos();
+			xPos = getAIPos().getX();
+			yPos = getAIPos().getY() - 30.0;
+			
 			if (xPos < targetX) {
-				//System.out.println(xPos);
+				System.out.println(xPos);
+				
+				if (yPos > targetY) {
+					moveRight();
+					continue;
+				}
 				
 				//detect edge
 				for (PhysObject block:blocks) {
@@ -311,15 +321,36 @@ public abstract class AI {
 					jumpRight = true;
 				}
 				
-				if (jumpLeft) {
+				if (jumpLeft && !jumpRight) {
 					moveUpLeft();
-					//System.out.println(myName + "Detected Edge. Jump Left");
+					moveLeft();
+					moveLeft();
+					moveLeft();
+					
+					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
-				if (jumpRight) {
+				
+				if (jumpRight && !jumpLeft) {
 					moveUpRight();
-					//System.out.println(myName + "Detected Edge. Jump Right");
+					moveRight();
+					moveRight();
+					moveRight();
+					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+				}
+				
+				if(jumpRight && jumpLeft) {
+					moveUpLeft();
+					moveLeft();
+					moveLeft();
+					moveLeft();
+					jumpRight = false;
+					jumpLeft = false;
+				}
+				else {
+					jumpRight = false;
+					jumpLeft = false;
 				}
 				
 				if (yPos < targetY) {
@@ -328,23 +359,28 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpRight();
-							//System.out.println(myName + "Jump Right");
+							System.out.println(myName + "Jump Right");
 							break;
 						}
 					}
 				}
 				
 				moveRight();
-				//System.out.println(myName + "move Right");
+				System.out.println(myName + "move Right");
 
 //				Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
 //				setPos(newPos);
 //				xPos += 2;
 				i++;
-				//System.out.println("Right " + i);
+				System.out.println("Right " + i);
 			}
 			else {
-				//System.out.println(xPos);
+				System.out.println(xPos);
+				
+				if (yPos > targetY) {
+					moveLeft();
+					continue;
+				}
 				
 				// detect edge
 				for (PhysObject block:blocks) {
@@ -366,15 +402,35 @@ public abstract class AI {
 					jumpRight = true;
 				}
 				
-				if (jumpLeft) {
+				if (jumpLeft && !jumpRight) {
 					moveUpLeft();
-					//System.out.println(myName + "Detected Edge. Jump Left");
+					moveLeft();
+					moveLeft();
+					moveLeft();
+					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 				}
-				if (jumpRight) {
+				
+				if (jumpRight && !jumpLeft) {
 					moveUpRight();
-					//System.out.println(myName + "Detected Edge. Jump Right");
+					moveRight();
+					moveRight();
+					moveRight();
+					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+				}
+				
+				if(jumpRight && jumpLeft) {
+					moveUpLeft();
+					moveLeft();
+					moveLeft();
+					moveLeft();
+					jumpRight = false;
+					jumpLeft = false;
+				}
+				else {
+					jumpRight = false;
+					jumpLeft = false;
 				}
 				
 				if (yPos < targetY) {
@@ -383,24 +439,21 @@ public abstract class AI {
 						double blockY = block.getPos().getY();
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpLeft();
-							//System.out.println(myName + "Jump Left");
+							System.out.println(myName + "Jump Left");
 							break;
 						}
 					}
 				}
 				
 				moveLeft();
-				//System.out.println(myName + "move Left");
+				System.out.println(myName + "move Left");
 //				xPos -= 2;
 
 //				Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
 //				setPos(newPos);
 				i++;
-				//System.out.println("Left " + i);
+				System.out.println("Left " + i);
 			}
-			changeAIPos();
-			xPos = getAIPos().getX();
-			yPos = getAIPos().getY() - 30.0;
 		}
 		return ;
 	}
@@ -605,6 +658,7 @@ public abstract class AI {
 				double blockY = block.getPos().getY();
 				if ((aiX < (blockX + 50)) && (aiX > (blockX-50)) && (aiY < (blockY + 50)) && (aiY > (blockY-50))) {
 					setObstacles(true);
+					return ;
 				}
 				aiX += xDis;
 				aiY += yDis;
@@ -655,7 +709,7 @@ public abstract class AI {
 	 * @return move
 	 */
 	private void moveUpRight() {
-		board.input("Pressed AW  " + myName);
+		board.input("Pressed DW " + myName);
 		try {
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
@@ -668,7 +722,7 @@ public abstract class AI {
 	 * @return move
 	 */
 	private void moveUpLeft() {
-		board.input("Pressed DW  " + myName);
+		board.input("Pressed AW " + myName);
 		try {
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
