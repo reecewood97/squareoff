@@ -152,6 +152,9 @@ public class Client {
 		
 		//Disconnects from the server.
 		disconnect();
+		
+		board = new Board("map1");
+		ui = new Screen(board, q, name, this);
 	
 		//Reconnects.
 		return connect(ip, port);
