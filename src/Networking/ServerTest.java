@@ -8,15 +8,6 @@ public class ServerTest {
 		
 		Client bob = new Client("Bob");
 		bob.connect("127.0.0.1", 4444);
-		
-		Client jerry = new Client("Jerry");
-		jerry.connect("127.0.0.1", 4444);
-		
-		Client mary = new Client("Mary");
-		mary.connect("127.0.0.1", 4444);
-		
-		Client sherly = new Client("Sherly");
-		sherly.connect("127.0.0.1", 4444);
 
 		server.startGame();
 		
@@ -25,12 +16,6 @@ public class ServerTest {
 		server.reset();
 		
 		wait(1000);
-		
-		System.out.println(bob.isConnected());
-		System.out.println(jerry.isConnected());
-		System.out.println(mary.isConnected());
-		System.out.println(sherly.isConnected());
-
 	}	
 	
 	public static void wait(int millis) {

@@ -71,6 +71,7 @@ public class Client {
 			System.exit(1);
 		}
 		
+		board = new Board("map1");
 		q.clear();
 		
 		sender = new ClientSender(toServer, q);
@@ -153,7 +154,6 @@ public class Client {
 		//Disconnects from the server.
 		disconnect();
 		
-		board = new Board("map1");
 		ui = new Screen(board, q, name, this);
 	
 		//Reconnects.

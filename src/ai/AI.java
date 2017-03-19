@@ -296,8 +296,6 @@ public abstract class AI {
 		moveUpLeft();
 		moveUpRight();
 		int i = 0;
-		boolean jumpLeft = false;
-		boolean jumpRight = false;
 		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
 			
 			try {
@@ -323,16 +321,26 @@ public abstract class AI {
 			xPos = getAIPos().getX();
 			yPos = getAIPos().getY() - 30.0;
 			
+			boolean jumpLeft = false;
+			boolean jumpRight = false;
+			boolean dontJumpDown = true;
+			
 			if (xPos < targetX) {
 				System.out.println(xPos);
 				
 				if (yPos > targetY) {
-					moveRight();
+					for (int k = 0; k < 10; k++) {
+						moveRight();
+					}
 					continue;
 				}
 				
 				//detect edge
+				
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -342,6 +350,9 @@ public abstract class AI {
 					jumpLeft = true;
 				}
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -351,25 +362,50 @@ public abstract class AI {
 					jumpRight = true;
 				}
 				
-				if (jumpLeft && !jumpRight) {
-					for (int j = 0; j < 10; j++) {
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
+						dontJumpDown = true;
+						break;
+					}
+					dontJumpDown = false;
+				}
+				
+				if (jumpLeft && !jumpRight && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
-				else if (jumpRight && !jumpLeft) {
-					for (int j = 0; j < 10; j++) {
+				else if (jumpRight && !jumpLeft && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
 						moveUpRight();
 						moveRight();
 					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+					dontJumpDown = false;
+				}
+				else if (jumpLeft && jumpRight && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
+					jumpRight = false;
+					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				else {
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				
 				if (yPos < targetY) {
@@ -397,12 +433,17 @@ public abstract class AI {
 				System.out.println(xPos);
 				
 				if (yPos > targetY) {
-					moveLeft();
+					for (int k = 0; k < 10; k++) {
+						moveLeft();
+					}
 					continue;
 				}
 				
 				// detect edge
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -412,6 +453,9 @@ public abstract class AI {
 					jumpLeft = true;
 				}
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -420,26 +464,50 @@ public abstract class AI {
 					}
 					jumpRight = true;
 				}
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
+						dontJumpDown = true;
+						break;
+					}
+					dontJumpDown = false;
+				}
 				
-				if (jumpLeft && !jumpRight) {
-					for (int j = 0; j < 10; j++) {
+				if (jumpLeft && !jumpRight && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
-				else if (jumpRight && !jumpLeft) {
-					for (int j = 0; j < 10; j++) {
+				else if (jumpRight && !jumpLeft && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
 						moveUpRight();
 						moveRight();
 					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+					dontJumpDown = false;
+				}
+				else if (jumpLeft && jumpRight && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
+					jumpRight = false;
+					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				else {
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				
 				if (yPos < targetY) {
