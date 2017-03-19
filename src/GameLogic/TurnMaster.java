@@ -1,7 +1,5 @@
 package GameLogic;
 
-import java.io.Serializable;
-
 public class TurnMaster extends Thread {
 	private Board board;
 	private int i = 0;
