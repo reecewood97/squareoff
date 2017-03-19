@@ -32,7 +32,7 @@ public class Board {
 	private boolean freeState;
 	private TurnMaster turn;
 	private boolean weaponsopen = false;
-	private String weaponType;
+	private String weaponType = "ExplodeOnImpact";
 	private int time = 0;
 	private TurnServant servant = new TurnServant(this);
 	private boolean playing = false;
@@ -1101,7 +1101,7 @@ public class Board {
 
 		}
 		setTurnFlag(true);
-		servant.end();
+		servant.interrupt();
 		turn.resetTimer();
 	}
 	
