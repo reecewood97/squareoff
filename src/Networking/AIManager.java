@@ -69,7 +69,7 @@ public class AIManager extends Thread {
 				}
 				//Iterates through the AIs and checks if it's one of their turns.
 				for(AI ai: ais) {
-					if(ai.getPlayerID() == playerTurn && !turnTaken) {
+					if(ai.getPlayerID() == playerTurn && !turnTaken && ((Square) board.getActivePlayer()).getAlive()) {
 						//Activates the AI whose turn it is, then ends the AI's turn.
 						ai.determineState();
 						turnTaken = true;

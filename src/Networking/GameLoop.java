@@ -1,5 +1,9 @@
 package Networking;
 
+import java.io.IOException;
+
+import javax.swing.text.StyledEditorKit.ItalicAction;
+
 import GameLogic.Board;
 
 /**
@@ -19,14 +23,14 @@ public class GameLoop extends Thread {
 	 * Thread run method.
 	 */
 	public void run() {
-		while(true) {
-			board.input("None");
-			try {
+		try {
+			while(true) {
+				board.input("None");
 				sleep(35);
 			}
-			catch(InterruptedException e) {
-				//Thread killed.
-			}
+		}
+		catch(InterruptedException e) {
+			//Thread killed.
 		}
 	}
 }
