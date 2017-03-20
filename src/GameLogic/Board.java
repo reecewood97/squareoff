@@ -463,7 +463,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if(circle.intersects
-						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight())){
+						(obj1.getPos().getX(), obj1.getPos().getY()/*+obj1.getHeight()*/, obj1.getWidth(), obj1.getHeight())){
 					System.out.println("Circular object collision detected between wep at "+obj2.getPos()+"with height "
 							+obj2.getHeight()+"and width "+obj2.getWidth()+" and block at "
 							+obj1.getPos()+" with height "+obj1.getHeight()+" and width "+obj1.getWidth());
@@ -481,7 +481,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if(circle.intersects
-						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight())){
+						(obj2.getPos().getX(), obj2.getPos().getY()/*+obj2.getHeight()*/, obj2.getWidth(), obj2.getHeight())){
 					System.out.println("Circular object collision detected between wep at "+obj1.getPos()+"with height "
 							+obj1.getHeight()+"and width "+obj1.getWidth()+" and block at "
 							+obj2.getPos()+" with height "+obj2.getHeight()+" and width "+obj2.getWidth());
@@ -792,6 +792,8 @@ public class Board {
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			//case "ExplodeOnImpact":  wep = new TimedGrenade(
 			//		wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			//case "ExplodeOnImpact": wep = new Missile(
+			//				wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "Missile": wep = new Missile(

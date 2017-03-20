@@ -13,10 +13,25 @@ public class Square extends PhysObject {
 	private boolean alive;
 	private String facing;
 	private boolean activePlayer;
+	private String playerName;
 	
 	//What is the point of colour? I thought that was the same as the player that owned it
+	public Square(String name, int playerID,int squareID, int colour, Point2D.Double pos) {
+		super(true, pos, 30, 30, false);
+		this.playerName = name;
+		this.playerID = playerID;
+		this.colour = colour;
+		this.squareID = squareID;
+		this.point = pos;
+		this.alive = true;
+		this.setName("Square");
+		this.facing = "At you!";
+		this.activePlayer = false;
+	}
+	
 	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
+		this.playerName = "noName";
 		this.playerID = playerID;
 		this.colour = colour;
 		this.squareID = squareID;
@@ -30,6 +45,7 @@ public class Square extends PhysObject {
 	public Square(Square other) {
 		//Creates a shallow copy of a square
 		super(other);
+		this.playerName = other.getPlayerName();
 		this.playerID = other.getPlayerID();
 		this.colour = other.getColour();
 		this.squareID = other.getSquareID();
@@ -38,6 +54,10 @@ public class Square extends PhysObject {
 		this.setName("Square");
 		this.facing = other.getFacing();
 		this.activePlayer = other.getActivePlayer();
+	}
+	
+	public String getPlayerName(){
+		return playerName;
 	}
 	
 	public boolean getActivePlayer(){
@@ -87,6 +107,10 @@ public class Square extends PhysObject {
 	
 	public boolean getInUse() {
 		return alive;
+	}
+	
+	public void setPlayerName(String newName) {
+		this.playerName = newName;
 	}
 	
 	public void setPoint(Point2D.Double update){
