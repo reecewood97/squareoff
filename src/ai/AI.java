@@ -245,7 +245,7 @@ public abstract class AI {
 			if (((Square) player).getPlayerID() == myPlayer) {
 				if (player.getInUse()) {
 					try {
-						Thread.sleep(30);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -253,7 +253,7 @@ public abstract class AI {
 					changeAIPos();
 					
 					try {
-						Thread.sleep(30);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -296,7 +296,7 @@ public abstract class AI {
 		moveUpLeft();
 		moveUpRight();
 		int i = 0;
-		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
+		while ((xPos < targetX - 24.5) || (xPos > targetX + 24.5) || yPos != targetY) {
 			
 			try {
 				Thread.sleep(30);
@@ -563,6 +563,7 @@ public abstract class AI {
 				int state = calculation(acc_angle, acc_velocity, target);
 				hit = isHit(state);
 				while (!hit) {
+					acc_velocity = maxVelocity/2;
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
 						acc_angle += 3.0;
@@ -591,6 +592,7 @@ public abstract class AI {
 				int state = calculation(acc_angle, acc_velocity, target);
 				hit = isHit(state);
 				while (!hit) {
+					acc_velocity = maxVelocity/2;
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
 						acc_angle -= 3.0;
@@ -761,7 +763,7 @@ public abstract class AI {
 	private void moveLeft() {
 		board.input("Pressed A  " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -773,7 +775,7 @@ public abstract class AI {
 	private void moveRight() {
 		board.input("Pressed D  " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -785,7 +787,7 @@ public abstract class AI {
 	private void moveUp() {
 		board.input("Pressed  W " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -798,7 +800,7 @@ public abstract class AI {
 	private void moveUpRight() {
 		board.input("Pressed DW " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -811,7 +813,7 @@ public abstract class AI {
 	private void moveUpLeft() {
 		board.input("Pressed AW " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -830,7 +832,7 @@ public abstract class AI {
 
 		board.input(command);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
