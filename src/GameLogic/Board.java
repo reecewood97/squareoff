@@ -99,10 +99,14 @@ public class Board {
 			//Draw blocks at bottom of map
 			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
 			
+			
 			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
 				objects.add(block);
 			}
+			
+			
+			//objects.add(new TerrainBlock(1,1,new Point2D.Double(100,150), true));
 			
 			for(int i = 100; i < 700; i+=120){
 				
@@ -1177,6 +1181,7 @@ public class Board {
 				}
 		}
 		
+		System.out.println("winner is " + winner);
 		return winner;
 		
 	}
