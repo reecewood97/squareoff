@@ -113,7 +113,7 @@ public class ServerReceiver extends Thread {
 		if(inGame) {
 			ais.addAIs(1);
 		}
-		table.get(this).send("I kill the Server sender.");
+		table.get(this).interrupt();
 		table.remove(this);
 	}
 	

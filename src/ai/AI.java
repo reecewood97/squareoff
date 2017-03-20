@@ -263,7 +263,7 @@ public abstract class AI {
 					try {
 						Thread.sleep(150);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 					aiAttack();
 				}

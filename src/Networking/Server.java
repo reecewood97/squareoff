@@ -29,7 +29,7 @@ public class Server extends Thread {
 
 	private int port;
 	private Board board;
-	private boolean running;
+	private boolean running, inGame;
 	private ServerSocket socket;
 	private ArrayList<String> players;
 	private ClientTable table;
@@ -129,10 +129,12 @@ public class Server extends Thread {
 	 */
 	public void startGame() {
 
-		// Do nothing if server isn't running.
-		if (!running)
+		// Do nothing if server is in game.
+		if (inGame)
 			return;
 
+		inGame = true;
+		
 		// Wait for all players to be in the lobby.
 		for (ServerReceiver s : table.getReceivers()) {
 			s.getPlayerName();
@@ -211,17 +213,19 @@ public class Server extends Thread {
 	 * Disconnects all clients from the server and then reconnects them.
 	 */
 	public void reset() {
-		players.clear();
 		// Reset and close everything.
+		players.clear();
+		inGame = false;
+		for (ServerReceiver r : table.getReceivers()) {
+			r.setInGame(false);
+		}
+		
 		board = new Board("map1");
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();
 		gl = new GameLoop(board);
-
-		for (ServerReceiver r : table.getReceivers()) {
-			r.setInGame(false);
-		}
+		
 		table.sendAll(Server.RESET_CONNECTION);
 
 
