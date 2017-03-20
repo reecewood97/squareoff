@@ -110,7 +110,9 @@ public class ScreenBoard extends JPanel{
 		for(PhysObject block : blocks){
 			
 			int x = (int) block.getPos().getX();
-			int y = (int) block.getPos().getY();
+			int y = (int) block.getPos().getY()+block.getHeight();
+			//TODO these todos are for me to keep track of the changes I've made in case I need to revert them
+			//From Reece :) Your can remove them if it doesn't break anything
 			
 			y = 450 - y; 
 			
@@ -160,7 +162,7 @@ public class ScreenBoard extends JPanel{
 	}
 	
 	/**
-	 * paint the squres onto the arena
+	 * paint the squares onto the arena
 	 * @param squares The ArrayList of squares
 	 * @param g2d Graphics
 	 */
@@ -170,7 +172,7 @@ public class ScreenBoard extends JPanel{
 			
 			if(((Square) square).getAlive()){
 				int x = (int) square.getPos().getX();
-				int y = (int) square.getPos().getY();
+				int y = (int) square.getPos().getY()+square.getHeight();//TODO
 				y = 450 - y;
 				
 				int newx = (int) (x*widthratio);
@@ -292,7 +294,7 @@ public class ScreenBoard extends JPanel{
 			int mousepos_y = (int) (this.getMousePosition().getY());
 			
 			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
-			int pp_y = (int) ((450 - square.getPos().getY()+15) * heightratio);
+			int pp_y = (int) ((450 - square.getPos().getY()-square.getHeight()+15) * heightratio); //TODO
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
@@ -318,7 +320,7 @@ public class ScreenBoard extends JPanel{
 				if (weapon.getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
-					int y = (int) weapon.getPos().getY();
+					int y = (int) weapon.getPos().getY()+weapon.getHeight();//TODO
 					//y += weapon.getHeight();
 					//System.out.println(x + " " + y + "helllllooooooooo");
 					
@@ -367,7 +369,7 @@ public class ScreenBoard extends JPanel{
 				//drawexplosions = true;
 				
 				int x = (int) (exp.getPos().getX());
-				int y = (int) (exp.getPos().getY());
+				int y = (int) (exp.getPos().getY());//TODO I haven't changed this... should I?
 				
 
 				double size = ((Explosion) exp).getSize();

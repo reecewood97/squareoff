@@ -22,7 +22,7 @@ public class TimedGrenade extends PhysObject { //This object should be painted c
 		this.setXvel(xvel);
 		this.setYvel(yvel);
 		this.setInUse(inUse);
-		this.framesLeft = 50;
+		this.framesLeft = 100;
 	}
 	
 	@Override
@@ -35,12 +35,11 @@ public class TimedGrenade extends PhysObject { //This object should be painted c
 	}
 		
 	//Undoes the update for when a collision is detected
-	@Override
+	/*@Override
 	public void undoUpdate() {
 		setPos(new Point2D.Double(getPos().getX()-getXvel(), getPos().getY()-getYvel()));
 		setYvel(getYvel()+getGrav());
-		framesLeft = framesLeft+1;
-	}
+	}*/
 	
 	@Override
 	public int getFrames() {
