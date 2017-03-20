@@ -77,7 +77,7 @@ public class Server extends Thread {
 				ServerReceiver sr = new ServerReceiver(fromClient, board, players, table, ais);
 				
 				ObjectOutputStream toClient = new ObjectOutputStream(s.getOutputStream());
-				ServerSender ss = new ServerSender(toClient, board);
+				ServerSender ss = new ServerSender(toClient, board, this);
 
 				//Adds Threads to a Client Table.
 				table.add(sr, ss);
@@ -204,17 +204,18 @@ public class Server extends Thread {
 	 * Disconnects all clients from the server and then reconnects them.
 	 */
 	public void reset() {	
-		players.clear();
-		for(ServerReceiver r: table.getReceivers()) {
-			r.setInGame(false);
-		}
-		table.sendAll(Server.RESET_CONNECTION);
 		
 		//Reset and close everything.
+		players.clear();
 		board = new Board("map1");
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();
 		gl = new GameLoop(board);
+		for(ServerReceiver r: table.getReceivers()) {
+			r.setInGame(false);
+		}
+		
+		table.sendAll(Server.RESET_CONNECTION);
 	}
 }

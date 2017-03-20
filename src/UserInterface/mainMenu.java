@@ -314,12 +314,10 @@ public class mainMenu extends Application {
     			        		trial = false;
     			        		showUI();
     			        		refreshHLobby(net);
-    			        		System.out.println("host if");
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
     			        		trial = false;
     			        		hideUI();
-    			        		System.out.println("host else if");
     			        	}
     			        	else {
     			        		if (!trial){
@@ -328,9 +326,6 @@ public class mainMenu extends Application {
     			        			trial = true;
     			        		}
     			        		showUI();
-    			        		System.out.println("host else");
-    			        		System.out.println("host isConnected: " + net.isConnected());
-    			        		System.out.println("host inGame: " + net.inGame());
     			        	}
     			        }
     			      });
