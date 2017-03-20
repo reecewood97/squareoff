@@ -109,14 +109,40 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void showWeaponsMenu(){
 		
+		//click sound
+		Audio audioforclick = new Audio();
+		audioforclick.click();
+		
+		//open menu
+		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
+		menu.open();
+		
+		/*
+		
 		Square square = (Square) board.getActivePlayer();
 		int id = square.getPlayerID();
 		
+		System.out.println(" active id is: " +id);
+
+		System.out.println("name is: " +name);
+		
+		
+		int sizeofplayers = client.getPlayers().size();
+		
+		
 		for(int i = 0; i < client.getPlayers().size(); i++){
+			
+
+			System.out.println(client.getPlayers().get(i));
 			
 			if(client.getPlayers().get(i).equals(name)){
 				
+				System.out.println(i);
+				
 				if((i+1)==id){
+					
+
+					System.out.println("hello");
 					
 					//click sound
 					Audio audioforclick = new Audio();
@@ -135,7 +161,7 @@ public class ButtonPanel extends JPanel{
 			
 			
 		}
-		
+		*/
 		
 	}
 	
