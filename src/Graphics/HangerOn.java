@@ -51,6 +51,10 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 		running = true;
 		try {
 			while(running) {
+				if (!(panel.hasFocus())){
+					input = "Pressed    " + name;
+					keysPressed = "";
+				}
 				q.offer(input);
 				sleep(40);
 			}

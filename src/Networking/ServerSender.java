@@ -38,7 +38,7 @@ public class ServerSender extends Thread {
 				if(inGame) {
 					//Checks if the game is over.
 					if(board.getWinner() > -1){
-						send(33);
+						send(Server.RESET_CONNECTION);
 						System.out.println("Sent the winner");
 						send(board.getWinner());
 						board.setWinner(5);
