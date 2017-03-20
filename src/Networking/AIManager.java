@@ -16,7 +16,6 @@ import ai.NormalAI;
 public class AIManager extends Thread {
 	
 	private ArrayList<AI> ais; 
-	private boolean running; 
 	private Board board; 
 	private int difficulty, maxNumberOfPlayers;
 	private ArrayList<String> players;
@@ -27,7 +26,6 @@ public class AIManager extends Thread {
 	 */
 	public AIManager(Board board, ArrayList<String> players, int maxNumberOfPlayers) {
 		ais = new ArrayList<AI>();
-		running = false;
 		this.board = board;
 		this.difficulty = Server.EASY_AI;
 		this.players = players;
@@ -61,31 +59,30 @@ public class AIManager extends Thread {
 	 * Thread run method.
 	 */
 	public void run() {
-		running = true;
 		int playerTurn = 5;
 		boolean turnTaken = true;
-		while(running) {
-			if (playerTurn != ((Square)board.getActivePlayer()).getPlayerID()){
-				turnTaken = false;
-				playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
-			}
-			//Iterates through the AIs and checks if it's one of their turns.
-			for(AI ai: ais) {
-				if(ai.getPlayerID() == playerTurn && !turnTaken) {
-					//Activates the AI whose turn it is, then ends the AI's turn.
-					ai.determineState();
-					turnTaken = true;
-					break;
+		try {
+			while(true) {
+				if (playerTurn != ((Square)board.getActivePlayer()).getPlayerID()){
+					turnTaken = false;
+					playerTurn = ((Square)board.getActivePlayer()).getPlayerID();
 				}
-			}
-			try {
+				//Iterates through the AIs and checks if it's one of their turns.
+				for(AI ai: ais) {
+					if(ai.getPlayerID() == playerTurn && !turnTaken && ((Square) board.getActivePlayer()).getAlive()) {
+						//Activates the AI whose turn it is, then ends the AI's turn.
+						ai.determineState();
+						turnTaken = true;
+						break;
+					}
+				}
 				sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				System.exit(1);
 			}
-	
+		} 
+		catch (InterruptedException e) {
+			//Thread killed.
 		}
+	
 	}
 	
 	/**
@@ -94,12 +91,5 @@ public class AIManager extends Thread {
 	 */
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
-	}
-	
-	/**
-	 * Kills the thread.
-	 */
-	public void close() {
-		running = false;
 	}
 }

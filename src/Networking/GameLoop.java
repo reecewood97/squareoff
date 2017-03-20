@@ -1,5 +1,9 @@
 package Networking;
 
+import java.io.IOException;
+
+import javax.swing.text.StyledEditorKit.ItalicAction;
+
 import GameLogic.Board;
 
 /**
@@ -10,7 +14,6 @@ import GameLogic.Board;
 public class GameLoop extends Thread {
 	
 	private Board board;
-	private boolean running;
 	
 	public GameLoop(Board board) {
 		this.board = board;
@@ -20,23 +23,14 @@ public class GameLoop extends Thread {
 	 * Thread run method.
 	 */
 	public void run() {
-		running = true;
-		while(running) {
-			board.input("None");
-			try {
+		try {
+			while(true) {
+				board.input("None");
 				sleep(35);
 			}
-			catch(InterruptedException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
 		}
-	}
-	
-	/**
-	 * Kills the thread.
-	 */
-	public void close() {
-		running = false;
+		catch(InterruptedException e) {
+			//Thread killed.
+		}
 	}
 }

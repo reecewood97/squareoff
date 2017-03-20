@@ -37,9 +37,6 @@ public class Client {
 		socket = null;
 		toServer = null;
 		fromServer = null;
-		board = new Board("map1");
-		q = new Queue();
-		ui = new Screen(board, q, name, this);
 	}
 	
 	/**
@@ -71,7 +68,9 @@ public class Client {
 			System.exit(1);
 		}
 		
-		q.clear();
+		board = new Board("map1");
+		q = new Queue();
+		ui = new Screen(board, q, name, this);
 		
 		sender = new ClientSender(toServer, q);
 		receiver = new ClientReceiver(fromServer, board, ui, this);

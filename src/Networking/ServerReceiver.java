@@ -36,14 +36,12 @@ public class ServerReceiver extends Thread {
 		this.table = table;
 		this.ais = ais;
 		name = null;
-		running = false;
 	}
 	
 	/**
 	 * Thread run method.
 	 */
 	public void run() {
-		running = true;
 		inGame = false;
 		
 		try {
@@ -70,7 +68,7 @@ public class ServerReceiver extends Thread {
 			table.get(this).setName(name + ": server sender");
 			
 			Object obj;
-			while(running) {
+			while(true) {
 				obj = fromClient.readObject();
 				
 				//Strings from the client are sent to the board.
@@ -115,7 +113,7 @@ public class ServerReceiver extends Thread {
 		if(inGame) {
 			ais.addAIs(1);
 		}
-		table.get(this).send("I kill the Server sender.");
+		table.get(this).interrupt();
 		table.remove(this);
 	}
 	

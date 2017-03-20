@@ -182,8 +182,7 @@ public abstract class AI {
 		ArrayList<PhysObject> squares = board.getSquares();
 		int numOfPlayers = squares.size();
 		for (int i = 0; i < numOfPlayers; i++) {
-			if (((Square) squares.get(i)).getSquareID() == mySquareID && ((Square) squares.get(i)).getPlayerID() == myPlayer) {
-//				System.out.println("Square ID match.");
+			if (((Square) squares.get(i)).getPlayerID() == myPlayer) {
 				setPos(squares.get(i).getPos());
 			}
 		}
@@ -241,21 +240,36 @@ public abstract class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		if (((Square)board.getActivePlayer()).getPlayerID() != myPlayer) {
-			return;
+		ArrayList<PhysObject> squares = board.getSquares();
+		for (PhysObject player:squares) {
+			if (((Square) player).getPlayerID() == myPlayer) {
+				if (player.getInUse()) {
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					changeAIPos();
+					
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					aiMove();
+					
+					try {
+						Thread.sleep(150);
+					} catch (InterruptedException e) {
+						//e.printStackTrace();
+					}
+					aiAttack();
+				}
+			}
 		}
 		
-		if (((Square)board.getActivePlayer()).getPlayerID() == myPlayer) {
-			changeAIPos();
-			aiMove();
-			
-			try {
-				Thread.sleep(150);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			aiAttack();
-		}
 		return;
 	}
 	
@@ -282,9 +296,23 @@ public abstract class AI {
 		moveUpLeft();
 		moveUpRight();
 		int i = 0;
-		boolean jumpLeft = false;
-		boolean jumpRight = false;
-		while ((xPos < targetX - 23.0) || (xPos > targetX + 23.0) || yPos != targetY) {
+		while ((xPos < targetX - 24.5) || (xPos > targetX + 24.5) || yPos != targetY) {
+			
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			ArrayList<PhysObject> squares = board.getSquares();
+			for (PhysObject player:squares) {
+				if (((Square) player).getPlayerID() == myPlayer) {
+					if (!((Square)player).getAlive()) {
+						return;
+					}
+				}
+			}
+			
 			if (board.getTime() >= 15 * 1000) {
 				return;
 			}
@@ -293,16 +321,26 @@ public abstract class AI {
 			xPos = getAIPos().getX();
 			yPos = getAIPos().getY() - 30.0;
 			
+			boolean jumpLeft = false;
+			boolean jumpRight = false;
+			boolean dontJumpDown = true;
+			
 			if (xPos < targetX) {
 				System.out.println(xPos);
 				
 				if (yPos > targetY) {
-					moveRight();
+					for (int k = 0; k < 10; k++) {
+						moveRight();
+					}
 					continue;
 				}
 				
 				//detect edge
+				
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -312,6 +350,9 @@ public abstract class AI {
 					jumpLeft = true;
 				}
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -321,36 +362,50 @@ public abstract class AI {
 					jumpRight = true;
 				}
 				
-				if (jumpLeft && !jumpRight) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
-					
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
+						dontJumpDown = true;
+						break;
+					}
+					dontJumpDown = false;
+				}
+				
+				if (jumpLeft && !jumpRight && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
+						moveUpLeft();
+						moveLeft();
+					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
-				
-				if (jumpRight && !jumpLeft) {
-					moveUpRight();
-					moveRight();
-					moveRight();
-					moveRight();
+				else if (jumpRight && !jumpLeft && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+					dontJumpDown = false;
 				}
-				
-				if(jumpRight && jumpLeft) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
+				else if (jumpLeft && jumpRight && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				else {
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				
 				if (yPos < targetY) {
@@ -378,12 +433,17 @@ public abstract class AI {
 				System.out.println(xPos);
 				
 				if (yPos > targetY) {
-					moveLeft();
+					for (int k = 0; k < 10; k++) {
+						moveLeft();
+					}
 					continue;
 				}
 				
 				// detect edge
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -393,6 +453,9 @@ public abstract class AI {
 					jumpLeft = true;
 				}
 				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
@@ -401,36 +464,50 @@ public abstract class AI {
 					}
 					jumpRight = true;
 				}
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
+						dontJumpDown = true;
+						break;
+					}
+					dontJumpDown = false;
+				}
 				
-				if (jumpLeft && !jumpRight) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
+				if (jumpLeft && !jumpRight && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
+						moveUpLeft();
+						moveLeft();
+					}
 					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
-				
-				if (jumpRight && !jumpLeft) {
-					moveUpRight();
-					moveRight();
-					moveRight();
-					moveRight();
+				else if (jumpRight && !jumpLeft && dontJumpDown) {
+					for (int j = 0; j < 5; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
+					dontJumpDown = false;
 				}
-				
-				if(jumpRight && jumpLeft) {
-					moveUpLeft();
-					moveLeft();
-					moveLeft();
-					moveLeft();
+				else if (jumpLeft && jumpRight && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
+						moveUpRight();
+						moveRight();
+					}
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				else {
 					jumpRight = false;
 					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				
 				if (yPos < targetY) {
@@ -486,6 +563,7 @@ public abstract class AI {
 				int state = calculation(acc_angle, acc_velocity, target);
 				hit = isHit(state);
 				while (!hit) {
+					acc_velocity = maxVelocity/2;
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
 						acc_angle += 3.0;
@@ -514,6 +592,7 @@ public abstract class AI {
 				int state = calculation(acc_angle, acc_velocity, target);
 				hit = isHit(state);
 				while (!hit) {
+					acc_velocity = maxVelocity/2;
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
 						acc_angle -= 3.0;
@@ -537,8 +616,18 @@ public abstract class AI {
 				}
 			}
 			
-			if(xdis < 0) {
-				acc_angle = 0 - acc_angle;
+			boolean enemyOnRight = false;
+			ArrayList<PhysObject> squares = board.getSquares();
+			for (PhysObject square:squares) {
+				if (getAIPos().getX() > square.getPos().getX()) {
+					enemyOnRight = true;
+					continue;
+				}
+				enemyOnRight = false;
+			}
+			
+			if(xdis < 0 || enemyOnRight) {
+				acc_angle = acc_angle * (-1);
 				acc_velocity *= -1;
 			}
 
@@ -629,7 +718,7 @@ public abstract class AI {
 	
 	public void determineObstacle(Point2D.Double target, Point2D.Double aiPos) {
 		double aiX = aiPos.getX();
-		double aiY = aiPos.getY();
+		double aiY = aiPos.getY() + 30.0;
 		
 		double angle = getAngle();
 		double velocity = getVelocity();
@@ -674,7 +763,7 @@ public abstract class AI {
 	private void moveLeft() {
 		board.input("Pressed A  " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -686,7 +775,7 @@ public abstract class AI {
 	private void moveRight() {
 		board.input("Pressed D  " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -698,7 +787,7 @@ public abstract class AI {
 	private void moveUp() {
 		board.input("Pressed  W " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -711,7 +800,7 @@ public abstract class AI {
 	private void moveUpRight() {
 		board.input("Pressed DW " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -724,7 +813,7 @@ public abstract class AI {
 	private void moveUpLeft() {
 		board.input("Pressed AW " + myName);
 		try {
-			Thread.sleep(150);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -743,7 +832,7 @@ public abstract class AI {
 
 		board.input(command);
 		try {
-			Thread.sleep(30);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

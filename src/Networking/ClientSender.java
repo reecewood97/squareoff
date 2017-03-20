@@ -12,7 +12,6 @@ public class ClientSender extends Thread {
 
 	private ObjectOutputStream server;
 	private Queue q;
-	private boolean running;
 	
 	/**
 	 * Creates a new Client Sender.
@@ -22,17 +21,14 @@ public class ClientSender extends Thread {
 	public ClientSender(ObjectOutputStream server, Queue q) {
 		this.server = server;
 		this.q = q;
-		running = false;
 	}
 	
 	/**
 	 * Thread run method.
 	 */
 	public void run() {
-		running = true;
-		
 		try {
-			while(running) {
+			while(true) {
 				//Take from the queue and send it to the server.
 				Object obj = q.take();
 				server.writeObject(obj);

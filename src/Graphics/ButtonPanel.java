@@ -100,7 +100,6 @@ public class ButtonPanel extends JPanel{
 		client.disconnect();
 		board.notifyQuit(); //method not complete
 		screen.setVisible(false);
-		mainMenu.showUI();
 		
 	}
 

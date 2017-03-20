@@ -14,17 +14,18 @@ public class ServerSender extends Thread {
 
 	private ObjectOutputStream toClient;
 	private Board board;
-	private boolean running, inGame;
+	private boolean inGame;
+	private Server server;
 	
 	/**
 	 * Creates a new Server Sender.
 	 * @param toClient The ObjectOutputStream to the Client.
 	 * @param board The server-side board.
 	 */
-	public ServerSender(ObjectOutputStream toClient, Board board) {
+	public ServerSender(ObjectOutputStream toClient, Board board, Server server) {
 		this.toClient = toClient;
 		this.board = board;
-		running = false;
+		this.server = server;
 	}
 	
 	/**
@@ -32,18 +33,18 @@ public class ServerSender extends Thread {
 	 */
 	public void run() {
 		inGame = false;
-		running = true;
 		
 		try {
-			while(running) {
+			while(true) {
 				sleep(35);
 				if(inGame) {
 					//Checks if the game is over.
 					if(board.getWinner() > -1){
-						send(33);
+
+						server.reset();
 						System.out.println("Sent the winner");
-						send(board.getWinner());
-						board.setWinner(-1);
+//						send(board.getWinner());
+//						board.setWinner(5);
 						//TODO
 					}
 					//Not sure what this is...
@@ -61,8 +62,7 @@ public class ServerSender extends Thread {
 			}
 		}
 		catch(InterruptedException e) {
-			e.printStackTrace();
-			System.exit(1);
+			//Thread killed.
 		}
 	}
 	

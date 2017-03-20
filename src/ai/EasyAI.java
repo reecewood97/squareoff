@@ -118,9 +118,7 @@ public class EasyAI extends AI{
 		double finalDis = 9999999999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square enemySquare = (Square) squares.get(i);
-			if (enemySquare.getPlayerID() != myPlayer) {
-//				System.out.println(enemySquare.getPlayerID());
-//				System.out.println(enemySquare.getPos());
+			if (enemySquare.getPlayerID() != myPlayer && enemySquare.getAlive()) {
 				// get position of enemies
 				int enemyX = (int) enemySquare.getPos().getX();
 				int enemyY = (int) enemySquare.getPos().getY();
@@ -129,7 +127,6 @@ public class EasyAI extends AI{
 				
 				// calculate shortest displacement by pythagoras theorem
 				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//				System.out.println(displacement);
 				if (displacement < finalDis) {
 					finalDis = displacement;
 					finalX = enemyX;
@@ -138,11 +135,10 @@ public class EasyAI extends AI{
 				}
 			}
 		}
-		System.out.println(finalSquare);
 		
 		// return the coordinates
 
-		System.out.println(finalSquare.getPos());
+		System.out.println("Enemy at " + finalSquare.getPos());
 		setObstacles(false);
 		return finalSquare.getPos();
 	}

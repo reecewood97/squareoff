@@ -689,11 +689,13 @@ public class Board {
 						
 						object.setInUse(false);
 						//audio.splash();
-						if (checkForWinner() != -1){
-							if(debug)System.out.println("winner?");
-							int won = findPlayer();
-							setWinner(won);
-							turn.endItAll();
+						if (winner != 5){
+							if (checkForWinner() != -1){
+								if(debug)System.out.println("winner?");
+								int won = findPlayer();
+								setWinner(won);
+								turn.interrupt();
+							}
 						}
 					}
 				}
@@ -858,11 +860,13 @@ public class Board {
 				
 				activePlayer.setDead();
 				audio.splash();
-				if (checkForWinner() != -1){
-					if(debug)System.out.println("winner?");
-					int won = findPlayer();
-					setWinner(won);
-					turn.endItAll();
+				if (winner != 5){
+					if (checkForWinner() != -1){
+						if(debug)System.out.println("winner?");
+						int won = findPlayer();
+						setWinner(won);
+						turn.interrupt();
+					}
 				}
 				incrementTurn();
 			}
@@ -1160,28 +1164,28 @@ public class Board {
 	 * @return True if all living squares are played by the same player, false otherwise.
 	 */
 	public int checkForWinner(){
+		//System.err.println("We are checking when someone dies");
 		ArrayList<PhysObject> chickenDinner = getSquares();
 		int winner = -1;
 		
-		for(int i=0; i< chickenDinner.size()-1;i++){
+		for(int i=0; i< chickenDinner.size();i++){
 			Square first = ((Square)chickenDinner.get(i));
-			Square second = ((Square)chickenDinner.get(i+1));
+			//Square second = ((Square)chickenDinner.get(i+1));
 			
-			if((first.getAlive() && second.getAlive()))
-			
-				winner = first.getPlayerID();
-				
-				if(first.getPlayerID() != second.getPlayerID()){
-					return -1;
+			if(first.getAlive()){
+				if ((winner == -1) || winner == first.getPlayerID()){
+					winner = first.getPlayerID();
 				}
 				else{
-					
-					winner = first.getPlayerID();
-					
+					//System.out.println(chickenDinner.get(1).getInUse());
+					return -1;
 				}
+			}
 		}
+
 		
 		System.out.println("winner is " + winner);
+
 		return winner;
 		
 	}
@@ -1235,7 +1239,7 @@ public class Board {
 	
 	public void startLocalTimer(){
 		servant.interrupt();
-		System.out.println("Restarted the timer");
+		//System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 		
