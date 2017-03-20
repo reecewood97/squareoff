@@ -43,8 +43,8 @@ public class ServerSender extends Thread {
 
 						server.reset();
 						System.out.println("Sent the winner");
-						send(board.getWinner());
-						board.setWinner(5);
+//						send(board.getWinner());
+//						board.setWinner(5);
 						//TODO
 					}
 					//Not sure what this is...
