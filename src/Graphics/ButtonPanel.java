@@ -3,6 +3,7 @@ package Graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import GameLogic.Board;
+import GameLogic.Square;
 import Networking.Client;
 import UserInterface.mainMenu;
 
@@ -26,6 +27,7 @@ public class ButtonPanel extends JPanel{
 	private Board board;
 	private HangerOn listeners;
 	private Client client;
+	private String name;
 	
 	/**
 	 * constructor 
@@ -37,59 +39,17 @@ public class ButtonPanel extends JPanel{
 		
 		super();
 		
-		System.out.println("HEIGHT OF PANEL: "  + this.getBounds().getHeight());
-		
 		//create main panel
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
 		
-		/*
-		String[] players = board.getPlayers();
-		int colournum = 0;
-		
-		for(int i = 0; i < 4; i++){
-			
-			System.out.println(players[i]);
-			
-			if(players[i].equals(name)){
-				
-				colournum = i+1;
-				
-				
-			}
-		}
-		*/
-		
-		/*
-		//set backgroudn colour according to player id num
-		if(colournum == 1){
-			
-			mainpanel.setBackground(Color.RED);
-			
-		}
-		else if(colournum == 2){
-			
-			mainpanel.setBackground(Color.BLUE);
-		}
-		else if(colournum == 3){
-			
-			mainpanel.setBackground(Color.YELLOW);
-			
-		}
-		else if(colournum == 4){
-			
-			mainpanel.setBackground(Color.GREEN);
-		}
-		else{
-			mainpanel.setBackground(Color.WHITE);
-		}
-			*/
 		//set attributes
 		this.audio = audio;
 		this.board = board;
 		this.listeners = screen.getHangerOn();
 		this.client = client;
+		this.name= name;
 		
 		//exit button
         ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
@@ -156,6 +116,52 @@ public class ButtonPanel extends JPanel{
 		//open menu
 		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 		menu.open();
+		
+		/*
+		
+		Square square = (Square) board.getActivePlayer();
+		int id = square.getPlayerID();
+		
+		System.out.println(" active id is: " +id);
+
+		System.out.println("name is: " +name);
+		
+		
+		int sizeofplayers = client.getPlayers().size();
+		
+		
+		for(int i = 0; i < client.getPlayers().size(); i++){
+			
+
+			System.out.println(client.getPlayers().get(i));
+			
+			if(client.getPlayers().get(i).equals(name)){
+				
+				System.out.println(i);
+				
+				if((i+1)==id){
+					
+
+					System.out.println("hello");
+					
+					//click sound
+					Audio audioforclick = new Audio();
+					audioforclick.click();
+					
+					//open menu
+					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
+					menu.open();
+					
+					break;
+					
+				}
+				
+			}
+			
+			
+			
+		}
+		*/
 		
 	}
 	

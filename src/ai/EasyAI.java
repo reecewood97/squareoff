@@ -118,7 +118,7 @@ public class EasyAI extends AI{
 		double finalDis = 9999999999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square enemySquare = (Square) squares.get(i);
-			if (enemySquare.getPlayerID() != myPlayer) {
+			if (enemySquare.getPlayerID() != myPlayer && enemySquare.getAlive()) {
 				// get position of enemies
 				int enemyX = (int) enemySquare.getPos().getX();
 				int enemyY = (int) enemySquare.getPos().getY();

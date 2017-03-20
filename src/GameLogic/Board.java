@@ -100,10 +100,14 @@ public class Board {
 			//Draw blocks at bottom of map
 			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
 			
+			
 			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
 				objects.add(block);
 			}
+			
+			
+			//objects.add(new TerrainBlock(1,1,new Point2D.Double(100,150), true));
 			
 			for(int i = 100; i < 700; i+=120){
 				
@@ -686,11 +690,13 @@ public class Board {
 						
 						object.setInUse(false);
 						//audio.splash();
-						if (checkForWinner() != -1){
-							if(debug)System.out.println("winner?");
-							int won = findPlayer();
-							setWinner(won);
-							turn.interrupt();
+						if (winner != 5){
+							if (checkForWinner() != -1){
+								if(debug)System.out.println("winner?");
+								int won = findPlayer();
+								setWinner(won);
+								turn.interrupt();
+							}
 						}
 					}
 				}
@@ -855,11 +861,13 @@ public class Board {
 				
 				activePlayer.setDead();
 				audio.splash();
-				if (checkForWinner() != -1){
-					if(debug)System.out.println("winner?");
-					int won = findPlayer();
-					setWinner(won);
-					turn.endItAll();
+				if (winner != 5){
+					if (checkForWinner() != -1){
+						if(debug)System.out.println("winner?");
+						int won = findPlayer();
+						setWinner(won);
+						turn.interrupt();
+					}
 				}
 				incrementTurn();
 			}
@@ -1175,7 +1183,10 @@ public class Board {
 				}
 			}
 		}
-		//System.err.println("There is a winner");
+
+		
+		System.out.println("winner is " + winner);
+
 		return winner;
 		
 	}

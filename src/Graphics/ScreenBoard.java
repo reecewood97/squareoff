@@ -394,10 +394,38 @@ public class ScreenBoard extends JPanel{
 				}
 				 
 				}
-				else if (sizeint >=20 && sizeint < 40){
+				else if (sizeint >=20 && sizeint < 30){
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/exp1.5.png"));
+						g2d.drawImage(image,(int) (x - 40*widthratio), 
+								(int) (y - 40*heightratio), null);
+					} 
+					catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				}
+				else if (sizeint >=30 && sizeint < 40){
 					
 					try {
 						image = ImageIO.read(new File("Files/Images/exp2.png"));
+						g2d.drawImage(image,(int) (x - 40*widthratio), 
+								(int) (y - 40*heightratio), null);
+					} 
+					catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				}
+				else if (sizeint >=40 && sizeint < 50){
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/exp2.5.png"));
 						g2d.drawImage(image,(int) (x - 40*widthratio), 
 								(int) (y - 40*heightratio), null);
 					} 
@@ -424,23 +452,7 @@ public class ScreenBoard extends JPanel{
 					
 				}
 				
-				/*
 				
-				//if reached max size, stop drawing
-				if((sizeint > 60) && drawexplosions == true){
-					drawexplosions = false;	
-				}
-				//otherwise increase size by one
-				else{
-						
-					if (drawexplosions){
-						sizeint = sizeint + 6;
-						hangeron.setExp(sizeint + "");
-					}
-					
-				}
-				
-				*/
 			
 			}
 		}
