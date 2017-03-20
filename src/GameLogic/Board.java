@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.lang.Math;
 
 //1. Missile
@@ -465,11 +466,11 @@ public class Board {
 					return true;
 				} else {return false;}
 			} else {
-				return obj1.rectIntersect(obj2);
-				/*Rectangle2D.Double rect = new Rectangle2D.Double
+				//return obj1.rectIntersect(obj2);
+				Rectangle2D.Double rect = new Rectangle2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects
-						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
 			if(obj1.getName().endsWith("ExplodeOnImpact")/* || obj1.getName().endsWith("TimedGrenade")*/){ //All circular objects
@@ -483,11 +484,11 @@ public class Board {
 					return true;
 				} else {return false;}
 			} else {
-				return obj1.rectIntersect(obj2);
-				/*Rectangle2D.Double rect = new Rectangle2D.Double
+				//return obj1.rectIntersect(obj2);
+				Rectangle2D.Double rect = new Rectangle2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects
-						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());*/
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			}
 		}
 	}
