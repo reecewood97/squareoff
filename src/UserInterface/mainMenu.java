@@ -33,7 +33,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -94,8 +93,6 @@ public class mainMenu extends Application {
         	temps.hide();
     		isHidden = false;
     	}
-    	
-
     }
     
     /**
@@ -347,25 +344,26 @@ public class mainMenu extends Application {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
+    			      System.err.println("host STILL IN WHILE LOOP");
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
     			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		System.err.println("host if");
     			        		showUI();
     			        		refreshHLobby(net);
-    			        		System.err.println("host if");
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
-    			        		hideUI();
     			        		System.err.println("host else if");
+    			        		hideUI();	
     			        	}
     			        	else {
-    			        		net.resetServer();
-    			        		net.connectToHost("localhost", name);
-    			        		showUI();
     			        		System.err.println("host else");
     			        		System.err.println("host isConnected: " + net.isConnected());
     			        		System.err.println("host inGame: " + net.inGame() );
+    			        		net.resetServer();
+    			        		net.connectToHost("localhost", name);
+    			        		showUI();
     			        	}
     			        }
     			      });
@@ -386,26 +384,28 @@ public class mainMenu extends Application {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
+    			      System.err.println("client STILL IN WHILE LOOP");
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
     			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		System.err.println("client if");
     			        		showUI();
     			        		refreshCLobby(net);
-    			        		System.err.println("client if");
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
-    			        		hideUI();
     			        		System.err.println("client else if");
+    			        		hideUI();
     			        	}
     			        	else {
+    			        		System.err.println("client else");
+    			        		System.err.println("client isConnected: " + net.isConnected());
+    			        		System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
     			        		inLobby = false;
     			        		showUI();
     			        		ps.setScene(ogScene);
     			        		ps.setTitle("Square-Off: Start Menu");
-    			        		System.err.println("client else");
-    			        		System.err.println("client isConnected: " + net.isConnected());
-    			        		System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
+    			        		
     			        	}
     			        }
     			      });
