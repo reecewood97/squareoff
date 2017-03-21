@@ -201,8 +201,13 @@ public class Board {
 	}
 	
 	public void setActivePlayer(int newPlayer, int newID) {
+		
+		
+		//System.out.println("NEW PLAYER" + newPlayer + "************************");
 		this.player = newPlayer;
 		this.squareID = newID;
+		
+		
 		int x = player + squareID;
 		activePlayer = (Square)getSquares().get(x);
 		for(PhysObject phys : getSquares()) {
@@ -212,10 +217,32 @@ public class Board {
 		activePlayer.setActivePlayer(true);
 		objects.remove(x);
 		objects.add(x, activePlayer);
+		
+	
+		
+		
+		
+		
+		
 	}
 	
 	public PhysObject getActivePlayer() {
-		return activePlayer;
+		
+		//System.out.println("in getactive player");
+		
+		for(PhysObject square : this.getSquares()){
+			
+			if( ((Square) square).getActivePlayer()){
+				
+				System.out.println("player id " +((Square)square).getPlayerID());
+				
+				return square;
+				
+			}
+		}
+		
+		return null;
+		
 	}
 	
 	public boolean getPlaying() {
