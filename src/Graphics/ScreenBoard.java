@@ -106,7 +106,9 @@ public class ScreenBoard extends JPanel{
 		for(PhysObject block : blocks){
 			
 			int x = (int) block.getPos().getX();
-			int y = (int) block.getPos().getY();
+			int y = (int) block.getPos().getY()+block.getHeight();
+			//TODO these todos are to keep track of the changes I've made in case they need to be reverted
+			//From Reece :) You can remove them if it doesn't break anything
 			
 			y = 450 - y; 
 			
@@ -156,7 +158,7 @@ public class ScreenBoard extends JPanel{
 	}
 	
 	/**
-	 * paint the squres onto the arena
+	 * paint the squares onto the arena
 	 * @param squares The ArrayList of squares
 	 * @param g2d Graphics
 	 */
@@ -166,7 +168,7 @@ public class ScreenBoard extends JPanel{
 			
 			if(((Square) square).getAlive()){
 				int x = (int) square.getPos().getX();
-				int y = (int) square.getPos().getY();
+				int y = (int) square.getPos().getY()+square.getHeight();//TODO
 				y = 450 - y;
 				
 				int newx = (int) (x*widthratio);
@@ -267,7 +269,7 @@ public class ScreenBoard extends JPanel{
 			int mousepos_y = (int) (this.getMousePosition().getY());
 			
 			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
-			int pp_y = (int) ((450 - square.getPos().getY()+15) * heightratio);
+			int pp_y = (int) ((450 - square.getPos().getY()-square.getHeight()+15) * heightratio); //TODO
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
@@ -291,7 +293,10 @@ public class ScreenBoard extends JPanel{
 				if (weapon.getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
-					int y = (int) weapon.getPos().getY();
+
+
+					int y = (int) weapon.getPos().getY()+weapon.getHeight();
+
 					
 					x = (int) (x*widthratio);
 					
@@ -300,9 +305,7 @@ public class ScreenBoard extends JPanel{
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
-					
-					System.out.println("hello" + weapon.getName());
-					
+				
 					if(weapon.getName().contains("ExplodeOnImpact")){
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
@@ -339,7 +342,6 @@ public class ScreenBoard extends JPanel{
 			
 				int x = (int) (exp.getPos().getX());
 				int y = (int) (exp.getPos().getY());
-				
 
 				double size = ((Explosion) exp).getSize();
 				

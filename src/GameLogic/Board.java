@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import Audio.Audio;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.lang.Math;
 
 //1. Missile
@@ -80,14 +81,14 @@ public class Board {
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(100, 180);
+		Point2D.Double redpos = new Point2D.Double(100, 150);
 		PhysObject red = new Square(1 ,0, 0, redpos);
 		((Square)red).setActivePlayer(true);
-		Point2D.Double blupos = new Point2D.Double(300, 180);
+		Point2D.Double blupos = new Point2D.Double(300, 150);
 		PhysObject blu = new Square(2 ,0, 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(400, 180);
+		Point2D.Double yelpos = new Point2D.Double(400, 150);
 		PhysObject yel = new Square(3 ,0, 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(500, 180);
+		Point2D.Double grnpos = new Point2D.Double(500, 150);
 		PhysObject grn = new Square(4 ,0, 0, grnpos);
 		objects.add(red);
 		objects.add(blu);
@@ -97,11 +98,11 @@ public class Board {
 		//Which map are we playing on? Initialise the correct one.
 		if(this.map.equals("map1")){
 			//Draw blocks at bottom of map
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
 			
 			
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,150), true);
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
 			
@@ -110,21 +111,21 @@ public class Board {
 			
 			for(int i = 100; i < 700; i+=120){
 				
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,225), true);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 				
 			}
 			
 			for(int i = 150; i < 700; i+=160){
 				
-				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,300), true);
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
 				
 			}
 			
 			for(int i = 50; i < 700; i+=200){
 				
-				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,375), true);
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,345), true);
 				objects.add(block);
 				
 			}
@@ -132,30 +133,30 @@ public class Board {
 		else{
 			
 			//Draw blocks at bottom of map
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,180), true));
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
 			
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,150), true);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
 			
 			for(int i = 100; i < 700; i+=120){
 				
-				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,200), true);
+				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,170), true);
 				objects.add(block);
 				
 			}
 			
 			for(int i = 150; i < 700; i+=160){
 				
-				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,250), true);
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,220), true);
 				objects.add(block);
 				
 			}
 			
 			for(int i = 50; i < 700; i+=200){
 				
-				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,475), true);
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,445), true);
 				objects.add(block);
 				
 			}
@@ -221,7 +222,7 @@ public class Board {
 		return this.playing;
 	}
 	
-	public ArrayList<PhysObject> getWeapons(){
+	public synchronized ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().startsWith("Weapon")){
@@ -231,7 +232,7 @@ public class Board {
 		return weapons;
 	}
 	
-	public ArrayList<PhysObject> getTargetLine(){
+	public synchronized ArrayList<PhysObject> getTargetLine(){
 		ArrayList<PhysObject> target = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().startsWith("Target")){
@@ -241,7 +242,7 @@ public class Board {
 		return target;
 	}
 	
-	public ArrayList<PhysObject> getExplodeOnImpact(){
+	public synchronized ArrayList<PhysObject> getExplodeOnImpact(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("ExplodeOnImpact")){
@@ -251,7 +252,7 @@ public class Board {
 		return weapons;
 	}
 	
-	public ArrayList<PhysObject> getTimedGrenade(){
+	public synchronized ArrayList<PhysObject> getTimedGrenade(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("TimedGrenade")){
@@ -262,7 +263,7 @@ public class Board {
 	}
 		
 	
-	public ArrayList<PhysObject> getMissile(){
+	public synchronized ArrayList<PhysObject> getMissile(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
 			if (obj.getName().endsWith("Missile")){
@@ -272,7 +273,7 @@ public class Board {
 		return weapons;
 	}
 	
-	public ArrayList<PhysObject> getBlocks(){
+	public synchronized ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -285,7 +286,7 @@ public class Board {
 		return blocks;
 	}
 	
-	public ArrayList<PhysObject> getSquares(){
+	public synchronized ArrayList<PhysObject> getSquares(){
 		
 		ArrayList<PhysObject> squares = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -299,7 +300,7 @@ public class Board {
 		return squares;
 	}
 	
-	public ArrayList<PhysObject> getExplosion(){
+	public synchronized ArrayList<PhysObject> getExplosion(){
 		
 		ArrayList<PhysObject> exp = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -469,11 +470,11 @@ public class Board {
 					return true;
 				} else {return false;}
 			} else {
-				return obj1.rectIntersect(obj2);
-				/*Rectangle2D.Double rect = new Rectangle2D.Double
+				//return obj1.rectIntersect(obj2);
+				Rectangle2D.Double rect = new Rectangle2D.Double
 						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects
-						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());*/
+						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
 			if(obj1.getName().endsWith("ExplodeOnImpact")/* || obj1.getName().endsWith("TimedGrenade")*/){ //All circular objects
@@ -487,11 +488,11 @@ public class Board {
 					return true;
 				} else {return false;}
 			} else {
-				return obj1.rectIntersect(obj2);
-				/*Rectangle2D.Double rect = new Rectangle2D.Double
+				//return obj1.rectIntersect(obj2);
+				Rectangle2D.Double rect = new Rectangle2D.Double
 						(obj1.getPos().getX(), obj1.getPos().getY()+obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects
-						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());*/
+						(obj2.getPos().getX(), obj2.getPos().getY()+obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			}
 		}
 	}
@@ -524,9 +525,9 @@ public class Board {
 				}
 			}
 		}
-		for(int hah=0;hah<things.size();hah++){
-			if(things.get(hah).getName().equals("Explosion")){
-				things.remove(hah);
+		for(int num=0;num<things.size();num++){
+			if(things.get(num).getName().equals("Explosion")){
+				things.remove(num);
 			}
 		}
 		things.add(new Explosion(new Point2D.Double(x, y)));
@@ -586,16 +587,30 @@ public class Board {
 			}
 		}
 		else { // Collisions for squares
-			thing.undoUpdate();
+			if(thing.getName().equals("WeaponTimedGrenade")){
+				System.out.println("Before, thing is at: "+thing.getPos());
+				thing.undoUpdate();
+				System.out.println("UndoUpdate, then: "+thing.getPos());
+			} else {
+				thing.undoUpdate();
+			}
+			if(thing.getName().equals("WeaponTimedGrenade")){
+				System.out.println("Timed Grenade colliding at: "+thing.getPos()
+				+" with Xvel: "+thing.getXvel()+" and Yvel: "+thing.getYvel());
+			}
 			if(thing.getPos().getX()+thing.getWidth()<=block.getPos().getX()) { //on the left
+				System.out.println("Collided on the left");
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
+					System.out.println("xvel zero");
 					thing.update();
 				}
 			}
-			if(thing.getPos().getX()>=block.getPos().getX()+block.getWidth()) { //on the right
+			if(block.getPos().getX()+block.getWidth()<=thing.getPos().getX()) { //on the right
+				System.out.println("Collided on the right");
 				thing.setXvel((-0.3)*thing.getXvel());
 				if(thing.getXvel()==0){
+					System.out.println("xvel zero");
 					thing.update();
 				}
 			}
@@ -615,6 +630,7 @@ public class Board {
 				}
 			}
 			if(thing.getPos().getY()+thing.getHeight()<=block.getPos().getY()) { //below
+				System.out.println("Collided on the bottom");
 				thing.setYvel((-0.3)*thing.getYvel());
 			}
 		}
@@ -644,18 +660,24 @@ public class Board {
 		}
 		
 		//Explode objects on a timer if they have run out
+		TimedGrenade boomer = null;
+		boolean boom = false;
 		for(PhysObject obj: objs){
-			switch(obj.getName()){
-			case "WeaponTimedGrenade": 
+			if(obj.getName().equals("WeaponTimedGrenade")){
 				TimedGrenade grenade = (TimedGrenade) obj;
 				if((grenade.getFrames()<=0) && (grenade.getInUse()==true)){
-					grenade.setInUse(false);
+					boom = true;
+					boomer = grenade;
+					/*grenade.setInUse(false);
 					createExplosion(objs, grenade.getPos().getX()+(grenade.getWidth()/2),
-						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);
+						grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50, 1);*/
 				}
-				break;
-			default: break;
 			}
+		}
+		if(boom){
+			boomer.setInUse(false);
+			createExplosion(objs, boomer.getPos().getX()+(boomer.getWidth()/2),
+				boomer.getPos().getY()+(boomer.getHeight()/2), 150, 50, 1);
 		}
 		
 		ArrayList<Collision> list = new ArrayList<Collision>();
@@ -677,6 +699,7 @@ public class Board {
 				}
 			}
 		}
+		
 		for(Collision collision: list){
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
@@ -768,8 +791,9 @@ public class Board {
 			case "ExplodeOnImpact": wep = new ExplodeOnImpact(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			//case "ExplodeOnImpact":  wep = new TimedGrenade(
-
 			//		wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
+			//case "ExplodeOnImpact": wep = new Missile(
+			//				wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "TimedGrenade": wep = new TimedGrenade(
 					wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true); break;
 			case "Missile": wep = new Missile(
@@ -880,7 +904,7 @@ public class Board {
 	 * Used on the server-side, receiving an update string that is from the inputs of the player.
 	 * @param inputs the formatted string from hangerOn.
 	 */
-	public void input(String input) {		
+	public synchronized void input(String input) {		
 		
 		
 		if (getExplosion().size()>0){
@@ -906,13 +930,14 @@ public class Board {
 		
 		Square active = (Square)getActivePlayer();
 		
+		//Handles the AI taking shots, they are generally assumed to have better behaviour than players so there aren't checks to make sure it's their turn.
 		if (input.contains("AItakesashotx86")){
 			weaponsopen = true;
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);
 			//if (AIatk[2].equals(players[player])) {
-				WeaponMove wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),xVel,yVel);
+				WeaponMove wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+10),xVel,yVel);
 				updateFrame(wmv);
 				if (q.size() > 0)
 					q.remove();
@@ -921,6 +946,7 @@ public class Board {
 			//else return;
 		}
 		
+		//Human players are not so well treated
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
 				return;
@@ -940,21 +966,16 @@ public class Board {
 			q.add(objects);
 
 
-		}
+		}// The code to handle a mouse click, will only be usable when a weapon is selected.
 		else if(input.contains("Clicked")){
-			//System.out.println(input);
 			
 			String[] inputArray = new String[3];
 			inputArray = input.split(" ");
-			
-			//System.out.println(inputArray[2]);
+
 			
 			if( !(inputArray[3].equals(players[player]))  ){
 				return;
 			}
-			//if(!(input.substring(36, input.length()).equals(players[player]))){
-				//return;
-			//}
 			if(weaponsopen){
 				
 				for( PhysObject obj : objects){
@@ -965,19 +986,19 @@ public class Board {
 					}
 				}
 				
-				int xs = input.indexOf('x');
-				int xe = input.indexOf(',');
+				//int xs = input.indexOf('x');
+				//int xe = input.indexOf(',');
 				//String xc = input.substring(xs+2, xe);
 				String xc = input.split(" ")[1];
-				int ye = input.indexOf(']');
+				//int ye = input.indexOf(']');
 				//String yc = input.substring(xe+3, ye);
 				String yc = input.split(" ")[2];
 				System.out.println("xc = " + xc + "and yc = " + yc);
 				
 				Double x = Double.parseDouble(xc);
 				Double y = Double.parseDouble(yc);
-				Double x2 = active.getPos().getX();
-				Double y2 = active.getPos().getY();
+				Double x2 = active.getPos().getX()+(active.getWidth()/2);
+				Double y2 = active.getPos().getY()+(active.getHeight()/2);
 				
 				System.out.println("ActivePlayer is at: " + active.getPos());
 				System.out.println("Mouse press is at: " + x + ", " + y);
@@ -1105,11 +1126,19 @@ public class Board {
 		this.objects = obj;
 	}
 	
+	/**
+	 * Check if a weapon is selected.
+	 * @return true if a weapon has been selected by the *current* player, false otherwise.
+	 */
 	public boolean getWeaponsOpen(){
 		
 		return weaponsopen;
 	}
 	
+	/**
+	 * Set the weapons in use or not
+	 * @param open true if the weapon has been selected, false otherwise.
+	 */
 	public void setWeaponsOpen(boolean open){
 		
 		weaponsopen = open;
@@ -1154,6 +1183,10 @@ public class Board {
 		turn.resetTimer();
 	}
 	
+	/**
+	 * Adds the name of a new client connected to the game
+	 * @param name The name of the new client
+	 */
 	public void addName(String name){
 		players[numberOfPlayers] = name;
 		numberOfPlayers++;
@@ -1190,6 +1223,10 @@ public class Board {
 		
 	}
 	
+	/**
+	 * Code to select a specific player 
+	 * @return the ID of the player.
+	 */
 	private int findPlayer()
 	{
 		ArrayList<PhysObject> chickenDinner = getSquares();
@@ -1236,7 +1273,20 @@ public class Board {
 	public String[] getPlayers() {
 		return players;
 	}
-	
+	/**
+	 * Converts the array of player names into an arrayList, as it's the prefered format for the network code
+	 * @return An arraylist version of the players array
+	 */
+	public ArrayList<String> getPlayerArray(){
+		ArrayList<String> ret = new ArrayList<String>();
+		for (int i = 0; i < players.length; i++){
+			ret.add(players[i]);
+		}
+		return ret;
+	}
+	/**
+	 * Used in the local game board to allow a local timer to shown to players to give them an idea of their remaining time.
+	 */
 	public void startLocalTimer(){
 		servant.interrupt();
 		//System.out.println("Restarted the timer");
@@ -1245,15 +1295,31 @@ public class Board {
 		
 	}
 
+	/**
+	 * Used by the turn keeping classes to set the time on the board
+	 * @param time the current amount of time left for the turn.
+	 */
 	public void setTime(int time){
 		this.time = time;
 	}
+	/**
+	 * Get the remaining time in the turn
+	 * @return the remaining turn
+	 */
 	public int getTime(){
 		return time;
 	}
+	/**
+	 * Let the local players know the current turn has been ended early and to advance their timers.
+	 * @param set
+	 */
 	public void setTurnFlag(boolean set){
 		this.turnChangedFlag = set;
 	}
+	/**
+	 * Check the board to see if turns need to be incremented
+	 * @return True if the turn has ended, false otherwise.
+	 */
 	public boolean getTurnFlag(){
 		return turnChangedFlag;
 	}

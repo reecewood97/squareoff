@@ -85,9 +85,14 @@ public class ClientReceiver extends Thread {
 						int winner = 3;
 						board.setWinner(winner);
 					}
-					//Not sure...
+					//If Clients need to update their timer
 					else if ((int)ob == 34){
 						board.startLocalTimer();
+					}
+					//Make sure the clients have the most updated arrayList of players
+					else if ((int)ob == 35){
+						ob = server.readObject();
+						players = (ArrayList<String>) ob;
 					}
 				}
 				//Whilst not in-game.

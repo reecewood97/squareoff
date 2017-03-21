@@ -16,6 +16,7 @@ public class ServerSender extends Thread {
 	private Board board;
 	private boolean inGame;
 	private Server server;
+	private boolean sentPlayers = false;
 	
 	/**
 	 * Creates a new Server Sender.
@@ -38,6 +39,12 @@ public class ServerSender extends Thread {
 			while(true) {
 				sleep(35);
 				if(inGame) {
+					if (!sentPlayers){
+						send(35);
+						send(board.getPlayerArray());
+						sentPlayers = true;
+					}
+					
 					//Checks if the game is over.
 					if(board.getWinner() > -1){
 
@@ -47,7 +54,7 @@ public class ServerSender extends Thread {
 //						board.setWinner(5);
 						//TODO
 					}
-					//Not sure what this is...
+					//Alerts the board that the turn was ended early.
 					else if(board.getTurnFlag()) {
 						send(34);
 						board.setTurnFlag(false);
