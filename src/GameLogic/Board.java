@@ -112,13 +112,11 @@ public class Board {
 				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 120), true);
 				objects.add(block);
 			}
-
-			// objects.add(new TerrainBlock(1,1,new Point2D.Double(100,150),
-			// true));
-
-			for (int i = 100; i < 700; i += 120) {
-
-				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 195), true);
+	
+			
+			for(int i = 100; i < 700; i+=120){
+				
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 
 			}
@@ -183,16 +181,19 @@ public class Board {
 		explosions.add(explosion);
 
 		PhysObject targetline = new TargetLine();
-		targetline.setInUse(false);
 		objects.add(targetline);
 	}
 
 	public void setFreeState(boolean free) {
 		freeState = free;
 	}
-
-	public void setWinner(int player) {
-
+	
+	public boolean getFreeState(){
+		return freeState;
+	}
+	
+	public void setWinner(int player){
+		
 		this.winner = player;
 
 	}
@@ -613,14 +614,14 @@ public class Board {
 			}
 		}
 		i = size;
-		circle = new Ellipse2D.Double(x - (i / 2), y + (i / 2), 2 * i, 2 * i);
-		for (PhysObject thing : things) {
-			if (thing.getName().equals("Square")) {
-				if (circle.intersects(thing.getPos().getX(), thing.getPos().getY() + thing.getHeight(),
-						thing.getWidth(), thing.getHeight())) {
-					Square square = ((Square) thing);
-					square.setXvel(square.getXvel() + (power / (thing.getPos().getX() - x)));
-					square.setYvel(square.getYvel() + (power / (thing.getPos().getY() - y)));
+		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
+		for(PhysObject thing : things){
+			if(thing.getName().equals("Square")){
+				if(circle.intersects(thing.getPos().getX(),
+				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
+					Square square = ((Square)thing);
+					square.setXvel(square.getXvel()+(power/((thing.getPos().getX()+thing.getWidth()/2)-x)));
+					square.setYvel(square.getYvel()+(power/((thing.getPos().getY()+thing.getHeight()/2)-y)));
 				}
 			}
 		}
@@ -964,10 +965,10 @@ public class Board {
 			PhysObject floor = onFloor(activePlayer);
 			if (floor != null) { // if the player is standing on a block
 				activePlayer.setYvel(0);
-				activePlayer.setPos(
-						new Point2D.Double(activePlayer.getPos().getX(), floor.getPos().getY() + floor.getHeight()));
-				if (move.getJump()) {
-					activePlayer.setYvel(20);
+				activePlayer.setPos(new Point2D.Double
+				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
+				if(move.getJump()) {
+					activePlayer.setYvel(10);
 				}
 				if (move.getDirection().equals("Left")) {
 					if (wallDistL(activePlayer) < XtravelDist) {
@@ -988,12 +989,14 @@ public class Board {
 				} else if (move.getDirection().equals("None")) {
 					// Don't move the square
 				}
-			} else { // Player not standing on a block
-				if (move.getDirection().equals("Left")) {
-					activePlayer.setXvel((-1) * XtravelDist);
-					if (wallDistL(activePlayer) < XtravelDist) {
-						activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX() - wallDistL(activePlayer),
-								activePlayer.getPos().getY()));
+			} else { //Player not standing on a block
+				
+				if(move.getDirection().equals("Left")){
+					activePlayer.setXvel((-1)*XtravelDist);
+					if (wallDistL(activePlayer)<XtravelDist){
+						activePlayer.setPos
+						(new Point2D.Double(activePlayer.getPos().getX()-wallDistL(activePlayer),
+						activePlayer.getPos().getY()));
 					} else {
 						activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX() - XtravelDist,
 								activePlayer.getPos().getY()));
@@ -1011,6 +1014,7 @@ public class Board {
 					activePlayer.setXvel(0);
 					// Don't move the square
 				}
+				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 
 			PhysObject ceiling = onCeiling(activePlayer);
@@ -1022,11 +1026,11 @@ public class Board {
 				activePlayer.setPos(new Point2D.Double(activePlayer.getPos().getX(),
 						activePlayer.getPos().getY() + activePlayer.getYvel()));
 			}
-
-			activePlayer.setYvel(activePlayer.getYvel() - activePlayer.getGrav());
-
-			if ((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()) {
-
+			
+			//activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+			
+			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
+				
 				activePlayer.setDead();
 				audio.splash();
 				if (winner != 5) {
@@ -1086,11 +1090,11 @@ public class Board {
 			// }
 			// else return;
 		}
-
-		// Human players are not so well treated
-		if (input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
-			if (!(input.substring(11, input.length()).equals(players[player]))) {
-				System.out.println("oops");
+		
+		//Human players are not so well treated
+		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
+			if(!(input.substring(11, input.length()).equals(players[player]))){
+				//System.out.println("oops");
 				return;
 			}
 			String input1 = input.substring(8, 9);
@@ -1236,7 +1240,6 @@ public class Board {
 			updateFrame(mv);
 			q.offer(objects);
 		}
-		;
 
 	}
 
