@@ -114,6 +114,16 @@ public class ClientReceiver extends Thread {
 	}
 	
 	/**
+	 * gets the players array list
+	 * @return list of players
+	 */
+	public ArrayList<String> getPlayers2(){
+		
+		return players;
+		
+	}
+	
+	/**
 	 * Waits for the current list of players from the server. Will cause dead-lock if server doesn't send the list.
 	 * @return The list of players from the server.
 	 */
