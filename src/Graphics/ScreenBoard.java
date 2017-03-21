@@ -34,7 +34,6 @@ public class ScreenBoard extends JPanel{
 	private double heightratio;
 	private double widthratio;
 	private HangerOn hangeron;
-	private boolean drawexplosions;
 	
 	/**
 	 * 
@@ -50,9 +49,6 @@ public class ScreenBoard extends JPanel{
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
 		this.hangeron = h;
-		this.drawexplosions = false;
-		
-		System.out.println("height ratio is " + heightratio);
 		
 	}
 	
@@ -255,38 +251,17 @@ public class ScreenBoard extends JPanel{
 	/**
 	 * 
 	 * @param weapons The ArrayList of weapons (1)
-	 * @param b Whether line is shown or not  - true or false
+	 * @param targetLine The arraylist of targetline (1)
 	 * @param g2d Graphics
 	 */
 	public void paintTargetLine(ArrayList<PhysObject> weapons,
 			ArrayList<PhysObject> targetline, Graphics2D g2d){
 	
-		//TO DO
-		
-		//System.out.println("PAINTING");
-		//System.out.println("in use??:" + targetline.get(0).getInUse());
 		
 		if(targetline.get(0).getInUse()){
 			
-			//System.out.println("WEAPONS AND TARGET IN USE");
-			
-	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
-			
-			/*
-			for(PhysObject square : board.getSquares()){
-				
-				if(((Square)square).getActivePlayer()){
-					
-					
-					playerpos = square.getPos();
-					
-				}
-				
-				
-			}
-			*/
 			
 			Square square = (Square) board.getActivePlayer();
 			
@@ -312,36 +287,39 @@ public class ScreenBoard extends JPanel{
 	 * @param g2d Graphics
 	 */
 	public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
-		
-			//currently paints on top left of square
 			
 			for(PhysObject weapon : weapons){
 				
 				if (weapon.getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
-					int y = (int) weapon.getPos().getY()+weapon.getHeight();//TODO
-					//y += weapon.getHeight();
-					//System.out.println(x + " " + y + "helllllooooooooo");
+
+
+					int y = (int) weapon.getPos().getY()+weapon.getHeight();
+
 					
 					x = (int) (x*widthratio);
 					
 					y = 450 - y;
 					y = (int) (y*heightratio);
-					//System.out.println(x + " " + y);
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
-					
+				
 					if(weapon.getName().contains("ExplodeOnImpact")){
-						//System.out.println(x + " " + y + "Where the wep is being doodled");
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}
 					else if(weapon.getName().contains("TimedGrenade")){
 					
+						g2d.setColor(Color.DARK_GRAY);
+						g2d.fillRect(x, y, weaponwidth, weaponheight);
+					}
+					else{
+						
 						g2d.setColor(Color.GRAY);
 						g2d.fillRect(x, y, weaponwidth, weaponheight);
+						
 					}
 					
 				}
@@ -357,24 +335,15 @@ public class ScreenBoard extends JPanel{
 	 */
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
-		//System.out.println("size of explosions:  " + explosion.size());
 		
 		for(PhysObject exp : explosion){
 		
-			//System.out.println("in use? " + ((Explosion) exp).getInUse());
-			
-			
 			if (((Explosion) exp).getInUse()){
-				
-				//drawexplosions = true;
-				
+			
 				int x = (int) (exp.getPos().getX());
-				int y = (int) (exp.getPos().getY());//TODO I haven't changed this... should I?
-				
+				int y = (int) (exp.getPos().getY());
 
 				double size = ((Explosion) exp).getSize();
-				System.out.println("size of exp: " + size);
-				
 				
 				x = (int) (x*widthratio);
 				y = 450 - y;

@@ -109,16 +109,18 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void showWeaponsMenu(){
 		
+		
 		//click sound
 		Audio audioforclick = new Audio();
 		audioforclick.click();
+		
 		
 		//open menu
 		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 		menu.open();
 		
-		/*
 		
+		/*
 		Square square = (Square) board.getActivePlayer();
 		int id = square.getPlayerID();
 		
@@ -144,10 +146,6 @@ public class ButtonPanel extends JPanel{
 
 					System.out.println("hello");
 					
-					//click sound
-					Audio audioforclick = new Audio();
-					audioforclick.click();
-					
 					//open menu
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 					menu.open();
@@ -161,8 +159,8 @@ public class ButtonPanel extends JPanel{
 			
 			
 		}
-		*/
 		
+		*/
 	}
 	
 	public void startMusic(){
