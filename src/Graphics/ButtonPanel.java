@@ -62,9 +62,6 @@ public class ButtonPanel extends JPanel{
         exit.setFocusPainted(false); 
         exit.setOpaque(false);
 		
-        
-        //start audio
-		//audio.startBackgroundMusic();
 		
 		//toggle sound button
         ImageIcon image3 = new ImageIcon("Files/Images/speaker1.png");
@@ -147,17 +144,6 @@ public class ButtonPanel extends JPanel{
 		
 	}
 	
-	public void startMusic(){
-		
-		audio.startBackgroundMusic();
-	}
-	
-	/**
-	 * Stops the music.
-	 */
-	public void stopMusic() {
-		audio.endBackgroundMusic();
-	}
 	
 	/**
 	 * turn background music on and off
@@ -166,27 +152,46 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void ToggleBackgroundMusic(JButton button){
 		
+		System.out.println("toggling");
+		
 		if(first){
+			System.out.println("first is true");
 			firstOff(button);
 		}
 		else{
 		
+			System.out.println("in else");
 			if(music_on){
 				
+				System.out.println("music on - turn off");
 				button.setOpaque(true);
-				audio.endBackgroundMusic();
+				audio.sam();
 			}
 			else{
 				
+				System.out.println("music off - turn on");
 				button.setOpaque(false);
-				audio.endBackgroundMusic();
-				//audio = new Audio();
-				audio.startBackgroundMusic();
+				//audio.endBackgroundMusic();
+				audio.newMusic();
+				audio.getBackgroundMusic().start();
 			}
 		}
 		
+		System.out.println("change bool");
 		music_on = !music_on;
+		System.out.println( "music_on is " + music_on );
 		
+	}
+	
+	public void startMusic(){
+		
+		audio.newMusic();
+		audio.getBackgroundMusic().start();
+	}
+	
+	public void stopMusic(){
+		
+		audio.sam();
 	}
 	
 	/**
@@ -194,9 +199,9 @@ public class ButtonPanel extends JPanel{
 	 * @param button
 	 */
 	public void firstOff(JButton button){
-		
+		System.out.println("in first off");
 		button.setOpaque(true);
-		audio.endBackgroundMusic();
+		audio.sam();
 		first = false;
 	}	
 }
