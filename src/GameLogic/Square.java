@@ -15,7 +15,14 @@ public class Square extends PhysObject {
 	private boolean activePlayer;
 	private String playerName;
 	
-	//What is the point of colour? I thought that was the same as the player that owned it
+	/**
+	 * Creates a new square with the specified attributes
+	 * @param name The name of the owner
+	 * @param playerID The ID of the owner
+	 * @param squareID The ID of the square in the owner's team
+	 * @param colour The colour of the square
+	 * @param pos The position of the square
+	 */
 	public Square(String name, int playerID,int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
 		this.playerName = name;
@@ -29,7 +36,14 @@ public class Square extends PhysObject {
 		this.activePlayer = false;
 	}
 	
-	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
+	/**
+	 * Creates a new square with the specified attributes an name "noName"
+	 * @param playerID The ID of the owner
+	 * @param squareID The ID of the square in the owner's team
+	 * @param colour The colour of the square
+	 * @param pos The position of the square
+	 */
+	public Square(int playerID, int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
 		this.playerName = "noName";
 		this.playerID = playerID;
@@ -42,8 +56,11 @@ public class Square extends PhysObject {
 		this.activePlayer = false;
 	}
 	
+	/**
+	 * Creates a shallow copy of a square
+	 * @param other The square to be copied
+	 */
 	public Square(Square other) {
-		//Creates a shallow copy of a square
 		super(other);
 		this.playerName = other.getPlayerName();
 		this.playerID = other.getPlayerID();

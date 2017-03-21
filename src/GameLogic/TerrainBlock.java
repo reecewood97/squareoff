@@ -10,6 +10,13 @@ public class TerrainBlock extends PhysObject {
 	private boolean visible;
 	private Point2D.Double pos;
 	
+	/**
+	 * Creates a new TerrainBlock with the specified attributes
+	 * @param health The health of the block
+	 * @param type The type of the block
+	 * @param pos The position of the bottom left corner of the block
+	 * @param visible True if the block is in use
+	 */
 	public TerrainBlock(int health, int type, Point2D.Double pos, boolean visible){
 		super(false, pos, 30, 40, true);
 		this.health = health;
@@ -19,8 +26,11 @@ public class TerrainBlock extends PhysObject {
 		this.setName("TerrainBlock");
 	}
 	
+	/**
+	 * Creates a shallow copy of a TerrainBlock
+	 * @param other The block to be copied
+	 */
 	public TerrainBlock(TerrainBlock other){
-		//Creates a shallow copy of a TerrainBlock
 		super(other);
 		this.health = other.getHealth();
 		this.type = other.getType();
@@ -34,7 +44,10 @@ public class TerrainBlock extends PhysObject {
 		return health;
 	}
 
-	
+	/**
+	 * Does damage to a block
+	 * @param damage The amount of damage dealt
+	 */
 	public void damage(int damage) {
 		this.health = this.health-damage;
 		if(health<1) {

@@ -1,3 +1,8 @@
+/**
+ * The Board class represents the state of the game and
+ * contains methods for entering moves via an input string.
+ */
+
 package GameLogic;
 
 import java.util.ArrayList;
@@ -69,6 +74,10 @@ public class Board {
 		}
 	}*/
 	
+	/**
+	 * Constructor makes a default board with four players
+	 * @param map Which map is being used
+	 */
 	public Board(String map){
 		this.objects = new ArrayList<PhysObject>();
 		this.explosions = new ArrayList<PhysObject>();
@@ -200,7 +209,7 @@ public class Board {
 		
 	}
 	
-	public void setActivePlayer(int newPlayer, int newID) {
+	private void setActivePlayer(int newPlayer, int newID) {
 		this.player = newPlayer;
 		this.squareID = newID;
 		int x = player + squareID;
@@ -222,6 +231,9 @@ public class Board {
 		return this.playing;
 	}
 	
+	/**
+	 * @return All weapons in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getWeapons(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -232,6 +244,9 @@ public class Board {
 		return weapons;
 	}
 	
+	/**
+	 * @return The target line from the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getTargetLine(){
 		ArrayList<PhysObject> target = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -242,6 +257,9 @@ public class Board {
 		return target;
 	}
 	
+	/**
+	 * @return All impact grenades in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getExplodeOnImpact(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -252,6 +270,9 @@ public class Board {
 		return weapons;
 	}
 	
+	/**
+	 * @return All timed grenades in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getTimedGrenade(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -262,7 +283,9 @@ public class Board {
 		return weapons;
 	}
 		
-	
+	/**
+	 * @return All missiles in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getMissile(){
 		ArrayList<PhysObject> weapons = new ArrayList<PhysObject>();
 		for(PhysObject obj : objects){
@@ -273,6 +296,9 @@ public class Board {
 		return weapons;
 	}
 	
+	/**
+	 * @return All blocks in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getBlocks(){
 		
 		ArrayList<PhysObject> blocks = new ArrayList<PhysObject>();
@@ -286,6 +312,9 @@ public class Board {
 		return blocks;
 	}
 	
+	/**
+	 * @return All squares in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getSquares(){
 		
 		ArrayList<PhysObject> squares = new ArrayList<PhysObject>();
@@ -300,6 +329,9 @@ public class Board {
 		return squares;
 	}
 	
+	/**
+	 * @return All explosions in the objects list
+	 */
 	public synchronized ArrayList<PhysObject> getExplosion(){
 		
 		ArrayList<PhysObject> exp = new ArrayList<PhysObject>();
@@ -314,7 +346,9 @@ public class Board {
 		return exp;
 	}
 	
-	//All these big chunk of functions are for figuring out how far a square is from a block
+	/**
+	 * @return Distance to the closest block to the left of the square
+	 */
 	private double wallDistL(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -350,6 +384,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * @return Distance to the closest block to the right of the square
+	 */
 	private double wallDistR(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -385,6 +422,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * @return The closest block to the bottom of the square
+	 */
 	private PhysObject onFloor(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -419,6 +459,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * @return The closest block to the top of the square
+	 */
 	private PhysObject onCeiling(Square guy) {
 		Iterator<PhysObject> it = getBlocks().iterator();
 		while(it.hasNext()) {
@@ -453,7 +496,12 @@ public class Board {
 		}
 	}
 	
-	//Are two PhysObjects currently colliding?
+	/**
+	 * Method for checking if two objects are colliding
+	 * @param obj1 The first physObject
+	 * @param obj2 The second physObject
+	 * @return True if the two objects are currently colliding
+	 */
 	private boolean collides(PhysObject obj1, PhysObject obj2) {
 		if((obj1.getSolid()==obj2.getSolid()) || (!obj1.getInUse()) || (!obj2.getInUse())){
 			return false;
@@ -497,6 +545,15 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Creates an explosion at a given point
+	 * @param things The list of physObjects being operated on
+	 * @param x The X co-ordinate of the middle of the explosion
+	 * @param y The Y co-ordinate of the middle of the explosion
+	 * @param power The relative force with which squares will be pushed away
+	 * @param size The area of effect of the explosion
+	 * @param damage The damage done to any blocks in range
+	 */
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size, int damage){
 		
 		
@@ -540,7 +597,12 @@ public class Board {
 		System.out.println("GETTING FROM ARRAYLIST" + explosions.get(0).getInUse());*/
 	}
 	
-	//If two objects are colliding, this method will be called to resolve the collision
+	/**
+	 * Resolves a collision between two objects; will always be a free moving object and a block
+	 * @param things The list of physObjects being operated on
+	 * @param thing The object that hit the block
+	 * @param block The block that was collided with
+	 */
 	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if(thing.getName().endsWith("ExplodeOnImpact") || thing.getName().endsWith("Missile")) {
 			if(debug) System.out.println("Resolving " + thing.getName() + "collision between thing at: " + thing.getPos()
@@ -636,9 +698,11 @@ public class Board {
 		}
 	}
 	
-	//For when no player is in control and things are bouncing about
-	//This method simulates a frame, detects collisions and resolves them.
-	//If nothing has changed since the last frame, move on.
+	/**
+	 * For when no player is in control and things are bouncing about.
+	 * This method simulates a frame, detects collisions and resolves them.
+	 * If nothing has changed since the last frame, stop free state and increment the turn.
+	 */
 	private void freeSim() {
 		//This is going to be relatively quite slow. Perhaps it can be improved later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
@@ -777,8 +841,11 @@ public class Board {
 	}
 	
 	
-	//Takes a move and updates one frame.
-	public synchronized void updateFrame(Move move) {
+	/**
+	 * Takes a move and updates one frame
+	 * @param move The move to be executed, does not matter if in free state.
+	 */
+	private synchronized void updateFrame(Move move) {
 		if(freeState) { // If the engine is in free-physics mode then the move is irrelevant,
 			freeSim();  // just simulate another frame.
 		}
@@ -947,6 +1014,7 @@ public class Board {
 		
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
+				System.out.println("oops");
 				return;
 			}
 			String input1 = input.substring(8, 9);
@@ -1158,7 +1226,7 @@ public class Board {
 	/**
 	 * Increments the active player
 	 */
-	public void incrementTurn(){
+	private void incrementTurn(){
 		weaponsopen = false;
 		if (player != 3){
 			player = player+1;
