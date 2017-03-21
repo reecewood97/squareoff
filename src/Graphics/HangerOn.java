@@ -197,9 +197,7 @@ public class HangerOn extends Thread implements KeyListener,MouseListener {
 	  * @param type The type of weapon that was selected.
 	  */
 	 public void setWep(String type){
-		 System.out.println("SET WEPPPPPP");
 		 String setWep = "setWep,"+type+","+name;
-		 System.out.println(type);
 		 q.offer(setWep);
 	 }
 	 

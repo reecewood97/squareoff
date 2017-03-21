@@ -1006,7 +1006,7 @@ public class Board {
 				//wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+25),5,10);
 				System.out.println("wep xvel is: " + xVel);
 				System.out.println("wep yvel is: " + yVel);
-				
+				System.err.println("weapontype is: " + weaponType);
 				getTargetLine().get(0).setInUse(false);
 				updateFrame(wmv);
 				if (q.size() > 0)
