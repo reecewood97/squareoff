@@ -210,9 +210,16 @@ public class Board {
 		
 	}
 	
-	private void setActivePlayer(int newPlayer, int newID) {
+
+	public void setActivePlayer(int newPlayer, int newID) {
+		
+		
+		//System.out.println("NEW PLAYER" + newPlayer + "************************");
+
 		this.player = newPlayer;
 		this.squareID = newID;
+		
+		
 		int x = player + squareID;
 		activePlayer = (Square)getSquares().get(x);
 		for(PhysObject phys : getSquares()) {
@@ -222,10 +229,33 @@ public class Board {
 		activePlayer.setActivePlayer(true);
 		objects.remove(x);
 		objects.add(x, activePlayer);
+		
+	
+		
+		
+		
+		
+		
 	}
 	
 	public PhysObject getActivePlayer() {
+		
+		//System.out.println("in getactive player");
 		return activePlayer;
+		
+//		for(PhysObject square : this.getSquares()){
+//			
+//			if( ((Square) square).getActivePlayer()){
+//				
+//				System.out.println("player id " +((Square)square).getPlayerID());
+//				
+//				return square;
+//				
+//			}
+//		}
+//		
+//		return null;
+		
 	}
 	
 	public boolean getPlaying() {
@@ -1322,6 +1352,28 @@ public class Board {
 	}
 	
 	/**
+	 * Removes a name without swapping to conform to player order.
+	 * @param name The name to be removed.
+	 */
+	public void removeNameSimple(String name) {
+		for(int i = 0; i < numberOfPlayers; i++) {
+			if(players[i].equals(name)) {
+				players[i] = "";
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Sets the name at a specific index of the player list.
+	 * @param index The index.
+	 * @param name The new name.
+	 */
+	public void addName(int index, String name) {
+		players[index] = name;
+	}
+	
+	/**
 	 * Sets the array of players.
 	 * @param players The new array.
 	 */
@@ -1352,7 +1404,6 @@ public class Board {
 	 */
 	public void startLocalTimer(){
 		servant.interrupt();
-		//System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 		

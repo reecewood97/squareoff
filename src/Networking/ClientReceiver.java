@@ -164,16 +164,18 @@ public class ClientReceiver extends Thread {
 	 * @return If the client has been accepted by the server.
 	 */
 	public boolean waitForAccept() {
-		while(state == Server.BASE) {
+		int i = 0;
+		while(state == Server.BASE && i < 200) {
 			try {
 				sleep(50);
+				i++;
 			}
 			catch(InterruptedException e) {							
 				e.printStackTrace();
 				System.exit(1);
 			}
 		}
-		return state == Server.ACCEPTED;
+			return state == Server.ACCEPTED;
 	}
 }
 

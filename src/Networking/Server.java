@@ -140,10 +140,8 @@ public class Server extends Thread {
 			s.getPlayerName();
 		}
 
-		int maxNumberOfPlayers = 4;
-
 		// Adds AIs.
-		ais.addAIs(maxNumberOfPlayers - players.size());
+		ais.addAIs();
 
 		// Tells everyone that the game is starting.
 		for (ServerReceiver r : table.getReceivers()) {
@@ -210,7 +208,7 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Disconnects all clients from the server and then reconnects them.
+	 * Disconnects all clients from the server and then reconnects them, resetting everything to as it should be before the game..
 	 */
 	public void reset() {
 		// Reset and close everything.
@@ -226,8 +224,7 @@ public class Server extends Thread {
 		gl.interrupt();
 		gl = new GameLoop(board);
 		
+		//Tell all clients to reconnect.
 		table.sendAll(Server.RESET_CONNECTION);
-
-
 	}
 }

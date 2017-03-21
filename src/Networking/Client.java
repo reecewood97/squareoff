@@ -137,7 +137,6 @@ public class Client {
 	 * 
 	 */
 	public ArrayList<String> getClientList(){
-		
 		return receiver.getPlayers2();
 	}
 	

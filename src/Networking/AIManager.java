@@ -36,11 +36,20 @@ public class AIManager extends Thread {
 	 * Adds AIs to the AIManager.
 	 * @param n The number of AIs to be added.
 	 */
-	public void addAIs(int n) {
-		int playerNumber;
-		for(int i = 0; i < n && (playerNumber = players.size()) < maxNumberOfPlayers; i++) {
-			playerNumber = players.size() + 1;
+	public void addAIs() {
+		
+		while(players.size() < maxNumberOfPlayers) {
+			String[] playerArray = board.getPlayers();
 			AI ai;
+			
+			int playerNumber = 0;
+			
+			for(int j = 0; j < maxNumberOfPlayers; j++) {
+				if(playerArray[j] == null || playerArray[j].equals("")) {
+					playerNumber = j + 1;
+					break;
+				}
+			}
 			String name = "AI " + (ais.size() + 1);
 			switch(difficulty) {
 				case Server.NORMAL_AI: ai = new NormalAI(playerNumber, 0, playerNumber, board, name);
@@ -51,7 +60,7 @@ public class AIManager extends Thread {
 			}
 			ais.add(ai);
 			players.add(name);
-			board.addName(name);
+			board.addName(playerNumber - 1, name);
 		}
 	}
 	
@@ -61,6 +70,7 @@ public class AIManager extends Thread {
 	public void run() {
 		int playerTurn = 5;
 		boolean turnTaken = true;
+
 		try {
 			while(true) {
 				if (playerTurn != ((Square)board.getActivePlayer()).getPlayerID()){
@@ -82,7 +92,6 @@ public class AIManager extends Thread {
 		catch (InterruptedException e) {
 			//Thread killed.
 		}
-	
 	}
 	
 	/**
