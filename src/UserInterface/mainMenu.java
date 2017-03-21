@@ -49,6 +49,7 @@ public class mainMenu extends Application {
 	static Stage temps;
 	static boolean isHidden = false;
 	static boolean inLobby = false;
+	static int aiDifficulty = 1;
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -196,7 +197,7 @@ public class mainMenu extends Application {
         
         RadioButton rb1 = new RadioButton("Easy AI");
         rb1.setToggleGroup(group);
-        rb1.setSelected(true);
+        //rb1.setSelected(true);
         RadioButton rb2 = new RadioButton("Normal AI");
         rb2.setToggleGroup(group);
         RadioButton rb3 = new RadioButton("Hard AI");
@@ -207,6 +208,15 @@ public class mainMenu extends Application {
                 Toggle old_toggle, Toggle new_toggle) {
                     if (group.getSelectedToggle() != null) {
                         System.out.println("something was selected");
+                        if (aiDifficulty == 1) {
+                        	rb1.setSelected(true);
+                        }
+                        else if (aiDifficulty == 2) {
+                        	rb2.setSelected(true);
+                        }
+                        else {
+                        	rb3.setSelected(true);
+                        }
                     }                
                 }
         });
