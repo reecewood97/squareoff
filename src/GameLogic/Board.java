@@ -1281,7 +1281,6 @@ public class Board {
 	 */
 	public void startLocalTimer(){
 		servant.interrupt();
-		//System.out.println("Restarted the timer");
 		this.servant = new TurnServant(this);
 		servant.start();
 		
