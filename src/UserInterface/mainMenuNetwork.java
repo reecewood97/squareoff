@@ -56,6 +56,15 @@ public class mainMenuNetwork {
 		
 	}
 	
+	public void setAIDifficulty(int i) {
+		if (i==1)
+			s.setAIDifficulty(Server.EASY_AI);
+		else if (i==2)
+			s.setAIDifficulty(Server.NORMAL_AI);
+		else
+			s.setAIDifficulty(Server.HARD_AI);
+	}
+	
 	public void resetServer() {
 		s.reset();
 	}

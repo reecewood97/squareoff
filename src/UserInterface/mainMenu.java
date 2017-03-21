@@ -203,19 +203,33 @@ public class mainMenu extends Application {
         RadioButton rb3 = new RadioButton("Hard AI");
         rb3.setToggleGroup(group);
         
+        if (aiDifficulty == 1) {
+        	rb1.setSelected(true);
+        }
+        else if (aiDifficulty == 2) {
+        	rb2.setSelected(true);
+        }
+        else {
+        	rb3.setSelected(true);
+        }
+        net.setAIDifficulty(aiDifficulty);
+        
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             public void changed(ObservableValue<? extends Toggle> ov,
                 Toggle old_toggle, Toggle new_toggle) {
                     if (group.getSelectedToggle() != null) {
                         System.out.println("something was selected");
-                        if (aiDifficulty == 1) {
-                        	rb1.setSelected(true);
+                        if (rb1.isSelected()) {
+                        	//rb1.setSelected(true);
+                        	aiDifficulty = 1;
                         }
-                        else if (aiDifficulty == 2) {
-                        	rb2.setSelected(true);
+                        else if (rb2.isSelected()) {
+                        	//rb2.setSelected(true);
+                        	aiDifficulty = 2;
                         }
                         else {
-                        	rb3.setSelected(true);
+                        	//rb3.setSelected(true);
+                        	aiDifficulty = 3;
                         }
                     }                
                 }
