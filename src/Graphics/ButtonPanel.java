@@ -2,6 +2,8 @@ package Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
+
 import GameLogic.Board;
 import GameLogic.Square;
 import Networking.Client;
@@ -104,7 +106,7 @@ public class ButtonPanel extends JPanel{
 	}
 
 	/**
-	 * open weapons menu
+	 * open weapons menu if they are the active player
 	 * 
 	 */
 	public void showWeaponsMenu(){
@@ -114,37 +116,19 @@ public class ButtonPanel extends JPanel{
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		
-		//open menu
-		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
-		menu.open();
-		
-		
-		/*
 		Square square = (Square) board.getActivePlayer();
 		int id = square.getPlayerID();
 		
-		System.out.println(" active id is: " +id);
-
-		System.out.println("name is: " +name);
-		
-		
-		int sizeofplayers = client.getPlayers().size();
-		
-		
-		for(int i = 0; i < client.getPlayers().size(); i++){
+		ArrayList<String> a = client.getClientList();
+	
+		//checks they are the active player
+		for(int i = 0; i < 4; i++){
 			
-
-			System.out.println(client.getPlayers().get(i));
+			String name2 = a.get(i);
 			
-			if(client.getPlayers().get(i).equals(name)){
-				
-				System.out.println(i);
+			if(name2.equals(name)){
 				
 				if((i+1)==id){
-					
-
-					System.out.println("hello");
 					
 					//open menu
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
@@ -160,7 +144,7 @@ public class ButtonPanel extends JPanel{
 			
 		}
 		
-		*/
+		
 	}
 	
 	public void startMusic(){
