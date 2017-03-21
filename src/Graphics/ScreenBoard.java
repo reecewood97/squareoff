@@ -82,7 +82,7 @@ public class ScreenBoard extends JPanel{
 		
 		g2d.setFont(new Font("Arial", Font.PLAIN, 20)); 
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("Player " + (((Square) (board.getActivePlayer())).getPlayerID()) +
+		g2d.drawString("Player " + (((Square) (board.getActiveBoard())).getPlayerID()) +
 				"'s turn", (int) (80*widthratio), (int) (10*heightratio));
 		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),
 				(int) (10*heightratio));
@@ -263,7 +263,7 @@ public class ScreenBoard extends JPanel{
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
 			
-			Square square = (Square) board.getActivePlayer();
+			Square square = (Square) board.getActiveBoard();
 			
 			int mousepos_x = (int) (this.getMousePosition().getX());
 			int mousepos_y = (int) (this.getMousePosition().getY());
