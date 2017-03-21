@@ -16,7 +16,7 @@ import Networking.Queue;
 public class EasyAI extends AI{
 	
 	private static final double maxVelocity = 100;
-	private static final double gravity = 9.81;
+	private static final double gravity = 0.5;
 	private int mySquareID; // Square ID
 	private int myColour;
 	private Point2D.Double myPos;
@@ -95,7 +95,7 @@ public class EasyAI extends AI{
 				}
 			}
 		}
-		aiMoveCal((targetX + 25), targetY);
+		aiMoveCal((targetX + 18), targetY);
 	}
 	
 	/**
