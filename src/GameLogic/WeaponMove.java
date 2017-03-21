@@ -9,6 +9,13 @@ public class WeaponMove extends Move {
 	private double yvel;
 	private String wepType;
 
+	/**
+	 * A weapon move signifies the player wants to use a weapon
+	 * @param wepType The type of weapon to be fired
+	 * @param pos The position of the weapon
+	 * @param xvel The X velocity of the weapon
+	 * @param yvel The Y velocity of the weapon
+	 */
 	public WeaponMove(String wepType, Point2D.Double pos, double xvel, double yvel) {
 		super(0,0,"",false);
 		this.setWeapon(true);

@@ -303,7 +303,7 @@ public abstract class AI {
 		moveUpLeft();
 		moveUpRight();
 		int i = 0;
-		while ((xPos < targetX - 24.5) || (xPos > targetX + 24.5) || yPos != targetY) {
+		while ((xPos > targetX + 40.0) || (xPos < targetX) || yPos != targetY) {
 			
 			try {
 				Thread.sleep(30);
@@ -352,7 +352,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
+					if (((xPos + 40.1 >= blockX - 20.0) && (xPos + 40.1 <= blockX + 20.0)) && yPos == blockY) {
 						jumpLeft = false;
 						break;
 					}
@@ -364,7 +364,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
+					if (((xPos - 40.1 >= blockX - 20.0) && (xPos - 40.1 <= blockX + 20.0)) && yPos == blockY) {
 						jumpRight = false;
 						break;
 					}
@@ -457,7 +457,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos + 50.1 >= blockX - 25.0) && (xPos + 50.1 <= blockX + 25.0)) && yPos == blockY) {
+					if (((xPos + 40.1 >= blockX - 20.0) && (xPos + 40.1 <= blockX + 20.0)) && yPos == blockY) {
 						jumpLeft = false;
 						break;
 					}
@@ -469,7 +469,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos - 50.1 >= blockX - 25.0) && (xPos - 50.1 <= blockX + 25.0)) && yPos == blockY) {
+					if (((xPos - 40.1 >= blockX - 25.0) && (xPos - 40.1 <= blockX + 20.0)) && yPos == blockY) {
 						jumpRight = false;
 						break;
 					}
@@ -748,7 +748,7 @@ public abstract class AI {
 		double aiY = aiPos.getY() + 30.0;
 		
 		double angle = Math.toRadians(getAngle());
-		double velocity = getVelocity();
+		double velocity = Math.abs(getVelocity());
 		double range = Math.abs(target.getX() - aiPos.getY());
 		
 		//calculate time
@@ -772,7 +772,7 @@ public abstract class AI {
 			for(PhysObject block:blocks) {
 				double blockX = block.getPos().getX();
 				double blockY = block.getPos().getY();
-				if ((aiX < (blockX + 50)) && (aiX > (blockX-50)) && (aiY < (blockY + 50)) && (aiY > (blockY-50))) {
+				if ((aiX < (blockX + 30)) && (aiX > (blockX - 30)) && (aiY < (blockY + 30)) && (aiY > (blockY - 30))) {
 					setObstacles(true);
 					return ;
 				}
