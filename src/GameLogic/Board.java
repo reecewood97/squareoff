@@ -240,19 +240,20 @@ public class Board {
 	public PhysObject getActivePlayer() {
 		
 		//System.out.println("in getactive player");
+		return activePlayer;
 		
-		for(PhysObject square : this.getSquares()){
-			
-			if( ((Square) square).getActivePlayer()){
-				
-				System.out.println("player id " +((Square)square).getPlayerID());
-				
-				return square;
-				
-			}
-		}
-		
-		return null;
+//		for(PhysObject square : this.getSquares()){
+//			
+//			if( ((Square) square).getActivePlayer()){
+//				
+//				System.out.println("player id " +((Square)square).getPlayerID());
+//				
+//				return square;
+//				
+//			}
+//		}
+//		
+//		return null;
 		
 	}
 	
