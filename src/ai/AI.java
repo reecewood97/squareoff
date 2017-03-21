@@ -240,35 +240,41 @@ public abstract class AI {
 	 * Should be called by the server to send movements and attacks
 	 */
 	public void determineState() {
-		ArrayList<PhysObject> squares = board.getSquares();
-		for (PhysObject player:squares) {
-			if (((Square) player).getPlayerID() == myPlayer) {
-				if (player.getInUse()) {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		try {
+			Thread.sleep(30);
+			ArrayList<PhysObject> squares = board.getSquares();
+			for (PhysObject player:squares) {
+				if (((Square) player).getPlayerID() == myPlayer) {
+					if (player.getInUse()) {
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						
+						changeAIPos();
+						
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						
+						aiMove();
+						
+						try {
+							Thread.sleep(150);
+						} catch (InterruptedException e) {
+							//e.printStackTrace();
+						}
+						aiAttack();
 					}
-					
-					changeAIPos();
-					
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-					aiMove();
-					
-					try {
-						Thread.sleep(150);
-					} catch (InterruptedException e) {
-						//e.printStackTrace();
-					}
-					aiAttack();
 				}
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		
 		
 		return;
 	}
@@ -280,7 +286,8 @@ public abstract class AI {
 		if (board.getTime() >= 20 * 1000) {
 			return;
 		}
-		alterResult();
+		determineResult();
+//		alterResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
 		sendAttack(angle_chosen, velocity_chosen);  // by sending power, angle chosen to methods in other class.
@@ -551,6 +558,7 @@ public abstract class AI {
 	 * @param mistakeVelocity 
 	 */
 	public void determineResult(){
+		System.out.println("myself: " + getAIPos());
 		Point2D.Double target = getFinalDestination();
 		double xdis = target.getX() - getAIPos().getX();
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -564,24 +572,29 @@ public abstract class AI {
 				hit = isHit(state);
 				while (!hit) {
 					acc_velocity = maxVelocity/2;
+					if (acc_angle >= 90 || acc_angle <= 0) {
+						acc_angle = 0;
+					}
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
-						acc_angle += 3.0;
+						acc_angle += 2.75;
 						while (acc_velocity <= maxVelocity && !hit) {
 							// increase power
-							acc_velocity += 7.5;
+							acc_velocity += 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
+							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 					else if (state == 2) { // too far
 						// angle increase by 3 degrees (?)
-						acc_angle += 3.0;
+						acc_angle += 2.75;
 						while (acc_velocity > 0 && !hit) {
 							// decrease power
-							acc_velocity -= 7.5;
+							acc_velocity -= 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
+							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 				}
@@ -593,47 +606,53 @@ public abstract class AI {
 				hit = isHit(state);
 				while (!hit) {
 					acc_velocity = maxVelocity/2;
+					if (acc_angle <= 0 || acc_angle >= 90) {
+						acc_angle = 90;
+					}
 					if (state == 1) { // too close
 						// angle increase by 3 degrees (?)
-						acc_angle -= 3.0;
+						acc_angle -= 2.75;
 						while (acc_velocity <= maxVelocity && !hit) {
 							// increase power
-							acc_velocity += 7.5;
+							acc_velocity += 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
+							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 					else if (state == 2) { // too far
 						// angle increase by 3 degrees (?)
-						acc_angle -= 3.0;
+						acc_angle -=2.75;
 						while (acc_velocity > 0 && !hit) {
 							// decrease power
-							acc_velocity -= 7.5;
+							acc_velocity -= 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
+							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 				}
+
+				System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 			}
 			
-			boolean enemyOnRight = false;
-			ArrayList<PhysObject> squares = board.getSquares();
-			for (PhysObject square:squares) {
-				if (getAIPos().getX() > square.getPos().getX()) {
-					enemyOnRight = true;
-					continue;
-				}
-				enemyOnRight = false;
-			}
-			
-			if(xdis < 0 || enemyOnRight) {
-				acc_angle = acc_angle * (-1);
+//			boolean enemyOnRight = false;
+//			ArrayList<PhysObject> squares = board.getSquares();
+//			for (PhysObject square:squares) {
+//				if (getAIPos().getX() > square.getPos().getX()) {
+//					enemyOnRight = true;
+//					continue;
+//				}
+//				enemyOnRight = false;
+//			}
+//			
+			if(xdis < 0) {
 				acc_velocity *= -1;
 			}
 
 			setAngle(acc_angle);
 			setVelocity(acc_velocity);
-			
+			System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 			determineObstacle(target, getAIPos());
 		}
 		
@@ -681,7 +700,7 @@ public abstract class AI {
 //		Point2D.Double target = getFinalDestination();
 		double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
-		double angle = a;
+		double angle = Math.toRadians(a);
 		double velocity = v;
 		double r = 0;
 		// R = v * cos(angle) * ((v * sin(angle)) + sqrt((v * v * sin(angle) * sin(angle)) + 2 * g * ydis))
@@ -720,7 +739,7 @@ public abstract class AI {
 		double aiX = aiPos.getX();
 		double aiY = aiPos.getY() + 30.0;
 		
-		double angle = getAngle();
+		double angle = Math.toRadians(getAngle());
 		double velocity = getVelocity();
 		double range = Math.abs(target.getX() - aiPos.getY());
 		
@@ -763,7 +782,7 @@ public abstract class AI {
 	private void moveLeft() {
 		board.input("Pressed A  " + myName);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(70);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -775,7 +794,7 @@ public abstract class AI {
 	private void moveRight() {
 		board.input("Pressed D  " + myName);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(70);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -787,7 +806,7 @@ public abstract class AI {
 	private void moveUp() {
 		board.input("Pressed  W " + myName);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(70);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -800,7 +819,7 @@ public abstract class AI {
 	private void moveUpRight() {
 		board.input("Pressed DW " + myName);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(70);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -813,7 +832,7 @@ public abstract class AI {
 	private void moveUpLeft() {
 		board.input("Pressed AW " + myName);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(70);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -825,9 +844,9 @@ public abstract class AI {
 	 * @param velocity velocity to attack
 	 */
 	private void sendAttack(double angle, double velocity){
-		double xVel = velocity * Math.cos(angle);
-		double yVel = velocity * Math.cos(angle);
-		
+		double xVel = velocity * Math.cos(Math.toRadians(angle));
+		double yVel = Math.abs(velocity * Math.sin(Math.toRadians(angle)));
+		System.out.println("xV: " + xVel + ", yV: " + yVel);
 		String command = xVel  + ", " + yVel + ", " + myName + ", AItakesashotx86";
 
 		board.input(command);
