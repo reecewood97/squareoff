@@ -929,7 +929,7 @@ public class Board {
 			//if (AIatk[2].equals(players[player])) {
 				WeaponMove wmv = new WeaponMove(weaponType,new Point2D.Double(active.getPos().getX(), active.getPos().getY()+10),xVel,yVel);
 				updateFrame(wmv);
-				if (q.size() > 0)
+				if (q.size() > 1)
 					q.remove();
 				q.add(objects);
 			//}
@@ -951,7 +951,7 @@ public class Board {
 			active.setFacing(input1);
 			Move mv = new Move(active.getColour(),active.getSquareID(), input1, input2.equals("W"));
 			updateFrame(mv);
-			if (q.size() > 0)
+			if (q.size() > 1)
 				q.remove();
 			q.add(objects);
 
@@ -1200,10 +1200,7 @@ public class Board {
 					winner = first.getPlayerID();
 				}
 				else{
-					if (winner != -1)
-						return -1;
-					else
-						return 5;
+					return -1;
 				}
 			}
 		}
@@ -1211,7 +1208,10 @@ public class Board {
 		
 		System.out.println("winner is " + winner);
 
-		return winner;
+		if (winner == -1)
+			return 5;
+		else
+			return winner;
 		
 	}
 	
