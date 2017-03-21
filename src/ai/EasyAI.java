@@ -25,7 +25,6 @@ public class EasyAI extends AI{
 	private String myName;
 	private double outAngle;
 	private double outVelocity;
-	private Queue q;
 	private final double mistakeAngle = 7;
 	private final double mistakeVelocity = 10;
 
@@ -80,7 +79,7 @@ public class EasyAI extends AI{
 			double yPos = currentBlock.getPos().getY();
 			for (PhysObject block:blocks) {
 				TerrainBlock searchBlock = (TerrainBlock) block;
-				if (searchBlock.getHealth() >= largerHealth) {
+				if (searchBlock.getHealth() >= largerHealth && searchBlock.getInUse()) {
 					double sBlockX = searchBlock.getPos().getX();
 					double sBlockY = searchBlock.getPos().getY();
 					double xDis = xPos - sBlockX;
