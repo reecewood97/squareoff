@@ -123,6 +123,7 @@ public class ButtonPanel extends JPanel{
 	
 		//checks they are the active player
 		//for(int i = 0; i < 4; i++){
+
 			
 			//String name2 = a.get(i);
 			
@@ -130,7 +131,7 @@ public class ButtonPanel extends JPanel{
 				
 				//if((i+1)==id){
 					
-					//open menu
+					//open menu*/
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 					menu.open();
 					
