@@ -930,6 +930,7 @@ public class Board {
 		
 		Square active = (Square)getActivePlayer();
 		
+		//Handles the AI taking shots, they are generally assumed to have better behaviour than players so there aren't checks to make sure it's their turn.
 		if (input.contains("AItakesashotx86")){
 			weaponsopen = true;
 			String[] AIatk = input.split(",");
@@ -945,6 +946,7 @@ public class Board {
 			//else return;
 		}
 		
+		//Human players are not so well treated
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
 				return;
@@ -964,21 +966,16 @@ public class Board {
 			q.add(objects);
 
 
-		}
+		}// The code to handle a mouse click, will only be usable when a weapon is selected.
 		else if(input.contains("Clicked")){
-			//System.out.println(input);
 			
 			String[] inputArray = new String[3];
 			inputArray = input.split(" ");
-			
-			//System.out.println(inputArray[2]);
+
 			
 			if( !(inputArray[3].equals(players[player]))  ){
 				return;
 			}
-			//if(!(input.substring(36, input.length()).equals(players[player]))){
-				//return;
-			//}
 			if(weaponsopen){
 				
 				for( PhysObject obj : objects){
@@ -1129,11 +1126,19 @@ public class Board {
 		this.objects = obj;
 	}
 	
+	/**
+	 * Check if a weapon is selected.
+	 * @return true if a weapon has been selected by the *current* player, false otherwise.
+	 */
 	public boolean getWeaponsOpen(){
 		
 		return weaponsopen;
 	}
 	
+	/**
+	 * Set the weapons in use or not
+	 * @param open true if the weapon has been selected, false otherwise.
+	 */
 	public void setWeaponsOpen(boolean open){
 		
 		weaponsopen = open;
@@ -1178,6 +1183,10 @@ public class Board {
 		turn.resetTimer();
 	}
 	
+	/**
+	 * Adds the name of a new client connected to the game
+	 * @param name The name of the new client
+	 */
 	public void addName(String name){
 		players[numberOfPlayers] = name;
 		numberOfPlayers++;
@@ -1214,6 +1223,10 @@ public class Board {
 		
 	}
 	
+	/**
+	 * Code to select a specific player 
+	 * @return the ID of the player.
+	 */
 	private int findPlayer()
 	{
 		ArrayList<PhysObject> chickenDinner = getSquares();
@@ -1260,7 +1273,20 @@ public class Board {
 	public String[] getPlayers() {
 		return players;
 	}
-	
+	/**
+	 * Converts the array of player names into an arrayList, as it's the prefered format for the network code
+	 * @return An arraylist version of the players array
+	 */
+	public ArrayList<String> getPlayerArray(){
+		ArrayList<String> ret = new ArrayList<String>();
+		for (int i = 0; i < players.length; i++){
+			ret.add(players[i]);
+		}
+		return ret;
+	}
+	/**
+	 * Used in the local game board to allow a local timer to shown to players to give them an idea of their remaining time.
+	 */
 	public void startLocalTimer(){
 		servant.interrupt();
 		//System.out.println("Restarted the timer");
@@ -1269,15 +1295,31 @@ public class Board {
 		
 	}
 
+	/**
+	 * Used by the turn keeping classes to set the time on the board
+	 * @param time the current amount of time left for the turn.
+	 */
 	public void setTime(int time){
 		this.time = time;
 	}
+	/**
+	 * Get the remaining time in the turn
+	 * @return the remaining turn
+	 */
 	public int getTime(){
 		return time;
 	}
+	/**
+	 * Let the local players know the current turn has been ended early and to advance their timers.
+	 * @param set
+	 */
 	public void setTurnFlag(boolean set){
 		this.turnChangedFlag = set;
 	}
+	/**
+	 * Check the board to see if turns need to be incremented
+	 * @return True if the turn has ended, false otherwise.
+	 */
 	public boolean getTurnFlag(){
 		return turnChangedFlag;
 	}
