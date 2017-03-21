@@ -78,6 +78,7 @@ public class mainMenu extends Application {
 			temps.setMaxHeight(0);
 			temps.setMaxWidth(0);
 			temps.setX(Double.MAX_VALUE);
+			temps.toBack();
 			temps.show();
         	}  );
         	ps.hide();
@@ -90,10 +91,12 @@ public class mainMenu extends Application {
      */
     public static void showUI() {
     	if ( isHidden ) {
-        	temps.setOnHiding( e -> {  ps.show(); }  );
+        	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
+    		System.err.println("show ui ran");
     	}
+    	System.err.println("show ui did nothing");
     }
     
     /**
@@ -409,6 +412,8 @@ public class mainMenu extends Application {
     			  public Void call() throws Exception {
     			    while (inLobby) {
     			      System.err.println("client STILL IN WHILE LOOP");
+    			      System.err.println("client isConnected: " + net.isConnected());
+		        	  System.err.println("client inGame: " + net.inGame() );
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
