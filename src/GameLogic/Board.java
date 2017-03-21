@@ -908,24 +908,14 @@ public class Board {
 		
 		
 		if (getExplosion().size()>0){
-			
-			
-				//if(!input.contains("setExp")){
-					
-					//if(!input.contains("setUse")){
 						
 						if(!input.contains("None")){
 							
-						
 							if (getExplosion().get(0).getInUse()){
 								
-							
 								return;
 							}
 						}
-					//}
-				//}
-			
 		}
 		
 		Square active = (Square)getActivePlayer();
