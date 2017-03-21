@@ -1251,6 +1251,28 @@ public class Board {
 	}
 	
 	/**
+	 * Removes a name without swapping to conform to player order.
+	 * @param name The name to be removed.
+	 */
+	public void removeNameSimple(String name) {
+		for(int i = 0; i < numberOfPlayers; i++) {
+			if(players[i].equals(name)) {
+				players[i] = "";
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Sets the name at a specific index of the player list.
+	 * @param index The index.
+	 * @param name The new name.
+	 */
+	public void addName(int index, String name) {
+		players[index] = name;
+	}
+	
+	/**
 	 * Sets the array of players.
 	 * @param players The new array.
 	 */

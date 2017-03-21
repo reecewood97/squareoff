@@ -11,16 +11,21 @@ import org.junit.Test;
 public class NetworkingJUnit {
 	
 	Server server;
-	Client bob, jerry, imposterBob;
+	Client bob, jerry, imposterBob, mary, sherly, danny;
+	ArrayList<String> expectedPlayers;
 
 	@Before
 	public void setUp() throws Exception {
-		//Starts the server.
 		server = new Server(4444);
 		
 		bob = new Client("Bob");
 		jerry = new Client("Jerry");
 		imposterBob = new Client("Bob");
+		mary = new Client("Mary");
+		sherly = new Client("Sherly");
+		danny = new Client("Danny");
+		
+		expectedPlayers = new ArrayList<String>();
 	}
 
 	@After
@@ -36,7 +41,6 @@ public class NetworkingJUnit {
 		assertFalse(bob.isConnected());
 		assertNull(bob.getPlayers());
 		
-		ArrayList<String> expectedPlayers = new ArrayList<String>();
 		expectedPlayers.add("Bob");
 		
 		//A server is started and Bob successfully joins it.
@@ -111,6 +115,53 @@ public class NetworkingJUnit {
 		assertTrue(bob.connect("127.0.0.1", 4444));
 		assertTrue(jerry.connect("127.0.0.1", 4444));
 		
+		//Reset the server.
+		System.err.println(11);
+		server.reset();
+		wait(1000);
+		assertTrue(bob.isConnected());
+		assertTrue(jerry.isConnected());
+		
+		//More clients join.
+		System.err.println(12);
+		assertTrue(mary.connect("127.0.0.1", 4444));
+		assertTrue(sherly.connect("127.0.0.1", 4444));
+		//Too many clients already connected.
+		assertFalse(danny.connect("127.0.0.1", 4444));
+		
+		server.kick("mary");
+		server.kick("Sherly");
+		
+		//Start the game.
+		System.err.println(13);
+		server.startGame();
+		assertTrue(bob.inGame());
+		assertTrue(jerry.inGame());
+		
+		wait(1000);
+		
+		//Reset connection.
+		System.err.println(14);
+		server.reset();
+		wait(1000);
+		assertTrue(bob.isConnected());
+		assertTrue(jerry.isConnected());
+		assertFalse(bob.inGame());
+		assertFalse(jerry.inGame());
+		
+		//Start game again.
+		System.err.println(15);
+		server.startGame();
+		assertTrue(bob.inGame());
+		assertTrue(jerry.inGame());
+		
+		wait(1000);
+		
+		//Bob disconnects and is replaced by an AI.
+		System.err.println(16);
+		bob.disconnect();
+		wait(1000);
+		assertTrue(server.getPlayers().contains("AI 1"));
 	}
 	
 	/**
