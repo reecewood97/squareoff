@@ -26,7 +26,6 @@ public class DifficultAI extends AI {
 	private String myName;
 	private double outAngle;
 	private double outVelocity;
-	private Queue q;
 	private final int mistakeAngle = 2;
 	private final int mistakeVelocity = 3;
 
@@ -126,6 +125,7 @@ public class DifficultAI extends AI {
 		System.out.println(blocks);
 		TerrainBlock targetBlock = null;
 		int targetHealth = 999;
+		double finalDis = 99999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square targetSquare = (Square) squares.get(i);
 			double targetX = targetSquare.getPos().getX();
@@ -137,10 +137,17 @@ public class DifficultAI extends AI {
 					targetBlock = (TerrainBlock) oneBlock;
 				}
 			}
+			
+			double xDis = myX - targetX;
+			double yDis = myY - targetY;
+			
+			double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
+			
 			System.out.println(targetBlock);
-			if (targetBlock.getHealth() < targetHealth) {
+			if (targetBlock.getHealth() < targetHealth && displacement < finalDis) {
 				finalSquare = targetSquare;
 				targetHealth = targetBlock.getHealth();
+				finalDis = displacement;
 			}
 			System.out.println(finalSquare);
 		}
