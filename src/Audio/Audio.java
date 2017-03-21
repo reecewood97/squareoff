@@ -33,6 +33,26 @@ public class Audio implements Serializable
 		music.start();
 	}
 	
+	public void newMusic(){
+		
+		music = new BackgroundMusic();
+	}
+	
+	/**
+	 * returns background music thread
+	 * @return background music
+	 */
+	public BackgroundMusic getBackgroundMusic(){
+		return music;
+	}
+	
+	public void sam(){
+		System.out.println("sam");
+		System.out.println(music.isInterrupted());
+		music.end();
+		System.out.println(music.isInterrupted());
+	}
+	
 	
 	/**
 	 * stops background music

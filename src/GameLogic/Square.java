@@ -19,12 +19,12 @@ public class Square extends PhysObject {
 	private String playerName;
 	
 	/**
-	 * The constructor
-	 * @param name name will just ID it as a Square
-	 * @param playerID The ID of the player who owns the square
-	 * @param squareID The ID of the square used for quick access
+	 * Creates a new square with the specified attributes
+	 * @param name The name of the owner
+	 * @param playerID The ID of the owner
+	 * @param squareID The ID of the square in the owner's team
 	 * @param colour The colour of the square
-	 * @param pos The starting position of the square.
+	 * @param pos The position of the square
 	 */
 	public Square(String name, int playerID,int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
@@ -40,13 +40,13 @@ public class Square extends PhysObject {
 	}
 	
 	/**
-	 * Secondary constructor
-	 * @param playerID The ID of the player who owns the square
-	 * @param squareID The ID of the square used for quick access
+	 * Creates a new square with the specified attributes an name "noName"
+	 * @param playerID The ID of the owner
+	 * @param squareID The ID of the square in the owner's team
 	 * @param colour The colour of the square
-	 * @param pos The starting position of the square.
+	 * @param pos The position of the square
 	 */
-	public Square(int playerID,int squareID, int colour, Point2D.Double pos) {
+	public Square(int playerID, int squareID, int colour, Point2D.Double pos) {
 		super(true, pos, 30, 30, false);
 		this.playerName = "noName";
 		this.playerID = playerID;
@@ -60,8 +60,8 @@ public class Square extends PhysObject {
 	}
 	
 	/**
-	 * Creates a shallow copy of the square
-	 * @param other The square that is being copied
+	 * Creates a shallow copy of a square
+	 * @param other The square to be copied
 	 */
 	public Square(Square other) {
 		super(other);

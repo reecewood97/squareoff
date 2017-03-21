@@ -20,8 +20,11 @@ public class PhysObject implements Serializable{
 	private boolean solid;
 	private boolean inUse;
 	
+	/**
+	 * Creates a shallow copy of a physObject
+	 * @param other The physObject to be copied
+	 */
 	public PhysObject(PhysObject other) {
-		//Creates a shallow copy
 		this.gravity = other.getGravity();
 		this.grav = other.getGrav();
 		this.pos = other.getPos();
@@ -34,6 +37,14 @@ public class PhysObject implements Serializable{
 		this.inUse = other.getInUse();
 	}
 	
+	/**
+	 * Creates a new physObject with the specified attributes
+	 * @param gravity Whether this object is subject to gravity
+	 * @param pos The position of this object(bottom left origin)
+	 * @param height The height of the object
+	 * @param width The width of the object
+	 * @param solid Whether the object allows things to pass through it
+	 */
 	public PhysObject(boolean gravity, Point2D.Double pos, int height, int width, boolean solid) {
 		this.gravity = gravity;
 		this.grav = 0.5;
@@ -52,11 +63,16 @@ public class PhysObject implements Serializable{
 		return 1;
 	}
 	
+	/**
+	 * @return true if this object is in use, false otherwise
+	 */
 	public boolean getInUse() {
 		return inUse;
 	}
 	
-	//Updates one frame for this object
+	/**
+	 * Updates one frame for this object
+	 */
 	public void update() {
 		if(getInUse()){
 			setYvel(getYvel()-getGrav());
@@ -64,7 +80,9 @@ public class PhysObject implements Serializable{
 		}
 	}
 	
-	//Undoes the update for when a collision is detected
+	/**
+	 * Undoes the update for when a collision is detected
+	 */
 	public void undoUpdate() {
 		setPos(new Point2D.Double(pos.getX()-xvel, pos.getY()-yvel));
 		setYvel(getYvel()+getGrav());
@@ -144,6 +162,10 @@ public class PhysObject implements Serializable{
 		this.pos = pos;
 	}
 	
+	/**
+	 * Sets the x-velocity of the object(won't go over 10)
+	 * @param vel The new velocity
+	 */
 	public void setXvel(double vel) {
 		if(vel > 10){
 			this.xvel = 10;
@@ -154,6 +176,10 @@ public class PhysObject implements Serializable{
 		}
 	}
 	
+	/**
+	 * Sets the y-velocity of the object(won't go over 10)
+	 * @param vel The new velocity
+	 */
 	public void setYvel(double vel) {
 		if(vel > 10){
 			this.yvel = 10;

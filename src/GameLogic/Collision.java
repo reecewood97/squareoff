@@ -8,6 +8,12 @@ public class Collision implements Comparable<Collision>{
 	private PhysObject block;
 	private int lspos;
 
+	/**
+	 * Creates a new collision object
+	 * @param thing The thing that collided
+	 * @param lspos The position in the objects list where that thing is
+	 * @param block The block that collided
+	 */
 	public Collision(PhysObject thing,int lspos, PhysObject block) {
 		this.thing = thing;
 		this.lspos = lspos;
