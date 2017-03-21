@@ -299,10 +299,9 @@ public abstract class AI {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
-		moveUpLeft();
-		moveUpRight();
+		moveUp();
 		int i = 0;
-		while (((int)xPos > targetX + 40.0) || ((int)xPos < targetX - 10.0) || yPos != targetY) {
+		while (((int)xPos > targetX + 40.0) || ((int)xPos < targetX) || yPos != targetY) {
 			
 			try {
 				Thread.sleep(30);
@@ -787,10 +786,13 @@ public abstract class AI {
 		double angle = Math.toRadians(a);
 		double velocity = v;
 		double r = 0;
+		double g = 1;
+		
+		g = (xdis / 100) * ((Math.abs(ydis) + 100) / 100);
 		// R = v * cos(angle) * ((v * sin(angle)) + sqrt((v * v * sin(angle) * sin(angle)) + 2 * g * ydis))
 //		r = (velocity * Math.cos(angle) * ((velocity * Math.sin(angle)) + Math.sqrt((v * v * Math.sin(angle) * Math.sin(angle)) + 2 * gravity * ydis))) / 2;
 		// R = (v * cos(angle) / g) * ((v * sin(angle)) + Math.sqrt((v * v * sin(angle) * sin(angle)) + (2 * g * ydis)))
-		r = (velocity * Math.cos(angle) / gravity) * ((velocity * Math.sin(angle)) + Math.sqrt((velocity * velocity * Math.sin(angle) * Math.sin(angle)) + (2 * gravity * ydis)));
+		r = (velocity * Math.cos(angle) / (gravity * g)) * ((velocity * Math.sin(angle)) + Math.sqrt((velocity * velocity * Math.sin(angle) * Math.sin(angle)) + (2 * (gravity * g) * ydis)));
 		//System.out.println(r);
 		
 		if (r > (xdis - 15) && r < (xdis + 15)) {
