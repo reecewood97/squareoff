@@ -47,8 +47,9 @@ public class PhysicsTest extends TestCase {
 	 * 1. No objects are changed after an empty move while not in free state.
 	 * 2. The active player is incremented correctly following the exit of free state.
 	 * 3. No objects are changed from free state, assuming they begin stationary on the floor.
-	 * 4. Raising a block above the floor then initiating physics leaves it in the same position as it started.
-	 * 5. A block's path in free state unfolds as it is meant to.
+	 * 4. Wall collisions are correctly detected and resolved outside of free state.
+	 * 5. Raising a block above the floor then initiating physics leaves it in the same position as it started.
+	 * 6. A block's path in free state unfolds as it is meant to.
 	 * Hence object collision detection and resolution are working as intended.
 	 */
 	@Test
@@ -73,6 +74,12 @@ public class PhysicsTest extends TestCase {
 		}
 		assertTrue(same); //Assert no objects change state from freeSim, 
 							//assuming they begin stationary on the floor
+		
+		for(int i = 0;i<6;i++){
+			board.input("Pressed,A ,2");
+		}
+		assertTrue(board.getActivePlayer().getPos().getX()==280);
+		//Assert wall collisions are detected without being in free state
 		
 		board.getActivePlayer().setPos(new Point2D.Double(300, 160));
 		board.setFreeState(true);
