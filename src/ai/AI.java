@@ -23,7 +23,7 @@ import Networking.Queue;
 public abstract class AI {
 	
 	private static final double maxVelocity = 100;
-	private static final double gravity = 9.81;
+	private static final double gravity = 0.5;
 	private int mySquareID; // Square ID
 	private int myColour;
 	private Point2D.Double myPos;
@@ -296,7 +296,7 @@ public abstract class AI {
 	}
 	
 	public void aiMoveCal(double targetX, double targetY) {
-		System.out.println(targetX + " " + targetY);
+		System.out.println("move to: " + targetX + " " + targetY);
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
@@ -338,6 +338,8 @@ public abstract class AI {
 				if (yPos > targetY) {
 					for (int k = 0; k < 10; k++) {
 						moveRight();
+						i++;
+						System.out.println(myName + "go down right! " + i);
 					}
 					continue;
 				}
@@ -442,6 +444,8 @@ public abstract class AI {
 				if (yPos > targetY) {
 					for (int k = 0; k < 10; k++) {
 						moveLeft();
+						i++;
+						System.out.println(myName + "go down left! " + i);
 					}
 					continue;
 				}
@@ -700,13 +704,17 @@ public abstract class AI {
 //		Point2D.Double target = getFinalDestination();
 		double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
+		System.out.println("a in cal: " + a + "v in cal: " + v);
 		double angle = Math.toRadians(a);
 		double velocity = v;
 		double r = 0;
 		// R = v * cos(angle) * ((v * sin(angle)) + sqrt((v * v * sin(angle) * sin(angle)) + 2 * g * ydis))
-		r = (velocity * Math.cos(angle) * ((velocity * Math.sin(angle)) + Math.sqrt((v * v * Math.sin(angle) * Math.sin(angle)) + 2 * gravity * ydis))) / 2;
+//		r = (velocity * Math.cos(angle) * ((velocity * Math.sin(angle)) + Math.sqrt((v * v * Math.sin(angle) * Math.sin(angle)) + 2 * gravity * ydis))) / 2;
+		// R = (v * cos(angle) / g) * ((v * sin(angle)) + Math.sqrt((v * v * sin(angle) * sin(angle)) + (2 * g * ydis)))
+		r = (velocity * Math.cos(angle) / gravity) * ((velocity * Math.sin(angle)) + Math.sqrt((velocity * velocity * Math.sin(angle) * Math.sin(angle)) + (2 * gravity * ydis)));
+		System.out.println(r);
 		
-		if (r > (xdis - 100) && r < (xdis + 100)) {
+		if (r > (xdis - 15) && r < (xdis + 15)) {
 			return 0;
 		}
 		else if (r < xdis) {
