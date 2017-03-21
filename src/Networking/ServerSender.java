@@ -17,6 +17,7 @@ public class ServerSender extends Thread {
 	private boolean inGame;
 	private Server server;
 	private boolean sentPlayers = false;
+	private boolean winnerSent = false;
 	
 	/**
 	 * Creates a new Server Sender.
@@ -46,8 +47,8 @@ public class ServerSender extends Thread {
 					}
 					
 					//Checks if the game is over.
-					if(board.getWinner() > -1){
-
+					if(board.getWinner() > -1 && !winnerSent){
+						winnerSent = true;
 						server.reset();
 						System.out.println("Sent the winner");
 //						send(board.getWinner());

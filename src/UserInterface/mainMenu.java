@@ -12,20 +12,26 @@ import Audio.Audio;
 import Graphics.SplashSplash;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -43,7 +49,7 @@ public class mainMenu extends Application {
 	static Stage temps;
 	static boolean isHidden = false;
 	static boolean inLobby = false;
-	static boolean trial = false;
+	static int aiDifficulty = 1;
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -72,6 +78,7 @@ public class mainMenu extends Application {
 			temps.setMaxHeight(0);
 			temps.setMaxWidth(0);
 			temps.setX(Double.MAX_VALUE);
+			temps.toBack();
 			temps.show();
         	}  );
         	ps.hide();
@@ -84,12 +91,12 @@ public class mainMenu extends Application {
      */
     public static void showUI() {
     	if ( isHidden ) {
-        	temps.setOnHiding( e -> {  ps.show(); }  );
+        	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
+    		System.err.println("show ui ran");
     	}
-    	
-
+    	System.err.println("show ui did nothing");
     }
     
     /**
@@ -185,8 +192,64 @@ public class mainMenu extends Application {
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
         btn6.setOnAction( e -> { a.click(); net.startGame(); } ); //hideUI(); } );
+        btn6.requestFocus();
         
         TableView table = lobbyTable(net);
+        
+        final ToggleGroup group = new ToggleGroup();
+        
+        RadioButton rb1 = new RadioButton("Easy AI");
+        rb1.setToggleGroup(group);
+        //rb1.setSelected(true);
+        RadioButton rb2 = new RadioButton("Normal AI");
+        rb2.setToggleGroup(group);
+        RadioButton rb3 = new RadioButton("Hard AI");
+        rb3.setToggleGroup(group);
+        
+        if (aiDifficulty == 1) {
+        	rb1.setSelected(true);
+        }
+        else if (aiDifficulty == 2) {
+        	rb2.setSelected(true);
+        }
+        else {
+        	rb3.setSelected(true);
+        }
+        net.setAIDifficulty(aiDifficulty);
+        
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov,
+                Toggle old_toggle, Toggle new_toggle) {
+                    if (group.getSelectedToggle() != null) {
+                        System.out.println("something was selected");
+                        if (rb1.isSelected()) {
+                        	//rb1.setSelected(true);
+                        	aiDifficulty = 1;
+                        }
+                        else if (rb2.isSelected()) {
+                        	//rb2.setSelected(true);
+                        	aiDifficulty = 2;
+                        }
+                        else {
+                        	//rb3.setSelected(true);
+                        	aiDifficulty = 3;
+                        }
+                    }                
+                }
+        });
+        
+        
+        HBox hbox2 = new HBox();
+        VBox vbox2 = new VBox();
+
+        vbox2.getChildren().add(rb1);
+        vbox2.getChildren().add(rb2);
+        vbox2.getChildren().add(rb3);
+        vbox2.setSpacing(10);
+
+        hbox2.getChildren().add(vbox2);
+        hbox2.setSpacing(50);
+        hbox2.setPadding(new Insets(20, 10, 10, 20));
         
         HBox hbox = new HBox(12);
         hbox.getChildren().addAll(btn6, btn5, btn4);
@@ -207,6 +270,7 @@ public class mainMenu extends Application {
         
         grid3.add(label3, 1, 0);
         grid3.add(vbox, 0, 0);
+        grid3.add(hbox2, 2, 0);
         grid3.setAlignment(Pos.CENTER);
         
         ps.setOnCloseRequest( e -> net.closeServer() ); 
@@ -252,7 +316,7 @@ public class mainMenu extends Application {
         grid3.add(vbox, 0, 0);
         grid3.setAlignment(Pos.CENTER);
         
-        grid3.setAlignment(Pos.CENTER);
+        //grid3.setAlignment(Pos.CENTER);
         grid3.setStyle("-fx-background-color: transparent;");
         
         ps.setOnCloseRequest( e -> net.Disconnect() ); 
@@ -307,24 +371,25 @@ public class mainMenu extends Application {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
+    			      System.err.println("host STILL IN WHILE LOOP");
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
     			        	if ( net.isConnected() && !net.inGame() ) {
-    			        		trial = false;
+    			        		System.err.println("host if");
     			        		showUI();
     			        		refreshHLobby(net);
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
-    			        		trial = false;
-    			        		hideUI();
+    			        		System.err.println("host else if");
+    			        		hideUI();	
     			        	}
     			        	else {
-    			        		if (!trial){
-    			        			net.resetServer();
-    			        			net.connectToHost("localhost", name);
-    			        			trial = true;
-    			        		}
+    			        		System.err.println("host else");
+    			        		System.err.println("host isConnected: " + net.isConnected());
+    			        		System.err.println("host inGame: " + net.inGame() );
+    			        		net.resetServer();
+    			        		net.connectToHost("localhost", name);
     			        		showUI();
     			        	}
     			        }
@@ -346,37 +411,31 @@ public class mainMenu extends Application {
     			  @Override
     			  public Void call() throws Exception {
     			    while (inLobby) {
+    			      System.err.println("client STILL IN WHILE LOOP");
+    			      System.err.println("client isConnected: " + net.isConnected());
+		        	  System.err.println("client inGame: " + net.inGame() );
     			      Platform.runLater(new Runnable() {
     			        @Override
     			        public void run() {
     			        	if ( net.isConnected() && !net.inGame() ) {
+    			        		System.err.println("client if");
     			        		showUI();
     			        		refreshCLobby(net);
-    			        		System.out.println("client if");
     			        	}
     			        	else if ( net.isConnected() && net.inGame() ) {
+    			        		System.err.println("client else if");
     			        		hideUI();
-    			        		System.out.println("client else if");
     			        	}
     			        	else {
+    			        		System.err.println("client else");
+    			        		System.err.println("client isConnected: " + net.isConnected());
+    			        		System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
     			        		inLobby = false;
     			        		showUI();
     			        		ps.setScene(ogScene);
     			        		ps.setTitle("Square-Off: Start Menu");
-    			        		System.out.println("client else");
-    			        		System.out.println("client isConnected: " + net.isConnected());
-    			        		System.out.println("client inGame: " + net.inGame() + "should be irrelevent now");
+    			        		
     			        	}
-    			        	/*
-    			        	try {
-    			        		refreshCLobby(net);
-    			        	}
-    			        	catch (NullPointerException e) {
-    			        		inLobby = false;
-    			        		ps.setScene(ogScene);
-    			        		ps.setTitle("Square-Off: Start Menu");
-    			        	}
-    			        	*/
     			        }
     			      });
     			      Thread.sleep(750);
