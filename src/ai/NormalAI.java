@@ -17,7 +17,7 @@ import Networking.Queue;
 public class NormalAI extends AI {
 	
 	private static final double maxVelocity = 100;
-	private static final double gravity = 9.81;
+	private static final double gravity = 1.0;
 	private int mySquareID; // Square ID
 	private int myColour;
 	private Point2D.Double myPos;
@@ -60,7 +60,7 @@ public class NormalAI extends AI {
 		double targetX = aiX;
 		double targetY = aiY;
 		PhysObject finalSquare = null;
-		
+		System.out.println("obstacles: " + thereAreObstacles());;
 		double finalDis = 9999999999999.0;
 		if (thereAreObstacles()) {
 			for (PhysObject player:squares) {
@@ -84,6 +84,7 @@ public class NormalAI extends AI {
 					}
 				}
 			}
+			System.out.println("Normal AI is going to attack: " + finalSquare.getPos() );
 			for (PhysObject block:blocks) {
 				if (((finalSquare.getPos().getY() - 30.0 <= block.getPos().getY() + 100.0) || (finalSquare.getPos().getY() - 30.0 >= block.getPos().getY() -100.0)) && ((finalSquare.getPos().getX() <= block.getPos().getX() +400.0) || (finalSquare.getPos().getY() >= block.getPos().getX() -400.0))) {
 					targetX = block.getPos().getX();
@@ -91,9 +92,6 @@ public class NormalAI extends AI {
 				}
 			}
 			aiMoveCal(targetX +50, targetY);
-		}
-		else {
-			
 		}
 	}
 

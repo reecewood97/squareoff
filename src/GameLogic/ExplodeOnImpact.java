@@ -4,7 +4,13 @@ import java.awt.geom.Point2D;
 
 public class ExplodeOnImpact extends PhysObject {
 
-	
+	/**
+	 * Creates a new impact grenade with the specified attributes
+	 * @param pos The position of the grenade(origin from bottom left)
+	 * @param xvel The velocity in the x-direction
+	 * @param yvel The velocity in the y-direction
+	 * @param inUse Whether the object is in use
+	 */
 	public ExplodeOnImpact(Point2D.Double pos, double xvel, double yvel, boolean inUse) {
 		super(true, pos, 10, 10, false);
 		this.setName("WeaponExplodeOnImpact");
@@ -13,8 +19,11 @@ public class ExplodeOnImpact extends PhysObject {
 		this.setInUse(inUse);
 	}
 	
+	/**
+	 * Creates a shallow copy of an impact grenade
+	 * @param other The grenade to be copied
+	 */
 	public ExplodeOnImpact(ExplodeOnImpact other) {
-		//Creates a shallow copy of a weapon
 		super(other);
 		this.setName("WeaponExplodeOnImpact");
 		this.setXvel(other.getXvel());

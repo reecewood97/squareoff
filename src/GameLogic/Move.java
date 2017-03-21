@@ -15,11 +15,11 @@ public class Move {
 	private boolean weapon;
 	
 	/**
-	 * Constructor when you make a move
-	 * @param player Colour colour of the active square
-	 * @param squareID The ID so it can be found in the relevant arraylist 
-	 * @param direction Left or right
-	 * @param jump true when jumping, false otherwise.
+	 * Represents a move to be made by a player
+	 * @param playerColour The team the player is on
+	 * @param squareID The ID of the square in that team
+	 * @param direction The direction: should be "Left", "Right", or "None"
+	 * @param jump Whether the player wants to jump
 	 */
 	public Move(int playerColour, int squareID, String direction, boolean jump) {
 		this.playerColour = playerColour;

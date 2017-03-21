@@ -50,18 +50,16 @@ public class BackgroundMusic extends Thread implements Serializable{
 		music.stop();
 	}
 	
+	
 	/**
 	 * run method plays the music
 	 */
 	@SuppressWarnings("static-access")
 	public void run(){
-	
-			while(run){	
 				
 				music.loop(music.LOOP_CONTINUOUSLY);
 				
 				
-			}
 		
 				
 	}
