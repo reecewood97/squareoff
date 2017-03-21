@@ -317,7 +317,7 @@ public class ScreenBoard extends JPanel{
 					}
 					else{
 						
-						g2d.setColor(Color.GRAY);
+						g2d.setColor(Color.BLACK);
 						g2d.fillRect(x, y, weaponwidth, weaponheight);
 						
 					}

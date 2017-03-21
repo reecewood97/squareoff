@@ -116,8 +116,6 @@ public class Board {
 			}
 			
 			
-			//objects.add(new TerrainBlock(1,1,new Point2D.Double(100,150), true));
-			
 			for(int i = 100; i < 700; i+=120){
 				
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
@@ -187,12 +185,15 @@ public class Board {
 		explosions.add(explosion);
 		
 		PhysObject targetline = new TargetLine();
-		targetline.setInUse(false);
 		objects.add(targetline);
 	}
 	
 	public void setFreeState(boolean free) {
 		freeState = free;
+	}
+	
+	public boolean getFreeState(){
+		return freeState;
 	}
 	
 	public void setWinner(int player){
@@ -577,8 +578,8 @@ public class Board {
 				if(circle.intersects(thing.getPos().getX(),
 				thing.getPos().getY()+thing.getHeight(),thing.getWidth(),thing.getHeight())){
 					Square square = ((Square)thing);
-					square.setXvel(square.getXvel()+(power/(thing.getPos().getX()-x)));
-					square.setYvel(square.getYvel()+(power/(thing.getPos().getY()-y)));
+					square.setXvel(square.getXvel()+(power/((thing.getPos().getX()+thing.getWidth()/2)-x)));
+					square.setYvel(square.getYvel()+(power/((thing.getPos().getY()+thing.getHeight()/2)-y)));
 				}
 			}
 		}
@@ -884,7 +885,7 @@ public class Board {
 				activePlayer.setPos(new Point2D.Double
 				  (activePlayer.getPos().getX(), floor.getPos().getY()+floor.getHeight()));
 				if(move.getJump()) {
-					activePlayer.setYvel(20);
+					activePlayer.setYvel(10);
 				}
 				if(move.getDirection().equals("Left")){
 					if (wallDistL(activePlayer)<XtravelDist){
@@ -909,6 +910,7 @@ public class Board {
 					//Don't move the square
 				}
 			} else { //Player not standing on a block
+				
 				if(move.getDirection().equals("Left")){
 					activePlayer.setXvel((-1)*XtravelDist);
 					if (wallDistL(activePlayer)<XtravelDist){
@@ -933,6 +935,7 @@ public class Board {
 					activePlayer.setXvel(0);
 					//Don't move the square
 				}
+				activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			}
 			
 			PhysObject ceiling = onCeiling(activePlayer);
@@ -945,7 +948,7 @@ public class Board {
 				activePlayer.getPos().getY()+activePlayer.getYvel()));
 			}
 			
-			activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
+			//activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			
 			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
 				
@@ -1006,7 +1009,7 @@ public class Board {
 		//Human players are not so well treated
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
-				System.out.println("oops");
+				//System.out.println("oops");
 				return;
 			}
 			String input1 = input.substring(8, 9);
@@ -1154,7 +1157,7 @@ public class Board {
 			Move mv = new Move(active.getColour(),active.getSquareID(),"None",false);
 			updateFrame(mv);
 			q.offer(objects);
-		};
+		}
 	
 	
 	}

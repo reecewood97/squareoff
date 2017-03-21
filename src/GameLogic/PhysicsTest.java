@@ -16,7 +16,6 @@ public class PhysicsTest extends TestCase {
 	
 	private Board board;
 	private ArrayList<PhysObject> objects;
-	private ArrayList<PhysObject> squares;
 	
 	@Before
 	public void setUp(){
@@ -43,17 +42,28 @@ public class PhysicsTest extends TestCase {
 		objects = objs;
 	}
 	
+	/**
+	 * Asserts the following:
+	 * 1. No objects are changed after an empty move while not in free state.
+	 * 2. The active player is incremented correctly following the exit of free state.
+	 * 3. No objects are changed from free state, assuming they begin stationary on the floor.
+	 * 4. Raising a block above the floor then initiating physics leaves it in the same position as it started.
+	 * 5. A block's path in free state unfolds as it is meant to.
+	 * Hence object collision detection and resolution are working as intended.
+	 */
 	@Test
 	public void test() {
 		board.input("Pressed,  ,1");
-		//board.input("setWep,ExplodeOnImpact,1");
 		for(int i = 0;i<board.getObjects().size();i++){
 			PhysObject obj = board.getObjects().get(i);
-			assertTrue(obj.equals(objects.get(i)) || !obj.getName().equals("Square") || ((Square)obj).getPlayerID()==1);
+			assertTrue(obj.equals(objects.get(i))); //Assert no objects are changed after an empty move
 		}
+		
 		board.setFreeState(true);
-		board.input("Pressed,  ,1");
-		board.input("Pressed,  ,1");
+		while(board.getFreeState()){
+			board.input("Pressed,  ,1");
+		}
+		assertTrue(((Square)board.getActivePlayer()).getPlayerID()==2);
 		board.input("Pressed,  ,2");
 		boolean same = true;
 		for(int i = 0;i<board.getObjects().size();i++){
@@ -61,17 +71,36 @@ public class PhysicsTest extends TestCase {
 				same = false;
 			}
 		}
-		assertFalse(same);
-		Square square = new Square("2", 2, 0, 0, new Point2D.Double(300, 150));
-		square.setYvel(-0.5);
-		//System.out.println(((Square)board.getActivePlayer()).getPlayerID());
-		assertTrue(board.getActivePlayer().equals(square));
+		assertTrue(same); //Assert no objects change state from freeSim, 
+							//assuming they begin stationary on the floor
+		
+		board.getActivePlayer().setPos(new Point2D.Double(300, 160));
+		board.setFreeState(true);
+		while(board.getFreeState()){
+			board.input("Pressed,  ,2");
+		}
+		boolean same2 = true;
+		for(int i = 0;i<board.getObjects().size();i++){
+			if(!board.getObjects().get(i).equals(objects.get(i))){
+				same2 = false;
+			}
+		}
+		assertTrue(same2); //Asserts raising then dropping a block does not displace it
+		
+		board.getSquares().get(2).setPos(new Point2D.Double(330, 220));
+		board.getSquares().get(2).setXvel(-4);
+		board.getSquares().get(2).setYvel(7.5);
+		board.setFreeState(true);
+		while(board.getFreeState()){
+			board.input("Pressed,  ,3");
+		}
+		//Asserts the block ends up where it is meant to
+		assertTrue(board.getSquares().get(2).getPos().equals(new Point2D.Double(265.60000000000025, 180)));
 	}
 	
 	@After
 	public void tearDown(){
 		board = null;
 		objects = null;
-		squares = null;
 	}
 }
