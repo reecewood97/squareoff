@@ -34,7 +34,6 @@ public class ScreenBoard extends JPanel{
 	private double heightratio;
 	private double widthratio;
 	private HangerOn hangeron;
-	private boolean drawexplosions;
 	
 	/**
 	 * 
@@ -50,9 +49,6 @@ public class ScreenBoard extends JPanel{
 		this.heightratio = heightratio;
 		this.widthratio = widthratio;
 		this.hangeron = h;
-		this.drawexplosions = false;
-		
-		System.out.println("height ratio is " + heightratio);
 		
 	}
 	
@@ -110,7 +106,9 @@ public class ScreenBoard extends JPanel{
 		for(PhysObject block : blocks){
 			
 			int x = (int) block.getPos().getX();
-			int y = (int) block.getPos().getY();
+			int y = (int) block.getPos().getY()+block.getHeight();
+			//TODO these todos are to keep track of the changes I've made in case they need to be reverted
+			//From Reece :) You can remove them if it doesn't break anything
 			
 			y = 450 - y; 
 			
@@ -160,7 +158,7 @@ public class ScreenBoard extends JPanel{
 	}
 	
 	/**
-	 * paint the squres onto the arena
+	 * paint the squares onto the arena
 	 * @param squares The ArrayList of squares
 	 * @param g2d Graphics
 	 */
@@ -170,7 +168,7 @@ public class ScreenBoard extends JPanel{
 			
 			if(((Square) square).getAlive()){
 				int x = (int) square.getPos().getX();
-				int y = (int) square.getPos().getY();
+				int y = (int) square.getPos().getY()+square.getHeight();//TODO
 				y = 450 - y;
 				
 				int newx = (int) (x*widthratio);
@@ -253,38 +251,17 @@ public class ScreenBoard extends JPanel{
 	/**
 	 * 
 	 * @param weapons The ArrayList of weapons (1)
-	 * @param b Whether line is shown or not  - true or false
+	 * @param targetLine The arraylist of targetline (1)
 	 * @param g2d Graphics
 	 */
 	public void paintTargetLine(ArrayList<PhysObject> weapons,
 			ArrayList<PhysObject> targetline, Graphics2D g2d){
 	
-		//TO DO
-		
-		//System.out.println("PAINTING");
-		//System.out.println("in use??:" + targetline.get(0).getInUse());
 		
 		if(targetline.get(0).getInUse()){
 			
-			//System.out.println("WEAPONS AND TARGET IN USE");
-			
-	
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
-			
-			/*
-			for(PhysObject square : board.getSquares()){
-				
-				if(((Square)square).getActivePlayer()){
-					
-					
-					playerpos = square.getPos();
-					
-				}
-				
-				
-			}
-			*/
 			
 			Square square = (Square) board.getActivePlayer();
 			
@@ -292,7 +269,7 @@ public class ScreenBoard extends JPanel{
 			int mousepos_y = (int) (this.getMousePosition().getY());
 			
 			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
-			int pp_y = (int) ((450 - square.getPos().getY()+15) * heightratio);
+			int pp_y = (int) ((450 - square.getPos().getY()-square.getHeight()+15) * heightratio); //TODO
 			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
@@ -310,36 +287,39 @@ public class ScreenBoard extends JPanel{
 	 * @param g2d Graphics
 	 */
 	public void paintWeapons(ArrayList<PhysObject> weapons, Graphics2D g2d){
-		
-			//currently paints on top left of square
 			
 			for(PhysObject weapon : weapons){
 				
 				if (weapon.getInUse()){
 					
 					int x = (int) weapon.getPos().getX();
-					int y = (int) weapon.getPos().getY();
-					//y += weapon.getHeight();
-					//System.out.println(x + " " + y + "helllllooooooooo");
+
+
+					int y = (int) weapon.getPos().getY()+weapon.getHeight();
+
 					
 					x = (int) (x*widthratio);
 					
 					y = 450 - y;
 					y = (int) (y*heightratio);
-					//System.out.println(x + " " + y);
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
-					
+				
 					if(weapon.getName().contains("ExplodeOnImpact")){
-						//System.out.println(x + " " + y + "Where the wep is being doodled");
 						g2d.setColor(Color.BLACK);
 						g2d.fillOval(x,y,weaponwidth,weaponheight);
 					}
 					else if(weapon.getName().contains("TimedGrenade")){
 					
+						g2d.setColor(Color.DARK_GRAY);
+						g2d.fillRect(x, y, weaponwidth, weaponheight);
+					}
+					else{
+						
 						g2d.setColor(Color.GRAY);
 						g2d.fillRect(x, y, weaponwidth, weaponheight);
+						
 					}
 					
 				}
@@ -355,24 +335,15 @@ public class ScreenBoard extends JPanel{
 	 */
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
 		
-		//System.out.println("size of explosions:  " + explosion.size());
 		
 		for(PhysObject exp : explosion){
 		
-			//System.out.println("in use? " + ((Explosion) exp).getInUse());
-			
-			
 			if (((Explosion) exp).getInUse()){
-				
-				//drawexplosions = true;
-				
+			
 				int x = (int) (exp.getPos().getX());
 				int y = (int) (exp.getPos().getY());
-				
 
 				double size = ((Explosion) exp).getSize();
-				System.out.println("size of exp: " + size);
-				
 				
 				x = (int) (x*widthratio);
 				y = 450 - y;
@@ -394,10 +365,38 @@ public class ScreenBoard extends JPanel{
 				}
 				 
 				}
-				else if (sizeint >=20 && sizeint < 40){
+				else if (sizeint >=20 && sizeint < 30){
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/exp1.5.png"));
+						g2d.drawImage(image,(int) (x - 40*widthratio), 
+								(int) (y - 40*heightratio), null);
+					} 
+					catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				}
+				else if (sizeint >=30 && sizeint < 40){
 					
 					try {
 						image = ImageIO.read(new File("Files/Images/exp2.png"));
+						g2d.drawImage(image,(int) (x - 40*widthratio), 
+								(int) (y - 40*heightratio), null);
+					} 
+					catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				}
+				else if (sizeint >=40 && sizeint < 50){
+					
+					try {
+						image = ImageIO.read(new File("Files/Images/exp2.5.png"));
 						g2d.drawImage(image,(int) (x - 40*widthratio), 
 								(int) (y - 40*heightratio), null);
 					} 
@@ -424,23 +423,7 @@ public class ScreenBoard extends JPanel{
 					
 				}
 				
-				/*
 				
-				//if reached max size, stop drawing
-				if((sizeint > 60) && drawexplosions == true){
-					drawexplosions = false;	
-				}
-				//otherwise increase size by one
-				else{
-						
-					if (drawexplosions){
-						sizeint = sizeint + 6;
-						hangeron.setExp(sizeint + "");
-					}
-					
-				}
-				
-				*/
 			
 			}
 		}

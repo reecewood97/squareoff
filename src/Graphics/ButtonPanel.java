@@ -2,7 +2,10 @@ package Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
+
 import GameLogic.Board;
+import GameLogic.Square;
 import Networking.Client;
 import UserInterface.mainMenu;
 
@@ -26,6 +29,7 @@ public class ButtonPanel extends JPanel{
 	private Board board;
 	private HangerOn listeners;
 	private Client client;
+	private String name;
 	
 	/**
 	 * constructor 
@@ -37,59 +41,17 @@ public class ButtonPanel extends JPanel{
 		
 		super();
 		
-		System.out.println("HEIGHT OF PANEL: "  + this.getBounds().getHeight());
-		
 		//create main panel
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
 		
-		/*
-		String[] players = board.getPlayers();
-		int colournum = 0;
-		
-		for(int i = 0; i < 4; i++){
-			
-			System.out.println(players[i]);
-			
-			if(players[i].equals(name)){
-				
-				colournum = i+1;
-				
-				
-			}
-		}
-		*/
-		
-		/*
-		//set backgroudn colour according to player id num
-		if(colournum == 1){
-			
-			mainpanel.setBackground(Color.RED);
-			
-		}
-		else if(colournum == 2){
-			
-			mainpanel.setBackground(Color.BLUE);
-		}
-		else if(colournum == 3){
-			
-			mainpanel.setBackground(Color.YELLOW);
-			
-		}
-		else if(colournum == 4){
-			
-			mainpanel.setBackground(Color.GREEN);
-		}
-		else{
-			mainpanel.setBackground(Color.WHITE);
-		}
-			*/
 		//set attributes
 		this.audio = audio;
 		this.board = board;
 		this.listeners = screen.getHangerOn();
 		this.client = client;
+		this.name= name;
 		
 		//exit button
         ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
@@ -144,18 +106,44 @@ public class ButtonPanel extends JPanel{
 	}
 
 	/**
-	 * open weapons menu
+	 * open weapons menu if they are the active player
 	 * 
 	 */
 	public void showWeaponsMenu(){
+		
 		
 		//click sound
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		//open menu
-		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
-		menu.open();
+		Square square = (Square) board.getActivePlayer();
+		int id = square.getPlayerID();
+		
+		ArrayList<String> a = client.getClientList();
+	
+		//checks they are the active player
+		for(int i = 0; i < 4; i++){
+			
+			String name2 = a.get(i);
+			
+			if(name2.equals(name)){
+				
+				if((i+1)==id){
+					
+					//open menu
+					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
+					menu.open();
+					
+					break;
+					
+				}
+				
+			}
+			
+			
+			
+		}
+		
 		
 	}
 	
