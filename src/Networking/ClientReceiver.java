@@ -174,6 +174,7 @@ public class ClientReceiver extends Thread {
 				e.printStackTrace();
 				System.exit(1);
 			}
+			System.out.println(i);
 		}
 			return state == Server.ACCEPTED;
 	}
