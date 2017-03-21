@@ -130,6 +130,17 @@ public class Client {
 		return receiver.inGame();
 	}
 	
+	
+	/**
+	 * gets list of clients from client receiver
+	 * @return Arraylist of player names
+	 * 
+	 */
+	public ArrayList<String> getClientList(){
+		
+		return receiver.getPlayers2();
+	}
+	
 	/**
 	 * Tests if the client is connected to a server. If it has just connected, it will wait until the server has responded.
 	 * @return If the client is connected to a server.

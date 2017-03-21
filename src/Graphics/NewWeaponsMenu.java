@@ -31,7 +31,7 @@ public class NewWeaponsMenu extends JFrame {
 	    private Audio audio;
 	   // private double framewidth = 800;
 	    //private double frameHeight = 450;
-	    private String[] weaponArray = {"Bomb","Missile","Grenade"};
+	    private String[] weaponArray = {"ExplodeOnImpact","Missile","TimedGrenade"};
 	    private int currentWeapon = 0;
 	    private JButton image;
 	    private Board board;
@@ -218,9 +218,9 @@ public class NewWeaponsMenu extends JFrame {
 	    	//click sound
 	    	audio.click();
 	    	
-	    	
+	    	System.out.println(weaponArray[currentWeapon]);
 	    	//TODO notify board of weapon choice
-	    	listeners.setWep("ExplodeOnImpact");
+	    	listeners.setWep(weaponArray[currentWeapon]);
 	    	listeners.setTargetLine("true",true);
 	    	
 	    	

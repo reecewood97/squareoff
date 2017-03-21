@@ -2,6 +2,8 @@ package Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
+
 import GameLogic.Board;
 import GameLogic.Square;
 import Networking.Client;
@@ -60,9 +62,6 @@ public class ButtonPanel extends JPanel{
         exit.setFocusPainted(false); 
         exit.setOpaque(false);
 		
-        
-        //start audio
-		//audio.startBackgroundMusic();
 		
 		//toggle sound button
         ImageIcon image3 = new ImageIcon("Files/Images/speaker1.png");
@@ -104,78 +103,48 @@ public class ButtonPanel extends JPanel{
 	}
 
 	/**
-	 * open weapons menu
+	 * open weapons menu if they are the active player
 	 * 
 	 */
 	public void showWeaponsMenu(){
+		
 		
 		//click sound
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		//open menu
-		NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
-		menu.open();
-		
-		/*
-		
 		Square square = (Square) board.getActivePlayer();
 		int id = square.getPlayerID();
 		
-		System.out.println(" active id is: " +id);
-
-		System.out.println("name is: " +name);
-		
-		
-		int sizeofplayers = client.getPlayers().size();
-		
-		
-		for(int i = 0; i < client.getPlayers().size(); i++){
+		ArrayList<String> a = client.getClientList();
+	
+		//checks they are the active player
+		/*
+		for(int i = 0; i < 4; i++){
 			
-
-			System.out.println(client.getPlayers().get(i));
+			String name2 = a.get(i);
 			
-			if(client.getPlayers().get(i).equals(name)){
-				
-				System.out.println(i);
+			if(name2.equals(name)){
 				
 				if((i+1)==id){
 					
-
-					System.out.println("hello");
-					
-					//click sound
-					Audio audioforclick = new Audio();
-					audioforclick.click();
-					
-					//open menu
+					//open menu*/
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 					menu.open();
 					
-					break;
+					//break;
 					
-				}
+				//}
 				
-			}
+			//}
 			
 			
 			
-		}
-		*/
+		//}
+		
 		
 	}
 	
-	public void startMusic(){
-		
-		audio.startBackgroundMusic();
-	}
-	
-	/**
-	 * Stops the music.
-	 */
-	public void stopMusic() {
-		audio.endBackgroundMusic();
-	}
 	
 	/**
 	 * turn background music on and off
@@ -184,27 +153,46 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void ToggleBackgroundMusic(JButton button){
 		
+		System.out.println("toggling");
+		
 		if(first){
+			System.out.println("first is true");
 			firstOff(button);
 		}
 		else{
 		
+			System.out.println("in else");
 			if(music_on){
 				
+				System.out.println("music on - turn off");
 				button.setOpaque(true);
-				audio.endBackgroundMusic();
+				audio.sam();
 			}
 			else{
 				
+				System.out.println("music off - turn on");
 				button.setOpaque(false);
-				audio.endBackgroundMusic();
-				//audio = new Audio();
-				audio.startBackgroundMusic();
+				//audio.endBackgroundMusic();
+				audio.newMusic();
+				audio.getBackgroundMusic().start();
 			}
 		}
 		
+		System.out.println("change bool");
 		music_on = !music_on;
+		System.out.println( "music_on is " + music_on );
 		
+	}
+	
+	public void startMusic(){
+		
+		audio.newMusic();
+		audio.getBackgroundMusic().start();
+	}
+	
+	public void stopMusic(){
+		
+		audio.sam();
 	}
 	
 	/**
@@ -212,9 +200,9 @@ public class ButtonPanel extends JPanel{
 	 * @param button
 	 */
 	public void firstOff(JButton button){
-		
+		System.out.println("in first off");
 		button.setOpaque(true);
-		audio.endBackgroundMusic();
+		audio.sam();
 		first = false;
 	}	
 }

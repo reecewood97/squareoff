@@ -35,8 +35,8 @@ public class BackgroundMusic extends Thread implements Serializable{
 		catch(Exception ex) {
 		    
 			System.out.println("Error playing sound");
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
+			//ex.printStackTrace();
+			//System.out.println(ex.getMessage());
 		
 		}
 	}	
@@ -50,18 +50,16 @@ public class BackgroundMusic extends Thread implements Serializable{
 		music.stop();
 	}
 	
+	
 	/**
 	 * run method plays the music
 	 */
 	@SuppressWarnings("static-access")
 	public void run(){
-	
-			while(run){	
 				
 				music.loop(music.LOOP_CONTINUOUSLY);
 				
 				
-			}
 		
 				
 	}
