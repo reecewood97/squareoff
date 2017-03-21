@@ -1200,8 +1200,10 @@ public class Board {
 					winner = first.getPlayerID();
 				}
 				else{
-					//System.out.println(chickenDinner.get(1).getInUse());
-					return -1;
+					if (winner != -1)
+						return -1;
+					else
+						return 5;
 				}
 			}
 		}
