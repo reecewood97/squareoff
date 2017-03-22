@@ -52,7 +52,7 @@ public class mainMenu extends Application {
 	static boolean isHidden = false;
 	static boolean inLobby = false;
 	static int aiDifficulty = 1;
-	static String map = "map1";
+	//static String map = "map1";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -210,7 +210,7 @@ public class mainMenu extends Application {
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.setMap(map); net.startGame(); } );
+        btn6.setOnAction( e -> { a.click(); net.startGame(); } );
         
         TableView table = lobbyTable(net);
         
@@ -246,39 +246,9 @@ public class mainMenu extends Application {
                 }
         });
         
-        
-        
-        
-        final ToggleGroup group2 = new ToggleGroup();
-        
-        RadioButton rb4 = new RadioButton("Map 1");
-        rb4.setToggleGroup(group2);
-        RadioButton rb5 = new RadioButton("Map 2");
-        rb5.setToggleGroup(group2);
-        
-        if (map.equals("map1"))
-        	rb4.setSelected(true);
-        else
-        	rb5.setSelected(true);
-        
-        net.setAIDifficulty(aiDifficulty);
-        
-        group2.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-            public void changed(ObservableValue<? extends Toggle> ov,
-                Toggle old_toggle, Toggle new_toggle) {
-                    if (group2.getSelectedToggle() != null) {
-                        if (rb4.isSelected())
-                        	map = "map1";
-                        else
-                        	map = "map2";
-                    }                
-                }
-        });
-        
         btn6.requestFocus();
         
         Label label1 = new Label("AI Difficulty:");
-        Label label2 = new Label("Map:");
         
         HBox hbox2 = new HBox();
         VBox vbox2 = new VBox();
@@ -293,21 +263,8 @@ public class mainMenu extends Application {
         hbox2.setSpacing(50);
         hbox2.setPadding(new Insets(20, 10, 10, 20));
         
-        
-        HBox hbox3 = new HBox();
-        VBox vbox3 = new VBox();
-
-        vbox3.getChildren().add(label2);
-        vbox3.getChildren().add(rb4);
-        vbox3.getChildren().add(rb5);
-        vbox3.setSpacing(10);
-
-        hbox3.getChildren().add(vbox3);
-        hbox3.setSpacing(50);
-        hbox3.setPadding(new Insets(20, 10, 10, 20));
-        
         VBox vbox4 = new VBox();
-        vbox4.getChildren().addAll(hbox2, hbox3);
+        vbox4.getChildren().addAll(hbox2);
         //vbox4.setSpacing(50);
         //vbox4.setPadding(new Insets(20, 10, 10, 20));
         
