@@ -28,7 +28,7 @@ public class GameLogicJUnit {
 
 	@Before
 	public void setUp(){
-		this.board = new Board("map1");
+		this.board = new Board();
 		this.move = new Move(0,0,"None",false);
 		this.square = new Square(0,0,0, new Point2D.Double(0.0,0.0));
 		this.block = new TerrainBlock(1,0,new Point2D.Double(0.0,0.0),false);

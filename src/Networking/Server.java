@@ -44,7 +44,7 @@ public class Server extends Thread {
 	 */
 	public Server(int port) {
 		this.port = port;
-		board = new Board("map1");
+		board = new Board();
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();
@@ -218,7 +218,7 @@ public class Server extends Thread {
 			r.setInGame(false);
 		}
 		
-		board = new Board("map1");
+		board = new Board();
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();

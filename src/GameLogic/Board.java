@@ -78,60 +78,68 @@ public class Board {
 	 * Constructor makes a default board with four players
 	 * @param map Which map is being used
 	 */
-	public Board(String map){
+	public Board(){
 		this.objects = new ArrayList<PhysObject>();
 		this.explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); //This handles the moves that need to be sent to clients.
 		this.winner = -1;
-		this.map = map;
+		this.map = "map1";
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
+	
+		this.player = 0;
+		this.squareID = 0;
+		
+		
+		
+	}
+		
+	public void setMap(String map){
 		
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
-		//Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(100, 150);
-		PhysObject red = new Square(1 ,0, 0, redpos);
-		((Square)red).setActivePlayer(true);
-		Point2D.Double blupos = new Point2D.Double(300, 150);
-		PhysObject blu = new Square(2 ,0, 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(400, 150);
-		PhysObject yel = new Square(3 ,0, 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(500, 150);
-		PhysObject grn = new Square(4 ,0, 0, grnpos);
-		objects.add(red);
-		objects.add(blu);
-		objects.add(yel);
-		objects.add(grn);
+		objects = new ArrayList<PhysObject>();
 		
-		//Which map are we playing on? Initialise the correct one.
-		if(this.map.equals("map1")){
-			//Draw blocks at bottom of map
+		if (map.equals("map1")){
+				
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(300, 150);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(400, 150);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(500, 150);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//Create Blocks
 			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
 			
-			
+			//level1
 			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
-			
-			
-			//objects.add(new TerrainBlock(1,1,new Point2D.Double(100,150), true));
-			
+			//level2
 			for(int i = 100; i < 700; i+=120){
 				
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 				
 			}
-			
+			//level3
 			for(int i = 150; i < 700; i+=160){
 				
 				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
 				
 			}
-			
+			//level4
 			for(int i = 50; i < 700; i+=200){
 				
 				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,345), true);
@@ -139,11 +147,26 @@ public class Board {
 				
 			}
 		}
+		
+		//MAP 2 SELECTED
 		else{
 			
-			//Draw blocks at bottom of map
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(180, 150);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(340, 200);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(460, 200);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
 			
+			//CREATE BLOCKS
 			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
 				objects.add(block);
@@ -173,9 +196,6 @@ public class Board {
 			
 		}
 		
-		this.player = 0;
-		this.squareID = 0;
-		activePlayer = (Square)objects.get(0);
 		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
@@ -189,6 +209,9 @@ public class Board {
 		PhysObject targetline = new TargetLine();
 		targetline.setInUse(false);
 		objects.add(targetline);
+		
+		activePlayer = (Square)objects.get(0);
+		
 	}
 	
 	public void setFreeState(boolean free) {

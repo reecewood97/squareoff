@@ -68,7 +68,7 @@ public class Client {
 			System.exit(1);
 		}
 		
-		board = new Board("map1");
+		board = new Board();
 		q = new Queue();
 		ui = new Screen(board, q, name, this);
 		
