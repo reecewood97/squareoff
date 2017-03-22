@@ -9,8 +9,7 @@ import GameLogic.Square;
 public class AITest {
 
 	public static void main(String[] args) {
-		Board board = new Board();
-		board.setMap("map1");
+		Board board = new Board("map1");
 		
 		DifficultAI aid = new DifficultAI(2, 0, 0, board, "aid");
 		EasyAI aie = new EasyAI(1, 0, 0, board, "aie");
