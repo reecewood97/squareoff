@@ -195,10 +195,10 @@ public class mainMenu extends Application {
     
     public static String mapChoice() {
     	List<String> choices = new ArrayList<>();
-    	choices.add("Map 1");
-    	choices.add("Map 2");
+    	choices.add("map1");
+    	choices.add("map2");
 
-    	ChoiceDialog<String> dialog = new ChoiceDialog<>("Map 1", choices);
+    	ChoiceDialog<String> dialog = new ChoiceDialog<>("map1", choices);
     	dialog.setTitle("Square-Off: Map Selection");
     	dialog.setHeaderText("Selecting a Map to play on");
     	dialog.setContentText("Please choose a map:");
