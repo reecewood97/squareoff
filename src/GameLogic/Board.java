@@ -101,10 +101,12 @@ public class Board {
 		objects.add(new TerrainBlock(1,1,new Point2D.Double(430, 150), true));
 		
 		//level1
-		for(int i = 100; i < 700; i+=40) {
-			PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
-			objects.add(block);
-		}
+//		for(int i = 100; i < 700; i+=40) {
+//			PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
+//			objects.add(block);
+//		}
+		PhysObject bloc = new TerrainBlock(1, 1,new Point2D.Double(100,120), true);
+		objects.add(bloc);
 		//level2
 		for(int i = 100; i < 700; i+=120){
 			
@@ -822,15 +824,18 @@ public class Board {
 				if ((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
 						|| (object.getPos().getX() > 850)) {
 
-					if (object.getInUse()) {
+					if (((Square) object).getAlive()) {
 
-						object.setInUse(false);
+						((Square) object).setDead();
 						// audio.splash();
+						
 						if (winner != 5) {
-							if (checkForWinner() != -1) {
+							//System.out.println("checking for winner");
+							int won = checkForWinner(objs);
+							if (won != -1) {
 								if (debug)
 									System.out.println("winner?");
-								int won = findPlayer();
+								//int won = findPlayer();
 								setWinner(won);
 								turn.interrupt();
 							}
@@ -1012,10 +1017,12 @@ public class Board {
 				activePlayer.setDead();
 				audio.splash();
 				if (winner != 5) {
-					if (checkForWinner() != -1) {
+					//System.out.println("Checking for winner at 1");
+					int won = checkForWinner(getSquares());
+					if (won != -1) {
 						if (debug)
 							System.out.println("winner?");
-						int won = findPlayer();
+						//int won = findPlayer();
 						setWinner(won);
 						turn.interrupt();
 					}
@@ -1327,13 +1334,20 @@ public class Board {
 	/**
 	 * Checks the arraylist of Squares to see if any two living squares have
 	 * different players
+	 * @param arrayList 
 	 * 
 	 * @return True if all living squares are played by the same player, false
 	 *         otherwise.
 	 */
-	public int checkForWinner() {
+	public int checkForWinner(ArrayList<PhysObject> arrayList) {
 		// System.err.println("We are checking when someone dies");
-		ArrayList<PhysObject> chickenDinner = getSquares();
+		ArrayList<PhysObject> chickenDinner = new ArrayList<PhysObject>();
+		for (PhysObject thing : arrayList){
+			if (thing.getName().equals("Square")){
+				chickenDinner.add(thing);
+			}
+		}
+		
 		int winner = -1;
 
 		for (int i = 0; i < chickenDinner.size(); i++) {
@@ -1358,20 +1372,20 @@ public class Board {
 
 	}
 
-	/**
-	 * Code to select a specific player
-	 * 
-	 * @return the ID of the player.
-	 */
-	private int findPlayer() {
-		ArrayList<PhysObject> chickenDinner = getSquares();
-		for (int i = 0; i < chickenDinner.size(); i++) {
-			Square first = ((Square) chickenDinner.get(i));
-			if (first.getAlive())
-				return ((Square) chickenDinner.get(0)).getPlayerID();
-		}
-		return -1;
-	}
+//	/**
+//	 * Code to select a specific player
+//	 * 
+//	 * @return the ID of the player.
+//	 */
+//	private int findPlayer() {
+//		ArrayList<PhysObject> chickenDinner = getSquares();
+//		for (int i = 0; i < chickenDinner.size(); i++) {
+//			Square first = ((Square) chickenDinner.get(i));
+//			if (first.getAlive())
+//				return ((Square) chickenDinner.get(0)).getPlayerID();
+//		}
+//		return -1;
+//	}
 
 	/**
 	 * Removes a name from the array of players (way more difficult than
