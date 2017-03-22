@@ -28,7 +28,7 @@ public class Board {
 	// Keep track of the current player
 	private int player;
 	private int squareID;
-	private static Square activePlayer;
+	private Square activePlayer;
 	// Keep track of state of the board
 	private String map;
 	private ArrayList<PhysObject> objects;
@@ -233,7 +233,7 @@ public class Board {
 
 	}
 
-	public void setActivePlayer(int newPlayer, int newID) {
+	private void setActivePlayer(int newPlayer, int newID) {
 
 		// System.out.println("NEW PLAYER" + newPlayer +
 		// "************************");
@@ -244,13 +244,19 @@ public class Board {
 		int x = player + squareID;
 		activePlayer = (Square) getSquares().get(x);
 		for (PhysObject phys : getSquares()) {
-			Square square = (Square) phys;
-			square.setActivePlayer(false);
+			((Square)phys).setActivePlayer(false);
 		}
 		activePlayer.setActivePlayer(true);
+		
 		objects.remove(x);
 		objects.add(x, activePlayer);
 
+//		for (PhysObject square : getSquares()) {
+//
+//			System.out.println(((Square) square).getActivePlayer());
+//			
+//		}
+//		System.out.println();
 	}
 
 	public PhysObject getActivePlayer() {
@@ -266,8 +272,10 @@ public class Board {
 	 * @return the active player.
 	 */
 	public PhysObject getActiveBoard() {
-		for (PhysObject square : this.getSquares()) {
+		
+		for (PhysObject square : getSquares()) {
 
+			//System.out.println(((Square) square).getActivePlayer());
 			if (((Square) square).getActivePlayer()) {
 
 				//System.out.println("player id " + ((Square) square).getPlayerID());
@@ -787,6 +795,8 @@ public class Board {
 	 * the turn.
 	 */
 	private void freeSim() {
+		
+		
 		// This is going to be relatively quite slow. Perhaps it can be improved
 		// later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
@@ -818,7 +828,7 @@ public class Board {
 				break;
 			}
 		}
-
+		
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
@@ -869,7 +879,7 @@ public class Board {
 		for (Collision collision : list) {
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
-
+		
 		for (PhysObject object : objs) {
 			if (object.getInUse()) {
 				if ((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
@@ -935,10 +945,13 @@ public class Board {
 			if (debug)
 				System.out.println("FreeState exited due to no movement");
 			freeState = false;
-			incrementTurn();
+			//incrementTurn();
 		}
 		turn.resetTimer();
 		objects = objs;
+		if(same)
+			incrementTurn();
+		
 	}
 
 	/**
@@ -1072,8 +1085,8 @@ public class Board {
 				incrementTurn();
 			}
 			int x = player + squareID;
+			objects.remove(x);
 			objects.add(x, activePlayer);
-			objects.remove(x + 1);
 		}
 	}
 
