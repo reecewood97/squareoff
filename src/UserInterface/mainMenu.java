@@ -99,9 +99,9 @@ public class mainMenu extends Application {
         	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
-    		//System.err.println("show ui ran");
+    		////System.err.println("show ui ran");
     	}
-    	//System.err.println("show ui did nothing");
+    	////System.err.println("show ui did nothing");
     }
     
     /**
@@ -396,6 +396,7 @@ public class mainMenu extends Application {
 	public static void hostLobby() {
 		String name = hostUsername();
     		
+
     	if (name==null) {
     		ps.setScene(ogScene);
     		ps.setTitle("Square-Off: Start Menu");
@@ -420,21 +421,21 @@ public class mainMenu extends Application {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					System.err.println("host STILL IN WHILE LOOP");
+					//System.err.println("host STILL IN WHILE LOOP");
 					//System.err.println("host isConnected: " + net.isConnected());
 					//System.err.println("host inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// System.err.println("host if");
+								// //System.err.println("host if");
 								showUI();
 								refreshHLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
 								//System.err.println("host else if");
 								hideUI();
 							} else {
-								System.err.println("host else");
+								//System.err.println("host else");
 								//System.err.println("host isConnected: " + net.isConnected());
 								//System.err.println("host inGame: " + net.inGame());
 								net.resetServer();
@@ -470,21 +471,21 @@ public class mainMenu extends Application {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					System.err.println("client STILL IN WHILE LOOP");
+					//System.err.println("client STILL IN WHILE LOOP");
 					//System.err.println("client isConnected: " + net.isConnected());
 					//System.err.println("client inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// System.err.println("client if");
+								// //System.err.println("client if");
 								showUI();
 								refreshCLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
 								//System.err.println("client else if");
 								hideUI();
 							} else {
-								System.err.println("client else");
+								//System.err.println("client else");
 								//System.err.println("client isConnected: " + net.isConnected());
 								//System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
 								inLobby = false;

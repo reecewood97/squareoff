@@ -3,7 +3,7 @@ package Networking;
 public class ServerTest {
 
 	public static void main(String[] args) {
-		Server server = new Server(4444);
+		Server server = new Server("map1",4444);
 		server.start();
 		
 		Client bob = new Client("Bob");
