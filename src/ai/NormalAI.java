@@ -51,6 +51,11 @@ public class NormalAI extends AI {
 		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
 		// Usually places that has higher hp (defense), or, there is a clear shooting path (ai and enemy on the same level(y axis))
 		determineResult();
+		aiMoveHelper();
+		
+	}
+	
+	public void aiMoveHelper() {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();
 
@@ -148,7 +153,7 @@ public class NormalAI extends AI {
 				
 				// calculate shortest displacement by pythagoras theorem
 				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-				if (displacement < finalDis) {
+				if (displacement < finalDis && !dontKillMyself(myX, myY, enemyX, enemyY)) {
 					finalDis = displacement;
 					finalX = enemyX;
 					finalY = enemyY;
@@ -157,6 +162,10 @@ public class NormalAI extends AI {
 			}
 		}
 		
+		if (finalSquare == null) {
+			setObstacles(true);
+			aiMoveHelper();
+		}
 		// return the coordinates
 
 		System.out.println("Enemy at " + finalSquare.getPos());
