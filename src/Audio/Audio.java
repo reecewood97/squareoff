@@ -4,6 +4,7 @@ import java.io.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 /**
  * audio class controls music and sounds
@@ -47,10 +48,7 @@ public class Audio implements Serializable
 	}
 	
 	public void sam(){
-		System.out.println("sam");
-		System.out.println(music.isInterrupted());
 		music.end();
-		System.out.println(music.isInterrupted());
 	}
 	
 	
@@ -76,6 +74,10 @@ public class Audio implements Serializable
 		        Clip explosion = AudioSystem.getClip();
 		        explosion.open(audioInputStream);
 		       
+		        FloatControl gainControl = 
+		        	    (FloatControl) explosion.getControl(FloatControl.Type.MASTER_GAIN);
+		        	gainControl.setValue(-12.0f); // Reduce volume by 12 decibels.
+		        
 		        //play
 		        explosion.start();
 		         

@@ -120,6 +120,8 @@ public class mainMenu extends Application {
     public void start(Stage primaryStage) throws Exception {
     	ps = primaryStage;
     	ps.setTitle("Square-Off: Start Menu");
+    	
+    	//ps.initStyle(StageStyle.UNDECORATED);
         
         Button btn = new Button("Host Game");
         btn.setMinWidth(100);
