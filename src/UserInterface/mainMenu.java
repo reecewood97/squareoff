@@ -178,19 +178,43 @@ public class mainMenu extends Application {
      * @return a string of the host's name or null if nothing is entered/player presses the cancel button
      */
     public static String hostUsername() {
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Square-Off: Hosting Game");
-		dialog.setHeaderText("Setting your user name");
-		dialog.setContentText("Please enter your name:");
+    	while (true) {
+    		TextInputDialog dialog = new TextInputDialog();
+    		dialog.setTitle("Square-Off: Hosting Game");
+    		dialog.setHeaderText("Setting your user name");
+    		dialog.setContentText("Please enter your name:");
 
-		Optional<String> result = dialog.showAndWait();
-		a.click();
+    		Optional<String> result = dialog.showAndWait();
+    		a.click();
 
-		if (result.isPresent() && !(result.get().isEmpty())) {
-			return result.get();
-		} else {
-			return null;
-		}
+    		if (result.isPresent() && !(result.get().isEmpty())) {
+    			if ( result.get().matches("^([A-Za-z]|[0-9])+$") && (result.get().length() < 62) ) {
+    				return result.get();
+    			}
+    			else if (result.get().length() > 61) {
+    	    		Alert alert;
+    				alert = new Alert(AlertType.WARNING);
+    				alert.setHeaderText("Error: Name too long");
+    				alert.setContentText("The maximum name length is 61 alphanumeric characters");
+    				alert.setTitle("Square-Off: Hosting Game");
+    				alert.showAndWait();
+    				a.click();
+    			}
+    			else {
+    	    		Alert alert;
+    				alert = new Alert(AlertType.WARNING);
+    				alert.setHeaderText("Error: Invalid Characters");
+    				alert.setContentText("Your name can only contain alphanumeric characters");
+    				alert.setTitle("Square-Off: Hosting Game");
+    				alert.showAndWait();
+    				a.click();
+    			}
+    			
+    		}
+    		else {
+    			return null;
+    		}
+    	}
 	} 
     
     public static String mapChoice() {
@@ -397,8 +421,8 @@ public class mainMenu extends Application {
 			public Void call() throws Exception {
 				while (inLobby) {
 					System.err.println("host STILL IN WHILE LOOP");
-					System.err.println("host isConnected: " + net.isConnected());
-					System.err.println("host inGame: " + net.inGame());
+					//System.err.println("host isConnected: " + net.isConnected());
+					//System.err.println("host inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -407,12 +431,12 @@ public class mainMenu extends Application {
 								showUI();
 								refreshHLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								System.err.println("host else if");
+								//System.err.println("host else if");
 								hideUI();
 							} else {
 								System.err.println("host else");
-								System.err.println("host isConnected: " + net.isConnected());
-								System.err.println("host inGame: " + net.inGame());
+								//System.err.println("host isConnected: " + net.isConnected());
+								//System.err.println("host inGame: " + net.inGame());
 								net.resetServer();
 								net.connectToHost("localhost", name);
 								showUI();
@@ -447,8 +471,8 @@ public class mainMenu extends Application {
 			public Void call() throws Exception {
 				while (inLobby) {
 					System.err.println("client STILL IN WHILE LOOP");
-					System.err.println("client isConnected: " + net.isConnected());
-					System.err.println("client inGame: " + net.inGame());
+					//System.err.println("client isConnected: " + net.isConnected());
+					//System.err.println("client inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -457,12 +481,12 @@ public class mainMenu extends Application {
 								showUI();
 								refreshCLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								System.err.println("client else if");
+								//System.err.println("client else if");
 								hideUI();
 							} else {
 								System.err.println("client else");
-								System.err.println("client isConnected: " + net.isConnected());
-								System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
+								//System.err.println("client isConnected: " + net.isConnected());
+								//System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
 								inLobby = false;
 								showUI();
 								ps.setScene(ogScene);
@@ -543,8 +567,17 @@ public class mainMenu extends Application {
 			a.click();
     	}
     	else {
-    		if (net.connectToHost(hostAddress, name))
+    		if (net.connectToHost(hostAddress, name) == 0)
 				clientLobby(net);
+    		else if (net.connectToHost(hostAddress, name) == 2) {
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setHeaderText("Error: Name in use");
+				alert.setContentText("There is already a client in the server with the name: " + name);
+				alert.setTitle("Square-Off: Joining Game");
+				alert.showAndWait();
+				a.click();
+    		}
 			else {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
