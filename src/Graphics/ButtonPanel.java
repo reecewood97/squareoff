@@ -114,10 +114,10 @@ public class ButtonPanel extends JPanel{
 		Audio audioforclick = new Audio();
 		audioforclick.click();
 		
-		Square square = (Square) board.getActivePlayer();
-		int id = square.getPlayerID();
+		//Square square = (Square) board.getActivePlayer();
+		//int id = square.getPlayerID();
 		
-		ArrayList<String> a = client.getPlayers();
+		//ArrayList<String> a = client.getPlayers();
 	
 		/*
 		//checks they are the active player
