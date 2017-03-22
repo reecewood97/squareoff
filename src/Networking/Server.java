@@ -227,6 +227,4 @@ public class Server extends Thread {
 		//Tell all clients to reconnect.
 		table.sendAll(Server.RESET_CONNECTION);
 	}
-	
-	
 }

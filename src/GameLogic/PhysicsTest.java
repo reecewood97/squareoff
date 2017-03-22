@@ -20,8 +20,7 @@ public class PhysicsTest extends TestCase {
 	
 	@Before
 	public void setUp(){
-		board = new Board();
-		board.setMap("map1");
+		board = new Board("map1");
 		String[] players = new String[4];
 		for(int i = 0; i < players.length;i++){
 			players[i] = ""+(i+1);
