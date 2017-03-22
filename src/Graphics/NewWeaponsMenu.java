@@ -229,7 +229,11 @@ public class NewWeaponsMenu extends JFrame {
 	    	
 	    }
 
-
+	    /**
+	     * method for when left button is selected
+	     * displays weapon in index below
+	     * 
+	     */
 	    public void cycleLeft() {
 	  
 	    	//click sound

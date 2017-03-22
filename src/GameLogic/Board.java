@@ -28,7 +28,7 @@ public class Board {
 	// Keep track of the current player
 	private int player;
 	private int squareID;
-	private static Square activePlayer;
+	private Square activePlayer;
 	// Keep track of state of the board
 	private String map;
 	private ArrayList<PhysObject> objects;
@@ -45,6 +45,7 @@ public class Board {
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
 	private int numberOfPlayers = 0;
+	private int sent = 0;
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
 	private boolean turnChangedFlag = true;
@@ -70,107 +71,119 @@ public class Board {
 	 * @param map
 	 *            Which map is being used
 	 */
-	public Board(String map) {
+	public Board(String map){
+
 		this.objects = new ArrayList<PhysObject>();
 		this.explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
-		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); // This
-																	// handles
-																	// the moves
-																	// that need
-																	// to be
-																	// sent to
-																	// clients.
+		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); 
 		this.winner = -1;
 		this.map = map;
 		this.turn = new TurnMaster(this);
-		// this.q = new ArrayBlockingQueue<String>(100); //This handles the
-		// moves that need to be sent to clients.
-
-		// BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
-		// Initialise the placements of the 4 teams.
-		Point2D.Double redpos = new Point2D.Double(100, 150);
-		PhysObject red = new Square(1, 0, 0, redpos);
-		((Square) red).setActivePlayer(true);
-		Point2D.Double blupos = new Point2D.Double(300, 150);
-		PhysObject blu = new Square(2, 0, 0, blupos);
-		Point2D.Double yelpos = new Point2D.Double(400, 150);
-		PhysObject yel = new Square(3, 0, 0, yelpos);
-		Point2D.Double grnpos = new Point2D.Double(500, 150);
-		PhysObject grn = new Square(4, 0, 0, grnpos);
-		objects.add(red);
-		objects.add(blu);
-		objects.add(yel);
-		objects.add(grn);
-
-		// Which map are we playing on? Initialise the correct one.
-		if (this.map.equals("map1")) {
-			// Draw blocks at bottom of map
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(240, 150), true));
-
-			for (int i = 100; i < 700; i += 40) {
-				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 120), true);
+		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
+	
+		
+		if(map.equals("map1")){
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(300, 150);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(400, 150);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(500, 150);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//Create Blocks
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
+			
+			//level1
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
-	
-			
+			//level2
 			for(int i = 100; i < 700; i+=120){
 				
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
-
+	
 			}
-
-			for (int i = 150; i < 700; i += 160) {
-
-				PhysObject block = new TerrainBlock(1, 2, new Point2D.Double(i, 270), true);
+			//level3
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
-
+	
 			}
-
+	
+	
 			for (int i = 50; i < 700; i += 200) {
-
+	
 				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
+	
 				objects.add(block);
-
+	
 			}
-		} else {
-
-			// Draw blocks at bottom of map
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(240, 150), true));
-
-			for (int i = 100; i < 700; i += 40) {
-				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 120), true);
-				objects.add(block);
-			}
-
-			for (int i = 100; i < 700; i += 120) {
-
-				PhysObject block = new TerrainBlock(1, 2, new Point2D.Double(i, 170), true);
-				objects.add(block);
-
-			}
-
-			for (int i = 150; i < 700; i += 160) {
-
-				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 220), true);
-				objects.add(block);
-
-			}
-
-			for (int i = 50; i < 700; i += 200) {
-
-				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 445), true);
-				objects.add(block);
-
-			}
-
 		}
-
-		this.player = 0;
-		this.squareID = 0;
-		activePlayer = (Square) objects.get(0);
-
+		else{
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(300, 150);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(400, 150);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(500, 150);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//Create Blocks
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(430, 150), true));
+			
+			//level1
+			for(int i = 100; i < 700; i+=40) {
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
+				objects.add(block);
+			}
+			//level2
+			for(int i = 100; i < 700; i+=120){
+				
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
+				objects.add(block);
+	
+			}
+			//level3
+			for(int i = 150; i < 700; i+=160){
+				
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
+				objects.add(block);
+	
+			}
+	
+	
+			for (int i = 50; i < 700; i += 200) {
+	
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
+	
+				objects.add(block);
+	
+			}
+			
+		}
+		
+		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
 		objects.add(weapon);
@@ -182,6 +195,12 @@ public class Board {
 
 		PhysObject targetline = new TargetLine();
 		objects.add(targetline);
+
+		this.player = 0;
+		this.squareID = 0;
+		
+		activePlayer = (Square)objects.get(0);
+		
 	}
 
 	public void setFreeState(boolean free) {
@@ -206,7 +225,7 @@ public class Board {
 
 	}
 
-	public void setActivePlayer(int newPlayer, int newID) {
+	private void setActivePlayer(int newPlayer, int newID) {
 
 		// System.out.println("NEW PLAYER" + newPlayer +
 		// "************************");
@@ -217,13 +236,19 @@ public class Board {
 		int x = player + squareID;
 		activePlayer = (Square) getSquares().get(x);
 		for (PhysObject phys : getSquares()) {
-			Square square = (Square) phys;
-			square.setActivePlayer(false);
+			((Square)phys).setActivePlayer(false);
 		}
 		activePlayer.setActivePlayer(true);
+		
 		objects.remove(x);
 		objects.add(x, activePlayer);
 
+//		for (PhysObject square : getSquares()) {
+//
+//			System.out.println(((Square) square).getActivePlayer());
+//			
+//		}
+//		System.out.println();
 	}
 
 	public PhysObject getActivePlayer() {
@@ -239,8 +264,10 @@ public class Board {
 	 * @return the active player.
 	 */
 	public PhysObject getActiveBoard() {
-		for (PhysObject square : this.getSquares()) {
+		
+		for (PhysObject square : getSquares()) {
 
+			//System.out.println(((Square) square).getActivePlayer());
 			if (((Square) square).getActivePlayer()) {
 
 				//System.out.println("player id " + ((Square) square).getPlayerID());
@@ -760,6 +787,8 @@ public class Board {
 	 * the turn.
 	 */
 	private void freeSim() {
+		
+		
 		// This is going to be relatively quite slow. Perhaps it can be improved
 		// later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
@@ -791,7 +820,7 @@ public class Board {
 				break;
 			}
 		}
-
+		
 		for (PhysObject obj : objs) {
 			obj.update();
 		}
@@ -842,21 +871,31 @@ public class Board {
 		for (Collision collision : list) {
 			resolveCollision(objs, collision.getThing(), collision.getBlock());
 		}
-
+		
 		for (PhysObject object : objs) {
 			if (object.getInUse()) {
-				if ((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
-						|| (object.getPos().getX() > 850)) {
+				if (((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
+						|| (object.getPos().getX() > 850))) {
+					
+					object.setInUse(false);
+						
+					if ((object.getName().equals("Square"))) {
 
-					if (object.getInUse()) {
-
-						object.setInUse(false);
-						// audio.splash();
+						((Square) object).setDead();
+						 audio.splash();
+						 for (PhysObject one : objs) {
+							 	if(one.getName().equals("Square"))
+							 		System.out.println(one.getInUse());
+							}
+						 
+						
 						if (winner != 5) {
-							if (checkForWinner() != -1) {
+							//System.out.println("checking for winner");
+							int won = checkForWinner(objs);
+							if (won != -1) {
 								if (debug)
 									System.out.println("winner?");
-								int won = findPlayer();
+								//int won = findPlayer();
 								setWinner(won);
 								turn.interrupt();
 							}
@@ -908,10 +947,14 @@ public class Board {
 			if (debug)
 				System.out.println("FreeState exited due to no movement");
 			freeState = false;
-			incrementTurn();
+			//incrementTurn();
 		}
 		turn.resetTimer();
 		objects = objs;
+		if(same) {
+			incrementTurn();
+		}
+		
 	}
 
 	/**
@@ -1034,10 +1077,12 @@ public class Board {
 				activePlayer.setDead();
 				audio.splash();
 				if (winner != 5) {
-					if (checkForWinner() != -1) {
+					//System.out.println("Checking for winner at 1");
+					int won = checkForWinner(getSquares());
+					if (won != -1) {
 						if (debug)
 							System.out.println("winner?");
-						int won = findPlayer();
+						//int won = findPlayer();
 						setWinner(won);
 						turn.interrupt();
 					}
@@ -1045,8 +1090,8 @@ public class Board {
 				incrementTurn();
 			}
 			int x = player + squareID;
+			objects.remove(x);
 			objects.add(x, activePlayer);
-			objects.remove(x + 1);
 		}
 	}
 
@@ -1349,13 +1394,20 @@ public class Board {
 	/**
 	 * Checks the arraylist of Squares to see if any two living squares have
 	 * different players
+	 * @param arrayList 
 	 * 
 	 * @return True if all living squares are played by the same player, false
 	 *         otherwise.
 	 */
-	public int checkForWinner() {
+	public int checkForWinner(ArrayList<PhysObject> arrayList) {
 		// System.err.println("We are checking when someone dies");
-		ArrayList<PhysObject> chickenDinner = getSquares();
+		ArrayList<PhysObject> chickenDinner = new ArrayList<PhysObject>();
+		for (PhysObject thing : arrayList){
+			if (thing.getName().equals("Square")){
+				chickenDinner.add(thing);
+			}
+		}
+		
 		int winner = -1;
 
 		for (int i = 0; i < chickenDinner.size(); i++) {
@@ -1380,20 +1432,20 @@ public class Board {
 
 	}
 
-	/**
-	 * Code to select a specific player
-	 * 
-	 * @return the ID of the player.
-	 */
-	private int findPlayer() {
-		ArrayList<PhysObject> chickenDinner = getSquares();
-		for (int i = 0; i < chickenDinner.size(); i++) {
-			Square first = ((Square) chickenDinner.get(i));
-			if (first.getAlive())
-				return ((Square) chickenDinner.get(0)).getPlayerID();
-		}
-		return -1;
-	}
+//	/**
+//	 * Code to select a specific player
+//	 * 
+//	 * @return the ID of the player.
+//	 */
+//	private int findPlayer() {
+//		ArrayList<PhysObject> chickenDinner = getSquares();
+//		for (int i = 0; i < chickenDinner.size(); i++) {
+//			Square first = ((Square) chickenDinner.get(i));
+//			if (first.getAlive())
+//				return ((Square) chickenDinner.get(0)).getPlayerID();
+//		}
+//		return -1;
+//	}
 
 	/**
 	 * Removes a name from the array of players (way more difficult than
@@ -1524,5 +1576,35 @@ public class Board {
 	 */
 	public boolean getTurnFlag() {
 		return turnChangedFlag;
+	}
+	
+	/**
+	 * Returns the number of players who have received the turn over signal to reset their local timers.
+	 * @return the number of sent signals
+	 */
+	public int sent(){
+		return sent;
+	}
+	
+	/**
+	 * Change the number of players who have sent the reset timer signal
+	 * @param x the number of people who have sent the signal
+	 */
+	public void setSent(int x){
+		sent = x;
+	}
+	
+	/**
+	 * Checks how many players are not AI
+	 * @return ret the number of real players.
+	 */
+	public int nonAIPlayers(){
+		int ret = 0;
+		for (int i = 0; i < 4; i++){
+			if (!players[i].contains("AI")){
+				ret ++;
+			}
+		}
+		return ret;
 	}
 }

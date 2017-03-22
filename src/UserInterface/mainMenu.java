@@ -9,6 +9,7 @@ package UserInterface;
 import Audio.Audio;
 import Graphics.SplashSplash;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -52,7 +54,7 @@ public class mainMenu extends Application {
 	static boolean isHidden = false;
 	static boolean inLobby = false;
 	static int aiDifficulty = 1;
-	static int map = 1;
+	static String map = "map1";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -97,9 +99,9 @@ public class mainMenu extends Application {
         	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
-    		//System.err.println("show ui ran");
+    		////System.err.println("show ui ran");
     	}
-    	//System.err.println("show ui did nothing");
+    	////System.err.println("show ui did nothing");
     }
     
     /**
@@ -160,7 +162,7 @@ public class mainMenu extends Application {
         
         ogScene = new Scene(grid, width, height, Color.LIGHTBLUE);
         
-        btn.setOnAction( e -> { a.click(); lobbyWindow("Host", (new mainMenuNetwork()) ); } );
+        btn.setOnAction( e -> { a.click(); hostLobby(); } ); //lobbyWindow("Host", (new mainMenuNetwork()) ); } );
         btn2.setOnAction( e -> { a.click(); jgWindow(); } );
         btn3.setOnAction( e -> { a.click(); oWindow(); } );
         btn5.setOnAction( e -> { a.click(); helpWindow(); } );
@@ -176,20 +178,62 @@ public class mainMenu extends Application {
      * @return a string of the host's name or null if nothing is entered/player presses the cancel button
      */
     public static String hostUsername() {
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Square-Off: Hosting Game");
-		dialog.setHeaderText("Setting your player name");
-		dialog.setContentText("Please enter your name:");
+    	while (true) {
+    		TextInputDialog dialog = new TextInputDialog();
+    		dialog.setTitle("Square-Off: Hosting Game");
+    		dialog.setHeaderText("Setting your user name");
+    		dialog.setContentText("Please enter your name:");
 
-		Optional<String> result = dialog.showAndWait();
-		a.click();
+    		Optional<String> result = dialog.showAndWait();
+    		a.click();
 
-		if (result.isPresent() && !(result.get().isEmpty())) {
-			return result.get();
-		} else {
-			return null;
-		}
+    		if (result.isPresent() && !(result.get().isEmpty())) {
+    			if ( result.get().matches("^([A-Za-z]|[0-9])+$") && (result.get().length() < 62) ) {
+    				return result.get();
+    			}
+    			else if (result.get().length() > 61) {
+    	    		Alert alert;
+    				alert = new Alert(AlertType.WARNING);
+    				alert.setHeaderText("Error: Name too long");
+    				alert.setContentText("The maximum name length is 61 alphanumeric characters");
+    				alert.setTitle("Square-Off: Hosting Game");
+    				alert.showAndWait();
+    				a.click();
+    			}
+    			else {
+    	    		Alert alert;
+    				alert = new Alert(AlertType.WARNING);
+    				alert.setHeaderText("Error: Invalid Characters");
+    				alert.setContentText("Your name can only contain alphanumeric characters");
+    				alert.setTitle("Square-Off: Hosting Game");
+    				alert.showAndWait();
+    				a.click();
+    			}
+    			
+    		}
+    		else {
+    			return null;
+    		}
+    	}
 	} 
+    
+    public static String mapChoice() {
+    	List<String> choices = new ArrayList<>();
+    	choices.add("map1");
+    	choices.add("map2");
+
+    	ChoiceDialog<String> dialog = new ChoiceDialog<>("map1", choices);
+    	dialog.setTitle("Square-Off: Map Selection");
+    	dialog.setHeaderText("Selecting a Map to play on");
+    	dialog.setContentText("Please choose a map:");
+
+    	// Traditional way to get the response value.
+    	Optional<String> result = dialog.showAndWait();
+    	if (result.isPresent())
+    		return result.get();
+    	else
+    		return null;
+    }
     
     /**
      * This method creates the lobby for the host (one with a start button)
@@ -246,39 +290,9 @@ public class mainMenu extends Application {
                 }
         });
         
-        
-        
-        
-        final ToggleGroup group2 = new ToggleGroup();
-        
-        RadioButton rb4 = new RadioButton("Map 1");
-        rb4.setToggleGroup(group2);
-        RadioButton rb5 = new RadioButton("Map 2");
-        rb5.setToggleGroup(group2);
-        
-        if (map == 1)
-        	rb4.setSelected(true);
-        else
-        	rb5.setSelected(true);
-        
-        net.setAIDifficulty(aiDifficulty);
-        
-        group2.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-            public void changed(ObservableValue<? extends Toggle> ov,
-                Toggle old_toggle, Toggle new_toggle) {
-                    if (group2.getSelectedToggle() != null) {
-                        if (rb4.isSelected())
-                        	map = 1;
-                        else
-                        	map = 2;
-                    }                
-                }
-        });
-        
         btn6.requestFocus();
         
         Label label1 = new Label("AI Difficulty:");
-        Label label2 = new Label("Map:");
         
         HBox hbox2 = new HBox();
         VBox vbox2 = new VBox();
@@ -293,21 +307,8 @@ public class mainMenu extends Application {
         hbox2.setSpacing(50);
         hbox2.setPadding(new Insets(20, 10, 10, 20));
         
-        
-        HBox hbox3 = new HBox();
-        VBox vbox3 = new VBox();
-
-        vbox3.getChildren().add(label2);
-        vbox3.getChildren().add(rb4);
-        vbox3.getChildren().add(rb5);
-        vbox3.setSpacing(10);
-
-        hbox3.getChildren().add(vbox3);
-        hbox3.setSpacing(50);
-        hbox3.setPadding(new Insets(20, 10, 10, 20));
-        
         VBox vbox4 = new VBox();
-        vbox4.getChildren().addAll(hbox2, hbox3);
+        vbox4.getChildren().addAll(hbox2);
         //vbox4.setSpacing(50);
         //vbox4.setPadding(new Insets(20, 10, 10, 20));
         
@@ -386,112 +387,124 @@ public class mainMenu extends Application {
         ps.show();
     } 
 
+    
+    
+    /**
+     * This method is run when entering a lobby
+     * It determines whether you're a host or client and sets up the lobby accordingly
+     */
+	public static void hostLobby() {
+		String name = hostUsername();
+    		
+
+    	if (name==null) {
+    		ps.setScene(ogScene);
+    		ps.setTitle("Square-Off: Start Menu");
+    		return;
+    	}
+    	
+    	map = mapChoice();
+    	
+    	if (map==null) {
+    		ps.setScene(ogScene);
+    		ps.setTitle("Square-Off: Start Menu");
+    		return;
+    	}
+    	
+    	mainMenuNetwork net = new mainMenuNetwork(map);
+    	net.runServer();
+    	net.connectToHost("localhost", name);
+    		
+    	inLobby = true;
+    		
+    	Task<Void> task = new Task<Void>() {
+			@Override
+			public Void call() throws Exception {
+				while (inLobby) {
+					//System.err.println("host STILL IN WHILE LOOP");
+					//System.err.println("host isConnected: " + net.isConnected());
+					//System.err.println("host inGame: " + net.inGame());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							if (net.isConnected() && !net.inGame()) {
+								// //System.err.println("host if");
+								showUI();
+								refreshHLobby(net);
+							} else if (net.isConnected() && net.inGame()) {
+								//System.err.println("host else if");
+								hideUI();
+							} else {
+								//System.err.println("host else");
+								//System.err.println("host isConnected: " + net.isConnected());
+								//System.err.println("host inGame: " + net.inGame());
+								net.resetServer();
+								net.connectToHost("localhost", name);
+								showUI();
+							}
+						}
+					});
+					Thread.sleep(750);
+				}
+				return null;
+			}
+		};
+		Thread th = new Thread(task);
+		th.setDaemon(true);
+		th.start();
+
+	}
+    
+    
+    
+    
     /**
      * This method is run when entering a lobby
      * It determines whether you're a host or client and sets up the lobby accordingly
      * @param type string used to determine whether the player is a host or client
      * @param net class which handles the networking of the player
      */
-	public static void lobbyWindow(String type, mainMenuNetwork net) {
-    	
-    	if (type.equals("Host")) {
-    		String name = hostUsername();
-    		
-    		if (name==null) {
-    			ps.setScene(ogScene);
-    			ps.setTitle("Square-Off: Start Menu");
-    			//net.closeServer();
-    			return;
-    		}
+	public static void clientLobby(mainMenuNetwork net) {
+		inLobby = true;
 
-    		net.runServer();
-    		net.connectToHost("localhost", name);
-    		
-    		inLobby = true;
-    		
-    		Task<Void> task = new Task<Void>() {
-    			  @Override
-    			  public Void call() throws Exception {
-    			    while (inLobby) {
-    			      System.err.println("host STILL IN WHILE LOOP");
-    			      System.err.println("host isConnected: " + net.isConnected());
-    			      System.err.println("host inGame: " + net.inGame() );
-    			      Platform.runLater(new Runnable() {
-    			        @Override
-    			        public void run() {
-    			        	if ( net.isConnected() && !net.inGame() ) {
-    			        		//System.err.println("host if");
-    			        		showUI();
-    			        		refreshHLobby(net);
-    			        	}
-    			        	else if ( net.isConnected() && net.inGame() ) {
-    			        		System.err.println("host else if");
-    			        		hideUI();	
-    			        	}
-    			        	else {
-    			        		System.err.println("host else");
-    			        		System.err.println("host isConnected: " + net.isConnected());
-    			        		System.err.println("host inGame: " + net.inGame() );
-    			        		net.resetServer();
-    			        		net.connectToHost("localhost", name);
-    			        		showUI();
-    			        	}
-    			        }
-    			      });
-    			      Thread.sleep(750);
-    			    }
-					return null;
-    			  }
-    			};
-    			Thread th = new Thread(task);
-    			th.setDaemon(true);
-    			th.start();
-    			
-    	}
-    	else {
-    		inLobby = true;
-    		
-    		Task<Void> task = new Task<Void>() {
-    			  @Override
-    			  public Void call() throws Exception {
-    			    while (inLobby) {
-    			      System.err.println("client STILL IN WHILE LOOP");
-    			      System.err.println("client isConnected: " + net.isConnected());
-		        	  System.err.println("client inGame: " + net.inGame() );
-    			      Platform.runLater(new Runnable() {
-    			        @Override
-    			        public void run() {
-    			        	if ( net.isConnected() && !net.inGame() ) {
-    			        		//System.err.println("client if");
-    			        		showUI();
-    			        		refreshCLobby(net);
-    			        	}
-    			        	else if ( net.isConnected() && net.inGame() ) {
-    			        		System.err.println("client else if");
-    			        		hideUI();
-    			        	}
-    			        	else {
-    			        		System.err.println("client else");
-    			        		System.err.println("client isConnected: " + net.isConnected());
-    			        		System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
-    			        		inLobby = false;
-    			        		showUI();
-    			        		ps.setScene(ogScene);
-    			        		ps.setTitle("Square-Off: Start Menu");
-    			        		
-    			        	}
-    			        }
-    			      });
-    			      Thread.sleep(750);
-    			    }
-					return null;
-    			  }
-    			};
-    			Thread th = new Thread(task);
-    			th.setDaemon(true);
-    			th.start();
-    	}
-    }
+		Task<Void> task = new Task<Void>() {
+			@Override
+			public Void call() throws Exception {
+				while (inLobby) {
+					//System.err.println("client STILL IN WHILE LOOP");
+					//System.err.println("client isConnected: " + net.isConnected());
+					//System.err.println("client inGame: " + net.inGame());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							if (net.isConnected() && !net.inGame()) {
+								// //System.err.println("client if");
+								showUI();
+								refreshCLobby(net);
+							} else if (net.isConnected() && net.inGame()) {
+								//System.err.println("client else if");
+								hideUI();
+							} else {
+								//System.err.println("client else");
+								//System.err.println("client isConnected: " + net.isConnected());
+								//System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
+								inLobby = false;
+								showUI();
+								ps.setScene(ogScene);
+								ps.setTitle("Square-Off: Start Menu");
+
+							}
+						}
+					});
+					Thread.sleep(750);
+				}
+				return null;
+			}
+		};
+		Thread th = new Thread(task);
+		th.setDaemon(true);
+		th.start();
+	}
     
     
     /**
@@ -543,7 +556,7 @@ public class mainMenu extends Application {
      * @param name name of the client
      */
     public static void tryToJoin(String hostAddress, String name) {
-    	mainMenuNetwork net = new mainMenuNetwork();
+    	mainMenuNetwork net = new mainMenuNetwork(map);
 
     	if (name.equals("")) {
     		Alert alert;
@@ -555,8 +568,17 @@ public class mainMenu extends Application {
 			a.click();
     	}
     	else {
-    		if (net.connectToHost(hostAddress, name))
-				lobbyWindow("Client", net);
+    		if (net.connectToHost(hostAddress, name) == 0)
+				clientLobby(net);
+    		else if (net.connectToHost(hostAddress, name) == 2) {
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setHeaderText("Error: Name in use");
+				alert.setContentText("There is already a client in the server with the name: " + name);
+				alert.setTitle("Square-Off: Joining Game");
+				alert.showAndWait();
+				a.click();
+    		}
 			else {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);

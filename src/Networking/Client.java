@@ -45,9 +45,9 @@ public class Client {
 	 * @param port
 	 * @return True if connection was successful and false otherwise.
 	 */
-	public boolean connect(String ip, int port) {
+	public int connect(String ip, int port) {
 		//Checks that the client isn't already connected.
-		if(isConnected()) return false;
+		if(isConnected()) return 2;
 		
 		this.port = port;
 	
@@ -57,7 +57,7 @@ public class Client {
 		}
 		catch(IOException e) {
 			//Cannot find the server.
-			return false;
+			return 1;
 		}
 		try {
 			toServer = new ObjectOutputStream(socket.getOutputStream());
@@ -86,7 +86,7 @@ public class Client {
 		sender.send(name);
 
 		//Waits for the server to respond to the client.
-		return isConnected();
+		return (isConnected()?0:2);
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class Client {
 		disconnect();
 	
 		//Reconnects.
-		return connect(ip, port);
+		return connect(ip, port) == 0;
 	}
 }
 

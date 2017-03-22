@@ -14,38 +14,22 @@ public class mainMenuNetwork {
 	
 	ArrayList<String> players = new ArrayList<>();
 	int port = 4444;
-	Server s = new Server(port);
+	Server s;
 	Client c;
 	
-	public boolean connectToHost(String hostName, String name) {
-		
+	public mainMenuNetwork(String m) {
+		s = new Server(m, port);
+	}
+	
+	public int connectToHost(String hostName, String name) {
 		c = new Client(name);
-		//String[] address;
-		
-		try {
-			/*
-			address = hostName.split(":");
-			if ((address[0].length()<7) | Integer.parseInt(address[1])!=port) {
-				//System.out.println("Incorrect address/port or address too small");
-				return false;
-			}
-			if (c.connect(address[0], Integer.parseInt(address[1]))) {
-				//Thread.sleep(1000);
-				players = c.getPlayers();
-				return true;
-			}
-			*/
-			if (c.connect(hostName, port)) {
-				players = c.getPlayers();
-				return true;
-			}
-			else
-				return false;
-		} catch (Exception e) {
-			//System.out.println("Exception caught in mainMenuNetwork");
-			//e.printStackTrace();
-			return false;
+		int val = (c.connect(hostName, port));
+		if ( val == 0 ) {
+			players = c.getPlayers();
+			return 0;
 		}
+		else
+			return val;
 	}
 	
 	public ArrayList<String> getPlayers() {
@@ -74,10 +58,12 @@ public class mainMenuNetwork {
 	}
 	
 	public boolean isConnected() {
+		//System.err.println("net.isConnected is being called");
 		return c.isConnected();
 	}
 	
 	public boolean inGame() {
+		//System.err.println("net.isGame is being called");
 		return c.inGame();
 	}
 	
@@ -92,4 +78,6 @@ public class mainMenuNetwork {
 	public void closeServer() {
 		s.close();
 	}
+	
+
 }

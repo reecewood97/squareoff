@@ -16,7 +16,7 @@ public class NetworkingJUnit {
 
 	@Before
 	public void setUp() throws Exception {
-		server = new Server(4444);
+		server = new Server("map1",4444);
 		
 		bob = new Client("Bob");
 		jerry = new Client("Jerry");
@@ -109,7 +109,7 @@ public class NetworkingJUnit {
 		
 		//New Server created and Bob and Jerry reconnect.
 		System.err.println(10);
-		server = new Server(4444);
+		server = new Server("map1", 4444);
 		server.start();
 		wait(1000);
 		assertTrue(bob.connect("127.0.0.1", 4444));
