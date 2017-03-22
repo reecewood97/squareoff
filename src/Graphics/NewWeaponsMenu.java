@@ -37,13 +37,14 @@ public class NewWeaponsMenu extends JFrame {
 	    private Board board;
 	    private boolean weaponselected;
 	    private HangerOn listeners;
+	    private JButton wepbtn;
 	 
 	    /**
 	     * weapon menu constructor
 	     * @param listeners The HangerOn instance
 	     * @param board The current board
 	     */
-	    public NewWeaponsMenu(HangerOn listeners, Board board){
+	    public NewWeaponsMenu(HangerOn listeners, Board board,JButton wepbtn){
 	    	   	
 	    	//edit menu settings
 	    	setBounds(0,0,200,200); //TODO change this to match height/width ratios
@@ -53,6 +54,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	this.board = board;
 	    	this.weaponselected = false;
 	    	this.listeners = listeners;
+	    	this.wepbtn = wepbtn;
 	    	
 	    	//create panels
 	    	JPanel toppanel = new JPanel();
@@ -132,6 +134,7 @@ public class NewWeaponsMenu extends JFrame {
 			
 	    	//hide menu
 			setVisible(false);
+			setFocusable(false);
 	    	
 	    }
 
@@ -169,6 +172,8 @@ public class NewWeaponsMenu extends JFrame {
 	    public void open(){
 	    	
 	    	setVisible(true);
+	    	setFocusable(true);
+	    	requestFocusInWindow();
 	    }
 	    
 	    
@@ -275,5 +280,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	
 	    	//hide menu
 	    	setVisible(false);
+	    	
+	    	wepbtn.setEnabled(true);
 	    }
 }

@@ -30,6 +30,7 @@ public class ButtonPanel extends JPanel{
 	private HangerOn listeners;
 	private Client client;
 	private String name;
+	private JButton weapons;
 	
 	/**
 	 * constructor 
@@ -73,7 +74,7 @@ public class ButtonPanel extends JPanel{
 		sound.setOpaque(false);
 		
 		//weapons menu button (only till key pressed used)
-		JButton weapons = new JButton("weapons menu");
+		weapons = new JButton("weapons menu");
 	    weapons.addActionListener(e -> showWeaponsMenu());
 		weapons.setBorderPainted(false); 
 		weapons.setContentAreaFilled(false); 
@@ -118,6 +119,7 @@ public class ButtonPanel extends JPanel{
 		
 		ArrayList<String> a = client.getClientList();
 	
+		/*
 		//checks they are the active player
 		for(int i = 0; i < 4; i++){
 
@@ -127,10 +129,11 @@ public class ButtonPanel extends JPanel{
 				
 				if((i+1)==id){
 					
+					*/
 					//open menu*
-					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
+					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board,weapons);
 					menu.open();
-					
+					/*
 					break;
 					
 				}
@@ -140,6 +143,9 @@ public class ButtonPanel extends JPanel{
 			
 			
 		 }
+		*/
+		
+		weapons.setEnabled(false);
 		
 		
 	}

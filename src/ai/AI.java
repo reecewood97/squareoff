@@ -271,7 +271,7 @@ public abstract class AI {
 				}
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//AIManager interrupted.
 		}
 		
 		

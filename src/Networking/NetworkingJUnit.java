@@ -37,7 +37,7 @@ public class NetworkingJUnit {
 	public void test() {
 		//Bob tries to connect to a server that isn't running.
 		System.err.println(1);
-		assertFalse(bob.connect("127.0.0.1", 4444));
+		assertTrue(bob.connect("127.0.0.1", 4444) == 1);
 		assertFalse(bob.isConnected());
 		assertNull(bob.getPlayers());
 		
@@ -47,7 +47,7 @@ public class NetworkingJUnit {
 		System.err.println(2);
 		server.start();
 		wait(1000);
-		assertTrue(bob.connect("127.0.0.1", 4444));
+		assertTrue(bob.connect("127.0.0.1", 4444) == 0);
 		assertTrue(bob.isConnected());
 		assertEquals(expectedPlayers, bob.getPlayers());
 		assertEquals(expectedPlayers, server.getPlayers());
@@ -56,7 +56,7 @@ public class NetworkingJUnit {
 		
 		//Jerry successfully joins the server and the list of players is updated for each player.
 		System.err.println(3);
-		assertTrue(jerry.connect("127.0.0.1", 4444));
+		assertTrue(jerry.connect("127.0.0.1", 4444) == 0);
 		assertTrue(jerry.isConnected());
 		assertEquals(expectedPlayers, jerry.getPlayers());
 		assertEquals(expectedPlayers, bob.getPlayers());
@@ -74,7 +74,7 @@ public class NetworkingJUnit {
 		
 		//Bob rejoins the server.
 		System.err.println(5);
-		assertTrue(bob.connect("127.0.0.1", 4444));
+		assertTrue(bob.connect("127.0.0.1", 4444) == 0);
 		assertTrue(bob.isConnected());
 		assertEquals(expectedPlayers, bob.getPlayers());
 		assertEquals(expectedPlayers, jerry.getPlayers());
@@ -82,7 +82,7 @@ public class NetworkingJUnit {
 		
 		//ImposterBob fails to connect to the server.
 		System.err.println(6);
-		assertFalse(imposterBob.connect("127.0.0.1", 4444));
+		assertTrue(imposterBob.connect("127.0.0.1", 4444) == 2);
 		assertFalse(imposterBob.isConnected());
 		
 		expectedPlayers.remove("Bob");
@@ -99,7 +99,7 @@ public class NetworkingJUnit {
 		assertTrue(jerry.isConnected());
 		assertEquals(expectedPlayers, jerry.getPlayers());
 		
-		assertTrue(bob.connect("127.0.0.1", 4444));
+		assertTrue(bob.connect("127.0.0.1", 4444) == 0);
 		
 		//Close the server.
 		System.err.println(9);
@@ -112,8 +112,8 @@ public class NetworkingJUnit {
 		server = new Server("map1", 4444);
 		server.start();
 		wait(1000);
-		assertTrue(bob.connect("127.0.0.1", 4444));
-		assertTrue(jerry.connect("127.0.0.1", 4444));
+		assertTrue(bob.connect("127.0.0.1", 4444) == 0);
+		assertTrue(jerry.connect("127.0.0.1", 4444) == 0);
 		
 		//Reset the server.
 		System.err.println(11);
@@ -124,10 +124,10 @@ public class NetworkingJUnit {
 		
 		//More clients join.
 		System.err.println(12);
-		assertTrue(mary.connect("127.0.0.1", 4444));
-		assertTrue(sherly.connect("127.0.0.1", 4444));
+		assertTrue(mary.connect("127.0.0.1", 4444) == 0);
+		assertTrue(sherly.connect("127.0.0.1", 4444) == 0);
 		//Too many clients already connected.
-		assertFalse(danny.connect("127.0.0.1", 4444));
+		assertTrue(danny.connect("127.0.0.1", 4444) == 2);
 		
 		server.kick("mary");
 		server.kick("Sherly");
