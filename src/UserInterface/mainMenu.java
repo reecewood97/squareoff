@@ -774,13 +774,17 @@ public class mainMenu extends Application {
     	
     	Button btn6 = new Button("Back to Main Menu");
         
+    	Label label = new Label("Square-Off is an artillery strategy game.\nYou are a Square and are about to Square off with opposing Squares.\nYour aim is to knock of any other Squares in the map.\nWhoever is the last Square standing wins!\n\nYou move left when you press the 'a' key and right when you press the 'd' key.\nYou can also jump with the 'w' key.\n\nGood Luck and may the best Square win!");
         
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(label, btn6);
+        vbox.setSpacing(45);
+        vbox.setAlignment(Pos.CENTER);
+    	
         GridPane grid4 = new GridPane();
         grid4.setVgap(12);
         
-        grid4.add(btn6, 0, 23);
-        grid4.setAlignment(Pos.CENTER);
-
+        grid4.add(vbox, 0, 11);
         grid4.setAlignment(Pos.CENTER);
         grid4.setStyle("-fx-background-color: transparent;");
         
