@@ -13,6 +13,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 public class PhysicsTest extends TestCase {
+	//WARNING RUNNING THIS TEST CAUSES A LOUD SOUND **DO NOT WEAR HEADPHONES**
 	
 	private Board board;
 	private ArrayList<PhysObject> objects;
@@ -50,6 +51,7 @@ public class PhysicsTest extends TestCase {
 	 * 4. Wall collisions are correctly detected and resolved outside of free state.
 	 * 5. Raising a block above the floor then initiating physics leaves it in the same position as it started.
 	 * 6. A block's path in free state unfolds as it is meant to.
+	 * 7. Throwing a grenade results in an explosion affecting blocks and squares, possibly knocking them off the map.
 	 * Hence object collision detection and resolution are working as intended.
 	 */
 	@Test
@@ -103,6 +105,19 @@ public class PhysicsTest extends TestCase {
 		}
 		//Asserts the block ends up where it is meant to
 		assertTrue(board.getSquares().get(2).getPos().equals(new Point2D.Double(265.60000000000025, 180)));
+		
+		board.setFreeState(true);
+		while(board.getFreeState()){
+			board.input("Pressed,  ,4");
+		}
+		board.input("setWep,ExplodeOnImpact,1");
+		board.input("setTar true");
+		board.input("Clicked 135 200 1"); //Enter a move that should kill the red player
+		while(board.getFreeState()){
+			board.input("Pressed    d");
+			board.input("None");
+		}
+		assertFalse(board.getSquares().get(0).getInUse()); //Assert the red player has in fact died
 	}
 	
 	@After

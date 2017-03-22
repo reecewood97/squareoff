@@ -1058,7 +1058,6 @@ public class Board {
 	 *            the formatted string from hangerOn.
 	 */
 	public synchronized void input(String input) {
-
 		if (getExplosion().size() > 0) {
 
 			if (!input.contains("None")) {
