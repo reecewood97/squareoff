@@ -119,28 +119,27 @@ public class ButtonPanel extends JPanel{
 		ArrayList<String> a = client.getClientList();
 	
 		//checks they are the active player
-		//for(int i = 0; i < 4; i++){
+		for(int i = 0; i < 4; i++){
 
+			String name2 = a.get(i);
 			
-			//String name2 = a.get(i);
-			
-			//if(name2.equals(name)){
+			if(name2.equals(name)){
 				
-				//if((i+1)==id){
+				if((i+1)==id){
 					
-					//open menu*/
+					//open menu*
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board);
 					menu.open();
 					
-					//break;
+					break;
 					
-				//}
+				}
 				
-			//}
+			}
 			
 			
 			
-		//}
+		 }
 		
 		
 	}
