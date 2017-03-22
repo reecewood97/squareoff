@@ -31,23 +31,8 @@ public class AITest {
 		double angle_chosen_d = aid.getAngle();
 		System.out.println(velocity_chosen_d + " " + angle_chosen_d);
 		
-		aid.alterResult();
-		
-		velocity_chosen_d = aid.getVelocity();
-		velocity_chosen_d = aid.getAngle();
-		System.out.println(velocity_chosen_d + " " + angle_chosen_d);
-		
-		aie.determineResult();
-		
-		double velocity_chosen_e = aie.getVelocity();
-		double angle_chosen_e = aie.getAngle();
-		System.out.println(velocity_chosen_e + " " + angle_chosen_e);
-		
-		aie.alterResult();
-		
-		velocity_chosen_e = aie.getVelocity();
-		angle_chosen_e = aie.getAngle();
-		System.out.println(velocity_chosen_e + " " + angle_chosen_e);
+		aie.getFinalDestination();
+		System.out.println(aie.getFinalDestination());
 	}
 
 }
