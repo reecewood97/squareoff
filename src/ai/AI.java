@@ -459,6 +459,8 @@ public abstract class AI {
 					dontJumpDown = false;
 				}
 				else {
+					targetX = xPos;
+					targetY = yPos;
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
@@ -496,10 +498,11 @@ public abstract class AI {
 								break;
 							}
 						}
-						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 20.0)) {
+						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 25.0)) {
+							moveRight();
 							moveUpRight();
 							System.out.println(myName + "Jump Right");
-							for (int k = 0; k < 10; k++) {
+							for (int k = 0; k < 9; k++) {
 								moveRight();
 								i++;
 								System.out.println(myName + "go right! " + i);
@@ -611,6 +614,8 @@ public abstract class AI {
 					dontJumpDown = false;
 				}
 				else {
+					targetX = xPos;
+					targetY = yPos;
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
@@ -632,10 +637,11 @@ public abstract class AI {
 							}
 							
 						}
-						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 60.0)) {
+						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 65.0)) {
+							moveLeft();
 							moveUpLeft();
 							System.out.println(myName + "Jump Left");
-							for (int k = 0; k < 10; k++) {
+							for (int k = 0; k < 9; k++) {
 								moveLeft();
 								i++;
 								System.out.println(myName + "go left! " + i);
@@ -842,26 +848,26 @@ public abstract class AI {
 		double yDis = 0;
 		double xDis = 0;
 		
-		g = (range / 100) * ((Math.abs(height) + 100) / 100);
+//		g = (range / 100) * ((Math.abs(height) + 100) / 100);
 		
-//		if (range <= 120 && height <= 100) {
-//			g = 1;
-//		}
-//		else if (range <=120 && height > 100) {
-//			g = height/100;
-//		}
-//		else if (range > 120 && range<= 240 && height <= 100) {
-//			g = (range / 120) * ((Math.abs(height) + 90) / 100);
-//		}
-//		else if (range > 120 && range<= 240 && height > 100) {
-//			g = (range / 120) * ((Math.abs(height) + 120) / 100) * 1.5;
-//		}
-//		else if (range > 240 && height <= 100) {
-//			g = (range / 80) * ((Math.abs(height) + 90) / 90);
-//		}
-//		else if (height > 100 && range > 240) {
-//			g = (range / 80) * ((Math.abs(height) + 100) / 80) * 1.5;
-//		}
+		if (range <= 120 && height <= 100) {
+			g = 1;
+		}
+		else if (range <=120 && height > 100) {
+			g = height/100;
+		}
+		else if (range > 120 && range<= 240 && height <= 100) {
+			g = (range / 120) * ((Math.abs(height) + 90) / 100);
+		}
+		else if (range > 120 && range<= 240 && height > 100) {
+			g = (range / 120) * ((Math.abs(height) + 120) / 100) * 1.5;
+		}
+		else if (range > 240 && height <= 100) {
+			g = (range / 80) * ((Math.abs(height) + 90) / 90);
+		}
+		else if (height > 100 && range > 240) {
+			g = (range / 80) * ((Math.abs(height) + 100) / 80) * 1.5;
+		}
 
 		
 //		System.out.println("time of flight: " + timeOfFlight);
@@ -929,6 +935,25 @@ public abstract class AI {
 		double xDis = 0;
 		
 		double g = (range / 100) * ((Math.abs(height) + 100) / 100);
+		
+		if (range <= 120 && height <= 100) {
+			g = 1;
+		}
+		else if (range <=120 && height > 100) {
+			g = height/100;
+		}
+		else if (range > 120 && range<= 240 && height <= 100) {
+			g = (range / 120) * ((Math.abs(height) + 90) / 100);
+		}
+		else if (range > 120 && range<= 240 && height > 100) {
+			g = (range / 120) * ((Math.abs(height) + 120) / 100) * 1.5;
+		}
+		else if (range > 240 && height <= 100) {
+			g = (range / 80) * ((Math.abs(height) + 90) / 90);
+		}
+		else if (height > 100 && range > 240) {
+			g = (range / 80) * ((Math.abs(height) + 100) / 80) * 1.5;
+		}
 		
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		for (int t = 1; t < timeOfFlight; t ++) {
@@ -1035,7 +1060,12 @@ public abstract class AI {
 		}
 	}
 	
-
+	public boolean dontKillMyself(double aix, double aiy, double tx, double ty) {
+		if ((aiy == ty) && (aix >= tx - 60.0) && (aix <= tx + 100.0)) {
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * Determine a target to attack and calculate the position of the target
