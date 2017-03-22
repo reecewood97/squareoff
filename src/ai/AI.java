@@ -701,77 +701,75 @@ public abstract class AI {
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
 		double acc_angle = 45.0;
 		double acc_velocity = maxVelocity/2;
-		if(!haveObstacles) {
-			if (ydis < 0) {
-				// angle larger than 45 degrees
-				boolean hit = false;
-				int state = calculation(acc_angle, acc_velocity, target);
-				hit = isHit(state);
-				while (!hit) {
-					acc_velocity = maxVelocity/2;
-					if (acc_angle >= 90 || acc_angle <= 0) {
-						acc_angle = 0;
+		if (ydis < 0) {
+			// angle larger than 45 degrees
+			boolean hit = false;
+			int state = calculation(acc_angle, acc_velocity, target);
+			hit = isHit(state);
+			while (!hit) {
+				acc_velocity = maxVelocity/2;
+				if (acc_angle >= 90 || acc_angle <= 0) {
+					acc_angle = 0;
+				}
+				if (state == 1) { // too close
+					// angle increase by 3 degrees (?)
+					acc_angle += 2.75;
+					while (acc_velocity <= maxVelocity && !hit) {
+						// increase power
+						acc_velocity += 4.5;
+						state = calculation(acc_angle, acc_velocity, target);
+						hit = isHit(state);
+						System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 					}
-					if (state == 1) { // too close
-						// angle increase by 3 degrees (?)
-						acc_angle += 2.75;
-						while (acc_velocity <= maxVelocity && !hit) {
-							// increase power
-							acc_velocity += 4.5;
-							state = calculation(acc_angle, acc_velocity, target);
-							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
-						}
-					}
-					else if (state == 2) { // too far
-						// angle increase by 3 degrees (?)
-						acc_angle += 2.75;
-						while (acc_velocity > 0 && !hit) {
-							// decrease power
-							acc_velocity -= 4.5;
-							state = calculation(acc_angle, acc_velocity, target);
-							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
-						}
+				}
+				else if (state == 2) { // too far
+					// angle increase by 3 degrees (?)
+					acc_angle += 2.75;
+					while (acc_velocity > 0 && !hit) {
+						// decrease power
+						acc_velocity -= 4.5;
+						state = calculation(acc_angle, acc_velocity, target);
+						hit = isHit(state);
+						System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 					}
 				}
 			}
-			else {
-				//try with 45 degrees and decrease it.
-				boolean hit = false;
-				int state = calculation(acc_angle, acc_velocity, target);
-				hit = isHit(state);
-				while (!hit) {
-					acc_velocity = maxVelocity/2;
-					if (acc_angle <= 0 || acc_angle >= 90) {
-						acc_angle = 90;
-					}
-					if (state == 1) { // too close
-						// angle increase by 3 degrees (?)
-						acc_angle -= 2.75;
-						while (acc_velocity <= maxVelocity && !hit) {
-							// increase power
-							acc_velocity += 4.5;
-							state = calculation(acc_angle, acc_velocity, target);
-							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
-						}
-					}
-					else if (state == 2) { // too far
-						// angle increase by 3 degrees (?)
-						acc_angle -=2.75;
-						while (acc_velocity > 0 && !hit) {
-							// decrease power
-							acc_velocity -= 4.5;
-							state = calculation(acc_angle, acc_velocity, target);
-							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
-						}
+		}
+		else {
+			//try with 45 degrees and decrease it.
+			boolean hit = false;
+			int state = calculation(acc_angle, acc_velocity, target);
+			hit = isHit(state);
+			while (!hit) {
+				acc_velocity = maxVelocity/2;
+				if (acc_angle <= 0 || acc_angle >= 90) {
+					acc_angle = 90;
+				}
+				if (state == 1) { // too close
+					// angle increase by 3 degrees (?)
+					acc_angle -= 2.75;
+					while (acc_velocity <= maxVelocity && !hit) {
+						// increase power
+						acc_velocity += 4.5;
+						state = calculation(acc_angle, acc_velocity, target);
+						hit = isHit(state);
+						System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 					}
 				}
+				else if (state == 2) { // too far
+					// angle increase by 3 degrees (?)
+					acc_angle -=2.75;
+					while (acc_velocity > 0 && !hit) {
+						// decrease power
+						acc_velocity -= 4.5;
+						state = calculation(acc_angle, acc_velocity, target);
+						hit = isHit(state);
+						System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+					}
+				}
+			}
 
-				System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
-			}
+			System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 			
 			if(xdis < 0) {
 				acc_velocity *= -1;

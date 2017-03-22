@@ -168,7 +168,7 @@ public class DifficultAI extends AI {
 		int finalX = 0;
 		int finalY = 0;
 		PhysObject finalSquare = null;
-		
+		System.out.println("start get destination");
 		// Calculation for NormalAI & DifficultAI
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		int numOfBlocks = blocks.size();
@@ -176,6 +176,7 @@ public class DifficultAI extends AI {
 		int targetHealth = 999;
 		double finalDis = 99999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
+			System.out.println("for loop 1");
 			Square targetSquare = (Square) squares.get(i);
 			if (targetSquare.getPlayerID() == myPlayer || !targetSquare.getInUse()) {
 				continue;
@@ -183,10 +184,12 @@ public class DifficultAI extends AI {
 			double targetX = targetSquare.getPos().getX();
 			double targetY = targetSquare.getPos().getY();
 			for (int j = 0; j < numOfBlocks; j++) {
+				System.out.println("for loop 2");
 				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
 				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX - 20.0) && (oneBlock.getPos().getX() <= targetX + 60.0)) {
 //							&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
 					targetBlock = (TerrainBlock) oneBlock;
+					System.out.println("found block to attack: " + targetBlock);
 					break;
 				}
 			}
