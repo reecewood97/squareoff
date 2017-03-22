@@ -95,7 +95,5 @@ public class mainMenuNetwork {
 		s.close();
 	}
 	
-	public void setMap(String str) {
-		s.setMap(str);
-	}
+
 }
