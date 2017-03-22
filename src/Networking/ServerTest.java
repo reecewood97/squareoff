@@ -23,6 +23,15 @@ public class ServerTest {
 			e.printStackTrace();
 		}
 	}
+	
+//	public static void waitForNotEqual(Object ) {
+//		try {
+//			Thread.sleep(millis);
+//		}
+//		catch(InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
 
 

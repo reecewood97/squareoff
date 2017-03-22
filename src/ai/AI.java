@@ -32,7 +32,6 @@ public abstract class AI {
 	private String myName;
 	private double outAngle;
 	private double outVelocity;
-	private Queue q;
 	private double mistakeAngle = 0;
 	private double mistakeVelocity = 0;
 	private boolean haveObstacles = false;
@@ -241,13 +240,13 @@ public abstract class AI {
 	 */
 	public void determineState() {
 		try {
-			Thread.sleep(30);
+			Thread.sleep(100);
 			ArrayList<PhysObject> squares = board.getSquares();
 			for (PhysObject player:squares) {
 				if (((Square) player).getPlayerID() == myPlayer) {
 					if (player.getInUse()) {
 						try {
-							Thread.sleep(50);
+							Thread.sleep(100);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -296,14 +295,13 @@ public abstract class AI {
 	}
 	
 	public void aiMoveCal(double targetX, double targetY) {
-		System.out.println("move to: " + targetX + " " + targetY);
+		////System.out.println("move to: " + targetX + " " + targetY);
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
-		moveUpLeft();
-		moveUpRight();
+		moveUp();
 		int i = 0;
-		while ((xPos > targetX + 40.0) || (xPos < targetX) || yPos != targetY) {
+		while (((int)xPos > targetX + 40.0) || ((int)xPos < targetX) || yPos != targetY) {
 			
 			try {
 				Thread.sleep(30);
@@ -331,15 +329,18 @@ public abstract class AI {
 			boolean jumpLeft = false;
 			boolean jumpRight = false;
 			boolean dontJumpDown = true;
+			boolean jumpLeftObs = false;
+			boolean jumpRightObs = false;
 			
 			if (xPos < targetX) {
-				System.out.println(xPos);
+				//System.out.println("move to: " + targetX + " " + targetY);
+				//system.out.println(xPos + " " + yPos);
 				
 				if (yPos > targetY) {
 					for (int k = 0; k < 10; k++) {
 						moveRight();
 						i++;
-						System.out.println(myName + "go down right! " + i);
+						////System.out.println(myName + "go down right! " + i);
 					}
 					continue;
 				}
@@ -383,13 +384,38 @@ public abstract class AI {
 					}
 					dontJumpDown = false;
 				}
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if ((xPos - 80 <= blockX) && (xPos - 40 >= blockX) && (yPos + 30.0 == blockY)) {
+						jumpLeftObs = true;
+						break;
+					}
+					jumpLeftObs = false;
+				}
+				for (PhysObject block:blocks) {
+					if (!block.getInUse()) {
+						continue;
+					}
+					double blockX = block.getPos().getX();
+					double blockY = block.getPos().getY();
+					if ((xPos + 110 >= blockX) && (xPos + 70 <= blockX) && (yPos + 30.0 == blockY)) {
+						jumpRightObs = true;
+						break;
+					}
+					jumpRightObs = false;
+				}
+				
 				
 				if (jumpLeft && !jumpRight && dontJumpDown) {
 					for (int j = 0; j < 5; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
-					System.out.println(myName + "Detected Edge. Jump Left");
+					////System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
@@ -398,7 +424,7 @@ public abstract class AI {
 						moveUpRight();
 						moveRight();
 					}
-					System.out.println(myName + "Detected Edge. Jump Right");
+					////System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
 				}
@@ -417,35 +443,64 @@ public abstract class AI {
 					dontJumpDown = false;
 				}
 				
+				if (jumpLeftObs) {
+					moveUpLeft();
+					moveLeft();
+					jumpLeftObs = false;
+					jumpRightObs = false;
+				}
+				else if (jumpRightObs) {
+					moveUpRight();
+					moveRight();
+					jumpLeftObs = false;
+					jumpRight = false;
+				}
+				else {
+					jumpLeftObs = false;
+					jumpRightObs = false;
+				}
+				
 				if (yPos < targetY) {
+					////System.out.println("y < targetY");
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
+						if (xPos < targetX + 70.0 && xPos > targetX - 70.0) {
+							////System.out.println("under block");
+							targetX = xPos;
+							targetY = yPos;
+						}
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpRight();
-							System.out.println(myName + "Jump Right");
+							////System.out.println(myName + "Jump Right");
+							for (int k = 0; k < 10; k++) {
+								moveRight();
+								i++;
+								////System.out.println(myName + "go right! " + i);
+							}
 							break;
 						}
 					}
 				}
 				
 				moveRight();
-				System.out.println(myName + "move Right");
+				////System.out.println(myName + "move Right");
 
 //				Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
 //				setPos(newPos);
 //				xPos += 2;
 				i++;
-				System.out.println("Right " + i);
+				////System.out.println("Right " + i);
 			}
 			else {
-				System.out.println(xPos);
+				////System.out.println("move to: " + targetX + " " + targetY);
+				////System.out.println(xPos + " " + yPos);
 				
 				if (yPos > targetY) {
 					for (int k = 0; k < 10; k++) {
 						moveLeft();
 						i++;
-						System.out.println(myName + "go down left! " + i);
+						////System.out.println(myName + "go down left! " + i);
 					}
 					continue;
 				}
@@ -493,7 +548,7 @@ public abstract class AI {
 						moveUpLeft();
 						moveLeft();
 					}
-					System.out.println(myName + "Detected Edge. Jump Left");
+					////System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
@@ -502,7 +557,7 @@ public abstract class AI {
 						moveUpRight();
 						moveRight();
 					}
-					System.out.println(myName + "Detected Edge. Jump Right");
+					////System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
 				}
@@ -522,28 +577,64 @@ public abstract class AI {
 				}
 				
 				if (yPos < targetY) {
+					////System.out.println("y < targetY");
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
+						if(blockX == targetX && blockY == targetY) {
+							////System.out.println("under block");
+							if (xPos < targetX + 70.0 && xPos > targetX - 70.0) {
+								targetX = xPos;
+								targetY = yPos;
+							}
+							
+							
+						}
 						if (((blockY < targetY) && (blockX < targetX)) && (yPos + 100.0 >= blockY) && (xPos >= blockX - 50.0) && (xPos <= blockX -24.9)) {
 							moveUpLeft();
-							System.out.println(myName + "Jump Left");
+							////System.out.println(myName + "Jump Left");
+							for (int k = 0; k < 10; k++) {
+								moveLeft();
+								i++;
+								////System.out.println(myName + "go left! " + i);
+							}
 							break;
 						}
 					}
 				}
 				
 				moveLeft();
-				System.out.println(myName + "move Left");
+				////System.out.println(myName + "move Left");
 //				xPos -= 2;
 
 //				Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
 //				setPos(newPos);
 				i++;
-				System.out.println("Left " + i);
+				//System.out.println("Left " + i);
 			}
 		}
 		return ;
+	}
+	
+	public boolean determineMovementFloorL(double x, double y) {
+		boolean floor = false;
+		//System.out.println(y);
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if ((x - 90 <= blockX) && (x - 40 >= blockX) && (y == blockY)) {
+				floor = true;
+				break;
+			}
+			floor = false;
+		}
+		
+		//System.out.println("obstacle on left: " + floor);
+		return floor;
 	}
 	
 	/**
@@ -562,7 +653,7 @@ public abstract class AI {
 	 * @param mistakeVelocity 
 	 */
 	public void determineResult(){
-		System.out.println("myself: " + getAIPos());
+		//System.out.println("myself: " + getAIPos());
 		Point2D.Double target = getFinalDestination();
 		double xdis = target.getX() - getAIPos().getX();
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -587,7 +678,7 @@ public abstract class AI {
 							acc_velocity += 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+							//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 					else if (state == 2) { // too far
@@ -598,7 +689,7 @@ public abstract class AI {
 							acc_velocity -= 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+							//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 				}
@@ -621,7 +712,7 @@ public abstract class AI {
 							acc_velocity += 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+							//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 					else if (state == 2) { // too far
@@ -632,36 +723,23 @@ public abstract class AI {
 							acc_velocity -= 4.5;
 							state = calculation(acc_angle, acc_velocity, target);
 							hit = isHit(state);
-							System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+							//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 						}
 					}
 				}
 
-				System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+				//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 			}
 			
-//			boolean enemyOnRight = false;
-//			ArrayList<PhysObject> squares = board.getSquares();
-//			for (PhysObject square:squares) {
-//				if (getAIPos().getX() > square.getPos().getX()) {
-//					enemyOnRight = true;
-//					continue;
-//				}
-//				enemyOnRight = false;
-//			}
-//			
 			if(xdis < 0) {
 				acc_velocity *= -1;
 			}
 
 			setAngle(acc_angle);
 			setVelocity(acc_velocity);
-			System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
+			//System.out.println("acc_a: " + acc_angle + "acc_v: " + acc_velocity);
 			determineObstacle(target, getAIPos());
 		}
-		
-
-		
 	}
 	
 	public void setMistake(double mistakeAngle, double mistakeVelocity) {
@@ -704,15 +782,18 @@ public abstract class AI {
 //		Point2D.Double target = getFinalDestination();
 		double xdis = Math.abs(getAIPos().getX() - target.getX());
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
-		System.out.println("a in cal: " + a + "v in cal: " + v);
+		//System.out.println("a in cal: " + a + "v in cal: " + v);
 		double angle = Math.toRadians(a);
 		double velocity = v;
 		double r = 0;
+		double g = 1;
+		
+		g = (xdis / 100) * ((Math.abs(ydis) + 100) / 100);
 		// R = v * cos(angle) * ((v * sin(angle)) + sqrt((v * v * sin(angle) * sin(angle)) + 2 * g * ydis))
 //		r = (velocity * Math.cos(angle) * ((velocity * Math.sin(angle)) + Math.sqrt((v * v * Math.sin(angle) * Math.sin(angle)) + 2 * gravity * ydis))) / 2;
 		// R = (v * cos(angle) / g) * ((v * sin(angle)) + Math.sqrt((v * v * sin(angle) * sin(angle)) + (2 * g * ydis)))
-		r = (velocity * Math.cos(angle) / gravity) * ((velocity * Math.sin(angle)) + Math.sqrt((velocity * velocity * Math.sin(angle) * Math.sin(angle)) + (2 * gravity * ydis)));
-		System.out.println(r);
+		r = (velocity * Math.cos(angle) / (gravity * g)) * ((velocity * Math.sin(angle)) + Math.sqrt((velocity * velocity * Math.sin(angle) * Math.sin(angle)) + (2 * (gravity * g) * ydis)));
+		//System.out.println(r);
 		
 		if (r > (xdis - 15) && r < (xdis + 15)) {
 			return 0;
@@ -854,7 +935,7 @@ public abstract class AI {
 	private void sendAttack(double angle, double velocity){
 		double xVel = velocity * Math.cos(Math.toRadians(angle));
 		double yVel = Math.abs(velocity * Math.sin(Math.toRadians(angle)));
-		System.out.println("xV: " + xVel + ", yV: " + yVel);
+		//System.out.println("xV: " + xVel + ", yV: " + yVel);
 		String command = xVel  + ", " + yVel + ", " + myName + ", AItakesashotx86";
 
 		board.input(command);

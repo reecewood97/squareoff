@@ -227,4 +227,12 @@ public class Server extends Thread {
 		//Tell all clients to reconnect.
 		table.sendAll(Server.RESET_CONNECTION);
 	}
+	
+	/**
+	 * Used to determine what map the game is played on.
+	 * @param map The new map string.
+	 */
+	public void setMap(String map) {
+		board.setMap(map);
+	}
 }

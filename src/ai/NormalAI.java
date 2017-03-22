@@ -26,7 +26,6 @@ public class NormalAI extends AI {
 	private String myName;
 	private double outAngle;
 	private double outVelocity;
-	private Queue q;
 	private final double mistakeAngle = 4;
 	private final double mistakeVelocity = 6;
 	
@@ -86,9 +85,10 @@ public class NormalAI extends AI {
 			}
 			System.out.println("Normal AI is going to attack: " + finalSquare.getPos() );
 			for (PhysObject block:blocks) {
-				if (((finalSquare.getPos().getY() - 30.0 <= block.getPos().getY() + 100.0) || (finalSquare.getPos().getY() - 30.0 >= block.getPos().getY() -100.0)) && ((finalSquare.getPos().getX() <= block.getPos().getX() +400.0) || (finalSquare.getPos().getY() >= block.getPos().getX() -400.0))) {
+				if (((finalSquare.getPos().getY() - 30.0 <= block.getPos().getY() + 90.0) || (finalSquare.getPos().getY() - 30.0 >= block.getPos().getY() -100.0)) && ((finalSquare.getPos().getX() <= block.getPos().getX() +400.0) || (finalSquare.getPos().getY() >= block.getPos().getX() -400.0))) {
 					targetX = block.getPos().getX();
 					targetY = block.getPos().getY();
+					break;
 				}
 			}
 			aiMoveCal(targetX +50, targetY);
@@ -117,6 +117,7 @@ public class NormalAI extends AI {
 		System.out.println(blocks);
 		TerrainBlock targetBlock = null;
 		int targetHealth = 999;
+		double finalDis = 99999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square targetSquare = (Square) squares.get(i);
 			double targetX = targetSquare.getPos().getX();
@@ -128,10 +129,17 @@ public class NormalAI extends AI {
 					targetBlock = (TerrainBlock) oneBlock;
 				}
 			}
+			
+			double xDis = myX - targetX;
+			double yDis = myY - targetY;
+			
+			double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
+			
 			System.out.println(targetBlock);
-			if (targetBlock.getHealth() < targetHealth) {
+			if ((targetBlock.getHealth() < targetHealth) && displacement < finalDis) {
 				finalSquare = targetSquare;
 				targetHealth = targetBlock.getHealth();
+				finalDis = displacement;
 			}
 			System.out.println(finalSquare);
 		}
