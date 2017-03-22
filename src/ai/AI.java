@@ -997,7 +997,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

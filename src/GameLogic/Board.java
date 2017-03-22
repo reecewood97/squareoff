@@ -99,9 +99,6 @@ public class Board {
 			objects.add(yel);
 			objects.add(grn);
 			
-			//Create Blocks
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
-			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
@@ -109,78 +106,91 @@ public class Board {
 			}
 			//level2
 			for(int i = 100; i < 700; i+=120){
-				
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
-	
 			}
 			//level3
 			for(int i = 150; i < 700; i+=160){
-				
 				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
-	
 			}
 	
 	
 			for (int i = 50; i < 700; i += 200) {
-	
 				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
-	
 				objects.add(block);
-	
 			}
 		}
-		else{
+		else if(map.equals("map2")){
 			
-			//Initialise the placements of the 4 teams.
-			Point2D.Double redpos = new Point2D.Double(100, 150);
+			Point2D.Double redpos = new Point2D.Double(255, 390);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
-			Point2D.Double blupos = new Point2D.Double(300, 150);
+			Point2D.Double blupos = new Point2D.Double(555, 390);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(400, 150);
+			Point2D.Double yelpos = new Point2D.Double(415, 300);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(500, 150);
+			Point2D.Double grnpos = new Point2D.Double(415, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
 			objects.add(yel);
 			objects.add(grn);
 			
-			//Create Blocks
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
-			objects.add(new TerrainBlock(1,1,new Point2D.Double(430, 150), true));
-			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,120), true);
 				objects.add(block);
-			}
-			//level2
-			for(int i = 100; i < 700; i+=120){
-				
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
-				objects.add(block);
-	
-			}
-			//level3
-			for(int i = 150; i < 700; i+=160){
-				
-				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
-				objects.add(block);
-	
-			}
-	
-	
-			for (int i = 50; i < 700; i += 200) {
-	
-				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
-	
-				objects.add(block);
-	
 			}
 			
+			//Bottom left bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 210), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 180), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 180), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 180), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 210), true));
+			
+			//Bottom right bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 210), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 180), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 180), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 180), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 210), true));
+			
+			//Middle left bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(80, 300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(90, 270), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(130, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(170, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(180, 300), true));
+			
+			//Middle middle bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(360, 300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(370, 270), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(410, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(450, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(460, 300), true));
+			
+			//Middle right bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(610, 300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(620, 270), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(660, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(700, 270), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(710, 300), true));
+			
+			//Top left bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 390), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 360), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 390), true));
+			
+			//Top right bucket
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 390), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 360), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 390), true));
 		}
 		
 		
@@ -576,7 +586,7 @@ public class Board {
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY()+ obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects(obj1.getPos().getX(),
-						obj1.getPos().getY() + 9, obj1.getWidth(), obj1.getHeight());
+						obj1.getPos().getY() + 10, obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
 			if (obj1.getName()
@@ -860,7 +870,7 @@ public class Board {
 		for (PhysObject object : objs) {
 			if (object.getInUse()) {
 				if (((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
-						|| (object.getPos().getX() > 850))) {
+						|| (object.getPos().getX() > 850) || (object.getPos().getY() > 1500))) {
 					
 					object.setInUse(false);
 						
@@ -1194,10 +1204,28 @@ public class Board {
 				WeaponMove wmv;
 				Double xVel = (Math.abs(x2 - x) / 800) * 30;
 				Double yVel = (Math.abs(y2 - y) / 450) * 30;
+				
+				double myx = xVel;
+				if(Math.abs(myx)<2){
+					if(myx>=0){
+						myx = 2;
+					} else {
+						myx = -2;
+					}
+				}
+				double myy = yVel;
+				myy = myy*0.5;
+				if(Math.abs(myy)<2){
+					if(myy>=0){
+						myy = 2;
+					} else {
+						myy = -2;
+					}
+				}
 
 				wmv = new WeaponMove(weaponType,
-						new Point2D.Double(active.getPos().getX() + 10, active.getPos().getY() + 10), xVel * factor,
-						yVel * yfactor);
+						new Point2D.Double(active.getPos().getX() + 10, active.getPos().getY() + 10), myx * factor,
+						myy * yfactor);
 				// wmv = new WeaponMove(weaponType,new
 				// Point2D.Double(active.getPos().getX(),
 				// active.getPos().getY()+25),5,10);
