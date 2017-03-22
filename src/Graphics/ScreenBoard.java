@@ -260,6 +260,7 @@ public class ScreenBoard extends JPanel{
 		
 		if(targetline.get(0).getInUse()){
 			
+			
 			Point mousepos = MouseInfo.getPointerInfo().getLocation();
 			Point2D.Double playerpos = new Point2D.Double(0, 0);
 			

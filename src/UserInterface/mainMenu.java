@@ -567,6 +567,24 @@ public class mainMenu extends Application {
 			alert.showAndWait();
 			a.click();
     	}
+		else if (name.length() > 61) {
+    		Alert alert;
+			alert = new Alert(AlertType.WARNING);
+			alert.setHeaderText("Error: Name too long");
+			alert.setContentText("The maximum name length is 61 alphanumeric characters");
+			alert.setTitle("Square-Off: Joining Game");
+			alert.showAndWait();
+			a.click();
+		}
+		else if ( !name.matches("^([A-Za-z]|[0-9])+$") ) {
+    		Alert alert;
+			alert = new Alert(AlertType.WARNING);
+			alert.setHeaderText("Error: Invalid Characters");
+			alert.setContentText("Your name can only contain alphanumeric characters");
+			alert.setTitle("Square-Off: Joining Game");
+			alert.showAndWait();
+			a.click();
+		}
     	else {
     		if (net.connectToHost(hostAddress, name) == 0)
 				clientLobby(net);
