@@ -117,7 +117,7 @@ public class ButtonPanel extends JPanel{
 		Square square = (Square) board.getActivePlayer();
 		int id = square.getPlayerID();
 		
-		ArrayList<String> a = client.getClientList();
+		ArrayList<String> a = client.getPlayers();
 	
 		/*
 		//checks they are the active player

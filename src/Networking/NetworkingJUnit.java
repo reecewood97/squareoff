@@ -152,6 +152,7 @@ public class NetworkingJUnit {
 		//Start game again.
 		System.err.println(15);
 		server.startGame();
+		wait(1000);
 		assertTrue(bob.inGame());
 		assertTrue(jerry.inGame());
 		
