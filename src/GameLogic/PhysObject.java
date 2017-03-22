@@ -167,10 +167,10 @@ public class PhysObject implements Serializable{
 	 * @param vel The new velocity
 	 */
 	public void setXvel(double vel) {
-		if(vel > 10){
-			this.xvel = 10;
-		} else if (vel < (-10)){
-			this.xvel = (-10);
+		if(vel > 20){
+			this.xvel = 20;
+		} else if (vel < (-20)){
+			this.xvel = (-20);
 		} else {
 			this.xvel = vel;
 		}
@@ -181,10 +181,10 @@ public class PhysObject implements Serializable{
 	 * @param vel The new velocity
 	 */
 	public void setYvel(double vel) {
-		if(vel > 10){
-			this.yvel = 10;
-		} else if (vel < (-10)){
-			this.yvel = (-10);
+		if(vel > 20){
+			this.yvel = 20;
+		} else if (vel < (-20)){
+			this.yvel = (-20);
 		} else {
 			this.yvel = vel;
 		}
