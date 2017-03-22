@@ -58,7 +58,11 @@ public class ServerSender extends Thread {
 					//Alerts the board that the turn was ended early.
 					else if(board.getTurnFlag()) {
 						send(34);
-						board.setTurnFlag(false);
+						board.setSent(board.sent()+1);
+						if (board.sent() == board.nonAIPlayers()){
+							board.setSent(0);
+							board.setTurnFlag(false);
+						}
 					}
 					//Sends a "copy" of the game to the client.
 					else {

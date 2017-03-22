@@ -45,6 +45,7 @@ public class Board {
 	private ArrayBlockingQueue<ArrayList<PhysObject>> q;
 	private String[] players = new String[4];
 	private int numberOfPlayers = 0;
+	private int sent = 0;
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
 	private boolean turnChangedFlag = true;
@@ -1575,5 +1576,35 @@ public class Board {
 	 */
 	public boolean getTurnFlag() {
 		return turnChangedFlag;
+	}
+	
+	/**
+	 * Returns the number of players who have received the turn over signal to reset their local timers.
+	 * @return the number of sent signals
+	 */
+	public int sent(){
+		return sent;
+	}
+	
+	/**
+	 * Change the number of players who have sent the reset timer signal
+	 * @param x the number of people who have sent the signal
+	 */
+	public void setSent(int x){
+		sent = x;
+	}
+	
+	/**
+	 * Checks how many players are not AI
+	 * @return ret the number of real players.
+	 */
+	public int nonAIPlayers(){
+		int ret = 0;
+		for (int i = 0; i < 4; i++){
+			if (!players[i].contains("AI")){
+				ret ++;
+			}
+		}
+		return ret;
 	}
 }
