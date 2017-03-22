@@ -296,7 +296,7 @@ public class ScreenBoard extends JPanel{
 					int x = (int) weapon.getPos().getX();
 
 
-					int y = (int) weapon.getPos().getY()+weapon.getHeight();
+					int y = (int) weapon.getPos().getY()+weapon.getHeight();//`TODO
 
 					
 					x = (int) (x*widthratio);
@@ -342,7 +342,7 @@ public class ScreenBoard extends JPanel{
 			if (((Explosion) exp).getInUse()){
 			
 				int x = (int) (exp.getPos().getX());
-				int y = (int) (exp.getPos().getY());
+				int y = (int) (exp.getPos().getY()+exp.getHeight());//TODO
 
 				double size = ((Explosion) exp).getSize();
 				

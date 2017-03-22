@@ -263,7 +263,7 @@ public class Board {
 	 * 
 	 * @return the active player.
 	 */
-	public PhysObject getActiveBoard() {
+	public synchronized PhysObject getActiveBoard() {
 		
 		for (PhysObject square : getSquares()) {
 
@@ -558,11 +558,8 @@ public class Board {
 			return false;
 		}
 		if (obj1.getName().equals("TerrainBlock")) {
-			if (obj2.getName()
-					.endsWith("ExplodeOnImpact")/*
-												 * || obj2.getName().endsWith(
-												 * "TimedGrenade")
-												 */) { // All circular objects
+			if (obj2.getName().endsWith("ExplodeOnImpact")/*|| obj2.getName().endsWith(
+												 * "TimedGrenade")*/) { // All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if (circle.intersects(obj1.getPos().getX(),
@@ -575,11 +572,11 @@ public class Board {
 					return false;
 				}
 			} else {
-				// return obj1.rectIntersect(obj2);
+				//return obj1.rectIntersect(obj2);
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj2.getPos().getX(),
-						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
-				return rect.intersects(obj1.getPos().getX(), obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(),
-						obj1.getHeight());
+						obj2.getPos().getY()+ obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
+				return rect.intersects(obj1.getPos().getX(),
+						obj1.getPos().getY() + 9, obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
 			if (obj1.getName()
@@ -590,7 +587,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj1.getPos().getX(),
 						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if (circle.intersects(obj2.getPos().getX(),
-						obj2.getPos().getY()/* +obj2.getHeight() */, obj2.getWidth(), obj2.getHeight())) {
+						obj2.getPos().getY()/* +obj2.getHeight()*/ , obj2.getWidth(), obj2.getHeight())) {
 					System.out.println("Circular object collision detected between wep at " + obj1.getPos()
 							+ "with height " + obj1.getHeight() + "and width " + obj1.getWidth() + " and block at "
 							+ obj2.getPos() + " with height " + obj2.getHeight() + " and width " + obj2.getWidth());
@@ -599,11 +596,11 @@ public class Board {
 					return false;
 				}
 			} else {
-				// return obj1.rectIntersect(obj2);
+				//return obj1.rectIntersect(obj2);
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj1.getPos().getX(),
 						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
-				return rect.intersects(obj2.getPos().getX(), obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(),
-						obj2.getHeight());
+				return rect.intersects(obj2.getPos().getX(),
+						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 			}
 		}
 	}
@@ -739,9 +736,7 @@ public class Board {
 				System.out.println("Timed Grenade colliding at: " + thing.getPos() + " with Xvel: " + thing.getXvel()
 						+ " and Yvel: " + thing.getYvel());
 			}
-			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on
-																						// the
-																						// left
+			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on the left
 				System.out.println("Collided on the left");
 				thing.setXvel((-0.3) * thing.getXvel());
 				if (thing.getXvel() == 0) {
@@ -749,9 +744,7 @@ public class Board {
 					thing.update();
 				}
 			}
-			if (block.getPos().getX() + block.getWidth() <= thing.getPos().getX()) { // on
-																						// the
-																						// right
+			if (block.getPos().getX() + block.getWidth() <= thing.getPos().getX()) { // on the right
 				System.out.println("Collided on the right");
 				thing.setXvel((-0.3) * thing.getXvel());
 				if (thing.getXvel() == 0) {
@@ -759,8 +752,7 @@ public class Board {
 					thing.update();
 				}
 			}
-			if (thing.getPos().getY() >= block.getPos().getY() + block.getHeight()) { // on
-																						// top
+			if (thing.getPos().getY() >= block.getPos().getY() + block.getHeight()) { // on top
 				if (Math.abs(thing.getXvel()) <= 2) {
 					thing.setXvel(0);
 				} else {
@@ -787,7 +779,6 @@ public class Board {
 	 * the turn.
 	 */
 	private void freeSim() {
-		
 		
 		// This is going to be relatively quite slow. Perhaps it can be improved
 		// later.
@@ -834,12 +825,6 @@ public class Board {
 				if ((grenade.getFrames() <= 0) && (grenade.getInUse() == true)) {
 					boom = true;
 					boomer = grenade;
-					/*
-					 * grenade.setInUse(false); createExplosion(objs,
-					 * grenade.getPos().getX()+(grenade.getWidth()/2),
-					 * grenade.getPos().getY()+(grenade.getHeight()/2), 150, 50,
-					 * 1);
-					 */
 				}
 			}
 		}
@@ -965,23 +950,16 @@ public class Board {
 	 */
 	private synchronized void updateFrame(Move move) {
 		if (freeState) { // If the engine is in free-physics mode then the move
-							// is irrelevant,
-			freeSim(); // just simulate another frame.
+						 // is irrelevant,
+			freeSim();   // just simulate another frame.
 		} else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove) move;
 			System.out.println("Weapon spawning at: " + wepMove.getPos());
 			PhysObject wep = null;
-			// switch(wepMove.wepType()){
 			switch (weaponType) {
 			case "ExplodeOnImpact":
 				wep = new ExplodeOnImpact(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
 				break;
-			// case "ExplodeOnImpact": wep = new TimedGrenade(
-			// wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
-			// break;
-			// case "ExplodeOnImpact": wep = new Missile(
-			// wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
-			// break;
 			case "TimedGrenade":
 				wep = new TimedGrenade(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
 				break;
