@@ -131,7 +131,7 @@ public class Board {
 	
 			}
 		}
-		else{
+		else if(map.equals("map2")){
 			
 			//Initialise the placements of the 4 teams.
 			Point2D.Double redpos = new Point2D.Double(100, 150);
@@ -180,6 +180,9 @@ public class Board {
 				objects.add(block);
 	
 			}
+			
+		}
+		else {
 			
 		}
 		
@@ -576,7 +579,7 @@ public class Board {
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY()+ obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects(obj1.getPos().getX(),
-						obj1.getPos().getY() + 9, obj1.getWidth(), obj1.getHeight());
+						obj1.getPos().getY() + 10, obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
 			if (obj1.getName()
@@ -860,7 +863,7 @@ public class Board {
 		for (PhysObject object : objs) {
 			if (object.getInUse()) {
 				if (((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
-						|| (object.getPos().getX() > 850))) {
+						|| (object.getPos().getX() > 850) || (object.getPos().getY() > 1500))) {
 					
 					object.setInUse(false);
 						
@@ -964,7 +967,7 @@ public class Board {
 				wep = new TimedGrenade(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
 				break;
 			case "Missile":
-				wep = new Missile(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
+				wep = new Missile(wepMove.getPos(), 5, 5, true);
 				break;
 			case "LongJump":
 				wep = getWeapons().get(0);
