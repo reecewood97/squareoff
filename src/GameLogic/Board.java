@@ -112,6 +112,7 @@ public class Board {
 			
 			//Create Blocks
 			objects.add(new TerrainBlock(1,1,new Point2D.Double(240,150), true));
+			objects.add(new TerrainBlock(1,1,new Point2D.Double(430, 150), true));
 			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
@@ -949,8 +950,9 @@ public class Board {
 		}
 		turn.resetTimer();
 		objects = objs;
-		if(same)
+		if(same) {
 			incrementTurn();
+		}
 		
 	}
 
