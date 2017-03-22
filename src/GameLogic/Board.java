@@ -70,7 +70,7 @@ public class Board {
 	 * @param map
 	 *            Which map is being used
 	 */
-	public Board(){
+	public Board(String map){
 
 		this.objects = new ArrayList<PhysObject>();
 		this.explosions = new ArrayList<PhysObject>();
@@ -90,11 +90,15 @@ public class Board {
 		
 	public void setMap(String map){
 		
+		
+		System.out.println("MAP SELECTED: " + map);
 		//BOARD IS 800 ACROSS BY 450 UP STARTING FROM BOTTOM LEFT AS (0, 0)
 		objects = new ArrayList<PhysObject>();
 		
 		if (map.equals("map1")){
 				
+			System.out.println("in map1");
+			
 			//Initialise the placements of the 4 teams.
 			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
@@ -147,25 +151,23 @@ public class Board {
 		//MAP 2 SELECTED
 		else{
 			
+			System.out.println("in map2");
 			//Initialise the placements of the 4 teams.
 			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
 			Point2D.Double blupos = new Point2D.Double(180, 150);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(340, 200);
+			Point2D.Double yelpos = new Point2D.Double(220, 150);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(460, 200);
+			Point2D.Double grnpos = new Point2D.Double(260, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
 			objects.add(yel);
 			objects.add(grn);
 			
-			//CREATE BLOCKS
-			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
-			}
+			//create blocks
 			for (int i = 100; i < 700; i += 40) {
 				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 120), true);
 

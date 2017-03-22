@@ -44,7 +44,7 @@ public class Server extends Thread {
 	 */
 	public Server(int port) {
 		this.port = port;
-		board = new Board();
+		board = new Board("map1");
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();
@@ -218,7 +218,7 @@ public class Server extends Thread {
 			r.setInGame(false);
 		}
 		
-		board = new Board();
+		board = new Board("map1");
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();
@@ -228,11 +228,5 @@ public class Server extends Thread {
 		table.sendAll(Server.RESET_CONNECTION);
 	}
 	
-	/**
-	 * Used to determine what map the game is played on.
-	 * @param map The new map string.
-	 */
-	public void setMap(String map) {
-		board.setMap(map);
-	}
+	
 }

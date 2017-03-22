@@ -210,7 +210,7 @@ public class mainMenu extends Application {
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.setMap(map); net.startGame(); } );
+        btn6.setOnAction( e -> { a.click(); net.startGame(); } );
         
         TableView table = lobbyTable(net);
         
