@@ -52,7 +52,7 @@ public class mainMenu extends Application {
 	static boolean isHidden = false;
 	static boolean inLobby = false;
 	static int aiDifficulty = 1;
-	static int map = 1;
+	static String map = "map1";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -210,7 +210,7 @@ public class mainMenu extends Application {
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.startGame(); } );
+        btn6.setOnAction( e -> { a.click(); net.setMap(map); net.startGame(); } );
         
         TableView table = lobbyTable(net);
         
@@ -256,7 +256,7 @@ public class mainMenu extends Application {
         RadioButton rb5 = new RadioButton("Map 2");
         rb5.setToggleGroup(group2);
         
-        if (map == 1)
+        if (map.equals("map1"))
         	rb4.setSelected(true);
         else
         	rb5.setSelected(true);
@@ -268,9 +268,9 @@ public class mainMenu extends Application {
                 Toggle old_toggle, Toggle new_toggle) {
                     if (group2.getSelectedToggle() != null) {
                         if (rb4.isSelected())
-                        	map = 1;
+                        	map = "map1";
                         else
-                        	map = 2;
+                        	map = "map2";
                     }                
                 }
         });
