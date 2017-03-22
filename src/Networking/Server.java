@@ -42,9 +42,9 @@ public class Server extends Thread {
 	 * @param port
 	 *            The port.
 	 */
-	public Server(int port) {
+	public Server(String map, int port) {
 		this.port = port;
-		board = new Board("map1");
+		board = new Board(map);
 		players = new ArrayList<String>();
 		socket = null;
 		table = new ClientTable();

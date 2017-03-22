@@ -14,8 +14,12 @@ public class mainMenuNetwork {
 	
 	ArrayList<String> players = new ArrayList<>();
 	int port = 4444;
-	Server s = new Server(port);
+	Server s;
 	Client c;
+	
+	public mainMenuNetwork(String m) {
+		s = new Server(m, port);
+	}
 	
 	public boolean connectToHost(String hostName, String name) {
 		
@@ -74,12 +78,12 @@ public class mainMenuNetwork {
 	}
 	
 	public boolean isConnected() {
-		System.err.println("net.isConnected is being called");
+		//System.err.println("net.isConnected is being called");
 		return c.isConnected();
 	}
 	
 	public boolean inGame() {
-		System.err.println("net.isGame is being called");
+		//System.err.println("net.isGame is being called");
 		return c.inGame();
 	}
 	
