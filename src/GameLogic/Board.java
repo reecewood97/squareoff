@@ -30,7 +30,7 @@ public class Board {
 	private int squareID;
 	private Square activePlayer;
 	// Keep track of state of the board
-	private String map;
+	//private String map;
 	private ArrayList<PhysObject> objects;
 	private ArrayList<PhysObject> explosions;
 	private int winner = -1;
@@ -78,7 +78,7 @@ public class Board {
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); 
 		this.winner = -1;
-		this.map = map;
+		//this.map = map;
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 	
@@ -750,7 +750,6 @@ public class Board {
 			}
 		}*/ else { // Collisions for squares
 			thing.undoUpdate();
-			System.out.println("Resolving square collision, square at: "+thing.getPos()+", block at "+block.getPos());
 			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on the left
 				System.out.println("Collided on the left");
 				thing.setXvel((-0.3) * thing.getXvel());
@@ -768,7 +767,6 @@ public class Board {
 				}
 			}
 			if (thing.getPos().getY() >= block.getPos().getY() + block.getHeight()) { // on top
-				System.out.println("collided on top");
 				if (Math.abs(thing.getXvel()) <= 2) {
 					thing.setXvel(0);
 				} else {
@@ -1253,8 +1251,9 @@ public class Board {
 			if (!(wepA[2].equals(players[player]))) {
 				return;
 			}
-			if (debugL)
+			if (debugL) {
 				System.out.println("Now a weapon in use");
+			}
 			this.weaponType = wepA[1];
 			weaponsopen = true;
 

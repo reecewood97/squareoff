@@ -1,7 +1,6 @@
 package GameLogic;
 
 import static org.junit.Assert.*;
-
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import org.junit.Before;
@@ -123,18 +122,39 @@ public class PhysicsTest extends TestCase {
 		board.input("setTar true");
 		board.input("Clicked 135 200 1"); //Enter a move that should kill the red player
 		while(board.getFreeState()){
-			board.input("Pressed    d");
 			board.input("None");
 		}
-		assertFalse(board.getSquares().get(0).getInUse()); //Assert the red player has in fact died
+		assertFalse(board.getSquares().get(0).getInUse()); //Assert that the red player has in fact died
 		
 		board = new Board("map2");
-		//freeSim square collide left and right
-		//use all weapons
-		//Left wall on floor
-		//Right wall on floor
-		//Left wall off floor
-		//updateFrame splash
+		String[] players = new String[4];
+		for(int i = 0; i < players.length;i++){
+			players[i] = ""+(i+1);
+		}
+		board.setPlayers(players);
+		board.input("setWep,TimedGrenade,1");
+		board.input("50,-50,AItakesashotx86");
+		while(board.getFreeState()){
+			board.input("None");
+		}
+		assertTrue(board.getSquares().get(0).getPos().equals(new Point2D.Double(255.0, 390.0)));
+		
+		board.input("setWep,Missile,2");
+		board.input("-50,-5,AItakesashotx86");
+		while(board.getFreeState()){
+			board.input("None");
+		}
+		assertTrue(board.getSquares().get(1).getPos().equals(new Point2D.Double(855,675)));
+		assertFalse(board.getSquares().get(1).getInUse());
+		
+		board.setFreeState(true);
+		while(board.getFreeState()){
+			board.input("Pressed,  ,3");
+		}
+		while(board.getSquares().get(3).getInUse()){
+			board.input("Pressed,A ,4");
+		}
+		assertFalse(board.getSquares().get(3).getInUse());
 	}
 	
 	@After
