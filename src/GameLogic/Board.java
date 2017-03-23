@@ -101,23 +101,23 @@ public class Board {
 			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
 			//level2
 			for(int i = 100; i < 700; i+=120){
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
+				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 			}
 			//level3
 			for(int i = 150; i < 700; i+=160){
-				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
+				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,270), true);
 				objects.add(block);
 			}
 	
 	
 			for (int i = 50; i < 700; i += 200) {
-				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
+				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 345), true);
 				objects.add(block);
 			}
 		}
@@ -191,7 +191,21 @@ public class Board {
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 360), true));
 			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 360), true));
 			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 390), true));
-		}
+		}/* else {
+			Point2D.Double redpos = new Point2D.Double(255, 390);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(555, 390);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(415, 300);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(415, 150);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+		}*/
 		
 		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
@@ -275,6 +289,7 @@ public class Board {
 	 */
 	public synchronized PhysObject getActiveBoard() {
 		
+		PhysObject ret = null;
 		for (PhysObject square : getSquares()) {
 
 			//System.out.println(((Square) square).getActivePlayer());
@@ -282,11 +297,11 @@ public class Board {
 
 				//System.out.println("player id " + ((Square) square).getPlayerID());
 
-				return square;
+				ret = square;
 
 			}
 		}
-		return null;
+		return ret;
 	}
 
 	public boolean getPlaying() {
@@ -589,15 +604,14 @@ public class Board {
 						obj1.getPos().getY() + 10, obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
-			if (obj1.getName()
-					.endsWith("ExplodeOnImpact")/*
+			/*if (obj1.getName().endsWith("ExplodeOnImpact")/*
 												 * || obj1.getName().endsWith(
 												 * "TimedGrenade")
-												 */) { // All circular objects
+												 ) { // All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj1.getPos().getX(),
 						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				if (circle.intersects(obj2.getPos().getX(),
-						obj2.getPos().getY()/* +obj2.getHeight()*/ , obj2.getWidth(), obj2.getHeight())) {
+						obj2.getPos().getY()/* +obj2.getHeight() , obj2.getWidth(), obj2.getHeight())) {
 					System.out.println("Circular object collision detected between wep at " + obj1.getPos()
 							+ "with height " + obj1.getHeight() + "and width " + obj1.getWidth() + " and block at "
 							+ obj2.getPos() + " with height " + obj2.getHeight() + " and width " + obj2.getWidth());
@@ -605,13 +619,13 @@ public class Board {
 				} else {
 					return false;
 				}
-			} else {
+			} else {*/
 				//return obj1.rectIntersect(obj2);
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj1.getPos().getX(),
 						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects(obj2.getPos().getX(),
 						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
-			}
+			
 		}
 	}
 
@@ -696,7 +710,7 @@ public class Board {
 			thing.setInUse(false);
 			createExplosion(things, thing.getPos().getX() + (thing.getWidth() / 2),
 					thing.getPos().getY() + (thing.getHeight() / 2), 150, 50, 1);
-		} else if (thing.getName().endsWith("TimedGrenadeDONT USE")) { // Collisions
+		}/* else if (thing.getName().endsWith("TimedGrenadeDONT USE")) { // Collisions
 																		// for
 																		// circular
 																		// objects
@@ -734,18 +748,9 @@ public class Board {
 				thing.setYvel((-0.4) * thing.getYvel());
 				thing.setXvel((-0.4) * thing.getXvel());
 			}
-		} else { // Collisions for squares
-			if (thing.getName().equals("WeaponTimedGrenade")) {
-				System.out.println("Before, thing is at: " + thing.getPos());
-				thing.undoUpdate();
-				System.out.println("UndoUpdate, then: " + thing.getPos());
-			} else {
-				thing.undoUpdate();
-			}
-			if (thing.getName().equals("WeaponTimedGrenade")) {
-				System.out.println("Timed Grenade colliding at: " + thing.getPos() + " with Xvel: " + thing.getXvel()
-						+ " and Yvel: " + thing.getYvel());
-			}
+		}*/ else { // Collisions for squares
+			thing.undoUpdate();
+			System.out.println("Resolving square collision, square at: "+thing.getPos()+", block at "+block.getPos());
 			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on the left
 				System.out.println("Collided on the left");
 				thing.setXvel((-0.3) * thing.getXvel());
@@ -763,6 +768,7 @@ public class Board {
 				}
 			}
 			if (thing.getPos().getY() >= block.getPos().getY() + block.getHeight()) { // on top
+				System.out.println("collided on top");
 				if (Math.abs(thing.getXvel()) <= 2) {
 					thing.setXvel(0);
 				} else {
@@ -822,10 +828,6 @@ public class Board {
 			}
 		}
 		
-		for (PhysObject obj : objs) {
-			obj.update();
-		}
-
 		// Explode objects on a timer if they have run out
 		TimedGrenade boomer = null;
 		boolean boom = false;
@@ -842,6 +844,10 @@ public class Board {
 			boomer.setInUse(false);
 			createExplosion(objs, boomer.getPos().getX() + (boomer.getWidth() / 2),
 					boomer.getPos().getY() + (boomer.getHeight() / 2), 150, 50, 1);
+		}
+		
+		for (PhysObject obj : objs) {
+			obj.update();
 		}
 
 		ArrayList<Collision> list = new ArrayList<Collision>();
