@@ -437,8 +437,8 @@ public abstract class AI {
 
 				
 				
-				if (jumpLeft && !jumpRight && !dontJumpDown) {
-					for (int j = 0; j < 5; j++) {
+				if (jumpLeft && !jumpRight && dontJumpDown) {
+					for (int j = 0; j < 8; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
@@ -446,8 +446,8 @@ public abstract class AI {
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
-				else if (jumpRight && !jumpLeft && !dontJumpDown) {
-					for (int j = 0; j < 5; j++) {
+				else if (jumpRight && !jumpLeft && dontJumpDown) {
+					for (int j = 0; j < 8; j++) {
 						moveUpRight();
 						moveRight();
 					}
@@ -455,13 +455,14 @@ public abstract class AI {
 					jumpRight = false;
 					dontJumpDown = false;
 				}
-				else if (jumpLeft && jumpRight && dontJumpDown) {
+				else if (jumpLeft && jumpRight && !dontJumpDown) {
 					targetX = xPos;
 					targetY = yPos;
 					//System.out.println("destination change to " + targetX + " " + targetY);
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
+					break;
 				}
 				else {
 					targetX = xPos;
@@ -469,6 +470,7 @@ public abstract class AI {
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
+					break;
 				}
 				
 				if (jumpLeftObs && !jumpRightObs) {
@@ -586,10 +588,12 @@ public abstract class AI {
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
+						System.out.println("block is underneath");
 						dontJumpDown = true;
 						break;
 					}
 					dontJumpDown = false;
+					System.out.println("no blocks underneath");
 				}
 				
 				for (PhysObject block:blocks) {
@@ -619,22 +623,26 @@ public abstract class AI {
 
 				
 				if (jumpLeft && !jumpRight && dontJumpDown) {
-					for (int j = 0; j < 5; j++) {
+					for (int j = 0; j < 8; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
 					//System.out.println(myName + "Detected Edge. Jump Left");
+
+					System.out.println("blocks underneath");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
 				else if (jumpRight && !jumpLeft && dontJumpDown) {
-					for (int j = 0; j < 5; j++) {
+					for (int j = 0; j < 8; j++) {
 						moveUpRight();
 						moveRight();
 					}
 					//System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
+
+					System.out.println("blocks underneath");
 				}
 				else if (jumpLeft && jumpRight && !dontJumpDown) {
 					targetX = xPos;
@@ -643,6 +651,7 @@ public abstract class AI {
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
+					break;
 				}
 				else {
 					targetX = xPos;
@@ -650,6 +659,7 @@ public abstract class AI {
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
+					break;
 				}
 				
 				
@@ -712,27 +722,6 @@ public abstract class AI {
 			}
 		}
 		return ;
-	}
-	
-	public boolean determineMovementFloorL(double x, double y) {
-		boolean floor = false;
-		////System.out.println(y);
-		ArrayList<PhysObject> blocks = board.getBlocks();
-		for (PhysObject block:blocks) {
-			if (!block.getInUse()) {
-				continue;
-			}
-			double blockX = block.getPos().getX();
-			double blockY = block.getPos().getY();
-			if ((x - 90 <= blockX) && (x - 40 >= blockX) && (y == blockY)) {
-				floor = true;
-				break;
-			}
-			floor = false;
-		}
-		
-		////System.out.println("obstacle on left: " + floor);
-		return floor;
 	}
 	
 	/**
@@ -930,13 +919,13 @@ public abstract class AI {
 			g = 0.9;
 		}
 		else if (range > 120 && range <= 200 && height <= 110) {
-			g = ((range - 100) / 40) / 2;
+			g = ((range - 100) / 40) / 1.5;
 		}
 		else if (range > 200 && range <= 280 && height <= 110) {
 			g = ((range - 100) / 40) / 1;
 		}
 		else if (range > 280 && range <= 360 && height <= 110) {
-			g = ((range - 200) / 40) / 3;
+			g = ((range - 200) / 40) / 1.5;
 		}
 		else if (range > 360) {
 			return 3;
@@ -1010,14 +999,18 @@ public abstract class AI {
 		
 		double g = 1;
 		
-		if (range <= 80 && height <= 110) {
+		if (height > 110) { // X
+			g = 3;
+		}
+		else if (range < 40) {
+			setObstacles(true);
+			return;
+		}
+		else if (range <= 80 && height <= 110) {
 			g = 0.7;
 		}
 		else if (range > 80 && range <= 120 && height <= 110) {
 			g = 0.9;
-		}
-		else if (height > 110) { // X
-			g = 0.5;
 		}
 		else if (range > 120 && range <= 200 && height <= 110) {
 			g = ((range - 100) / 40) / 2;
@@ -1026,7 +1019,11 @@ public abstract class AI {
 			g = ((range - 100) / 40) / 1;
 		}
 		else if (range > 280 && range <= 360 && height <= 110) {
-			g = ((range - 200) / 40) / 3;
+			g = ((range - 200) / 40) / 1.5;
+		}
+		else if (range > 360) {
+			setObstacles(true);
+			return;
 		}
 		
 		ArrayList<PhysObject> blocks = board.getBlocks();

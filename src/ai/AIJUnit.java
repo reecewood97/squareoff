@@ -70,11 +70,15 @@ public class AIJUnit extends TestCase{
 		assertTrue(diffai.getVelocity() <= maxVelocity);
 		assertTrue(diffai.getVelocity() >= -1 * maxVelocity);
 		
-		// test determineObstacle
-		// put two points in it and test if it is correct
-		
 		// test dontKillMyself
 		// put two points in it and test if it is correct
+		assertTrue(easyai.dontKillMyself(100, 150, 160, 150));
+		assertTrue(easyai.dontKillMyself(100, 150, 100, 150));
+		assertFalse(easyai.dontKillMyself(100, 150, 200, 150));
+		assertFalse(easyai.dontKillMyself(100, 150, 110, 100));
+		assertTrue(easyai.dontKillMyself(100, 150, 40, 150));
+		assertTrue(easyai.dontKillMyself(100, 150, 80, 150));
+		assertTrue(easyai.dontKillMyself(100, 150, 120, 150));
 		
 		// test getFinalDestination
 		// test whether the ais get a target destination which is not equal to its own position
