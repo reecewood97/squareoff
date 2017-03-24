@@ -43,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.util.Random;
 
 public class mainMenu extends Application {
 	static int width = 960;
@@ -220,6 +221,7 @@ public class mainMenu extends Application {
     	List<String> choices = new ArrayList<>();
     	choices.add("map1");
     	choices.add("map2");
+    	choices.add("random");
 
     	ChoiceDialog<String> dialog = new ChoiceDialog<>("map1", choices);
     	dialog.setTitle("Square-Off: Map Selection");
@@ -395,6 +397,13 @@ public class mainMenu extends Application {
     	}
     	
     	map = mapChoice();
+    	
+    	if(map.equals("random")){
+    		//Choose a random map
+    		Random random = new Random();
+    		int randMap = random.nextInt(2)+1; //Number in the brackets is how many maps we have
+    		map = "map"+randMap;
+    	}
     	
     	if (map==null) {
     		ps.setScene(ogScene);

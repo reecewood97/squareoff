@@ -119,8 +119,7 @@ public class PhysicsTest extends TestCase {
 			board.input("Pressed,  ,4");
 		}
 		board.input("setWep,ExplodeOnImpact,1");
-		board.input("setTar true");
-		board.input("Clicked 135 200 1"); //Enter a move that should kill the red player
+		board.input("50,-50,AItakesashotx86"); //Enter a move that should kill the red player
 		while(board.getFreeState()){
 			board.input("None");
 		}
@@ -133,19 +132,22 @@ public class PhysicsTest extends TestCase {
 		}
 		board.setPlayers(players);
 		board.input("setWep,TimedGrenade,1");
-		board.input("50,-50,AItakesashotx86");
+		board.input("setTar true");
+		board.input("Clicked 255 390 1");
+		System.err.println(board.getWeapons().get(0).getName());
 		while(board.getFreeState()){
 			board.input("None");
 		}
-		assertTrue(board.getSquares().get(0).getPos().equals(new Point2D.Double(255.0, 390.0)));
+		assertTrue(board.getSquares().get(0).getPos().equals(new Point2D.Double(-45, 502.5)));
+		assertFalse(board.getSquares().get(0).getInUse());
 		
 		board.input("setWep,Missile,2");
-		board.input("-50,-5,AItakesashotx86");
+		board.input("setTar true");
+		board.input("Clicked 555 390 2");
 		while(board.getFreeState()){
 			board.input("None");
 		}
-		assertTrue(board.getSquares().get(1).getPos().equals(new Point2D.Double(855,675)));
-		assertFalse(board.getSquares().get(1).getInUse());
+		assertTrue(board.getSquares().get(1).getPos().equals(new Point2D.Double(305.8999999999995, 240.0)));
 		
 		board.setFreeState(true);
 		while(board.getFreeState()){

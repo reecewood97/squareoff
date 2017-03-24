@@ -53,18 +53,6 @@ public class Board {
 	private final boolean debug = false;
 	private final boolean debugL = false;
 
-	/*
-	 * public static void main(String[] args) { //For testing purposes only
-	 * Board board = new Board("map1"); Scanner scanner = new
-	 * Scanner(System.in); while(true){ String input = scanner.nextLine(); if
-	 * (input.equals("l")){ board.updateFrame(new Move(0,0,"Left",false)); } if
-	 * (input.equals("r")){ board.updateFrame(new Move(0,0,"Right",false)); } if
-	 * (input.equals("u")){ board.updateFrame(new Move(0,0,"None",true)); } if
-	 * (input.equals("w")){ board.updateFrame(new WeaponMove("ExplodeOnImpact",
-	 * new Point2D.Double(activePlayer.getPos().getX(),
-	 * activePlayer.getPos().getY()+5),0,0)); } } }
-	 */
-
 	/**
 	 * Constructor makes a default board with four players
 	 * 
@@ -1255,6 +1243,7 @@ public class Board {
 			if (debugL) {
 				System.out.println("Now a weapon in use");
 			}
+			System.err.println(wepA[1]);
 			this.weaponType = wepA[1];
 			weaponsopen = true;
 
