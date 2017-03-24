@@ -1113,6 +1113,7 @@ public class Board {
 		// it's their turn.
 		if (input.contains("AItakesashotx86")) {
 			weaponsopen = true;
+			weaponType = "ExplodeOnImpact";
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);

@@ -170,7 +170,7 @@ public class NewWeaponsMenu extends JFrame {
 	     * open menu method
 	     */
 	    public void open(){
-	    	
+	    	//System.err.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	    	setVisible(true);
 	    	setFocusable(true);
 	    	requestFocusInWindow();
@@ -227,7 +227,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	//TODO notify board of weapon choice
 	    	listeners.setWep(weaponArray[currentWeapon]);
 	    	listeners.setTargetLine("true",true);
-	    	
+	    	wepbtn.setEnabled(true);
 	    	
 	    	exit();
 	    	
