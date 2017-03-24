@@ -285,8 +285,8 @@ public abstract class AI {
 		if (board.getTime() >= 20 * 1000) {
 			return;
 		}
-		determineResult();
-//		alterResult();
+// 		determineResult();
+		alterResult();
 		double velocity_chosen = getVelocity();
 		double angle_chosen = getAngle();
 		sendAttack(angle_chosen, velocity_chosen);  // by sending power, angle chosen to methods in other class.
@@ -303,10 +303,10 @@ public abstract class AI {
 //		moveUp();
 		int i = 0;
 		while (((int)xPos >= targetX + 40.0) || ((int)xPos <= targetX - 5.0) || !(yPos <= targetY && yPos >= targetY -30.0 )) {
-			System.out.println("xpos" + xPos);
-			System.out.println("ypos" + yPos);
-			System.out.println("targety" + targetY);
-			System.out.println("targetx" + targetX);
+// 			System.out.println("xpos" + xPos);
+// 			System.out.println("ypos" + yPos);
+// 			System.out.println("targety" + targetY);
+// 			System.out.println("targetx" + targetX);
 			try {
 				Thread.sleep(30);
 			} catch (InterruptedException e) {
@@ -328,9 +328,9 @@ public abstract class AI {
 				}
 			}
 			
-			if (board.getTime() >= 15 * 1000) {
-				return;
-			}
+// 			if (board.getTime() >= 15 * 1000) {
+// 				return;
+// 			}
 			
 			changeAIPos();
 			xPos = getAIPos().getX();
@@ -372,13 +372,13 @@ public abstract class AI {
 				
 				//detect edge
 				
-				for (PhysObject block:blocks) {
+			for (PhysObject block:blocks) {
 					if (!block.getInUse()) {
 						continue;
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if ((xPos >= blockX - 40.1) && (yPos - 25.0 >= blockY) && (yPos == blockY)) {
+					if ((xPos >= blockX) && (xPos < blockX + 120.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
 						jumpLeft = false;
 						break;
 					}
@@ -390,7 +390,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos <= blockX + 80.1)) && (yPos - 25.0 >= blockY) && (yPos -25.0 == blockY)) {
+					if (((xPos <= blockX)) && (xPos >= blockX - 80.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
 						jumpRight = false;
 						break;
 					}
@@ -436,33 +436,38 @@ public abstract class AI {
 				}
 
 				
-				
-				if (jumpLeft && !jumpRight && dontJumpDown) {
+				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
+				if (jumpLeft && !jumpRight && !dontJumpDown) {
 					for (int j = 0; j < 8; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
-					//System.out.println(myName + "Detected Edge. Jump Left");
+					System.out.println(myName + "Detected Edge. Jump Left");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
-				else if (jumpRight && !jumpLeft && dontJumpDown) {
+				else if (jumpRight && !jumpLeft && !dontJumpDown) {
 					for (int j = 0; j < 8; j++) {
 						moveUpRight();
 						moveRight();
 					}
-					//System.out.println(myName + "Detected Edge. Jump Right");
+					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
 				}
 				else if (jumpLeft && jumpRight && !dontJumpDown) {
 					targetX = xPos;
 					targetY = yPos;
-					//System.out.println("destination change to " + targetX + " " + targetY);
+					System.out.println("destination change to " + targetX + " " + targetY);
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
 					break;
+				}
+				else if (!jumpLeft && !jumpRight) {
+					jumpRight = false;
+					jumpLeft = false;
+					dontJumpDown = false;
 				}
 				else {
 					targetX = xPos;
@@ -563,7 +568,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos + 40.1 >= blockX - 20.0) && (xPos + 40.1 <= blockX + 20.0)) && yPos == blockY) {
+					if ((xPos >= blockX - 40.1) && (yPos - 25.0 >= blockY) && (yPos == blockY)) {
 						jumpLeft = false;
 						break;
 					}
@@ -575,7 +580,7 @@ public abstract class AI {
 					}
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
-					if (((xPos - 40.1 >= blockX - 25.0) && (xPos - 40.1 <= blockX + 20.0)) && yPos == blockY) {
+					if (((xPos <= blockX + 80.1)) && (yPos - 25.0 >= blockY) && (yPos == blockY)) {
 						jumpRight = false;
 						break;
 					}
@@ -588,12 +593,12 @@ public abstract class AI {
 					double blockX = block.getPos().getX();
 					double blockY = block.getPos().getY();
 					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
-						System.out.println("block is underneath");
+//						System.out.println("block is underneath");
 						dontJumpDown = true;
 						break;
 					}
 					dontJumpDown = false;
-					System.out.println("no blocks underneath");
+//					System.out.println("no blocks underneath");
 				}
 				
 				for (PhysObject block:blocks) {
@@ -621,33 +626,38 @@ public abstract class AI {
 					jumpRightObs = false;
 				}
 
-				
-				if (jumpLeft && !jumpRight && dontJumpDown) {
-					for (int j = 0; j < 8; j++) {
+				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
+				if (jumpLeft && !jumpRight && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
-					//System.out.println(myName + "Detected Edge. Jump Left");
+//					System.out.println(myName + "Detected Edge. Jump Left");
 
-					System.out.println("blocks underneath");
+//					System.out.println("blocks underneath");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
-				else if (jumpRight && !jumpLeft && dontJumpDown) {
-					for (int j = 0; j < 8; j++) {
+				else if (jumpRight && !jumpLeft && !dontJumpDown) {
+					for (int j = 0; j < 10; j++) {
 						moveUpRight();
 						moveRight();
 					}
-					//System.out.println(myName + "Detected Edge. Jump Right");
+//					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
 
-					System.out.println("blocks underneath");
+//					System.out.println("blocks underneath");
 				}
-				else if (jumpLeft && jumpRight && !dontJumpDown) {
+				else if (!jumpLeft && !jumpRight) {
+					jumpRight = false;
+					jumpLeft = false;
+					dontJumpDown = false;
+				}
+				else if (jumpLeft && jumpRight) {
 					targetX = xPos;
 					targetY = yPos;
-					//System.out.println("destination change to " + targetX + " " + targetY);
+//					System.out.println("destination change to " + targetX + " " + targetY);
 					jumpRight = false;
 					jumpLeft = false;
 					dontJumpDown = false;
@@ -740,7 +750,7 @@ public abstract class AI {
 	 * @param mistakeVelocity 
 	 */
 	public void determineResult(){
-		////System.out.println("myself: " + getAIPos());
+	////System.out.println("myself: " + getAIPos());
 		Point2D.Double target = getFinalDestination();
 		double xdis = target.getX() - getAIPos().getX();
 		double ydis = getAIPos().getY() - target.getY(); // no need to absolute
@@ -749,17 +759,18 @@ public abstract class AI {
 		if (ydis < 0) {
 			// angle larger than 45 degrees
 			boolean hit = false;
+			acc_angle = 90;
 			int state = calculation(acc_angle, acc_velocity, target);
 			hit = isHit(state);
 			while (!hit) {
-				if (state == 3) {
-					if (target.getX() > getAIPos().getX()) {
-						aiMoveCal(target.getX(), target.getY());
-					}
-					else {
-						aiMoveCal(target.getX(), target.getY());
-					}
-				}
+//				if (state == 3) {
+//					if (target.getX() > getAIPos().getX()) {
+//						aiMoveCal(target.getX() + 40.0, target.getY());
+//					}
+//					else {
+//						aiMoveCal(target.getX() -, target.getY());
+//					}
+//				}
 				acc_velocity = maxVelocity/2;
 				if (acc_angle >= 90 || acc_angle <= 0) {
 					acc_angle = 0;
@@ -794,14 +805,14 @@ public abstract class AI {
 			int state = calculation(acc_angle, acc_velocity, target);
 			hit = isHit(state);
 			while (!hit) {
-				if (state == 3) {
-					if (target.getX() > getAIPos().getX()) {
-						aiMoveCal(target.getX() - 160.0, target.getY());
-					}
-					else {
-						aiMoveCal(target.getX() + 160.0, target.getY());
-					}
-				}
+//				if (state == 3) {
+//					if (target.getX() > getAIPos().getX()) {
+//						aiMoveCal(target.getX() - 160.0, target.getY());
+//					}
+//					else {
+//						aiMoveCal(target.getX() + 160.0, target.getY());
+//					}
+//				}
 				acc_velocity = maxVelocity/2;
 				if (acc_angle <= 0 || acc_angle >= 90) {
 					acc_angle = 90;
@@ -906,14 +917,14 @@ public abstract class AI {
 //		g = (range / 100) * ((Math.abs(height) + 100) / 100);
 		
 
-		if (height > 110) { // X
-			g = 3;
+		if (height > 90) { // X
+			g = 1.7;
 		}
 		else if (range < 40) {
-			return 3;
+			g = 0.5;
 		}
 		else if (range <= 80 && height <= 110) {
-			g = 0.7;
+			g = 1;
 		}
 		else if (range > 80 && range <= 120 && height <= 110) {
 			g = 0.9;
@@ -925,10 +936,10 @@ public abstract class AI {
 			g = ((range - 100) / 40) / 1;
 		}
 		else if (range > 280 && range <= 360 && height <= 110) {
-			g = ((range - 200) / 40) / 1.5;
+			g = ((range - 200) / 40) / 1.8;
 		}
 		else if (range > 360) {
-			return 3;
+			g = 2.123;
 		}
 
 		
@@ -999,31 +1010,29 @@ public abstract class AI {
 		
 		double g = 1;
 		
-		if (height > 110) { // X
-			g = 3;
+		if (height > 90) { // X
+			g = 1.7;
 		}
 		else if (range < 40) {
-			setObstacles(true);
-			return;
+			g = 0.5;
 		}
 		else if (range <= 80 && height <= 110) {
-			g = 0.7;
+			g = 1;
 		}
 		else if (range > 80 && range <= 120 && height <= 110) {
 			g = 0.9;
 		}
 		else if (range > 120 && range <= 200 && height <= 110) {
-			g = ((range - 100) / 40) / 2;
+			g = ((range - 100) / 40) / 1.5;
 		}
 		else if (range > 200 && range <= 280 && height <= 110) {
 			g = ((range - 100) / 40) / 1;
 		}
 		else if (range > 280 && range <= 360 && height <= 110) {
-			g = ((range - 200) / 40) / 1.5;
+			g = ((range - 200) / 40) / 1.8;
 		}
 		else if (range > 360) {
-			setObstacles(true);
-			return;
+			g = 2.123;
 		}
 		
 		ArrayList<PhysObject> blocks = board.getBlocks();
