@@ -116,7 +116,6 @@ public class ScreenBoard extends JPanel{
 			int height = (int) (particle.getHeight()*heightratio);
 			
 			if(particle.getInUse()) {
-				System.err.println("HELLO");
 				g2d.setColor(Color.black);
 				g2d.fillRect(newx,newy,width,height);
 			}

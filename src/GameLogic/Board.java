@@ -578,7 +578,7 @@ public class Board {
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if (circle.intersects(obj1.getPos().getX(),
-						obj1.getPos().getY()/* +obj1.getHeight() */, obj1.getWidth(), obj1.getHeight())) {
+						obj1.getPos().getY() +obj2.getHeight() , obj1.getWidth(), obj1.getHeight())) {
 					System.out.println("Circular object collision detected between wep at " + obj2.getPos()
 							+ "with height " + obj2.getHeight() + "and width " + obj2.getWidth() + " and block at "
 							+ obj1.getPos() + " with height " + obj1.getHeight() + " and width " + obj1.getWidth());
@@ -641,16 +641,15 @@ public class Board {
 		System.out.println("CREATING EXPLOSION***************************");
 
 		// for i from x to y, all squares push away, all blocks damage
-		double i = (2 * size / 5);
+		double i = (1 * size / 2);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x - (i / 2), y + (i / 2), 2 * i, 2 * i);
 		ArrayList<PhysObject> newParticles = new ArrayList<PhysObject>();
-		System.err.println(things.size());
 		for (PhysObject thing : things) {
 			if (thing.getName().equals("TerrainBlock")) {
 				if (circle.intersects(thing.getPos().getX(), thing.getPos().getY() + thing.getHeight(),
 						thing.getWidth(), thing.getHeight())) {
 					((TerrainBlock) thing).damage(damage);
-					if(((TerrainBlock)thing).getHealth()>1){
+					if(!thing.getInUse()){
 						Random random = new Random();
 						Point2D.Double thingPos = new Point2D.Double(thing.getPos().getX()+thing.getWidth()/2,
 								thing.getPos().getY()+thing.getHeight()/2);
@@ -662,7 +661,6 @@ public class Board {
 			}
 		}
 		things.addAll(newParticles);
-		System.err.println(things.size());
 		i = size;
 		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
 		for(PhysObject thing : things){
@@ -937,17 +935,18 @@ public class Board {
 			}
 
 		}
-		
-		if(objs.size()!=objects.size()){
-			System.err.println(objs.size());
-			System.err.println(objects.size());
-		}
 
 		boolean same = true;
-		for (int i = 0; i < objs.size(); i++) {
+		for (int i = 0; i < objects.size(); i++) {
 			if (!objs.get(i).equals(objects.get(i))
 					|| (objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse())
 					|| (objs.get(i).getName().equals("Explosion") && objs.get(i).getInUse())) {
+				same = false;
+			}
+		}
+		
+		for(int i = 0; i < objs.size(); i++) {
+			if(objs.get(i).getName().equals("Particle") && objs.get(i).getInUse()) {
 				same = false;
 			}
 		}
