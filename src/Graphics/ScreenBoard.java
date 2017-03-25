@@ -93,7 +93,35 @@ public class ScreenBoard extends JPanel{
 		paintWeapons(board.getWeapons(),g2d); //paint other weps
 		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
-	} 		
+		paintParticles(board.getParticles(),g2d);
+	}
+	
+	/**
+	 * paint the particles onto the panel
+	 * @param particles The ArrayList of particles
+	 * @param g2d Graphics 2D
+	 */
+	public void paintParticles(ArrayList<PhysObject> particles, Graphics2D g2d){
+		
+		for(PhysObject particle : particles) {
+			
+			int x = (int) particle.getPos().getX();
+			int y = (int) particle.getPos().getY()+particle.getHeight();
+			y = 450 - y;
+			
+			int newx = (int) (x*widthratio);
+			int newy = (int) (y*heightratio);
+			
+			int width = (int) (particle.getWidth()*widthratio);
+			int height = (int) (particle.getHeight()*heightratio);
+			
+			if(particle.getInUse()) {
+				System.err.println("HELLO");
+				g2d.setColor(Color.black);
+				g2d.fillRect(newx,newy,width,height);
+			}
+		}
+	}
 	
 	
 	/**

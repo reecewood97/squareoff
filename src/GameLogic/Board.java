@@ -13,16 +13,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.lang.Math;
-
-//1. Missile
-//2. Dont use any weapon and instead fling your square across the map.
-
-//Formula for adding more weapons. All these things need to be implemented.
-//Weapons are no longer all going to extend Weapon, sorry for the confusion.
-//1. Create new class. Modify all necessary methods from PhysObject which would be different.
-//2. Modify collision methods to detect the defining string of the weapon
-//3. update freeSim arrayList copy cases
-//4. update updateFrame weaponMove cases
+import java.util.Random;
 
 public class Board {
 	// Keep track of the current player
@@ -30,9 +21,7 @@ public class Board {
 	private int squareID;
 	private Square activePlayer;
 	// Keep track of state of the board
-	//private String map;
 	private ArrayList<PhysObject> objects;
-	private ArrayList<PhysObject> explosions;
 	private int winner = -1;
 	private boolean freeState;
 	private TurnMaster turn;
@@ -62,11 +51,9 @@ public class Board {
 	public Board(String map){
 
 		this.objects = new ArrayList<PhysObject>();
-		this.explosions = new ArrayList<PhysObject>();
 		this.freeState = false;
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); 
 		this.winner = -1;
-		//this.map = map;
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 	
@@ -102,7 +89,6 @@ public class Board {
 				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,270), true);
 				objects.add(block);
 			}
-	
 	
 			for (int i = 50; i < 700; i += 200) {
 				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 345), true);
@@ -195,7 +181,6 @@ public class Board {
 			objects.add(grn);
 		}*/
 		
-		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
 		objects.add(weapon);
@@ -203,16 +188,19 @@ public class Board {
 		Point2D.Double explosionpos = new Point2D.Double(150, 150);
 		PhysObject explosion = new Explosion(explosionpos);
 		explosion.setInUse(false);
-		explosions.add(explosion);
+		objects.add(explosion);
 
 		PhysObject targetline = new TargetLine();
 		objects.add(targetline);
+		
+		Particle particle = new Particle(explosionpos, 0, 0);
+		particle.setInUse(false);
+		objects.add(particle);
 
 		this.player = 0;
 		this.squareID = 0;
 		
 		activePlayer = (Square)objects.get(0);
-		
 	}
 
 	public void setFreeState(boolean free) {
@@ -294,6 +282,19 @@ public class Board {
 
 	public boolean getPlaying() {
 		return this.playing;
+	}
+	
+	/**
+	 * @return All particles in the objects list
+	 */
+	public synchronized ArrayList<PhysObject> getParticles() {
+		ArrayList<PhysObject> particles = new ArrayList<PhysObject>();
+		for (PhysObject obj : objects) {
+			if (obj.getName().equals("Particle")) {
+				particles.add(obj);
+			}
+		}
+		return particles;
 	}
 
 	/**
@@ -567,7 +568,8 @@ public class Board {
 	 * @return True if the two objects are currently colliding
 	 */
 	private boolean collides(PhysObject obj1, PhysObject obj2) {
-		if ((obj1.getSolid() == obj2.getSolid()) || (!obj1.getInUse()) || (!obj2.getInUse())) {
+		if ((obj1.getName().equals("Particle")) || (obj2.getName().equals("Particle"))
+				|| (obj1.getSolid() == obj2.getSolid()) || (!obj1.getInUse()) || (!obj2.getInUse())) {
 			return false;
 		}
 		if (obj1.getName().equals("TerrainBlock")) {
@@ -641,14 +643,26 @@ public class Board {
 		// for i from x to y, all squares push away, all blocks damage
 		double i = (2 * size / 5);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x - (i / 2), y + (i / 2), 2 * i, 2 * i);
+		ArrayList<PhysObject> newParticles = new ArrayList<PhysObject>();
+		System.err.println(things.size());
 		for (PhysObject thing : things) {
 			if (thing.getName().equals("TerrainBlock")) {
 				if (circle.intersects(thing.getPos().getX(), thing.getPos().getY() + thing.getHeight(),
 						thing.getWidth(), thing.getHeight())) {
 					((TerrainBlock) thing).damage(damage);
+					if(((TerrainBlock)thing).getHealth()>1){
+						Random random = new Random();
+						Point2D.Double thingPos = new Point2D.Double(thing.getPos().getX()+thing.getWidth()/2,
+								thing.getPos().getY()+thing.getHeight()/2);
+						newParticles.add(new Particle(thingPos, random.nextDouble()*10, random.nextDouble()*8));
+						newParticles.add(new Particle(thingPos, random.nextDouble()*-10, random.nextDouble()*8));
+						newParticles.add(new Particle(thingPos, (random.nextDouble()-0.5)*10, random.nextDouble()*8));
+					}
 				}
 			}
 		}
+		things.addAll(newParticles);
+		System.err.println(things.size());
 		i = size;
 		circle = new Ellipse2D.Double(x-(i/2), y+(i/2), 2*i, 2*i);
 		for(PhysObject thing : things){
@@ -808,6 +822,9 @@ public class Board {
 			case "Explosion":
 				objs.add(new Explosion((Explosion) objects.get(i)));
 				break;
+			case "Particle":
+				objs.add(new Particle((Particle) objects.get(i)));
+				break;
 			default:
 				System.out.println("error copying arraylists in freeSim: " + objects.get(i).getName());
 				break;
@@ -862,7 +879,7 @@ public class Board {
 		for (PhysObject object : objs) {
 			if (object.getInUse()) {
 				if (((object.getPos().getY() < 100) || (object.getPos().getX() < (-40))
-						|| (object.getPos().getX() > 850) || (object.getPos().getY() > 1500))) {
+						|| (object.getPos().getX() > 850) || (object.getPos().getY() > 1300))) {
 					
 					object.setInUse(false);
 						
@@ -920,9 +937,14 @@ public class Board {
 			}
 
 		}
+		
+		if(objs.size()!=objects.size()){
+			System.err.println(objs.size());
+			System.err.println(objects.size());
+		}
 
 		boolean same = true;
-		for (int i = 0; i < objects.size(); i++) {
+		for (int i = 0; i < objs.size(); i++) {
 			if (!objs.get(i).equals(objects.get(i))
 					|| (objs.get(i).getName().equals("WeaponTimedGrenade") && objs.get(i).getInUse())
 					|| (objs.get(i).getName().equals("Explosion") && objs.get(i).getInUse())) {
