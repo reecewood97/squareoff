@@ -139,8 +139,6 @@ public class EasyAI extends AI{
 		}
 		
 		// return the coordinates
-
-		System.out.println("Enemy at " + finalSquare.getPos());
 		setObstacles(false);
 		return finalSquare.getPos();
 	}

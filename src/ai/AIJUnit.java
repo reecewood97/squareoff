@@ -57,7 +57,7 @@ public class AIJUnit extends TestCase{
 		assertTrue(easyai.getAngle() > 0);
 		assertTrue(easyai.getVelocity() <= maxVelocity);
 		assertTrue(easyai.getVelocity() >= -1 * maxVelocity);
-		
+
 		normalai.determineResult();
 		assertTrue(normalai.getAngle() <= 90);
 		assertTrue(normalai.getAngle() > 0);
