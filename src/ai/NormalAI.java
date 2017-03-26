@@ -41,11 +41,11 @@ public class NormalAI extends AI {
 		this.myName = name;
 	}
 	
-	public void aiMove() {
+public void aiMove() {
 		
-		if (getEndTurn()) {
-			return ;
-		}
+//		if (getEndTurn()) {
+//			return ;
+//		}
 		
 		// Stage 2:
 		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
@@ -55,6 +55,10 @@ public class NormalAI extends AI {
 		
 	}
 	
+	/**
+	 * Determine whether normal AI should move or not. 
+	 * Helper method of aiMove().
+	 */
 	public void aiMoveHelper() {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();
@@ -94,7 +98,6 @@ public class NormalAI extends AI {
 			if (((finalSquare.getPos().getY() + 50.0 <= aiY) && (finalSquare.getPos().getY() - 110.0 >= aiY)) && ((finalSquare.getPos().getX() + 160.0 <= aiX) && (finalSquare.getPos().getX() -120.0 >= aiX))) {
 				targetX = aiX;
 				targetY = aiY - 30.0;
-				System.out.println("Same position");
 			}
 			else {
 				for (PhysObject block:blocks) {
@@ -102,11 +105,9 @@ public class NormalAI extends AI {
 						targetX = block.getPos().getX();
 						targetY = block.getPos().getY();
 
-						System.out.println("find block to move");
 						break;
 					}
 				}
-				System.out.println("can't find");
 			}
 			System.out.println("target block: " + targetX + ", " + targetY);
 			setTargetLocked(true);
@@ -161,63 +162,19 @@ public class NormalAI extends AI {
 				}
 			}
 		}
-		
-		if (finalSquare == null) {
-			setObstacles(true);
-			aiMoveHelper();
+		try {
+			setObstacles(false);
+			return finalSquare.getPos();
 		}
-		// return the coordinates
-
-		System.out.println("Enemy at " + finalSquare.getPos());
-		setObstacles(false);
-		return finalSquare.getPos();
+		catch (NullPointerException e){
+			if (finalSquare == null) {
+				setObstacles(true);
+				aiMoveHelper();
+			}
+		}
 		
-//		ArrayList<PhysObject> squares = board.getSquares();
-//		int numOfPlayers = squares.size();
-//		int myX = (int) getAIPos().getX();
-//		int myY = (int) getAIPos().getY();
-//		int finalX = 0;
-//		int finalY = 0;
-//		PhysObject finalSquare = null;
-//		
-//		// Calculation for NormalAI & DifficultAI
-//		ArrayList<PhysObject> blocks = board.getBlocks();
-//		int numOfBlocks = blocks.size();
-//		TerrainBlock targetBlock = null;
-//		int targetHealth = 999;
-//		double finalDis = 99999999.0;
-//		for (int i = 0; i < numOfPlayers; i++) {
-//			Square targetSquare = (Square) squares.get(i);
-//			if (targetSquare.getPlayerID() == myPlayer) {
-//				continue;
-//			}
-//			double targetX = targetSquare.getPos().getX();
-//			double targetY = targetSquare.getPos().getY();
-//			for (int j = 0; j < numOfBlocks; j++) {
-//				TerrainBlock oneBlock = (TerrainBlock) blocks.get(j);
-//				if ((oneBlock.getPos().getY() == targetY - 30.0) && (oneBlock.getPos().getX() >= targetX - 50.0) && (oneBlock.getPos().getX() <= targetX + 100.0)) {
-////					&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
-//					targetBlock = (TerrainBlock) oneBlock;
-//				}
-//			}
-//			
-//			double xDis = myX - targetX;
-//			double yDis = myY - targetY;
-//			
-//			double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//			
-//			if ((targetBlock.getHealth() < targetHealth) && displacement < finalDis) {
-//				finalSquare = targetSquare;
-//				targetHealth = targetBlock.getHealth();
-//				finalDis = displacement;
-//			}
-//		}
-//		
-//		
-//		// return the coordinates
-//
-//		System.out.println("attack: " + finalSquare.getPos());
-//		return finalSquare.getPos();
+		// return the coordinates
+		return finalSquare.getPos();
 	}
 	
 	public void setTargetLocked(boolean lock) {

@@ -43,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.util.Random;
 
 public class mainMenu extends Application {
 	static int width = 960;
@@ -218,20 +219,30 @@ public class mainMenu extends Application {
     
     public static String mapChoice() {
     	List<String> choices = new ArrayList<>();
-    	choices.add("map1");
-    	choices.add("map2");
+    	choices.add("Battleground");
+    	choices.add("Derelict");
+    	choices.add("Random");
 
-    	ChoiceDialog<String> dialog = new ChoiceDialog<>("map1", choices);
+    	ChoiceDialog<String> dialog = new ChoiceDialog<>("Battleground", choices);
     	dialog.setTitle("Square-Off: Map Selection");
     	dialog.setHeaderText("Selecting a Map to play on");
     	dialog.setContentText("Please choose a map:");
 
     	// Traditional way to get the response value.
     	Optional<String> result = dialog.showAndWait();
-    	if (result.isPresent())
-    		return result.get();
-    	else
+    	if (result.isPresent()) {
+    		String mapChoice = null;
+    		switch(result.get()){
+    		case "Battleground": mapChoice = "map1"; break;
+    		case "Derelict": mapChoice = "map2"; break;
+    		case "Random": mapChoice = "Random"; break;
+    		default: System.err.println("Error selecting maps in MainMenu"); break;
+    		}
+    		return mapChoice;
+    	}
+    	else {
     		return null;
+    	}
     }
     
     /**
@@ -395,6 +406,13 @@ public class mainMenu extends Application {
     	}
     	
     	map = mapChoice();
+    	
+    	if(map.equals("Random")){
+    		//Choose a random map
+    		Random random = new Random();
+    		int randMap = random.nextInt(2)+1; //Number in the brackets is how many maps we have
+    		map = "map"+randMap;
+    	}
     	
     	if (map==null) {
     		ps.setScene(ogScene);

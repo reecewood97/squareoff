@@ -89,7 +89,7 @@ public class PhysObject implements Serializable{
 	}
 	
 	//For collision detection
-	public boolean rectIntersect(PhysObject other){
+	/*public boolean rectIntersect(PhysObject other){
 		double left = getPos().getX();
 		double right = getPos().getX()+getWidth();
 		double bottom = getPos().getY();
@@ -101,7 +101,7 @@ public class PhysObject implements Serializable{
 		boolean column = (((otherleft<=left) && (left<=otherright)) || ((otherleft<=right) && (right<=otherright)));
 		boolean row = ((otherbottom<=bottom) && (bottom<=othertop) || ((otherbottom<=top) && (top<=othertop)));
 		return(column && row);
-	}
+	}*/
 	
 	public boolean getGravity() {
 		return gravity;
@@ -214,7 +214,8 @@ public class PhysObject implements Serializable{
 	@Override
 	public boolean equals(Object anObject) {
 		PhysObject p = (PhysObject)anObject;
-		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse() && this.getName().equals(p.getName())) {
+		if(pos.equals(p.getPos()) && this.getInUse()==p.getInUse() && this.getName().equals(p.getName())
+				&& getYvel()==p.getYvel()) {
 			return true;
 		}
 		return false;
