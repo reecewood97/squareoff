@@ -35,6 +35,7 @@ public class Server extends Thread {
 	private ClientTable table;
 	private AIManager ais;
 	private GameLoop gl;
+	private String map;
 
 	/**
 	 * Creates a new Server.
@@ -44,6 +45,7 @@ public class Server extends Thread {
 	 */
 	public Server(String map, int port) {
 		this.port = port;
+		this.map = map;
 		board = new Board(map);
 		players = new ArrayList<String>();
 		socket = null;
@@ -219,7 +221,7 @@ public class Server extends Thread {
 			r.setInGame(false);
 		}
 		
-		board = new Board("Battleground");
+		board = new Board(map);
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();
