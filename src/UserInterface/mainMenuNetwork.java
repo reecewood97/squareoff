@@ -12,10 +12,10 @@ import Networking.Server;
 
 public class mainMenuNetwork {
 	
-	ArrayList<String> players = new ArrayList<>();
-	int port = 4444;
-	Server s;
-	Client c;
+	private ArrayList<String> players = new ArrayList<>();
+	private int port = 4444;
+	private Server s;
+	private Client c;
 	
     /**
      * New instance of a mainMenuNetwork - it creates a new Server
@@ -28,14 +28,16 @@ public class mainMenuNetwork {
 	/**
 	 * This method runs the connect method in the Client
 	 * It tries to connect a client to the Server
+	 * @param hostAddress address the Client is trying to connect to
+	 * @param name the name of the Client
 	 * @return an int of the result of the connection attempt
 	 * 0 for the client successfully connecting to the given Server address
 	 * 1 for a failed connection attempt (there isn't a Server with the given address)
 	 * 2 for if the client (or a client with the same name) is already connected to the Server
 	 */
-	public int connectToHost(String hostName, String name) {
+	public int connectToHost(String hostAddress, String name) {
 		c = new Client(name);
-		int val = (c.connect(hostName, port));
+		int val = (c.connect(hostAddress, port));
 		if ( val == 0 ) {
 			players = c.getPlayers();
 			return 0;
@@ -58,6 +60,7 @@ public class mainMenuNetwork {
 	/**
 	 * This method runs the setAIDifficulty method in the Server
 	 * It sets how difficult the AI will be for the next game
+	 * @param i an int that represents the difficulty of ai selected
 	 */
 	public void setAIDifficulty(int i) {
 		if (i==1)
