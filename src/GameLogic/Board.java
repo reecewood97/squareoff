@@ -1149,6 +1149,8 @@ public class Board {
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);
+			if(!AIatk[2].equals(players[player]))
+				return;
 			WeaponMove wmv = new WeaponMove(weaponType,
 					new Point2D.Double(active.getPos().getX(), active.getPos().getY() + 10), xVel, yVel);
 			updateFrame(wmv);
