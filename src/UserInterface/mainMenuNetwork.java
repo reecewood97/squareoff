@@ -17,10 +17,22 @@ public class mainMenuNetwork {
 	Server s;
 	Client c;
 	
+    /**
+     * New instance of a mainMenuNetwork - it creates a new Server
+     * @param m Name of map to be created in the server
+     */
 	public mainMenuNetwork(String m) {
 		s = new Server(m, port);
 	}
 	
+	/**
+	 * This method runs the connect method in the Client
+	 * It tries to connect a client to the Server
+	 * @return an int of the result of the connection attempt
+	 * 0 for the client successfully connecting to the given Server address
+	 * 1 for a failed connection attempt (there isn't a Server with the given address)
+	 * 2 for if the client (or a client with the same name) is already connected to the Server
+	 */
 	public int connectToHost(String hostName, String name) {
 		c = new Client(name);
 		int val = (c.connect(hostName, port));
@@ -32,14 +44,21 @@ public class mainMenuNetwork {
 			return val;
 	}
 	
+	/**
+	 * This method runs the getPlayers method in the Client
+	 * It gets a list of the players connected to the server
+	 * @return a String ArrayList of the players connected to the server
+	 */
 	public ArrayList<String> getPlayers() {
-		//Thread.sleep(1000);
 		players = c.getPlayers();
-		//System.out.println(players);
 		return players;
 		
 	}
 	
+	/**
+	 * This method runs the setAIDifficulty method in the Server
+	 * It sets how difficult the AI will be for the next game
+	 */
 	public void setAIDifficulty(int i) {
 		if (i==1)
 			s.setAIDifficulty(Server.EASY_AI);
@@ -49,32 +68,60 @@ public class mainMenuNetwork {
 			s.setAIDifficulty(Server.HARD_AI);
 	}
 	
+	/**
+	 * This method runs the reset method in the Server
+	 * It resets the server
+	 */
 	public void resetServer() {
 		s.reset();
 	}
 	
+	/**
+	 * This method runs the disconnect method in the Client
+	 * It disconnects the client from the Server
+	 */
 	public void Disconnect() {
 		c.disconnect();
 	}
 	
+	/**
+	 * This method runs the isConnected method in the Client
+	 * It checks whether the client is connected to the Server or not
+	 * @return a boolean of whether the client is connected to the Server or not
+	 */
 	public boolean isConnected() {
-		//System.err.println("net.isConnected is being called");
 		return c.isConnected();
 	}
 	
+	/**
+	 * This method runs the inGame method in the Client
+	 * It checks whether the client is in a game or not
+	 * @return a boolean of whether the client is in the game or not
+	 */
 	public boolean inGame() {
-		//System.err.println("net.isGame is being called");
 		return c.inGame();
 	}
 	
+	/**
+	 * This method starts the Server thread
+	 * It starts the Server
+	 */
 	public void runServer() {
 		s.start();
 	}
 	
+	/**
+	 * This method runs the startGame method in the Server
+	 * It starts the game
+	 */
 	public void startGame() {
 		s.startGame();
 	}
 
+	/**
+	 * This method runs the close method in the Server
+	 * It closes the server
+	 */
 	public void closeServer() {
 		s.close();
 	}
