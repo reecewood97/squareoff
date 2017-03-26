@@ -89,22 +89,22 @@ public class Board {
 			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
 			//level2
 			for(int i = 100; i < 700; i+=120){
-				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,195), true);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 			}
 			//level3
 			for(int i = 150; i < 700; i+=160){
-				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,270), true);
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
 			}
 	
 			for (int i = 50; i < 700; i += 200) {
-				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 345), true);
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
 				objects.add(block);
 			}
 		}
