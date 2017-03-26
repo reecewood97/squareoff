@@ -30,7 +30,6 @@ public class TurnMaster extends Thread {
 					i = 0;
 				}
 			} catch (InterruptedException e) {
-				//e.printStackTrace();
 			}
 		}
 		

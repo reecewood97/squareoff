@@ -52,13 +52,8 @@ public class TerrainBlock extends PhysObject {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Does damage to a block
-	 * @param damage The amount of damage dealt
-=======
 	 * Deal damage to the block appropriate to the strength of the weapon that hits it
 	 * @param damage The amount of damage being done to the block
->>>>>>> 686b7592c71176e3b4a370d94951dac4245fddc4
 	 */
 	public void damage(int damage) {
 		this.health = this.health-damage;
