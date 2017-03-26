@@ -77,7 +77,7 @@ public class Square extends PhysObject {
 	}
 	/**
 	 * Get the name of the square
-	 * @return Will almost always be "noName"
+	 * @return Will almost always be "Square"
 	 */
 	public String getPlayerName(){
 		return playerName;

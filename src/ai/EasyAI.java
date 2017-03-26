@@ -40,19 +40,23 @@ public class EasyAI extends AI{
 	
 	public void aiMove() {
 		
+//		if (getEndTurn()) {
+//			return ;
+//		}
+		
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double myX = getAIPos().getX();
 		double myY = getAIPos().getY();
 		double targetX = myX;
 		double targetY = myY - 30.0;
 		TerrainBlock currentBlock = (TerrainBlock) blocks.get(0);
-
+//				System.out.println("block 0: " + currentBlock.getPos());
 		for (PhysObject block:blocks) {
 			if ((block.getPos().getY() == myY - 30.0) && (block.getPos().getX() > myX) && (block.getPos().getX() <= myX + 50.0)) {
 				currentBlock = (TerrainBlock) block;
 			}
 		}
-
+//				System.out.println("block standing: " + currentBlock.getPos());
 		int currentBlockHealth = currentBlock.getHealth();
 		double distance = 99999999999.0;
 		
@@ -62,7 +66,7 @@ public class EasyAI extends AI{
 		// If the coordinate's block has low hp (e.g. cannot survive two hits), 
 		// go to the blocks next to it which has higher hp.
 		
-		if (currentBlockHealth <= 1) {
+		if (currentBlockHealth <= 2) {
 			int largerHealth = currentBlockHealth;
 			double xPos = currentBlock.getPos().getX();
 			double yPos = currentBlock.getPos().getY();
@@ -75,7 +79,7 @@ public class EasyAI extends AI{
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-
+//					System.out.println(searchBlock.getPos() + ", " + displacement);
 					if (displacement < distance && displacement > 40.0) {
 						distance = displacement;
 						targetX = sBlockX;
@@ -83,6 +87,7 @@ public class EasyAI extends AI{
 					}
 				}
 			}
+			System.out.println("x, y " + targetX +", " + targetY);
 		}
 		aiMoveCal((targetX + 10), targetY);
 	}
@@ -126,6 +131,8 @@ public class EasyAI extends AI{
 		}
 		
 		// return the coordinates
+
+		System.out.println("Enemy at " + finalSquare.getPos());
 		setObstacles(false);
 		return finalSquare.getPos();
 	}

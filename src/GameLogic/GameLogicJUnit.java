@@ -23,7 +23,7 @@ public class GameLogicJUnit {
 
 	@Before
 	public void setUp() {
-		this.board = new Board("Battleground");
+		this.board = new Board("map1");
 		this.square = new Square(0, 0, 0, new Point2D.Double(0.0, 0.0));//
 		this.master = new TurnMaster(board);//
 		this.servant = new TurnServant(board);//

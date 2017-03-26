@@ -47,13 +47,8 @@ public class Audio implements Serializable
 		return music;
 	}
 	
-	/**
-	 * end music method stops background music playing
-	 */
-	public void endMusic(){
-	
+	public void sam(){
 		music.end();
-
 	}
 	
 	
@@ -89,6 +84,8 @@ public class Audio implements Serializable
 		    } 
 			catch(Exception ex) {
 		        
+				//System.out.println("Error playing sound");
+		        //ex.printStackTrace();
 		    }
 		}
 	}
@@ -113,6 +110,8 @@ public class Audio implements Serializable
 			}
 			catch(Exception ex){
 				
+				//System.out.println("Error playing sound");
+		        //ex.printStackTrace();
 			}
 		}
 	}
@@ -138,6 +137,8 @@ public class Audio implements Serializable
 			}
 			catch(Exception ex){
 				
+				//System.out.println("Error playing sound");
+		        //ex.printStackTrace();
 			}
 		}
 	}

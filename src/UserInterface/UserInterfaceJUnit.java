@@ -9,6 +9,16 @@ import org.junit.Test;
 public class UserInterfaceJUnit {
 
 	//mainMenu test
+	/*
+	@SuppressWarnings("static-access")
+	@Test
+	public void testShowUI() {
+		mainMenu m = new mainMenu();
+		//m.launch();
+		m.showUI();
+		assertEquals(m.isHidden, false);
+	}
+	*/
 	
 	//mainMenuNetwork tests
 	@Test
@@ -32,7 +42,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testDisconnect() {
-		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		mainMenuNetwork net = new mainMenuNetwork("map1");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.Disconnect();
@@ -42,7 +52,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testIsConnected() {
-		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		mainMenuNetwork net = new mainMenuNetwork("map1");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -51,7 +61,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testRunServer() {
-		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		mainMenuNetwork net = new mainMenuNetwork("map1");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -60,7 +70,7 @@ public class UserInterfaceJUnit {
 	
 	@Test
 	public void testGetPlayers() {
-		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		mainMenuNetwork net = new mainMenuNetwork("map1");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.getPlayers().get(0), "test");
@@ -69,7 +79,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testCloseServer() {
-		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		mainMenuNetwork net = new mainMenuNetwork("map1");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.closeServer();

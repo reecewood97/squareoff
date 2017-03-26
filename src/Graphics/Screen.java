@@ -35,13 +35,6 @@ public class Screen extends JFrame {
 	private ButtonPanel controls;
 	private Client client;
 	
-	/**
-	 * constructor - create screen instance
-	 * @param newboard The copy of the board
-	 * @param q The moves
-	 * @param name Name of this client
-	 * @param client Copy of client
-	 */
 	public Screen(Board newboard,Queue q,String name, Client client){
 		
 		//set window size
@@ -164,9 +157,6 @@ public class Screen extends JFrame {
 		listeners.start();
 	}
 	
-	/**
-	 * stop music, hide screen
-	 */
 	public void end() {
 		setInvisible();
 		stopMusic();

@@ -42,7 +42,10 @@ public class NormalAI extends AI {
 	}
 	
 public void aiMove() {
-	
+		
+//		if (getEndTurn()) {
+//			return ;
+//		}
 		
 		// Stage 2:
 		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
@@ -67,11 +70,14 @@ public void aiMove() {
 		double targetX = aiX;
 		double targetY = aiY - 30.0;
 		PhysObject finalSquare = null;
+		System.out.println("obstacles: " + thereAreObstacles());;
 		double finalDis = 9999999999999.0;
 		if (thereAreObstacles()) {
 			for (PhysObject player:squares) {
 				Square enemySquare = (Square) player;
 				if (enemySquare.getPlayerID() != myPlayer) {
+//							System.out.println(enemySquare.getPlayerID());
+//							System.out.println(enemySquare.getPos());
 					// get position of enemies
 					double enemyX = enemySquare.getPos().getX();
 					double enemyY = enemySquare.getPos().getY();
@@ -79,7 +85,7 @@ public void aiMove() {
 					double yDis = aiY - enemyY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-
+//							System.out.println(displacement);
 					if (displacement < finalDis) {
 						finalDis = displacement;
 						finalX = enemyX;
@@ -88,7 +94,7 @@ public void aiMove() {
 					}
 				}
 			}
-			
+			System.out.println("Normal AI is going to attack: " + finalSquare.getPos() );
 			if (((finalSquare.getPos().getY() + 50.0 <= aiY) && (finalSquare.getPos().getY() - 110.0 >= aiY)) && ((finalSquare.getPos().getX() + 160.0 <= aiX) && (finalSquare.getPos().getX() -120.0 >= aiX))) {
 				targetX = aiX;
 				targetY = aiY - 30.0;
@@ -103,6 +109,7 @@ public void aiMove() {
 					}
 				}
 			}
+			System.out.println("target block: " + targetX + ", " + targetY);
 			setTargetLocked(true);
 			setTarget((Square)finalSquare);
 			aiMoveCal(targetX, targetY);

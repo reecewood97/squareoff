@@ -33,8 +33,9 @@ public class mainMenuNetwork {
 	}
 	
 	public ArrayList<String> getPlayers() {
-		
+		//Thread.sleep(1000);
 		players = c.getPlayers();
+		//System.out.println(players);
 		return players;
 		
 	}
@@ -57,12 +58,12 @@ public class mainMenuNetwork {
 	}
 	
 	public boolean isConnected() {
-		
+		//System.err.println("net.isConnected is being called");
 		return c.isConnected();
 	}
 	
 	public boolean inGame() {
-		
+		//System.err.println("net.isGame is being called");
 		return c.inGame();
 	}
 	

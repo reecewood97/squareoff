@@ -75,7 +75,7 @@ public class GraphicsJUnit {
 		frameheight = 450;
 		framewidth = 800;
 		screenSize = new Dimension(1080,500);
-		board = new Board("Battleground");
+		board = new Board("map1");
 		widthratio = 1.35;
 		heightratio = 1.6;
 		name = "Bob";

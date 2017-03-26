@@ -26,7 +26,7 @@ public class AIJUnit extends TestCase{
 	private static final double maxVelocity = 100;
 	
 	public void setUp() {
-		board = new Board("Battleground");
+		board = new Board("map1");
 		easyname = "easyai";
 		normalname = "normalai";
 		diffname = "diffai";

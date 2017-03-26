@@ -133,7 +133,8 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 		case "L":
 
 			if (targetInUse) {
-				
+				// keysPressed = keysPressed.replace("L", "");
+				// input =
 				targetInUse = false;
 			}
 		default:
@@ -175,10 +176,10 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 
 			String clickedEvent = "Clicked " + x + " " + y + " " + name;
 			q.offer(clickedEvent);
-			
+			// System.out.println("works!");
 			panel.grabFocus();
 		}
-		
+		// panel.grabFocus();
 	}
 
 	@Override
@@ -198,7 +199,8 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
+		// String releasedEvent = "Released " + e.getPoint();
+		// q.offer(releasedEvent);
 	}
 
 	/**
@@ -209,7 +211,9 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 	 *            The type of weapon that was selected.
 	 */
 	public void setWep(String type) {
+		System.out.println("SET WEPPPPPP");
 		String setWep = "setWep," + type + "," + name;
+		System.out.println(type);
 		q.offer(setWep);
 	}
 
@@ -250,6 +254,9 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 	 *            Where the targetting lines should draw to.
 	 */
 	public void setTargetLine(String b, boolean b2) {
+
+		System.out.println("SETTING TARGET");
+		System.out.println("BOOL IS" + b);
 
 		this.targetInUse = b2;
 		String setTar = "setTar " + b;

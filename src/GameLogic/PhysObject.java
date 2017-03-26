@@ -88,6 +88,20 @@ public class PhysObject implements Serializable{
 		setYvel(getYvel()+getGrav());
 	}
 	
+	//For collision detection
+	/*public boolean rectIntersect(PhysObject other){
+		double left = getPos().getX();
+		double right = getPos().getX()+getWidth();
+		double bottom = getPos().getY();
+		double top = getPos().getY()+getHeight();
+		double otherleft = other.getPos().getX();
+		double otherright = other.getPos().getX()+getWidth();
+		double otherbottom = other.getPos().getY();
+		double othertop = other.getPos().getY()+getHeight();
+		boolean column = (((otherleft<=left) && (left<=otherright)) || ((otherleft<=right) && (right<=otherright)));
+		boolean row = ((otherbottom<=bottom) && (bottom<=othertop) || ((otherbottom<=top) && (top<=othertop)));
+		return(column && row);
+	}*/
 	
 	public boolean getGravity() {
 		return gravity;

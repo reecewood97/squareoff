@@ -134,6 +134,9 @@ public class ScreenBoard extends JPanel{
 			
 			int x = (int) block.getPos().getX();
 			int y = (int) block.getPos().getY()+block.getHeight();
+			//TODO these todos are to keep track of the changes I've made in case they need to be reverted
+			//From Reece :) You can remove them if it doesn't break anything
+			
 			y = 450 - y; 
 			
 			int newx = (int) (x*widthratio);
