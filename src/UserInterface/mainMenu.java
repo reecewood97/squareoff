@@ -55,7 +55,7 @@ public class mainMenu extends Application {
 	static boolean isHidden = false;
 	static boolean inLobby = false;
 	static int aiDifficulty = 1;
-	static String map = "map1";
+	static String map = "Battleground";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -220,8 +220,12 @@ public class mainMenu extends Application {
     public static String mapChoice() {
     	List<String> choices = new ArrayList<>();
     	choices.add("Battleground");
-    	choices.add("Derelict");
-    	choices.add("Random");
+    	choices.add("Pyramid");
+    	choices.add("X");
+    	choices.add("Smile");
+    	choices.add("Sandwich");
+    	choices.add("No Hiding");
+    	choices.add("Pot luck");
 
     	ChoiceDialog<String> dialog = new ChoiceDialog<>("Battleground", choices);
     	dialog.setTitle("Square-Off: Map Selection");
@@ -233,9 +237,14 @@ public class mainMenu extends Application {
     	if (result.isPresent()) {
     		String mapChoice = null;
     		switch(result.get()){
-    		case "Battleground": mapChoice = "map1"; break;
-    		case "Derelict": mapChoice = "map2"; break;
-    		case "Random": mapChoice = "Random"; break;
+    		case "Battleground": mapChoice = "Battleground"; break;
+    		case "Pyramid": mapChoice = "Pyramid"; break;
+    		case "X": mapChoice = "X"; break;
+    		case "Smile": mapChoice = "Smile"; break;
+    		case "Sandwich": mapChoice = "Sandwich"; break;
+    		case "No Hiding": mapChoice = "No Hiding"; break;
+    		case "Pot luck": mapChoice = "Pot luck"; break;
+    		
     		default: System.err.println("Error selecting maps in MainMenu"); break;
     		}
     		return mapChoice;

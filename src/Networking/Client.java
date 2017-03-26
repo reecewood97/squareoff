@@ -69,7 +69,7 @@ public class Client {
 			System.exit(1);
 		}
 		
-		board = new Board("map1");
+		board = new Board("Battleground");
 		q = new Queue();
 		ui = new Screen(board, q, name, this);
 		

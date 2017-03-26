@@ -8,6 +8,8 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
+
 import Audio.Audio;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -57,8 +59,19 @@ public class Board {
 		this.turn = new TurnMaster(this);
 		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 	
+		//randomly selects map
+		if(map.equals("Pot luck")){
+			
+			String[] maps = {"Battleground","Pyramid","X","Smile","Sandwich","No Hiding"};
+			
+			int rand = ThreadLocalRandom.current().nextInt(0,5);
+			map = maps[rand];
+				
+		}
 		
-		if(map.equals("map1")){
+		//map creation
+		if(map.equals("Battleground")){
+			
 			//Initialise the placements of the 4 teams.
 			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
@@ -95,16 +108,16 @@ public class Board {
 				objects.add(block);
 			}
 		}
-		else if(map.equals("map2")){
+		else if(map.equals("Pyramid")){
 			
-			Point2D.Double redpos = new Point2D.Double(255, 390);
+			Point2D.Double redpos = new Point2D.Double(180, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
-			Point2D.Double blupos = new Point2D.Double(555, 390);
+			Point2D.Double blupos = new Point2D.Double(260, 150);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(415, 300);
+			Point2D.Double yelpos = new Point2D.Double(340, 150);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(415, 150);
+			Point2D.Double grnpos = new Point2D.Double(420, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
@@ -112,74 +125,193 @@ public class Board {
 			objects.add(grn);
 			
 			//level1
-			for(int i = 100; i < 700; i+=40) {
+			for(int i = 100; i < 700; i+=80) {
 				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
 			
-			//Bottom left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 210), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 180), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 210), true));
+			//level2
+			for(int i = 200; i < 600; i+=100) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,200), true);
+				objects.add(block);
+			}
 			
-			//Bottom right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 210), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 180), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 210), true));
+			//level3
+			for(int i = 280; i < 500; i+=80) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,280), true);
+				objects.add(block);
+			}
 			
-			//Middle left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(80, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(90, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(130, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(170, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(180, 300), true));
+			//level4
+			for(int i = 320; i < 460; i+=80) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,360), true);
+				objects.add(block);
+			}
 			
-			//Middle middle bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(360, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(370, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(410, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(450, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(460, 300), true));
 			
-			//Middle right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(610, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(620, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(660, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(700, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(710, 300), true));
 			
-			//Top left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 390), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 360), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 390), true));
 			
-			//Top right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 390), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 360), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 390), true));
-		}/* else {
-			Point2D.Double redpos = new Point2D.Double(255, 390);
+		}
+		else if(map.equals("Sandwich")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
-			Point2D.Double blupos = new Point2D.Double(555, 390);
+			Point2D.Double blupos = new Point2D.Double(250, 150);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(415, 300);
+			Point2D.Double yelpos = new Point2D.Double(400, 150);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(415, 150);
+			Point2D.Double grnpos = new Point2D.Double(550, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
 			objects.add(yel);
 			objects.add(grn);
-		}*/
+			
+			for(int i = 80; i < 740; i+=40){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,120), true));
+			}
+			
+			for(int i = 80; i < 740; i+=40){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,360), true));
+			}
+			
+			
+			for(int i = 120; i < 700; i+=80){
+				
+				objects.add(new TerrainBlock(2, 2, new Point2D.Double(i,200), true));
+			}
+			
+			for(int i = 120; i < 700; i+=80){
+				
+				objects.add(new TerrainBlock(1, 2, new Point2D.Double(i,280), true));
+			}
+			
+		}
+		else if(map.equals("Smile")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(280, 140);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(380, 140);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(460, 140);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(520, 140);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//bottom
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(340,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(380,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(420,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(460,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(500,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(300,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(260,110), true));
+			
+			//sides
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(540,140), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(220,140), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(580,170), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(180,170), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(620,200), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(140,200), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(660,230), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(100,230), true));
+			
+			//nose
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(380,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(340,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(420,230), true));
+			
+			//eyes
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(440,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(320,330), true));
+			
+			
+		}
+		else if (map.equals("No Hiding")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(80, 170);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(320, 170);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(480, 170);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(720, 170);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			for(int i = 80; i < 740; i+=80){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,140), true));
+			}
+			
+		}
+		else if(map.equals("X")){
+		
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(430, 210);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(330, 210);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(430, 330);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(330, 330);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//centre
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(380,240), true));
+			
+			//downright
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(430,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(470,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(520,120), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(560,120), true));
+			
+			//downleft
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(330,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(290,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(240,120), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(200,120), true));
+			
+			//upright
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(430,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(470,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(520,360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(560,360), true));
+			
+			//upleft
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(330,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(240,360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200,360), true));
+			
+			
+		}
+		else{
+			
+			System.err.println("Error processing map");
+		}
+		
 		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
@@ -193,10 +325,12 @@ public class Board {
 		PhysObject targetline = new TargetLine();
 		objects.add(targetline);
 		
+		
 		Particle particle = new Particle(explosionpos, 0, 0);
 		particle.setInUse(false);
 		objects.add(particle);
-
+		
+		
 		this.player = 0;
 		this.squareID = 0;
 		
