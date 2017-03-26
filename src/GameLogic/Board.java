@@ -234,8 +234,8 @@ public class Board {
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(300,230), true));
 			
 			//eyes
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(440,330), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(320,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(420,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(340,330), true));
 			
 			
 		}
@@ -265,14 +265,14 @@ public class Board {
 		else if(map.equals("X")){
 		
 			//Initialise the placements of the 4 teams.
-			Point2D.Double redpos = new Point2D.Double(430, 210);
+			Point2D.Double redpos = new Point2D.Double(520, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
 			Point2D.Double blupos = new Point2D.Double(330, 210);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(430, 330);
+			Point2D.Double yelpos = new Point2D.Double(380, 270);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(330, 330);
+			Point2D.Double grnpos = new Point2D.Double(300, 330);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
