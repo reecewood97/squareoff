@@ -65,8 +65,8 @@ public class EasyAI extends AI{
 		// Only move if the blocks that it's standing on has low hp.
 		// If the coordinate's block has low hp (e.g. cannot survive two hits), 
 		// go to the blocks next to it which has higher hp.
-		
-		if (currentBlockHealth <= 2) {
+		System.out.println("health: " + currentBlockHealth);
+		if (currentBlockHealth <= 1) {
 			int largerHealth = currentBlockHealth;
 			double xPos = currentBlock.getPos().getX();
 			double yPos = currentBlock.getPos().getY();
@@ -87,7 +87,6 @@ public class EasyAI extends AI{
 					}
 				}
 			}
-			System.out.println("x, y " + targetX +", " + targetY);
 		}
 		aiMoveCal((targetX + 10), targetY);
 	}

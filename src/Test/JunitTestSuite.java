@@ -8,9 +8,7 @@ import GameLogic.PhysicsTest;
 import Graphics.GraphicsJUnit;
 import Graphics.HangerOnJUnit;
 import Networking.NetworkingJUnit;
-import UserInterface.PlayersTest;
-import UserInterface.mainMenuNetworkTest;
-import UserInterface.mainMenuTest;
+import UserInterface.UserInterfaceJUnit;
 import ai.AIJUnit;
 
 @RunWith(Suite.class)
@@ -19,9 +17,7 @@ import ai.AIJUnit;
    NetworkingJUnit.class,
    PhysicsTest.class,
    AIJUnit.class,
-   mainMenuNetworkTest.class,
-   mainMenuTest.class,
-   PlayersTest.class,
+   UserInterfaceJUnit.class,
    GraphicsJUnit.class,
    HangerOnJUnit.class
 })
