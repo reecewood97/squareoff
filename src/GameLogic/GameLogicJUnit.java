@@ -25,6 +25,8 @@ public class GameLogicJUnit {
 	public void setUp() {
 		this.board = new Board("Battleground");
 		this.square = new Square(0, 0, 0, new Point2D.Double(0.0, 0.0));//
+		this.square = new Square("Square",0, 0, 0, new Point2D.Double(0.0, 0.0));//
+		this.square = new Square(square);
 		this.master = new TurnMaster(board);//
 		this.servant = new TurnServant(board);//
 	}
@@ -223,7 +225,14 @@ public class GameLogicJUnit {
 
 		board.setActivePlayer(0, 0);
 		
-
-	
+		//Get a block out of the list - wont be affected in an update
+		PhysObject obj = board.getObjects().get(0);
+		obj.setInUse(true);
+		PhysObject obj2 = obj;
+		obj.update();
+		assertTrue(obj.equals(obj2));
+		
+		obj.undoUpdate();
+		assertTrue(obj.equals(obj2));
 	}
 }
