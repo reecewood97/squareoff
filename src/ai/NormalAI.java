@@ -11,6 +11,8 @@ import GameLogic.TerrainBlock;
 import Networking.Queue;
 
 /**
+ * The class of an AI player with normal difficulty. 
+ * It does all the calculation that a normal AI needs.
  * @author JeffLeung
  *
  */
@@ -31,6 +33,14 @@ public class NormalAI extends AI {
 	private boolean targetLocked = false;
 	private Square target;
 	
+	/**
+	 * Constructor that sets up AI with normal difficulty
+	 * @param aiPlayer Player ID
+	 * @param aiSquareID Square ID
+	 * @param aiColour colour for this AI player
+	 * @param board Board of the current game
+	 * @param name name for this AI player
+	 */
 	public NormalAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
 		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
@@ -41,18 +51,16 @@ public class NormalAI extends AI {
 		this.myName = name;
 	}
 	
-public void aiMove() {
-		
-//		if (getEndTurn()) {
-//			return ;
-//		}
-		
-		// Stage 2:
-		// If the angle of shooting >90 or <0 but still cannnot find a shooting path, move to elsewhere
-		// Usually places that has higher hp (defense), or, there is a clear shooting path (ai and enemy on the same level(y axis))
+	/**
+	 * Determine the destination of the Square of the AI player and move the AI player
+	 * Normal AI move when no shooting path is found, 
+	 * it will move to position which is near target
+	 * If clear shooting path is found, 
+	 * stay and attack
+	 */
+	public void aiMove() {
 		determineResult();
 		aiMoveHelper();
-		
 	}
 	
 	/**
@@ -76,8 +84,6 @@ public void aiMove() {
 			for (PhysObject player:squares) {
 				Square enemySquare = (Square) player;
 				if (enemySquare.getPlayerID() != myPlayer) {
-//							System.out.println(enemySquare.getPlayerID());
-//							System.out.println(enemySquare.getPos());
 					// get position of enemies
 					double enemyX = enemySquare.getPos().getX();
 					double enemyY = enemySquare.getPos().getY();
@@ -85,7 +91,6 @@ public void aiMove() {
 					double yDis = aiY - enemyY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//							System.out.println(displacement);
 					if (displacement < finalDis) {
 						finalDis = displacement;
 						finalX = enemyX;
@@ -116,7 +121,7 @@ public void aiMove() {
 		}
 		else {
 			
-			aiMoveCal(targetX + 10, targetY);
+			aiMoveCal(targetX, targetY);
 		}
 	}
 
@@ -141,7 +146,7 @@ public void aiMove() {
 		int finalY = 0;
 		PhysObject finalSquare = null;
 		
-		// Calculation for EasyAI
+		// Calculation for NormalAI
 		double finalDis = 9999999999999.0;
 		for (int i = 0; i < numOfPlayers; i++) {
 			Square enemySquare = (Square) squares.get(i);
@@ -154,7 +159,7 @@ public void aiMove() {
 				
 				// calculate shortest displacement by pythagoras theorem
 				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-				if (displacement < finalDis && !dontKillMyself(myX, myY, enemyX, enemyY)) {
+				if (displacement < finalDis && !dontKillMyself(myX, myY, enemyX, enemyY) && xDis > 30) {
 					finalDis = displacement;
 					finalX = enemyX;
 					finalY = enemyY;
@@ -163,32 +168,50 @@ public void aiMove() {
 			}
 		}
 		try {
+			if (finalSquare.getPos() == null) {
+				setObstacles(true);
+				aiMoveHelper();
+			}
 			setObstacles(false);
 			return finalSquare.getPos();
 		}
 		catch (NullPointerException e){
-			if (finalSquare == null) {
-				setObstacles(true);
-				aiMoveHelper();
-			}
+			setObstacles(true);
+			aiMoveHelper();
 		}
 		
 		// return the coordinates
 		return finalSquare.getPos();
 	}
 	
+	/**
+	 * Set true if there was a target already
+	 * @param lock true if there is a target already, false if there are no targets
+	 */
 	public void setTargetLocked(boolean lock) {
 		this.targetLocked = lock;
 	}
 	
+	/**
+	 * Returns whether a target is already chosen
+	 * @return true if target is already chosen, false if not
+	 */
 	public boolean isTargetLocked() {
 		return this.targetLocked;
 	}
 	
+	/**
+	 * Set chosen target
+	 * @param newTarget target
+	 */
 	public void setTarget(Square newTarget) {
 		this.target = newTarget;
 	}
 	
+	/**
+	 * Get chosen target
+	 * @return target
+	 */
 	public Square getTarget() {
 		return this.target;
 	}
