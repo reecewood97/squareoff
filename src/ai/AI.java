@@ -741,6 +741,11 @@ public abstract class AI {
 				if (acc_angle >= 90 || acc_angle <= 0) {
 					acc_angle = 0;
 				}
+				if (Math.abs(xdis) < 10) {
+					acc_angle = 90.0;
+					state = 0;
+					hit = true;
+				}
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
 					acc_angle += 2.75;
@@ -772,6 +777,11 @@ public abstract class AI {
 				acc_velocity = maxVelocity/2;
 				if (acc_angle <= 0 || acc_angle >= 90) {
 					acc_angle = 90;
+				}
+				if (Math.abs(xdis) < 10) {
+					acc_angle = 90.0;
+					state = 0;
+					hit = true;
 				}
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
@@ -835,8 +845,8 @@ public abstract class AI {
 			final_velocity = acc_velocity + random.nextInt(mistakeVelocity) + (((double)random.nextInt(10)) / 10);
 		}
 		else {
-			final_angle = acc_angle - random.nextInt(mistakeAngle);
-			final_velocity = acc_velocity - random.nextInt(mistakeVelocity);
+			final_angle = acc_angle - random.nextInt(mistakeAngle) + (((double)random.nextInt(10)) / 10);
+			final_velocity = acc_velocity - random.nextInt(mistakeVelocity) + (((double)random.nextInt(10)) / 10);
 		}
 		setAngle(final_angle);
 		setVelocity(final_velocity);

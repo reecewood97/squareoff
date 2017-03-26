@@ -160,7 +160,7 @@ public class DifficultAI extends AI {
 			
 			double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
 			
-			if ((targetBlock.getHealth() <= targetHealth) && displacement < finalDis && xDis > 30) {
+			if ((targetBlock.getHealth() <= targetHealth) && displacement < finalDis) {
 				if (dontKillMyself(myX, myY, targetX, targetY)) {
 					continue;
 				}

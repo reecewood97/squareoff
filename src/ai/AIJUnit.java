@@ -53,22 +53,46 @@ public class AIJUnit extends TestCase{
 		// check whether the resulted angle is >0 and <=90
 		// check whether the velocity is under the max velocity
 		easyai.determineResult();
-		assertTrue(easyai.getAngle() <= 90);
-		assertTrue(easyai.getAngle() > 0);
-		assertTrue(easyai.getVelocity() <= maxVelocity);
-		assertTrue(easyai.getVelocity() >= -1 * maxVelocity);
-
+		double ea = easyai.getAngle();
+		double ev = easyai.getVelocity();
+		assertTrue(ea <= 90);
+		assertTrue(ea > 0);
+		assertTrue(ev <= maxVelocity);
+		assertTrue(ev >= -1 * maxVelocity);
+		
 		normalai.determineResult();
-		assertTrue(normalai.getAngle() <= 90);
-		assertTrue(normalai.getAngle() > 0);
-		assertTrue(normalai.getVelocity() <= maxVelocity);
-		assertTrue(normalai.getVelocity() >= -1 * maxVelocity);
+		double na = normalai.getAngle();
+		double nv = normalai.getVelocity();
+		assertTrue(na <= 90);
+		assertTrue(na > 0);
+		assertTrue(nv <= maxVelocity);
+		assertTrue(nv >= -1 * maxVelocity);
 		
 		diffai.determineResult();
-		assertTrue(diffai.getAngle() <= 90);
-		assertTrue(diffai.getAngle() > 0);
-		assertTrue(diffai.getVelocity() <= maxVelocity);
-		assertTrue(diffai.getVelocity() >= -1 * maxVelocity);
+		double da = diffai.getAngle();
+		double dv = diffai.getVelocity();
+		assertTrue(da <= 90);
+		assertTrue(da > 0);
+		assertTrue(dv <= maxVelocity);
+		assertTrue(dv >= -1 * maxVelocity);
+		
+		easyai.alterResult();
+		assertTrue(easyai.getAngle() > (ea - 8));
+		assertTrue(easyai.getAngle() < (ea + 8));
+		assertTrue(easyai.getVelocity() > (ev - 11));
+		assertTrue(easyai.getVelocity() < (ev + 11));
+		
+		normalai.alterResult();
+		assertTrue(normalai.getAngle() > (na - 5));
+		assertTrue(normalai.getAngle() < (na + 5));
+		assertTrue(normalai.getVelocity() > (nv - 7));
+		assertTrue(normalai.getVelocity() < (nv + 7));
+		
+		diffai.alterResult();
+		assertTrue(diffai.getAngle() > (da - 3));
+		assertTrue(diffai.getAngle() < (da + 3));
+		assertTrue(diffai.getVelocity() > (dv - 4));
+		assertTrue(diffai.getVelocity() < (dv + 4));
 		
 		// test dontKillMyself
 		// put two points in it and test if it is correct
@@ -91,5 +115,6 @@ public class AIJUnit extends TestCase{
 		assertTrue(easyt != easyai.getAIPos());
 		assertTrue(normalt != normalai.getAIPos());
 		assertTrue(difft != diffai.getAIPos());
+		
 	}
 }
