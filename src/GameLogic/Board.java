@@ -1117,7 +1117,8 @@ public class Board {
 			objects.remove(x);
 			objects.add(x, activePlayer);
 		}
-	}
+		
+			}
 
 	/**
 	 * Used on the server-side, receiving an update string that is from the

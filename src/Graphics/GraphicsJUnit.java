@@ -220,11 +220,15 @@ public class GraphicsJUnit extends JFrame{
 		BufferedImage image = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = image.createGraphics();
 		sb.repaint();
+		
 		assertTrue(board.getObjects().contains(e));
 		assertTrue(board.getObjects().contains(t));
 		assertTrue(board.getObjects().contains(p));
 		
+		this.repaint();
+		
 	}
 	
+
 
 }
