@@ -1062,7 +1062,7 @@ public abstract class AI {
 	private void sendAttack(double angle, double velocity){
 		double xVel = velocity * Math.cos(Math.toRadians(angle));
 		double yVel = Math.abs(velocity * Math.sin(Math.toRadians(angle)));
-		String command = xVel  + ", " + yVel + ", " + myName + ", AItakesashotx86";
+		String command = xVel  + ", " + yVel + "," + myName + ", AItakesashotx86";
 
 		board.input(command);
 		try {
