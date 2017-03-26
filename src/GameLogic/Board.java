@@ -235,8 +235,8 @@ public class Board {
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(300,230), true));
 			
 			//eyes
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(440,330), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(320,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(420,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(340,330), true));
 			
 			
 		}
