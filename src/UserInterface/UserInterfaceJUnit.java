@@ -23,7 +23,7 @@ public class UserInterfaceJUnit {
 	//mainMenuNetwork tests
 	@Test
 	public void testConnectToHost() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		assertEquals(net.connectToHost("localhost", "test"), 0);
 		net.closeServer();
@@ -31,7 +31,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testResetServer() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		ArrayList<String> preResetList = net.getPlayers();
@@ -42,7 +42,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testDisconnect() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.Disconnect();
@@ -52,7 +52,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testIsConnected() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -61,7 +61,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testRunServer() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -70,7 +70,7 @@ public class UserInterfaceJUnit {
 	
 	@Test
 	public void testGetPlayers() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.getPlayers().get(0), "test");
@@ -79,7 +79,7 @@ public class UserInterfaceJUnit {
 
 	@Test
 	public void testCloseServer() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.closeServer();

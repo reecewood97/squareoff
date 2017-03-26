@@ -219,7 +219,7 @@ public class Server extends Thread {
 			r.setInGame(false);
 		}
 		
-		board = new Board("map1");
+		board = new Board("Battleground");
 		ais.interrupt();
 		ais = new AIManager(board, players, 4);
 		gl.interrupt();
