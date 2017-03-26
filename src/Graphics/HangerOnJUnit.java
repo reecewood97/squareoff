@@ -43,7 +43,7 @@ public class HangerOnJUnit {
 		h.setTargetLine("test4", false);
 		assertTrue(testQ.take().toString().contains("test4"));
 		
-		ScreenBoard board = new ScreenBoard(new Board("map1"),1.0,1.0,h);
+		ScreenBoard board = new ScreenBoard(new Board("Battleground"),1.0,1.0,h);
 		h.hangOn2(board);
 		board.grabFocus();
 		assertTrue(board.isFocusable());

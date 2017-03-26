@@ -14,7 +14,7 @@ public class bypassUI {
 	 * @param args arguments passed when running main method (none of which are used)
 	 */
 	public static void main(String[] args) {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("127.0.0.1:4444", "a");
 		net.startGame();

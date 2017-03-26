@@ -55,7 +55,7 @@ public class mainMenu extends Application {
 	static boolean isHidden = false;
 	static boolean inLobby = false;
 	static int aiDifficulty = 1;
-	static String map = "map1";
+	static String map = "Battleground";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -100,9 +100,9 @@ public class mainMenu extends Application {
         	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
-    		////System.err.println("show ui ran");
+    		
     	}
-    	////System.err.println("show ui did nothing");
+    	
     }
     
     /**
@@ -122,7 +122,6 @@ public class mainMenu extends Application {
     	ps = primaryStage;
     	ps.setTitle("Square-Off: Start Menu");
     	
-    	//ps.initStyle(StageStyle.UNDECORATED);
         
         Button btn = new Button("Host Game");
         btn.setMinWidth(100);
@@ -220,8 +219,12 @@ public class mainMenu extends Application {
     public static String mapChoice() {
     	List<String> choices = new ArrayList<>();
     	choices.add("Battleground");
-    	choices.add("Derelict");
-    	choices.add("Random");
+    	choices.add("Pyramid");
+    	choices.add("Sandwich");
+    	choices.add("Smile");
+    	choices.add("Tricky");
+    	choices.add("X");
+    	choices.add("Pot Luck");
 
     	ChoiceDialog<String> dialog = new ChoiceDialog<>("Battleground", choices);
     	dialog.setTitle("Square-Off: Map Selection");
@@ -233,9 +236,14 @@ public class mainMenu extends Application {
     	if (result.isPresent()) {
     		String mapChoice = null;
     		switch(result.get()){
-    		case "Battleground": mapChoice = "map1"; break;
-    		case "Derelict": mapChoice = "map2"; break;
-    		case "Random": mapChoice = "Random"; break;
+    		case "Battleground": mapChoice = "Battleground"; break;
+    		case "Pyramid": mapChoice = "Pyramid"; break;
+    		case "Sandwich": mapChoice = "Sandwich"; break;
+    		case "Smile": mapChoice = "Smile"; break;
+    		case "Tricky": mapChoice = "Tricky"; break;
+    		case "X": mapChoice = "X"; break;
+    		case "Pot Luck": mapChoice = "Pot Luck"; break;
+    		
     		default: System.err.println("Error selecting maps in MainMenu"); break;
     		}
     		return mapChoice;
@@ -430,23 +438,19 @@ public class mainMenu extends Application {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					//System.err.println("host STILL IN WHILE LOOP");
-					//System.err.println("host isConnected: " + net.isConnected());
-					//System.err.println("host inGame: " + net.inGame());
+					
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// //System.err.println("host if");
+								
 								showUI();
 								refreshHLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								//System.err.println("host else if");
+								
 								hideUI();
 							} else {
-								//System.err.println("host else");
-								//System.err.println("host isConnected: " + net.isConnected());
-								//System.err.println("host inGame: " + net.inGame());
+								
 								net.resetServer();
 								net.connectToHost("localhost", name);
 								showUI();
@@ -480,23 +484,19 @@ public class mainMenu extends Application {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					//System.err.println("client STILL IN WHILE LOOP");
-					//System.err.println("client isConnected: " + net.isConnected());
-					//System.err.println("client inGame: " + net.inGame());
+					
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// //System.err.println("client if");
+								
 								showUI();
 								refreshCLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								//System.err.println("client else if");
+								
 								hideUI();
 							} else {
-								//System.err.println("client else");
-								//System.err.println("client isConnected: " + net.isConnected());
-								//System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
+							
 								inLobby = false;
 								showUI();
 								ps.setScene(ogScene);
@@ -675,7 +675,18 @@ public class mainMenu extends Application {
     	
     	Button btn6 = new Button("Back to Main Menu");
         
-    	Label label = new Label("Square-Off is an artillery strategy game.\nYou are a Square and are about to Square off with opposing Squares.\nYour aim is to knock off any other Squares in the map by targetting the blocks beneath them.\nWhoever is the last Square standing wins!\n\nYou move left when you press the 'a' key and right when you press the 'd' key.\nYou can also jump with the 'w' key.\nYou can select different weapons, mute the music and exit in game via the buttons at the top of the game.\n\nGood Luck and may the best Square win!");
+    	Label label = new Label("Square-Off is an artillery strategy game."
+    			+ "\nYou are a Square and are about to Square off with opposing Squares."
+    			+ "\nYour aim is to knock off any other Squares in the map by targetting "
+    			+ "the blocks beneath them.\nWhoever is the last Square standing wins!"
+    			+ "\n\nYou move left when you press the 'a' key and right when you"
+    			+ " press the 'd' key.\nYou can also jump with the 'w' key.\nYou can "
+    			+ "select different weapons, mute the music and exit in game via the "
+    			+ "buttons at the top of the game."
+    			+ "\nTo fire a weapon, select the button at the top, select the weapon"
+    			+ "you want,\n aim with the mouse, then click to fire."
+    			+ "\n\nGood Luck and may the best "
+    			+ "Square win!");
     	label.setFont(new Font("Arial", 15));
     	
         VBox vbox = new VBox();

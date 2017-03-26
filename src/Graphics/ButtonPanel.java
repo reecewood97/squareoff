@@ -103,7 +103,6 @@ public class ButtonPanel extends JPanel {
 	public void openMainMenu(Screen screen, Board board) {
 
 		client.disconnect();
-		board.notifyQuit(); // method not complete
 		screen.setVisible(false);
 
 	}
@@ -120,66 +119,25 @@ public class ButtonPanel extends JPanel {
 
 		Square square = (Square) board.getActiveBoard();
 		int id = square.getPlayerID();
-<<<<<<< HEAD
-		
-		ArrayList<String> a = client.getClientList();
-			
-		//checks they are the active player
-		for(int i = 0; i < 4; i++){
-
-			String name2 = a.get(i);
-			
-			System.out.println(a);
-			
-			if(name2.equals(name)){
-				
-				System.out.println("id" + id);
-				System.out.println("iadd1: " + (i+1));
-				if((i+1)==id){
-					
-					//open menu
-					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board,weapons);
-					menu.open();
-					
-					break;
-					
-				}
-				
-			}
-				
-		 }
-		
-		
-		weapons.setEnabled(false);
-		
-		
-=======
 
 		ArrayList<String> a = client.getLocalPlayers();
-		// System.err.println(a);
-
+		
 		// checks they are the active player
 		for (int i = 0; i < 4; i++) {
 
 			String name2 = a.get(i);
 
-			System.err.println("Name of this client " + name + " Name found in server" + name2 + " The ID of the player" + id + " The ID we're looking at" + (i+1));
 			if ((name2.equals(name)) && ((i + 1) == id)) {
-				// open menu*
+				// open menu
 				NewWeaponsMenu menu = new NewWeaponsMenu(listeners, board, weapons);
 				menu.open();
 				weapons.setEnabled(false);
 				//break;
 
-			} else {
-				//weapons.setEnabled(false);
-			}
+			} 
 
 		}
 
-		//weapons.setEnabled(false);
-
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
 
 	/**
@@ -188,54 +146,30 @@ public class ButtonPanel extends JPanel {
 	 * @param button
 	 *            The toggle button
 	 */
-<<<<<<< HEAD
 	public void ToggleBackgroundMusic(JButton button){
 		
 		if(first){
-=======
-	public void ToggleBackgroundMusic(JButton button) {
 
-		System.out.println("toggling");
-
-		if (first) {
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
-			System.out.println("first is true");
 			firstOff(button);
-		} else {
+		} 
+		else {
 
-			System.out.println("in else");
+
 			if (music_on) {
 
-				System.out.println("music on - turn off");
 				button.setOpaque(true);
-<<<<<<< HEAD
 				audio.endMusic();
 			}
 			else{
-				
-=======
-				audio.sam();
-			} else {
 
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 				System.out.println("music off - turn on");
 				button.setOpaque(false);
-				// audio.endBackgroundMusic();
 				audio.newMusic();
 				audio.getBackgroundMusic().start();
 			}
 		}
-<<<<<<< HEAD
 		
 		music_on = !music_on;
-		
-=======
-
-		System.out.println("change bool");
-		music_on = !music_on;
-		System.out.println("music_on is " + music_on);
-
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
 
 	public void startMusic() {
@@ -243,17 +177,11 @@ public class ButtonPanel extends JPanel {
 		audio.newMusic();
 		audio.getBackgroundMusic().start();
 	}
-<<<<<<< HEAD
-	
+
 	public void stopMusic(){
 		
 		audio.endMusic();
-=======
 
-	public void stopMusic() {
-
-		audio.sam();
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
 
 	/**
@@ -261,13 +189,8 @@ public class ButtonPanel extends JPanel {
 	 * 
 	 * @param button
 	 */
-<<<<<<< HEAD
 	public void firstOff(JButton button){
 
-=======
-	public void firstOff(JButton button) {
-		System.out.println("in first off");
->>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 		button.setOpaque(true);
 		audio.endMusic();
 		first = false;

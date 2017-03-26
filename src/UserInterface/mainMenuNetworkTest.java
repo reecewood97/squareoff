@@ -29,7 +29,7 @@ public class mainMenuNetworkTest {
 
 	@Test
 	public void testDisconnect() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.Disconnect();
@@ -39,7 +39,7 @@ public class mainMenuNetworkTest {
 
 	@Test
 	public void testIsConnected() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -48,7 +48,7 @@ public class mainMenuNetworkTest {
 
 	@Test
 	public void testRunServer() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
@@ -57,7 +57,7 @@ public class mainMenuNetworkTest {
 	
 	@Test
 	public void testGetPlayers() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.getPlayers().get(0), "test");
@@ -66,7 +66,7 @@ public class mainMenuNetworkTest {
 
 	@Test
 	public void testCloseServer() {
-		mainMenuNetwork net = new mainMenuNetwork("map1");
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		net.closeServer();
