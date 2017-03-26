@@ -128,6 +128,9 @@ public class Screen extends JFrame {
 		
 	}
 	
+	/**
+	 * start playing music
+	 */
 	public void startMusic(){	
 		controls.startMusic();
 	}

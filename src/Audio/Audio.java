@@ -26,18 +26,12 @@ public class Audio implements Serializable
 		music = new BackgroundMusic();
 	}
 	
-	/**
-	 * plays background music
-	 */
-	public void startBackgroundMusic(){
-	
-		music.start();
-	}
 	
 	public void newMusic(){
 		
 		music = new BackgroundMusic();
 	}
+	
 	
 	/**
 	 * returns background music thread
@@ -47,7 +41,12 @@ public class Audio implements Serializable
 		return music;
 	}
 	
-	public void sam(){
+	
+	
+	/**
+	 * end background music
+	 */
+	public void endMusic(){
 		music.end();
 	}
 	

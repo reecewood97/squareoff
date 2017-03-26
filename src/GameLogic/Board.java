@@ -125,7 +125,7 @@ public class Board {
 			objects.add(grn);
 			
 			//level1
-			for(int i = 100; i < 700; i+=80) {
+			for(int i = 100; i < 700; i+=40) {
 				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
@@ -199,9 +199,9 @@ public class Board {
 			((Square)red).setActivePlayer(true);
 			Point2D.Double blupos = new Point2D.Double(380, 140);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(460, 140);
+			Point2D.Double yelpos = new Point2D.Double(450, 140);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(520, 140);
+			Point2D.Double grnpos = new Point2D.Double(500, 140);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
@@ -231,6 +231,8 @@ public class Board {
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(380,230), true));
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(340,230), true));
 			objects.add(new TerrainBlock(2, 2, new Point2D.Double(420,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(460,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(300,230), true));
 			
 			//eyes
 			objects.add(new TerrainBlock(1, 1, new Point2D.Double(440,330), true));
@@ -255,7 +257,7 @@ public class Board {
 			objects.add(yel);
 			objects.add(grn);
 			
-			for(int i = 80; i < 740; i+=80){
+			for(int i = 80; i < 740; i+=40){
 				
 				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,140), true));
 			}
