@@ -190,16 +190,17 @@ public class GameLogicJUnit {
 		board.input(inputString);
 		inputString  = "Clicked " + x + " " + y + " " + "Fran";
 		board.input(inputString);
-		assertNotEquals(OG, board.getObjects());
+		assertEquals(OG, board.getObjects());
 		
 		board.addName("David");
 		assertTrue(board.checkForWinner(board.getObjects()) == -1);
-		for (int i = 0; i<4; i++){
+		for (int i = 0; i<3; i++){
 			active = (Square) board.getActivePlayer();
 			active.setDead();
 			board.incrementTurn();
 		}
-		assertTrue(board.checkForWinner(board.getObjects())==3);
+		
+		assertTrue(board.checkForWinner(board.getObjects())==2);
 		
 		board.removeName("sam");
 		assertFalse(board.getPlayerArray().contains("sam"));
