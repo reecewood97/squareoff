@@ -347,30 +347,6 @@ public abstract class AI {
 				//System.out.println(xPos + " " + yPos);
 				System.out.println("go right");
 				
-				if (yPos > targetY) {
-					for (PhysObject block:blocks) {
-						double blockX = block.getPos().getX();
-						double blockY = block.getPos().getY();
-						if(blockX == targetX && blockY == targetY) {
-							System.out.println("upper block!!!!!!!!");
-							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								targetX = xPos;
-								targetY = yPos;
-								//System.out.println("destination change to " + targetX + " " + targetY);
-								skip = true;
-								break;
-							}
-							
-						}
-					}
-					for (int k = 0; k < 15; k++) {
-						moveRight();
-						i++;
-						//System.out.println(myName + "go down right! " + i);
-					}
-					continue;
-				}
-				
 				//detect edge
 				jumpLeft = determineNBR(xPos, yPos);
 				jumpRight = determineNBL(xPos, yPos);
@@ -380,7 +356,7 @@ public abstract class AI {
 				
 				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
 				if (jumpLeft && !jumpRight && !dontJumpDown) {
-					for (int j = 0; j < 10; j++) {
+					for (int j = 0; j < 15; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
@@ -391,7 +367,7 @@ public abstract class AI {
 					dontJumpDown = false;
 				}
 				else if (jumpRight && !jumpLeft && !dontJumpDown) {
-					for (int j = 0; j < 10; j++) {
+					for (int j = 0; j < 15; j++) {
 						moveUpRight();
 						moveRight();
 					}
@@ -435,11 +411,34 @@ public abstract class AI {
 					moveUpRight();
 					moveRight();
 					jumpLeftObs = false;
-					jumpRight = false;
+					jumpRightObs = false;
 				}
-				else {
+				else if (!jumpLeftObs && !jumpRightObs) {
 					jumpLeftObs = false;
 					jumpRightObs = false;
+				}
+				else {
+					moveUpRight();
+					moveRight();
+					jumpLeftObs = false;
+					jumpRightObs = false;
+				}
+				
+				if (yPos > targetY) {
+					System.out.println("upper block!!!!!!!!");
+					if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
+						targetX = xPos;
+						targetY = yPos;
+						//System.out.println("destination change to " + targetX + " " + targetY);
+						skip = true;
+						break;
+					}
+					for (int k = 0; k < 20; k++) {
+						moveRight();
+						i++;
+						//System.out.println(myName + "go down right! " + i);
+					}
+					continue;
 				}
 				
 				if (yPos < targetY) {
@@ -447,21 +446,20 @@ public abstract class AI {
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
-						if(blockX == targetX && blockY == targetY) {
-							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								System.out.println("under block!!!!!!!!");
-								targetX = xPos;
-								targetY = yPos;
-								System.out.println("destination change to " + targetX + " " + targetY);
-								skip = true;
-								break;
-							}
+						if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
+							System.out.println("under block!!!!!!!!");
+							targetX = xPos;
+							targetY = yPos;
+							System.out.println("destination change to " + targetX + " " + targetY);
+							skip = true;
+							break;
 						}
+						
 						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 25.0)) {
 							moveRight();
 							moveUpRight();
 							System.out.println(myName + "Jump Right");
-							for (int k = 0; k < 9; k++) {
+							for (int k = 0; k < 15; k++) {
 								moveRight();
 								i++;
 								System.out.println(myName + "go right! " + i);
@@ -481,30 +479,6 @@ public abstract class AI {
 				//System.out.println(xPos + " " + yPos);
 				System.out.println("go left");
 				
-				if (yPos > targetY) {
-					for (PhysObject block:blocks) {
-						double blockX = block.getPos().getX();
-						double blockY = block.getPos().getY();
-						if(blockX == targetX && blockY == targetY) {
-							System.out.println("upper block!!!!!!!!");
-							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								targetX = xPos;
-								targetY = yPos;
-								//System.out.println("destination change to " + targetX + " " + targetY);
-								skip = true;
-								break;
-							}
-							
-						}
-					}
-					for (int k = 0; k < 15; k++) {
-						moveLeft();
-						i++;
-						//System.out.println(myName + "go down left! " + i);
-					}
-					continue;
-				}
-				
 				// detect edge
 				jumpLeft = determineNBR(xPos, yPos);
 				jumpRight = determineNBL(xPos, yPos);
@@ -514,7 +488,7 @@ public abstract class AI {
 
 				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
 				if (jumpLeft && !jumpRight && !dontJumpDown) {
-					for (int j = 0; j < 10; j++) {
+					for (int j = 0; j < 15; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
@@ -525,7 +499,7 @@ public abstract class AI {
 					dontJumpDown = false;
 				}
 				else if (jumpRight && !jumpLeft && !dontJumpDown) {
-					for (int j = 0; j < 10; j++) {
+					for (int j = 0; j < 15; j++) {
 						moveUpRight();
 						moveRight();
 					}
@@ -560,21 +534,44 @@ public abstract class AI {
 				
 				
 				
-				if (jumpLeftObs) {
+				if (jumpLeftObs && !jumpRightObs) {
 					moveUpLeft();
 					moveLeft();
 					jumpLeftObs = false;
 					jumpRightObs = false;
 				}
-				else if (jumpRightObs) {
+				else if (jumpRightObs && !jumpLeftObs) {
 					moveUpRight();
 					moveRight();
 					jumpLeftObs = false;
-					jumpRight = false;
+					jumpRightObs = false;
 				}
-				else {
+				else if (!jumpLeftObs && !jumpRightObs) {
 					jumpLeftObs = false;
 					jumpRightObs = false;
+				}
+				else {
+					moveUpLeft();
+					moveLeft();
+					jumpLeftObs = false;
+					jumpRightObs = false;
+				}
+				
+				if (yPos > targetY) {
+					System.out.println("upper block!!!!!!!!");
+					if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
+						targetX = xPos;
+						targetY = yPos;
+						//System.out.println("destination change to " + targetX + " " + targetY);
+						skip = true;
+						break;
+					}
+					for (int k = 0; k < 15; k++) {
+						moveLeft();
+						i++;
+						//System.out.println(myName + "go down left! " + i);
+					}
+					continue;
 				}
 				
 				if (yPos < targetY) {
@@ -582,22 +579,20 @@ public abstract class AI {
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
-						if(blockX == targetX && blockY == targetY) {
-							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								System.out.println("under block!!!!!!!!");
-								targetX = xPos;
-								targetY = yPos;
-								System.out.println("destination change to " + targetX + " " + targetY);
-								skip = true;
-								break;
-							}
-							
+						if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
+							System.out.println("under block!!!!!!!!");
+							targetX = xPos;
+							targetY = yPos;
+							System.out.println("destination change to " + targetX + " " + targetY);
+							skip = true;
+							break;
 						}
+							
 						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 65.0)) {
 							moveLeft();
 							moveUpLeft();
 							System.out.println(myName + "Jump Left");
-							for (int k = 0; k < 9; k++) {
+							for (int k = 0; k < 15; k++) {
 								moveLeft();
 								i++;
 								System.out.println(myName + "go left! " + i);
