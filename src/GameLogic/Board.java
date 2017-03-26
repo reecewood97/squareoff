@@ -402,18 +402,21 @@ public class Board {
 		
 		PhysObject ret = null;
 		
+		
+			
 		for (PhysObject square : getSquares()) {
-
+	
 			if(square.getName().equals("Square")){
-				
+					
 				if (((Square) square).getActivePlayer()) {
-	
-					ret = square;
-	
+								ret = square;
+		
 				}
 			}
 		}
+		
 		return ret;
+				
 	}
 
 	/**
@@ -714,15 +717,12 @@ public class Board {
 			return false;
 		}
 		if (obj1.getName().equals("TerrainBlock")) {
-			if (obj2.getName().endsWith("ExplodeOnImpact")/*|| obj2.getName().endsWith(
-												 * "TimedGrenade")*/) { // All circular objects
+			if (obj2.getName().endsWith("ExplodeOnImpact")) { // All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if (circle.intersects(obj1.getPos().getX(),
 						obj1.getPos().getY() +obj2.getHeight() , obj1.getWidth(), obj1.getHeight())) {
-					System.out.println("Circular object collision detected between wep at " + obj2.getPos()
-							+ "with height " + obj2.getHeight() + "and width " + obj2.getWidth() + " and block at "
-							+ obj1.getPos() + " with height " + obj1.getHeight() + " and width " + obj1.getWidth());
+					
 					return true;
 				} else {
 					return false;
@@ -1045,7 +1045,7 @@ public class Board {
 			freeSim();   // just simulate another frame.
 		} else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove) move;
-			System.out.println("Weapon spawning at: " + wepMove.getPos());
+			
 			PhysObject wep = null;
 			switch (weaponType) {
 			case "ExplodeOnImpact":
