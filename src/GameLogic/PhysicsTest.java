@@ -32,6 +32,8 @@ public class PhysicsTest extends TestCase {
 			case "Square": objs.add(new Square((Square)board.getObjects().get(i))); break;
 			case "WeaponExplodeOnImpact": objs.add(new ExplodeOnImpact((ExplodeOnImpact)board.getObjects().get(i))); break;
 			case "TargetLine": objs.add(new TargetLine((TargetLine)board.getObjects().get(i))); break;
+			case "Explosion": objs.add(new Explosion((Explosion)board.getObjects().get(i))); break;
+			case "Particle": objs.add(new Particle((Particle)board.getObjects().get(i))); break;
 			}
 		}
 		objs.remove(1);
@@ -60,6 +62,9 @@ public class PhysicsTest extends TestCase {
 		board.input("Pressed,  ,1");
 		for(int i = 0;i<board.getObjects().size();i++){
 			PhysObject obj = board.getObjects().get(i);
+			if(!obj.equals(objects.get(i))){
+				System.out.println(obj.getName());
+			}
 			assertTrue(obj.equals(objects.get(i))); //Assert no objects are changed after an empty move
 		}
 		
@@ -138,7 +143,7 @@ public class PhysicsTest extends TestCase {
 		while(board.getFreeState()){
 			board.input("None");
 		}
-		assertTrue(board.getSquares().get(0).getPos().equals(new Point2D.Double(-45, 502.5)));
+		assertTrue(board.getSquares().get(0).getPos().equals(new Point2D.Double(855, 607.5)));
 		assertFalse(board.getSquares().get(0).getInUse());
 		
 		board.input("setWep,Missile,2");

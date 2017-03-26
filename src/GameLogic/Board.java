@@ -638,8 +638,7 @@ public class Board {
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size,
 			int damage) {
 
-		System.out.println("CREATING EXPLOSION***************************");
-
+		//System.err.println("Explosion at: ");
 		// for i from x to y, all squares push away, all blocks damage
 		double i = (1 * size / 2);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x - (i / 2), y + (i / 2), 2 * i, 2 * i);
@@ -679,16 +678,6 @@ public class Board {
 			}
 		}
 		things.add(new Explosion(new Point2D.Double(x, y)));
-
-		/*
-		 * System.out.println("here ***************************");
-		 * 
-		 * Explosion exp = new Explosion(new Point2D.Double(x, y));
-		 * System.out.println("INUSE?" + exp.getInUse());
-		 * 
-		 * System.out.println("GETTING FROM ARRAYLIST" +
-		 * explosions.get(0).getInUse());
-		 */
 	}
 
 	/**
@@ -1194,8 +1183,8 @@ public class Board {
 				Double x2 = active.getPos().getX() + (active.getWidth() / 2);
 				Double y2 = active.getPos().getY() + (active.getHeight() / 2);
 
-				System.out.println("ActivePlayer is at: " + active.getPos());
-				System.out.println("Mouse press is at: " + x + ", " + y);
+				//System.out.println("ActivePlayer is at: " + active.getPos());
+				//System.out.println("Mouse press is at: " + x + ", " + y);
 
 				Double factor; // Need to check if the value is behind the
 								// player.
@@ -1219,20 +1208,23 @@ public class Board {
 				Double yVel = (Math.abs(y2 - y) / 450) * 30;
 				
 				double myx = xVel;
-				if(Math.abs(myx)<2){
-					if(myx>=0){
-						myx = 2;
-					} else {
-						myx = -2;
-					}
-				}
 				double myy = yVel;
-				myy = myy*0.5;
-				if(Math.abs(myy)<2){
-					if(myy>=0){
-						myy = 2;
-					} else {
-						myy = -2;
+				
+				if(weaponType.equals("Missile")){
+					if(Math.abs(myx)<2){
+						if(myx>=0){
+							myx = 2;
+						} else {
+							myx = -2;
+						}
+					}
+					myy = myy*0.5;
+					if(Math.abs(myy)<2){
+						if(myy>=0){
+							myy = 2;
+						} else {
+							myy = -2;
+						}
 					}
 				}
 
@@ -1264,7 +1256,7 @@ public class Board {
 			if (debugL) {
 				System.out.println("Now a weapon in use");
 			}
-			System.err.println(wepA[1]);
+			//System.err.println(wepA[1]);
 			this.weaponType = wepA[1];
 			weaponsopen = true;
 

@@ -20,10 +20,16 @@ public class Collision{// implements Comparable<Collision>{
 		this.block = block;
 	}
 	
+	/**
+	 * @return The moving object taking part in the collision
+	 */
 	public PhysObject getThing(){
 		return thing;
 	}
 	
+	/**
+	 * @return The block taking part in the collision
+	 */
 	public PhysObject getBlock(){
 		return block;
 	}
