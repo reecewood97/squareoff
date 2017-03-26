@@ -26,7 +26,9 @@ public class Audio implements Serializable
 		music = new BackgroundMusic();
 	}
 	
-	
+	/**
+	 * create new instance of music
+	 */
 	public void newMusic(){
 		
 		music = new BackgroundMusic();
@@ -42,20 +44,10 @@ public class Audio implements Serializable
 	}
 	
 	
-	
 	/**
 	 * end background music
 	 */
 	public void endMusic(){
-		music.end();
-	}
-	
-	
-	/**
-	 * stops background music
-	 */
-	public void endBackgroundMusic(){
-		
 		music.end();
 	}
 	
@@ -83,8 +75,8 @@ public class Audio implements Serializable
 		    } 
 			catch(Exception ex) {
 		        
-				//System.out.println("Error playing sound");
-		        //ex.printStackTrace();
+				System.err.println("Error playing sound");
+		        
 		    }
 		}
 	}
@@ -109,8 +101,8 @@ public class Audio implements Serializable
 			}
 			catch(Exception ex){
 				
-				//System.out.println("Error playing sound");
-		        //ex.printStackTrace();
+				System.err.println("Error playing sound");
+		     
 			}
 		}
 	}
@@ -136,25 +128,11 @@ public class Audio implements Serializable
 			}
 			catch(Exception ex){
 				
-				//System.out.println("Error playing sound");
-		        //ex.printStackTrace();
+				System.err.println("Error playing sound");
+		       
 			}
 		}
 	}
 	
-	/**
-	 * turn on sounds
-	 */
-	public void enableSound(){
-		
-		sound = true;
-	}
 	
-	
-	/**
-	 * turn off sounds
-	 */
-	public void disableSound(){
-		sound = false;
-	}
 }
