@@ -1383,7 +1383,7 @@ public class Board {
 	/**
 	 * Increments the active player
 	 */
-	private void incrementTurn() {
+	public void incrementTurn() {
 		weaponsopen = false;
 		if (player != 3) {
 			player = player + 1;

@@ -1,5 +1,5 @@
 /*
-This is a buddy for the UI - create an istance of this class wherever you make the frame for the game board  
+This is a buddy for the UI - create an instance of this class wherever you make the frame for the game board  
  * * then you just call hangOn2() with the frame as the argument - you get the frame back with listeners nicely  
  * * attached with the methods that David will need.  
  * 
@@ -7,12 +7,10 @@ This is a buddy for the UI - create an istance of this class wherever you make t
  * * more generic to just return whatever kind of component is needed.*/
 package Graphics;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import Networking.Queue;
 
 /**
@@ -36,7 +34,7 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 	 *            the server
 	 * @param name
 	 *            The client name is used to "sign" the moves they send to the
-	 *            server to discern whos turn it is.
+	 *            server to discern who's turn it is.
 	 */
 	public HangerOn(Queue q, String name, Double xr, Double yr) {
 		this.q = q;
@@ -64,7 +62,7 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 				sleep(40);
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.exit(1);
 		}
 	}
