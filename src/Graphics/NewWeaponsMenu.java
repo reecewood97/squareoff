@@ -29,8 +29,6 @@ public class NewWeaponsMenu extends JFrame {
 	    private double screenheight = screenSize.getHeight(); 
 	    private double screenwidth = screenSize.getWidth();
 	    private Audio audio;
-	   // private double framewidth = 800;
-	    //private double frameHeight = 450;
 	    private String[] weaponArray = {"ExplodeOnImpact","Missile","TimedGrenade"};
 	    private int currentWeapon = 0;
 	    private JButton image;
@@ -134,8 +132,7 @@ public class NewWeaponsMenu extends JFrame {
 			
 	    	//hide menu
 			setVisible(false);
-			setFocusable(false);
-	    	
+		
 	    }
 
 	    
@@ -172,8 +169,7 @@ public class NewWeaponsMenu extends JFrame {
 	    public void open(){
 	    	
 	    	setVisible(true);
-	    	setFocusable(true);
-	    	requestFocusInWindow();
+	    
 	    }
 	    
 	    

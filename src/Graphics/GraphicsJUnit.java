@@ -13,10 +13,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Audio.Audio;
+import Audio.BackgroundMusic;
 import GameLogic.Board;
+import GameLogic.Explosion;
+import GameLogic.TimedGrenade;
 import Networking.Client;
 import Networking.Queue;
 
+/**
+ * class for testing graphics methods - most testing has been completed by user testing
+ * @author Fran
+ *
+ */
 public class GraphicsJUnit {
 
 	//SCREEN CLASS
@@ -33,6 +41,9 @@ public class GraphicsJUnit {
 	private HangerOn listeners;
 	private ButtonPanel controls;
 	private Client client;
+	private Screen screen;
+	private JButton btn;
+	private WinnerBoard winboard;
 	//SCREENBOARD CLASS
 	private Board board;
 	//HANGERON
@@ -47,13 +58,16 @@ public class GraphicsJUnit {
     private boolean weaponselected;
     private NewWeaponsMenu wepMenu;
 	//BUTTON PANEL
-    private boolean music_on = true;
-	private boolean first = true;
+    private boolean music_on;
+	private boolean first;
+	private boolean run;
+	private BackgroundMusic music;
 	//SPLASHSPLASH
+	private SplashSplash splash;
 	//WINNERBOARD
 	private int playernum;
 
-	/*
+
 	@Before
 	public void setUp() throws Exception {
 		
@@ -64,32 +78,80 @@ public class GraphicsJUnit {
 		board = new Board("map1");
 		widthratio = 1.35;
 		heightratio = 1.6;
-		sBoard = new ScreenBoard(board,heightratio,widthratio,hangerOn);
-		listeners = new HangerOn(queue,name,xwidthratio,heightratio);
-		controls = new ButtonPanel(screen, Board board, Audio audio,String name, Client client)
+		name = "Bob";
+		q = new Queue();
 		client = new Client(name);
+		listeners = new HangerOn(q,name,widthratio,heightratio);
+		screen = new Screen(board, q, name, client);
+		sboard = new ScreenBoard(board,heightratio,widthratio,listeners);
+		winboard = new WinnerBoard(-1);
 		
-		//weapons menu
-		wepMenu = new NewWeaponsMenu(hangerOn,board);
 		audio = new Audio();
-		currentWeapon = 2;
+		music = audio.getBackgroundMusic();
+		controls = new ButtonPanel(screen,board,audio,name,client);
+		btn = new JButton();
+		//weapons menu
+		wepMenu = new NewWeaponsMenu(listeners,board,btn);
+		board.addName("Bob");
+		board.addName("Dave");
+		board.addName("Sharon");
+		board.addName("Liz");
 		
-	}
-
-	@After
-	public void tearDown() throws Exception {
+		first = true;
+		music_on = true;
+		run = false;
+		
+		splash = new SplashSplash(10);
+		
 		
 	}
 
 	@Test
 	public void test() {
 		
-		//newweaponsmenu
+		//button panel
+		first = true;
+		music_on = true;
+		controls.ToggleBackgroundMusic(btn);
 		
+		//weapons menu tests
+		wepMenu.setInvisible();
+		assertFalse(wepMenu.isVisible());
+		wepMenu.open();
+		assertTrue(wepMenu.isVisible());
+		int current = wepMenu.getCurrentWeapon();
+		wepMenu.cycleRight();
+		assert(current+1==wepMenu.getCurrentWeapon());
+		current = wepMenu.getCurrentWeapon();
+		wepMenu.cycleLeft();
+		assert(current-1==wepMenu.getCurrentWeapon());
+		wepMenu.select();
+		assertFalse(wepMenu.isVisible());
+		wepMenu.open();
+		wepMenu.exit();
+		assertFalse(wepMenu.isVisible());
+		
+		//screen
+		screen.setVisible();
+		assertTrue(screen.isVisible());
+		screen.setInvisible();
+		assertFalse(screen.isVisible());
+		screen.start();
+		assertTrue(screen.isVisible());
+		screen.end();
+		assertFalse(screen.isVisible());
+		
+		//hangeron
+		listeners.setWep("WeaponTimedGrenade");
+		listeners.setExp("1");
+		
+		//splash screen
+		splash.showSplash();
+		assertFalse(splash.isVisible());
 		
 		
 		
 	}
-	*/
+	
 
 }

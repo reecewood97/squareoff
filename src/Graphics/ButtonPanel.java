@@ -118,32 +118,32 @@ public class ButtonPanel extends JPanel{
 		int id = square.getPlayerID();
 		
 		ArrayList<String> a = client.getClientList();
-	
-		/*
+			
 		//checks they are the active player
 		for(int i = 0; i < 4; i++){
 
 			String name2 = a.get(i);
 			
+			System.out.println(a);
+			
 			if(name2.equals(name)){
 				
+				System.out.println("id" + id);
+				System.out.println("iadd1: " + (i+1));
 				if((i+1)==id){
 					
-					*/
-					//open menu*
+					//open menu
 					NewWeaponsMenu menu = new NewWeaponsMenu(listeners,board,weapons);
 					menu.open();
-					/*
+					
 					break;
 					
 				}
 				
 			}
-			
-			
-			
+				
 		 }
-		*/
+		
 		
 		weapons.setEnabled(false);
 		
@@ -158,8 +158,6 @@ public class ButtonPanel extends JPanel{
 	 */
 	public void ToggleBackgroundMusic(JButton button){
 		
-		System.out.println("toggling");
-		
 		if(first){
 			System.out.println("first is true");
 			firstOff(button);
@@ -171,7 +169,7 @@ public class ButtonPanel extends JPanel{
 				
 				System.out.println("music on - turn off");
 				button.setOpaque(true);
-				audio.sam();
+				audio.endMusic();
 			}
 			else{
 				
@@ -183,9 +181,7 @@ public class ButtonPanel extends JPanel{
 			}
 		}
 		
-		System.out.println("change bool");
 		music_on = !music_on;
-		System.out.println( "music_on is " + music_on );
 		
 	}
 	
@@ -197,7 +193,7 @@ public class ButtonPanel extends JPanel{
 	
 	public void stopMusic(){
 		
-		audio.sam();
+		audio.endMusic();
 	}
 	
 	/**
@@ -205,9 +201,9 @@ public class ButtonPanel extends JPanel{
 	 * @param button
 	 */
 	public void firstOff(JButton button){
-		System.out.println("in first off");
+
 		button.setOpaque(true);
-		audio.sam();
+		audio.endMusic();
 		first = false;
 	}	
 }

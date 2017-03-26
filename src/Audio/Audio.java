@@ -46,11 +46,13 @@ public class Audio implements Serializable
 		return music;
 	}
 	
-	public void sam(){
-		System.out.println("sam");
-		System.out.println(music.isInterrupted());
+	/**
+	 * end music method stops background music playing
+	 */
+	public void endMusic(){
+	
 		music.end();
-		System.out.println(music.isInterrupted());
+		
 	}
 	
 	
