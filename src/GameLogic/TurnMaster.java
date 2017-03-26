@@ -25,12 +25,12 @@ public class TurnMaster extends Thread {
 				sleep(40);
 				i = i+1;
 				board.setTime(i);
-				if(i >= 500){ //Should be 500? changed it for ease of testing
+				if(i >= 500){ 
 					board.setFreeState(true);
 					i = 0;
 				}
 			} catch (InterruptedException e) {
-				//e.printStackTrace();
+				
 			}
 		}
 		
