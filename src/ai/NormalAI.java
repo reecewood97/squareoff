@@ -158,7 +158,7 @@ public class NormalAI extends AI {
 				
 				// calculate shortest displacement by pythagoras theorem
 				double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-				if (displacement < finalDis && !dontKillMyself(myX, myY, enemyX, enemyY) && xDis > 30) {
+				if (displacement < finalDis && !dontKillMyself(myX, myY, enemyX, enemyY)) {
 					finalDis = displacement;
 					finalX = enemyX;
 					finalY = enemyY;
