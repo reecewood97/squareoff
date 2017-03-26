@@ -78,7 +78,7 @@ public class NormalAI extends AI {
 		double targetX = aiX;
 		double targetY = aiY - 30.0;
 		PhysObject finalSquare = null;
-		System.out.println("obstacles: " + thereAreObstacles());;
+//		System.out.println("obstacles: " + thereAreObstacles());
 		double finalDis = 9999999999999.0;
 		if (thereAreObstacles()) {
 			for (PhysObject player:squares) {
@@ -99,7 +99,7 @@ public class NormalAI extends AI {
 					}
 				}
 			}
-			System.out.println("Normal AI is going to attack: " + finalSquare.getPos() );
+//			System.out.println("Normal AI is going to attack: " + finalSquare.getPos() );
 			if (((finalSquare.getPos().getY() + 50.0 <= aiY) && (finalSquare.getPos().getY() - 110.0 >= aiY)) && ((finalSquare.getPos().getX() + 160.0 <= aiX) && (finalSquare.getPos().getX() -120.0 >= aiX))) {
 				targetX = aiX;
 				targetY = aiY - 30.0;
@@ -114,7 +114,6 @@ public class NormalAI extends AI {
 					}
 				}
 			}
-			System.out.println("target block: " + targetX + ", " + targetY);
 			setTargetLocked(true);
 			setTarget((Square)finalSquare);
 			aiMoveCal(targetX, targetY);
