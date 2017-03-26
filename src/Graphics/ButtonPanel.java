@@ -103,7 +103,6 @@ public class ButtonPanel extends JPanel {
 	public void openMainMenu(Screen screen, Board board) {
 
 		client.disconnect();
-		board.notifyQuit(); // method not complete
 		screen.setVisible(false);
 
 	}
@@ -122,28 +121,24 @@ public class ButtonPanel extends JPanel {
 		int id = square.getPlayerID();
 
 		ArrayList<String> a = client.getLocalPlayers();
-		// System.err.println(a);
 
 		// checks they are the active player
 		for (int i = 0; i < 4; i++) {
 
 			String name2 = a.get(i);
 
-			System.err.println("Name of this client " + name + " Name found in server" + name2 + " The ID of the player" + id + " The ID we're looking at" + (i+1));
 			if ((name2.equals(name)) && ((i + 1) == id)) {
-				// open menu*
+				// open menu
 				NewWeaponsMenu menu = new NewWeaponsMenu(listeners, board, weapons);
 				menu.open();
 				weapons.setEnabled(false);
-				//break;
+				
 
-			} else {
-				//weapons.setEnabled(false);
 			}
 
 		}
 
-		//weapons.setEnabled(false);
+		
 
 	}
 
