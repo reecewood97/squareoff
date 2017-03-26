@@ -359,7 +359,7 @@ public class Board {
 
 	}
 
-	private void setActivePlayer(int newPlayer, int newID) {
+	public void setActivePlayer(int newPlayer, int newID) {
 
 		this.player = newPlayer;
 		this.squareID = newID;

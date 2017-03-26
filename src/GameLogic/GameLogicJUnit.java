@@ -217,6 +217,8 @@ public class GameLogicJUnit {
 		}
 		assertTrue(board.getTime() > 0);
 		
+		board.setActivePlayer(0, 0);
+		
 	
 	}
 }
