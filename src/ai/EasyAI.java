@@ -87,7 +87,7 @@ public class EasyAI extends AI{
 					}
 				}
 			}
-			System.out.print("x, y " + targetX +", " + targetY);
+			System.out.println("x, y " + targetX +", " + targetY);
 		}
 		aiMoveCal((targetX + 10), targetY);
 	}

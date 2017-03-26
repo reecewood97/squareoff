@@ -296,15 +296,15 @@ public abstract class AI {
 	
 	public void aiMoveCal(double targetX, double targetY) {
 		boolean skip = false;
-		////System.out.println("move to: " + targetX + " " + targetY);
+//		System.out.println("move to: " + targetX + " " + targetY);
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double xPos = getAIPos().getX();
 		double yPos = getAIPos().getY() - 30.0;
 //		moveUp();
 		int i = 0;
-		while (((int)xPos >= targetX + 40.0) || ((int)xPos <= targetX - 5.0) || !(yPos <= targetY && yPos >= targetY -30.0 )) {
-// 			System.out.println("xpos" + xPos);
-// 			System.out.println("ypos" + yPos);
+		while (((int)xPos >= targetX + 30.0) || ((int)xPos <= targetX) || !(yPos <= targetY && yPos >= targetY -30.0 )) {
+ 			System.out.println("xpos" + xPos);
+ 			System.out.println("ypos" + yPos);
 // 			System.out.println("targety" + targetY);
 // 			System.out.println("targetx" + targetX);
 			try {
@@ -345,13 +345,14 @@ public abstract class AI {
 			if (xPos <= targetX) {
 				//System.out.println("move to: " + targetX + " " + targetY);
 				//System.out.println(xPos + " " + yPos);
+				System.out.println("go right");
 				
 				if (yPos > targetY) {
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
 						if(blockX == targetX && blockY == targetY) {
-							//System.out.println("upper block!!!!!!!!");
+							System.out.println("upper block!!!!!!!!");
 							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
 								targetX = xPos;
 								targetY = yPos;
@@ -371,91 +372,42 @@ public abstract class AI {
 				}
 				
 				//detect edge
-				
-			for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos >= blockX) && (xPos < blockX + 120.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
-						jumpLeft = false;
-						break;
-					}
-					jumpLeft = true;
-				}
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if (((xPos <= blockX)) && (xPos >= blockX - 80.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
-						jumpRight = false;
-						break;
-					}
-					jumpRight = true;
-				}
-				
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if (((xPos >= blockX - 40.0) && (xPos <= blockX + 80.0)) && (yPos > blockY)) {
-						dontJumpDown = false;
-						break;
-					}
-					dontJumpDown = true;
-				}
-				
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos - 80 <= blockX) && (xPos - 40 >= blockX) && (yPos + 30.0 == blockY)) {
-						jumpLeftObs = true;
-						break;
-					}
-					jumpLeftObs = false;
-				}
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos + 110 >= blockX) && (xPos + 70 <= blockX) && (yPos + 30.0 == blockY)) {
-						jumpRightObs = true;
-						break;
-					}
-					jumpRightObs = false;
-				}
-
+				jumpLeft = determineNBR(xPos, yPos);
+				jumpRight = determineNBL(xPos, yPos);
+				dontJumpDown = determineNBD(xPos, yPos);
+				jumpLeftObs = determineObsL(xPos, yPos);
+				jumpRightObs = determineObsR(xPos, yPos);
 				
 				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
 				if (jumpLeft && !jumpRight && !dontJumpDown) {
-					for (int j = 0; j < 8; j++) {
+					for (int j = 0; j < 10; j++) {
 						moveUpLeft();
 						moveLeft();
 					}
 					System.out.println(myName + "Detected Edge. Jump Left");
+
+//					System.out.println("blocks underneath");
 					jumpLeft = false;
 					dontJumpDown = false;
 				}
 				else if (jumpRight && !jumpLeft && !dontJumpDown) {
-					for (int j = 0; j < 8; j++) {
+					for (int j = 0; j < 10; j++) {
 						moveUpRight();
 						moveRight();
 					}
 					System.out.println(myName + "Detected Edge. Jump Right");
 					jumpRight = false;
 					dontJumpDown = false;
+
+//					System.out.println("blocks underneath");
 				}
-				else if (jumpLeft && jumpRight && !dontJumpDown) {
+				else if (!jumpLeft && !jumpRight) {
+					jumpRight = false;
+					jumpLeft = false;
+					dontJumpDown = false;
+					System.out.println("continue movement");
+				}
+				else if (jumpLeft && jumpRight) {
 					targetX = xPos;
 					targetY = yPos;
 					System.out.println("destination change to " + targetX + " " + targetY);
@@ -463,11 +415,6 @@ public abstract class AI {
 					jumpLeft = false;
 					dontJumpDown = false;
 					break;
-				}
-				else if (!jumpLeft && !jumpRight) {
-					jumpRight = false;
-					jumpLeft = false;
-					dontJumpDown = false;
 				}
 				else {
 					targetX = xPos;
@@ -496,16 +443,16 @@ public abstract class AI {
 				}
 				
 				if (yPos < targetY) {
-					//System.out.println("y < targetY");
+					System.out.println("y < targetY");
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
 						if(blockX == targetX && blockY == targetY) {
 							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								//System.out.println("under block!!!!!!!!");
+								System.out.println("under block!!!!!!!!");
 								targetX = xPos;
 								targetY = yPos;
-								//System.out.println("destination change to " + targetX + " " + targetY);
+								System.out.println("destination change to " + targetX + " " + targetY);
 								skip = true;
 								break;
 							}
@@ -513,11 +460,11 @@ public abstract class AI {
 						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 25.0)) {
 							moveRight();
 							moveUpRight();
-							//System.out.println(myName + "Jump Right");
+							System.out.println(myName + "Jump Right");
 							for (int k = 0; k < 9; k++) {
 								moveRight();
 								i++;
-								//System.out.println(myName + "go right! " + i);
+								System.out.println(myName + "go right! " + i);
 							}
 							break;
 						}
@@ -525,24 +472,21 @@ public abstract class AI {
 				}
 				
 				moveRight();
-				//System.out.println(myName + "move Right");
-
-//				Point2D.Double newPos = new Point2D.Double(xPos + 2, targetY + 30);
-//				setPos(newPos);
-//				xPos += 2;
+				System.out.println(myName + "move Right");
 				i++;
-				//System.out.println("Right " + i);
+				System.out.println("Right " + i);
 			}
 			else {
 				//System.out.println("move to: " + targetX + " " + targetY);
 				//System.out.println(xPos + " " + yPos);
+				System.out.println("go left");
 				
 				if (yPos > targetY) {
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
 						if(blockX == targetX && blockY == targetY) {
-							//System.out.println("upper block!!!!!!!!");
+							System.out.println("upper block!!!!!!!!");
 							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
 								targetX = xPos;
 								targetY = yPos;
@@ -562,69 +506,11 @@ public abstract class AI {
 				}
 				
 				// detect edge
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos >= blockX - 40.1) && (yPos - 25.0 >= blockY) && (yPos == blockY)) {
-						jumpLeft = false;
-						break;
-					}
-					jumpLeft = true;
-				}
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if (((xPos <= blockX + 80.1)) && (yPos - 25.0 >= blockY) && (yPos == blockY)) {
-						jumpRight = false;
-						break;
-					}
-					jumpRight = true;
-				}
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if (((xPos >= blockX - 75.0) && (xPos <= blockX + 75.0)) && (yPos > blockY)) {
-//						System.out.println("block is underneath");
-						dontJumpDown = true;
-						break;
-					}
-					dontJumpDown = false;
-//					System.out.println("no blocks underneath");
-				}
-				
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos - 80 <= blockX) && (xPos - 40 >= blockX) && (yPos + 30.0 == blockY)) {
-						jumpLeftObs = true;
-						break;
-					}
-					jumpLeftObs = false;
-				}
-				for (PhysObject block:blocks) {
-					if (!block.getInUse()) {
-						continue;
-					}
-					double blockX = block.getPos().getX();
-					double blockY = block.getPos().getY();
-					if ((xPos + 110 >= blockX) && (xPos + 70 <= blockX) && (yPos + 30.0 == blockY)) {
-						jumpRightObs = true;
-						break;
-					}
-					jumpRightObs = false;
-				}
+				jumpLeft = determineNBR(xPos, yPos);
+				jumpRight = determineNBL(xPos, yPos);
+				dontJumpDown = determineNBD(xPos, yPos);
+				jumpLeftObs = determineObsL(xPos, yPos);
+				jumpRightObs = determineObsR(xPos, yPos);
 
 				System.out.println("jl, jr, djd " + jumpLeft + jumpRight + dontJumpDown);
 				if (jumpLeft && !jumpRight && !dontJumpDown) {
@@ -692,16 +578,16 @@ public abstract class AI {
 				}
 				
 				if (yPos < targetY) {
-					//System.out.println("y < targetY");
+					System.out.println("y < targetY");
 					for (PhysObject block:blocks) {
 						double blockX = block.getPos().getX();
 						double blockY = block.getPos().getY();
 						if(blockX == targetX && blockY == targetY) {
 							if (xPos < targetX + 60.0 && xPos > targetX - 20.0) {
-								//System.out.println("under block!!!!!!!!");
+								System.out.println("under block!!!!!!!!");
 								targetX = xPos;
 								targetY = yPos;
-								//System.out.println("destination change to " + targetX + " " + targetY);
+								System.out.println("destination change to " + targetX + " " + targetY);
 								skip = true;
 								break;
 							}
@@ -710,11 +596,11 @@ public abstract class AI {
 						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 65.0)) {
 							moveLeft();
 							moveUpLeft();
-							//System.out.println(myName + "Jump Left");
+							System.out.println(myName + "Jump Left");
 							for (int k = 0; k < 9; k++) {
 								moveLeft();
 								i++;
-								//System.out.println(myName + "go left! " + i);
+								System.out.println(myName + "go left! " + i);
 							}
 							break;
 						}
@@ -722,16 +608,109 @@ public abstract class AI {
 				}
 				
 				moveLeft();
-				//System.out.println(myName + "move Left");
-//				xPos -= 2;
-
-//				Point2D.Double newPos = new Point2D.Double(xPos - 2, targetY + 30);
-//				setPos(newPos);
+				System.out.println(myName + "move Left");
 				i++;
-				//System.out.println("Left " + i);
+				System.out.println("Left " + i);
 			}
 		}
 		return ;
+	}
+	
+	public boolean determineNBR(double xPos, double yPos) {
+		boolean jumpLeft = false;
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				jumpLeft = true;
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if ((xPos >= blockX) && (xPos < blockX + 120.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
+				jumpLeft = false;
+				return jumpLeft;
+			}
+			jumpLeft = true;
+		}
+		return jumpLeft;
+	}
+	
+	public boolean determineNBL(double xPos, double yPos) {
+		System.out.println("xPos in NBL" + xPos);
+		System.out.println("yPos in NBL" + yPos);
+		boolean jumpRight = false;
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				jumpRight = true;
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if (((xPos <= blockX)) && (xPos >= blockX - 80.0) && (yPos >= blockY) && (yPos <= blockY + 35)) {
+				jumpRight = false;
+				return jumpRight;
+			}
+			jumpRight = true;
+		}
+		return jumpRight;
+	}
+	
+	public boolean determineNBD(double xPos, double yPos) {
+		boolean dontJumpDown = true;
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				dontJumpDown = true;
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if (((xPos >= blockX - 40.0) && (xPos <= blockX + 80.0)) && (yPos > blockY)) {
+//				System.out.println("block is underneath");
+				dontJumpDown = false;
+				return dontJumpDown;
+			}
+			dontJumpDown = true;
+//			System.out.println("no blocks underneath");
+		}
+		return dontJumpDown;
+	}
+	
+	public boolean determineObsL(double xPos, double yPos) {
+		boolean jumpLeftObs = false;
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if ((xPos - 80 <= blockX) && (xPos - 40 >= blockX) && (yPos + 30.0 == blockY)) {
+				jumpLeftObs = true;
+				return jumpLeftObs;
+			}
+			jumpLeftObs = false;
+		}
+		return jumpLeftObs;
+	}
+	
+	public boolean determineObsR(double xPos, double yPos) {
+		boolean jumpRightObs = false;
+		ArrayList<PhysObject> blocks = board.getBlocks();
+		for (PhysObject block:blocks) {
+			if (!block.getInUse()) {
+				continue;
+			}
+			double blockX = block.getPos().getX();
+			double blockY = block.getPos().getY();
+			if ((xPos + 110 >= blockX) && (xPos + 70 <= blockX) && (yPos + 30.0 == blockY)) {
+				jumpRightObs = true;
+				return jumpRightObs;
+			}
+			jumpRightObs = false;
+		}
+		return jumpRightObs;
 	}
 	
 	/**
