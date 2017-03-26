@@ -19,7 +19,7 @@ public class ClientReceiver extends Thread {
 	private Board board; 
 	private boolean inGame;
 	private Screen ui;
-	private ArrayList<String> players;
+	private ArrayList<String> players, newPlayers;
 	private Client client;
 	private int state; 
 
@@ -37,6 +37,7 @@ public class ClientReceiver extends Thread {
 		this.ui = ui;
 		this.client = client;
 		players = null;
+		newPlayers = new ArrayList<String>();
 		state = Server.BASE;
 	}
 	
@@ -89,11 +90,6 @@ public class ClientReceiver extends Thread {
 					else if ((int)ob == 34){
 						board.startLocalTimer();
 					}
-					//Make sure the clients have the most updated arrayList of players
-					else if ((int)ob == 35){
-						ob = server.readObject();
-						players = (ArrayList<String>) ob;
-					}
 				}
 				//Whilst not in-game.
 				else {
@@ -114,22 +110,13 @@ public class ClientReceiver extends Thread {
 	}
 	
 	/**
-	 * gets the players array list
-	 * @return list of players
-	 */
-	public ArrayList<String> getPlayers2(){
-		
-		return players;
-		
-	}
-	
-	/**
 	 * Waits for the current list of players from the server. Will cause dead-lock if server doesn't send the list.
 	 * @return The list of players from the server.
 	 */
 	public ArrayList<String> getPlayers() {
 		//Waits for the list.
-		while(players == null && waitForAccept()) {
+		int i = 0;
+		while(players == null && waitForAccept() && i < 200) {
 			try {
 				sleep(50);
 			}	
@@ -137,14 +124,12 @@ public class ClientReceiver extends Thread {
 				e.printStackTrace();
 				System.exit(1);
 			}
+			i++;
 		}
 		
 		//Sets the client-side playerlist to the new playerlist if it isn't null.
-		ArrayList<String> newPlayers = players;
-		if(newPlayers != null) {
-			String[] playerArray = new String[4];
-			playerArray = newPlayers.toArray(playerArray);
-			board.setPlayers(playerArray);
+		if(players != null) {
+			newPlayers = players;
 			players = null;
 		}
 		return newPlayers;
@@ -168,15 +153,14 @@ public class ClientReceiver extends Thread {
 		while(state == Server.BASE && i < 200) {
 			try {
 				sleep(50);
-				i++;
 			}
 			catch(InterruptedException e) {							
 				e.printStackTrace();
 				System.exit(1);
 			}
-			System.out.println(i);
+			i++;
 		}
-			return state == Server.ACCEPTED;
+		return state == Server.ACCEPTED;
 	}
 }
 

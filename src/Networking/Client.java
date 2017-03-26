@@ -26,6 +26,7 @@ public class Client {
 	private Board board; 
 	private Queue q; 
 	private Screen ui;
+	private ArrayList<String> localPlayers = null;
 	
 	/**
 	 * Creates a new Client.
@@ -119,7 +120,10 @@ public class Client {
 	public ArrayList<String> getPlayers() {
 		if(!isConnected()) return null;
 		sender.send(Server.PLAYERLIST);
-		return receiver.getPlayers();
+		ArrayList<String> x = receiver.getPlayers();
+		if (x != null)
+			localPlayers = x;
+		return x;
 	}
 	
 	/**
@@ -128,16 +132,6 @@ public class Client {
 	 */
 	public boolean inGame() {
 		return receiver.inGame();
-	}
-	
-	
-	/**
-	 * gets list of clients from client receiver
-	 * @return Arraylist of player names
-	 * 
-	 */
-	public ArrayList<String> getClientList(){
-		return receiver.getPlayers2();
 	}
 	
 	/**
@@ -164,6 +158,17 @@ public class Client {
 	
 		//Reconnects.
 		return connect(ip, port) == 0;
+	}
+	
+	/**
+	 * Returns the local player list held in the server without speaking to the server again
+	 * @return the playerlist.
+	 */
+	public ArrayList<String> getLocalPlayers(){
+		for (int i = 1; i <= 5-localPlayers.size(); i++){
+			localPlayers.add("AI " + i);
+		}
+		return localPlayers;
 	}
 }
 

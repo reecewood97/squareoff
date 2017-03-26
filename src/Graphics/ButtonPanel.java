@@ -18,9 +18,10 @@ import Audio.*;
  * 
  * @author Fran
  *
- * creates the panel at the top of the game arena for users to toggle sound and quit
+ *         creates the panel at the top of the game arena for users to toggle
+ *         sound and quit
  */
-public class ButtonPanel extends JPanel{
+public class ButtonPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private boolean music_on = true;
@@ -31,91 +32,95 @@ public class ButtonPanel extends JPanel{
 	private Client client;
 	private String name;
 	private JButton weapons;
-	
+
 	/**
-	 * constructor 
-	 * @param screen The screen
-	 * @param board The current board
-	 * @param audio The audio
+	 * constructor
+	 * 
+	 * @param screen
+	 *            The screen
+	 * @param board
+	 *            The current board
+	 * @param audio
+	 *            The audio
 	 */
-	public ButtonPanel(Screen screen, Board board, Audio audio,String name, Client client) {
-		
+	public ButtonPanel(Screen screen, Board board, Audio audio, String name, Client client) {
+
 		super();
-		
-		//create main panel
+
+		// create main panel
 		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BorderLayout());
 		add(mainpanel);
-		
-		//set attributes
+
+		// set attributes
 		this.audio = audio;
 		this.board = board;
 		this.listeners = screen.getHangerOn();
 		this.client = client;
-		this.name= name;
-		
-		//exit button
-        ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
-        JButton exit = new JButton(image2);
-		exit.addActionListener(e -> openMainMenu(screen,board));
-		exit.setBorderPainted(false); 
-        exit.setContentAreaFilled(false); 
-        exit.setFocusPainted(false); 
-        exit.setOpaque(false);
-		
-		
-		//toggle sound button
-        ImageIcon image3 = new ImageIcon("Files/Images/speaker1.png");
-        JButton sound = new JButton(image3);
-        sound.addActionListener(e -> ToggleBackgroundMusic(sound));
-		sound.setBorderPainted(false); 
-		sound.setContentAreaFilled(false); 
-		sound.setFocusPainted(false); 
+		this.name = name;
+
+		// exit button
+		ImageIcon image2 = new ImageIcon("Files/Images/cross.png");
+		JButton exit = new JButton(image2);
+		exit.addActionListener(e -> openMainMenu(screen, board));
+		exit.setBorderPainted(false);
+		exit.setContentAreaFilled(false);
+		exit.setFocusPainted(false);
+		exit.setOpaque(false);
+
+		// toggle sound button
+		ImageIcon image3 = new ImageIcon("Files/Images/speaker1.png");
+		JButton sound = new JButton(image3);
+		sound.addActionListener(e -> ToggleBackgroundMusic(sound));
+		sound.setBorderPainted(false);
+		sound.setContentAreaFilled(false);
+		sound.setFocusPainted(false);
 		sound.setOpaque(false);
-		
-		//weapons menu button (only till key pressed used)
+
+		// weapons menu button (only till key pressed used)
 		weapons = new JButton("weapons menu");
-	    weapons.addActionListener(e -> showWeaponsMenu());
-		weapons.setBorderPainted(false); 
-		weapons.setContentAreaFilled(false); 
-		weapons.setFocusPainted(false); 
+		weapons.addActionListener(e -> showWeaponsMenu());
+		weapons.setBorderPainted(false);
+		weapons.setContentAreaFilled(false);
+		weapons.setFocusPainted(false);
 		weapons.setOpaque(false);
-			
-		//add buttons to panel
-		mainpanel.add(sound,BorderLayout.WEST);
+
+		// add buttons to panel
+		mainpanel.add(sound, BorderLayout.WEST);
 		mainpanel.add(exit, BorderLayout.EAST);
 		mainpanel.add(weapons, BorderLayout.CENTER);
-		
 
 	}
-	
+
 	/**
 	 * closes the screen
 	 * 
-	 * @param screen The screen
-	 * @param board The current board
+	 * @param screen
+	 *            The screen
+	 * @param board
+	 *            The current board
 	 */
-	public void openMainMenu(Screen screen, Board board){
-	
+	public void openMainMenu(Screen screen, Board board) {
+
 		client.disconnect();
-		board.notifyQuit(); //method not complete
+		board.notifyQuit(); // method not complete
 		screen.setVisible(false);
-		
+
 	}
 
 	/**
 	 * open weapons menu if they are the active player
 	 * 
 	 */
-	public void showWeaponsMenu(){
-		
-		
-		//click sound
+	public void showWeaponsMenu() {
+
+		// click sound
 		Audio audioforclick = new Audio();
 		audioforclick.click();
-		
-		Square square = (Square) board.getActivePlayer();
+
+		Square square = (Square) board.getActiveBoard();
 		int id = square.getPlayerID();
+<<<<<<< HEAD
 		
 		ArrayList<String> a = client.getClientList();
 			
@@ -148,62 +153,123 @@ public class ButtonPanel extends JPanel{
 		weapons.setEnabled(false);
 		
 		
+=======
+
+		ArrayList<String> a = client.getLocalPlayers();
+		// System.err.println(a);
+
+		// checks they are the active player
+		for (int i = 0; i < 4; i++) {
+
+			String name2 = a.get(i);
+
+			System.err.println("Name of this client " + name + " Name found in server" + name2 + " The ID of the player" + id + " The ID we're looking at" + (i+1));
+			if ((name2.equals(name)) && ((i + 1) == id)) {
+				// open menu*
+				NewWeaponsMenu menu = new NewWeaponsMenu(listeners, board, weapons);
+				menu.open();
+				weapons.setEnabled(false);
+				//break;
+
+			} else {
+				//weapons.setEnabled(false);
+			}
+
+		}
+
+		//weapons.setEnabled(false);
+
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
-	
-	
+
 	/**
 	 * turn background music on and off
 	 * 
-	 * @param button The toggle button
+	 * @param button
+	 *            The toggle button
 	 */
+<<<<<<< HEAD
 	public void ToggleBackgroundMusic(JButton button){
 		
 		if(first){
+=======
+	public void ToggleBackgroundMusic(JButton button) {
+
+		System.out.println("toggling");
+
+		if (first) {
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 			System.out.println("first is true");
 			firstOff(button);
-		}
-		else{
-		
+		} else {
+
 			System.out.println("in else");
-			if(music_on){
-				
+			if (music_on) {
+
 				System.out.println("music on - turn off");
 				button.setOpaque(true);
+<<<<<<< HEAD
 				audio.endMusic();
 			}
 			else{
 				
+=======
+				audio.sam();
+			} else {
+
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 				System.out.println("music off - turn on");
 				button.setOpaque(false);
-				//audio.endBackgroundMusic();
+				// audio.endBackgroundMusic();
 				audio.newMusic();
 				audio.getBackgroundMusic().start();
 			}
 		}
+<<<<<<< HEAD
 		
 		music_on = !music_on;
 		
+=======
+
+		System.out.println("change bool");
+		music_on = !music_on;
+		System.out.println("music_on is " + music_on);
+
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
-	
-	public void startMusic(){
-		
+
+	public void startMusic() {
+
 		audio.newMusic();
 		audio.getBackgroundMusic().start();
 	}
+<<<<<<< HEAD
 	
 	public void stopMusic(){
 		
 		audio.endMusic();
+=======
+
+	public void stopMusic() {
+
+		audio.sam();
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 	}
-	
+
 	/**
 	 * change button colour when pressed initially
+	 * 
 	 * @param button
 	 */
+<<<<<<< HEAD
 	public void firstOff(JButton button){
 
+=======
+	public void firstOff(JButton button) {
+		System.out.println("in first off");
+>>>>>>> 95b369a57a3443f4acfcf981fe91a119337b1e79
 		button.setOpaque(true);
 		audio.endMusic();
 		first = false;
-	}	
+	}
 }

@@ -27,7 +27,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -41,8 +40,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.util.Random;
 
 public class mainMenu extends Application {
 	static int width = 960;
@@ -120,13 +121,13 @@ public class mainMenu extends Application {
     public void start(Stage primaryStage) throws Exception {
     	ps = primaryStage;
     	ps.setTitle("Square-Off: Start Menu");
+    	
+    	//ps.initStyle(StageStyle.UNDECORATED);
         
         Button btn = new Button("Host Game");
         btn.setMinWidth(100);
         Button btn2 = new Button("Join Game");
         btn2.setMinWidth(100);
-        Button btn3 = new Button("Options");
-        btn3.setMinWidth(100);
         Button btn5 = new Button("Help");
         btn5.setMinWidth(100);
         Button btn4 = new Button("Quit Game");
@@ -142,7 +143,7 @@ public class mainMenu extends Application {
         Label label2 = new Label("\n\n");
         
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(btn, btn2, btn3, btn5, btn4);
+        vbox.getChildren().addAll(btn, btn2, btn5, btn4);
         vbox.setSpacing(12);
         vbox.setAlignment(Pos.CENTER);
         
@@ -164,7 +165,6 @@ public class mainMenu extends Application {
         
         btn.setOnAction( e -> { a.click(); hostLobby(); } ); //lobbyWindow("Host", (new mainMenuNetwork()) ); } );
         btn2.setOnAction( e -> { a.click(); jgWindow(); } );
-        btn3.setOnAction( e -> { a.click(); oWindow(); } );
         btn5.setOnAction( e -> { a.click(); helpWindow(); } );
         btn4.setOnAction( e -> { a.click(); stop(); } );
         
@@ -219,20 +219,30 @@ public class mainMenu extends Application {
     
     public static String mapChoice() {
     	List<String> choices = new ArrayList<>();
-    	choices.add("map1");
-    	choices.add("map2");
+    	choices.add("Battleground");
+    	choices.add("Derelict");
+    	choices.add("Random");
 
-    	ChoiceDialog<String> dialog = new ChoiceDialog<>("map1", choices);
+    	ChoiceDialog<String> dialog = new ChoiceDialog<>("Battleground", choices);
     	dialog.setTitle("Square-Off: Map Selection");
     	dialog.setHeaderText("Selecting a Map to play on");
     	dialog.setContentText("Please choose a map:");
 
     	// Traditional way to get the response value.
     	Optional<String> result = dialog.showAndWait();
-    	if (result.isPresent())
-    		return result.get();
-    	else
+    	if (result.isPresent()) {
+    		String mapChoice = null;
+    		switch(result.get()){
+    		case "Battleground": mapChoice = "map1"; break;
+    		case "Derelict": mapChoice = "map2"; break;
+    		case "Random": mapChoice = "Random"; break;
+    		default: System.err.println("Error selecting maps in MainMenu"); break;
+    		}
+    		return mapChoice;
+    	}
+    	else {
     		return null;
+    	}
     }
     
     /**
@@ -243,10 +253,6 @@ public class mainMenu extends Application {
     @SuppressWarnings({ "rawtypes" })
     public static void refreshHLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
-    	
-    	Button btn4 = new Button("Refresh");
-    	btn4.setMinWidth(120);
-        btn4.setOnAction( e -> { a.click(); refreshHLobby(net); } );
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
@@ -313,7 +319,7 @@ public class mainMenu extends Application {
         //vbox4.setPadding(new Insets(20, 10, 10, 20));
         
         HBox hbox = new HBox(12);
-        hbox.getChildren().addAll(btn6, btn5, btn4);
+        hbox.getChildren().addAll(btn6, btn5);
         hbox.setAlignment(Pos.CENTER);
         
         VBox vbox = new VBox(12);
@@ -351,10 +357,6 @@ public class mainMenu extends Application {
     public static void refreshCLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
     	
-    	Button btn4 = new Button("Refresh");
-    	btn4.setMinWidth(120);
-        btn4.setOnAction( e -> { a.click(); refreshCLobby(net); } );
-    	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
         btn5.setOnAction( e -> { a.click(); inLobby=false; net.Disconnect(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
@@ -362,7 +364,7 @@ public class mainMenu extends Application {
         TableView table = lobbyTable(net);
         
         HBox hbox = new HBox(12);
-        hbox.getChildren().addAll(btn5, btn4);
+        hbox.getChildren().addAll(btn5);
         hbox.setAlignment(Pos.CENTER);
         
         VBox vbox = new VBox(12);
@@ -404,6 +406,13 @@ public class mainMenu extends Application {
     	}
     	
     	map = mapChoice();
+    	
+    	if(map.equals("Random")){
+    		//Choose a random map
+    		Random random = new Random();
+    		int randMap = random.nextInt(2)+1; //Number in the brackets is how many maps we have
+    		map = "map"+randMap;
+    	}
     	
     	if (map==null) {
     		ps.setScene(ogScene);
@@ -657,154 +666,6 @@ public class mainMenu extends Application {
         ps.setScene(scene3);
         ps.show();
     }
-	
-    
-	/**
-	 * Options menu for the game, handles video/audio options
-	 */
-    public static void oWindow() {
-    	ps.setTitle("Square-Off: Options");
-    	
-    	Button btn6 = new Button("Back to Main Menu");
-    	btn6.setMinWidth(120);
-        
-        Button btn7 = new Button("Video Options");
-        btn7.setMinWidth(120);
-        
-        Button btn8 = new Button("Audio Options");
-        btn8.setMinWidth(120);
-        
-        
-        GridPane grid4 = new GridPane();
-        grid4.setVgap(12);
-        
-        grid4.add(btn7, 0, 17);
-        grid4.add(btn8, 0, 18);
-        grid4.add(btn6, 0, 19);
-        grid4.setAlignment(Pos.CENTER);
-        
-        grid4.setAlignment(Pos.CENTER);
-        grid4.setStyle("-fx-background-color: transparent;");
-        
-        Scene scene4 = new Scene(grid4, width, height, Color.LIGHTBLUE);
-        
-        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
-        btn7.setOnAction( e -> { a.click(); videoWindow(width, height); ps.setTitle("Square-Off: Video Options"); } );
-        btn8.setOnAction( e -> { a.click(); audioWindow(); ps.setTitle("Square-Off: Audio Options"); } );
-        
-        ps.setScene(scene4);
-        ps.show();
-    }
-    
-    
-    /**
-     * sets the volume of the game
-     * @param d new volume level
-     */
-    public static void setVolume(double d) {
-    	//System.out.println(d);
-    }
-    
-    /**
-     * sets the resolution of the game (always in 16:9 aspect ratio)
-     * @param d new resolution of the game
-     */
-    public static void setResolution(double d) {
-    	//System.out.println(((16.0/9.0) * d) + " x " + d);
-    }
-    
-    /**
-     * Audio options window
-     */
-    public static void audioWindow() {
-    	
-    	Button btn9 = new Button("Back to Options");
-    	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Options"); } );
-        
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(100);
-        slider.setValue(75);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(50);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(10);
-        
-        
-        HBox hb = new HBox(10);
-    	Button btn10 = new Button("Set Volume");
-    	btn10.setMinWidth(140);
-        btn10.setOnAction( e -> { a.click(); setVolume(slider.getValue()); } );
-        
-        hb.getChildren().addAll(slider, btn10);
-        hb.setAlignment(Pos.CENTER);
-        
-        
-        GridPane grid5 = new GridPane();
-        grid5.setVgap(12);
-        
-        grid5.add(hb, 0, 19);
-        grid5.add(btn9, 0, 20);
-        grid5.setAlignment(Pos.CENTER);
-        
-        grid5.setAlignment(Pos.CENTER);
-        grid5.setStyle("-fx-background-color: transparent;");
-        
-        Scene scene5 = new Scene(grid5, width, height, Color.LIGHTBLUE);
-        ps.setScene(scene5);
-        ps.show();
-    }
-    
-    /**
-     * Video options window
-     * @param w new width of window
-     * @param h new height of window
-     */
-    public static void videoWindow(double w, double h) {
-    	
-    	Button btn9 = new Button("Back to Options");
-    	btn9.setMinWidth(120);
-        btn9.setOnAction( e -> { a.click(); width = (int) w; height = (int) h; ps.setScene(ogScene); ps.setTitle("Square-Off: Options"); } );
-        
-        Slider slider = new Slider();
-        slider.setMin(480);
-        slider.setMax(1080);
-        slider.setValue( (int) height );
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(50);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(10);
-        
-        Label currentLabel = new Label( ((int) w) + " x " + ( (int) h ));
-        
-        HBox hb = new HBox(10);
-    	Button btn10 = new Button("Set Resolution");
-    	btn10.setMinWidth(140);
-        btn10.setOnAction( e -> { a.click(); videoWindow(((16.0/9.0) * slider.getValue()), slider.getValue());  } ); //setResolution(slider.getValue()); } );
-        
-        hb.getChildren().addAll(slider, btn10);
-        hb.setAlignment(Pos.CENTER);
-        
-        
-        GridPane grid5 = new GridPane();
-        grid5.setVgap(12);
-        
-        grid5.add(currentLabel, 0, 16);
-        grid5.add(hb, 0, 17);
-        grid5.add(btn9, 0, 18);
-        grid5.setAlignment(Pos.CENTER);
-        
-        grid5.setAlignment(Pos.CENTER);
-        grid5.setStyle("-fx-background-color: transparent;");
-        
-        
-        Scene scene5 = new Scene(grid5, (int) w, (int) h, Color.LIGHTBLUE);
-        ps.setScene(scene5);
-        ps.show();
-    }    
     
     /**
      * Help window - controls etc
@@ -814,8 +675,9 @@ public class mainMenu extends Application {
     	
     	Button btn6 = new Button("Back to Main Menu");
         
-    	Label label = new Label("Square-Off is an artillery strategy game.\nYou are a Square and are about to Square off with opposing Squares.\nYour aim is to knock of any other Squares in the map.\nWhoever is the last Square standing wins!\n\nYou move left when you press the 'a' key and right when you press the 'd' key.\nYou can also jump with the 'w' key.\n\nGood Luck and may the best Square win!");
-        
+    	Label label = new Label("Square-Off is an artillery strategy game.\nYou are a Square and are about to Square off with opposing Squares.\nYour aim is to knock off any other Squares in the map by targetting the blocks beneath them.\nWhoever is the last Square standing wins!\n\nYou move left when you press the 'a' key and right when you press the 'd' key.\nYou can also jump with the 'w' key.\nYou can select different weapons, mute the music and exit in game via the buttons at the top of the game.\n\nGood Luck and may the best Square win!");
+    	label.setFont(new Font("Arial", 15));
+    	
         VBox vbox = new VBox();
         vbox.getChildren().addAll(label, btn6);
         vbox.setSpacing(45);

@@ -109,7 +109,7 @@ public class ServerReceiver extends Thread {
 	public void close() {
 		running = false;
 		players.remove(name);
-		board.removeNameSimple(name);
+		board.removeName(name);
 		if(inGame) {
 			ais.addAIs();
 		}

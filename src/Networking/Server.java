@@ -174,7 +174,8 @@ public class Server extends Thread {
 				table.get(r).send(Server.DISCONNECT);
 
 				// Waits for them to disconnect.
-				while (players.contains(name)) {
+				int i = 0;
+				while (players.contains(name) && i < 200) {
 					try {
 						sleep(50);
 					} catch (InterruptedException e) {
@@ -182,7 +183,7 @@ public class Server extends Thread {
 						System.exit(1);
 					}
 				}
-				return true;
+				return i < 200;
 			}
 		}
 		return false;
