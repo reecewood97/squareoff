@@ -134,5 +134,14 @@ public class Audio implements Serializable
 		}
 	}
 	
+	/**
+	 * returns value of sound
+	 * @return true/false sound on or off
+	 */
+	public boolean getSound(){
+		
+		return sound;
+	}
+	
 	
 }
