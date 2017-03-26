@@ -167,7 +167,7 @@ public class NewWeaponsMenu extends JFrame {
 	     * open menu method
 	     */
 	    public void open(){
-	    	//System.err.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+	    
 	    	setVisible(true);
 	    
 	    }
@@ -219,8 +219,7 @@ public class NewWeaponsMenu extends JFrame {
 	    	//click sound
 	    	audio.click();
 	    	
-	    	System.out.println(weaponArray[currentWeapon]);
-	    	//TODO notify board of weapon choice
+	    	//tell board
 	    	listeners.setWep(weaponArray[currentWeapon]);
 	    	listeners.setTargetLine("true",true);
 	    	wepbtn.setEnabled(true);

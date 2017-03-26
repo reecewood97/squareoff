@@ -162,7 +162,6 @@ public class ButtonPanel extends JPanel {
 			}
 			else{
 
-				System.out.println("music off - turn on");
 				button.setOpaque(false);
 				audio.newMusic();
 				audio.getBackgroundMusic().start();

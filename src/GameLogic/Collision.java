@@ -1,8 +1,7 @@
 package GameLogic;
 
-//import java.lang.Comparable;
 
-public class Collision{// implements Comparable<Collision>{
+public class Collision{
 	
 	private PhysObject thing;
 	private PhysObject block;
@@ -38,18 +37,5 @@ public class Collision{// implements Comparable<Collision>{
 		return(this.lspos==collision.lspos() && this.thing.equals(collision.getThing()));
 	}
 
-	/*@Override
-	public int compareTo(Collision o) {
-		if (thing.getPos().getY()<o.getThing().getPos().getX()){
-			return -1;
-		}
-		if (thing.getPos().getY()==o.getThing().getPos().getX()){
-			return 0;
-		}
-		if (thing.getPos().getY()>o.getThing().getPos().getX()){
-			return 1;
-		}
-		return 0;
-	}*/
 
 }

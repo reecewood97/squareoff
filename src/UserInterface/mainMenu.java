@@ -323,8 +323,6 @@ public class mainMenu extends Application {
         
         VBox vbox4 = new VBox();
         vbox4.getChildren().addAll(hbox2);
-        //vbox4.setSpacing(50);
-        //vbox4.setPadding(new Insets(20, 10, 10, 20));
         
         HBox hbox = new HBox(12);
         hbox.getChildren().addAll(btn6, btn5);
@@ -346,7 +344,6 @@ public class mainMenu extends Application {
         grid3.add(label3, 1, 0);
         grid3.add(vbox, 0, 0);
         grid3.add(vbox4, 2, 0);
-        //grid3.add(hbox3, 2, 0);
         grid3.setAlignment(Pos.CENTER);
         
         ps.setOnCloseRequest( e -> net.closeServer() ); 

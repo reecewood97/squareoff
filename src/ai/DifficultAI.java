@@ -45,10 +45,7 @@ public class DifficultAI extends AI {
 	 */
 	public void aiMove() {
 		
-//		if (getEndTurn()) {
-//			return ;
-//		}
-		
+
 		determineResult();
 		
 		if (thereAreObstacles()) {
@@ -75,7 +72,7 @@ public class DifficultAI extends AI {
 	public void defend() {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();
-//		ArrayList<Point2D.Double> enemyposs = new ArrayList<Point2D.Double>();
+
 		
 		double aiX = getAIPos().getX();
 		double aiY = getAIPos().getY();
@@ -102,13 +99,7 @@ public class DifficultAI extends AI {
 					double yDis = blockY - enemyY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//						System.out.println(displacement);
-//					if (displacement < finalDis) {
-//						finalDis = displacement;
-//						finalX = blockX;
-//						finalY = blockY;
-//						finalBlock = block;
-//					}
+
 					totaldis += displacement;
 				}
 			}
@@ -118,7 +109,7 @@ public class DifficultAI extends AI {
 				finalDis = averagedis;
 			}
 		}
-		System.out.println(myName + " go to defend: " + finalBlock.getPos());
+		
 		finalX = finalBlock.getPos().getX();
 		finalY = finalBlock.getPos().getY();
 		aiMoveCal(finalX, finalY);
@@ -160,7 +151,7 @@ public class DifficultAI extends AI {
 			double targetY = targetSquare.getPos().getY();
 			for (PhysObject oneBlock:blocks) {
 				if ((oneBlock.getPos().getY() - 100.0 <= targetY) && (oneBlock.getPos().getX() >= targetX - 20.0) && (oneBlock.getPos().getX() <= targetX + 60.0)) {
-//							&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
+							
 					targetBlock = (TerrainBlock) oneBlock;
 					break;
 				}
@@ -184,8 +175,7 @@ public class DifficultAI extends AI {
 			defend();
 		}
 		
-		// return the coordinates
-//		System.out.println("closest target with low hp: " + finalSquare.getPos());
+		
 		return finalSquare.getPos();
 	}
 	

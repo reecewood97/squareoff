@@ -50,10 +50,7 @@ public class ServerSender extends Thread {
 					if(board.getWinner() > -1 && !winnerSent){
 						winnerSent = true;
 						server.reset();
-						System.out.println("Sent the winner");
-//						send(board.getWinner());
-//						board.setWinner(5);
-						//TODO
+						
 					}
 					//Alerts the board that the turn was ended early.
 					else if(board.getTurnFlag()) {

@@ -9,16 +9,6 @@ import org.junit.Test;
 public class UserInterfaceJUnit {
 
 	//mainMenu test
-	/*
-	@SuppressWarnings("static-access")
-	@Test
-	public void testShowUI() {
-		mainMenu m = new mainMenu();
-		//m.launch();
-		m.showUI();
-		assertEquals(m.isHidden, false);
-	}
-	*/
 	
 	//mainMenuNetwork tests
 	@Test
