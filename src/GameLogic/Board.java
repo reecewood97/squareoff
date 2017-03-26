@@ -91,6 +91,9 @@ public class Board {
 				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
+			
+			objects.add(new TerrainBlock(1, 1,new Point2D.Double(240,150), true));
+			
 			//level2
 			for(int i = 100; i < 700; i+=120){
 				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
@@ -355,9 +358,6 @@ public class Board {
 		return winner;
 	}
 
-	public void notifyQuit() {
-
-	}
 
 	private void setActivePlayer(int newPlayer, int newID) {
 

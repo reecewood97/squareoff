@@ -14,8 +14,8 @@ import ai.AIJUnit;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
    GameLogicJUnit.class,
-   NetworkingJUnit.class,
-   PhysicsTest.class,
+   //NetworkingJUnit.class,
+   //PhysicsTest.class,
    AIJUnit.class,
    UserInterfaceJUnit.class,
    GraphicsJUnit.class,

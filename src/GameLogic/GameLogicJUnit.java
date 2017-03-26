@@ -216,6 +216,9 @@ public class GameLogicJUnit {
 		}
 		assertTrue(board.getTime() > 0);
 		
+		Board board2 = new Board("Pot luck");
+		board2.setWinner(2);
+		assertTrue(board2.getWinner()==2);
 	
 	}
 }
