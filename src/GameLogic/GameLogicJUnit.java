@@ -220,6 +220,10 @@ public class GameLogicJUnit {
 		Board board2 = new Board("Pot luck");
 		board2.setWinner(2);
 		assertTrue(board2.getWinner()==2);
+
+		board.setActivePlayer(0, 0);
+		
+
 	
 	}
 }

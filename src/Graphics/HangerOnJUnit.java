@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 
 import GameLogic.Board;
