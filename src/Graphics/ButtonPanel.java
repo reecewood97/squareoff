@@ -155,32 +155,27 @@ public class ButtonPanel extends JPanel {
 	 */
 	public void ToggleBackgroundMusic(JButton button) {
 
-		System.out.println("toggling");
 
 		if (first) {
-			System.out.println("first is true");
 			firstOff(button);
 		} else {
 
-			System.out.println("in else");
+			
 			if (music_on) {
 
-				System.out.println("music on - turn off");
 				button.setOpaque(true);
-				audio.sam();
-			} else {
+				audio.endMusic();
+			} 
+			else {
 
-				System.out.println("music off - turn on");
 				button.setOpaque(false);
-				// audio.endBackgroundMusic();
 				audio.newMusic();
 				audio.getBackgroundMusic().start();
 			}
 		}
 
-		System.out.println("change bool");
 		music_on = !music_on;
-		System.out.println("music_on is " + music_on);
+		
 
 	}
 
@@ -192,7 +187,7 @@ public class ButtonPanel extends JPanel {
 
 	public void stopMusic() {
 
-		audio.sam();
+		audio.endMusic();
 	}
 
 	/**
@@ -201,9 +196,8 @@ public class ButtonPanel extends JPanel {
 	 * @param button
 	 */
 	public void firstOff(JButton button) {
-		System.out.println("in first off");
 		button.setOpaque(true);
-		audio.sam();
+		audio.endMusic();
 		first = false;
 	}
 }

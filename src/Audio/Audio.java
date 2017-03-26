@@ -47,7 +47,10 @@ public class Audio implements Serializable
 		return music;
 	}
 	
-	public void sam(){
+	/**
+	 * end background music
+	 */
+	public void endMusic(){
 		music.end();
 	}
 	
