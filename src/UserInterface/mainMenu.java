@@ -422,13 +422,6 @@ public class mainMenu extends Application {
     		return;
     	}
     	
-    	if(map.equals("Random")){
-    		//Choose a random map
-    		Random random = new Random();
-    		int randMap = random.nextInt(2)+1; //Number in the brackets is how many maps we have
-    		map = "map"+randMap;
-    	}
-    	
     	mainMenuNetwork net = new mainMenuNetwork(map);
     	net.runServer();
     	net.connectToHost("localhost", name);
