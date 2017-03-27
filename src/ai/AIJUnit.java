@@ -152,5 +152,13 @@ public class AIJUnit extends TestCase{
 		easyai.aiMoveCal(50.0, 100.0);
 		copy = easyai;
 		assertTrue(easyai.getAIPos() == copy.getAIPos());
+		
+		easyai.aiMoveCal(110.0, 100.0);
+		copy = easyai;
+		assertTrue(easyai.getAIPos() == copy.getAIPos());
+		
+		normalai.aiMoveCal(290.0, 195.0);
+		copy = normalai;
+		assertTrue(normalai.getAIPos() == copy.getAIPos());
 	}
 }
