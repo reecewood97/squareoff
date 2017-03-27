@@ -19,17 +19,20 @@ public class AIJUnit extends TestCase{
 	private NormalAI normalai;
 	private DifficultAI diffai;
 	private Board board;
+	private Board board2;
 	private String easyname;
 	private String normalname;
 	private String diffname;
 	private int easyID;
 	private int normalID;
 	private int diffID;
+	private EasyAI easyai2;
 	
 	private static final double maxVelocity = 100;
 	
 	public void setUp() {
 		board = new Board("Battleground");
+		board2 = new Board("X");
 		easyname = "easyai";
 		normalname = "normalai";
 		diffname = "diffai";
@@ -42,6 +45,8 @@ public class AIJUnit extends TestCase{
 		easyai.changeAIPos();
 		normalai.changeAIPos();
 		diffai.changeAIPos();
+		easyai2 = new EasyAI(easyID, 0, easyID, board2, easyname);
+		easyai2.changeAIPos();
 	}
 	
 	public void tearDown() {
@@ -49,6 +54,7 @@ public class AIJUnit extends TestCase{
 		normalai = null;
 		diffai = null;
 		board = null;
+		easyai2 = null;
 	}
 	
 	public void test() {
@@ -78,6 +84,14 @@ public class AIJUnit extends TestCase{
 		assertTrue(da > 0);
 		assertTrue(dv <= maxVelocity);
 		assertTrue(dv >= -1 * maxVelocity);
+		
+		easyai2.determineResult();
+		double ea2 = easyai.getAngle();
+		double ev2 = easyai.getVelocity();
+		assertTrue(ea2 <= 90);
+		assertTrue(ea2 > 0);
+		assertTrue(ev2 <= maxVelocity);
+		assertTrue(ev2 >= -1 * maxVelocity);
 		
 		easyai.alterResult();
 		assertTrue(easyai.getAngle() > (ea - 8));
