@@ -422,7 +422,7 @@ public abstract class AI {
 							break;
 						}
 						
-						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 25.0)) {
+						if (((blockY <= targetY) && (blockX < targetX)) && (yPos >= blockY - 101.0) && (xPos >= blockX - 40.0) && (xPos < blockX - 30.0)) {
 							moveRight();
 							moveUpRight();
 //							System.out.println(myName + "Jump Right");
@@ -553,7 +553,7 @@ public abstract class AI {
 							break;
 						}
 							
-						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 65.0)) {
+						if (((blockY <= targetY) && (blockX > targetX)) && (yPos >= blockY - 101.0) && (xPos <= blockX + 80.0) && (xPos > blockX + 70.0)) {
 							moveLeft();
 							moveUpLeft();
 //							System.out.println(myName + "Jump Left");
@@ -724,10 +724,11 @@ public abstract class AI {
 				if (acc_angle >= 90 || acc_angle <= 0) {
 					acc_angle = 0;
 				}
-				if (Math.abs(xdis) < 10) {
+				if (Math.abs(xdis) < 1) {
 					acc_angle = 90.0;
 					state = 0;
 					hit = true;
+					break;
 				}
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
@@ -761,10 +762,11 @@ public abstract class AI {
 				if (acc_angle <= 0 || acc_angle >= 90) {
 					acc_angle = 90;
 				}
-				if (Math.abs(xdis) < 10) {
+				if (Math.abs(xdis) < 1) {
 					acc_angle = 90.0;
 					state = 0;
 					hit = true;
+					break;
 				}
 				if (state == 1) { // too close
 					// angle increase by 3 degrees (?)
@@ -991,7 +993,7 @@ public abstract class AI {
 	 * Send move left command
 	 */
 	public void moveLeft() {
-		board.input("Pressed A  " + myName);
+		board.input("Pressed A  " + getAIName());
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
@@ -1003,7 +1005,7 @@ public abstract class AI {
 	 * Send move right command
 	 */
 	public void moveRight() {
-		board.input("Pressed D  " + myName);
+		board.input("Pressed D  " + getAIName());
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
@@ -1015,7 +1017,7 @@ public abstract class AI {
 	 * Send jump command
 	 */
 	public void moveUp() {
-		board.input("Pressed  W " + myName);
+		board.input("Pressed  W " + getAIName());
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
@@ -1027,7 +1029,7 @@ public abstract class AI {
 	 * Send jump to the right command
 	 */
 	public void moveUpRight() {
-		board.input("Pressed DW " + myName);
+		board.input("Pressed DW " + getAIName());
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
@@ -1039,7 +1041,7 @@ public abstract class AI {
 	 * Send jump to the left command
 	 */
 	public void moveUpLeft() {
-		board.input("Pressed AW " + myName);
+		board.input("Pressed AW " + getAIName());
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
@@ -1055,7 +1057,7 @@ public abstract class AI {
 	public void sendAttack(double angle, double velocity){
 		double xVel = velocity * Math.cos(Math.toRadians(angle));
 		double yVel = Math.abs(velocity * Math.sin(Math.toRadians(angle)));
-		String command = xVel  + ", " + yVel + "," + myName + ", AItakesashotx86";
+		String command = xVel  + ", " + yVel + "," + getAIName() + ", AItakesashotx86";
 
 		board.input(command);
 		try {
