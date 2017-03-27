@@ -79,7 +79,7 @@ public class DifficultAI extends AI {
 	 * Calculates the defending position.
 	 * The defending position is the block that can be targeted by less enemies
 	 */
-	public void defend() {
+	private void defend() {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();
 		
