@@ -2,7 +2,7 @@ package GameLogic;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class PhysObject implements Serializable{
 	// This class is meant to be extended by each other physics object
@@ -13,7 +13,6 @@ public class PhysObject implements Serializable{
 	private Point2D.Double pos;
 	private double xvel;
 	private double yvel;
-	private ArrayList<String> attributes;
 	private int width;
 	private int height;
 	private String name;
@@ -25,16 +24,15 @@ public class PhysObject implements Serializable{
 	 * @param other The physObject to be copied
 	 */
 	public PhysObject(PhysObject other) {
-		this.gravity = other.getGravity();
-		this.grav = other.getGrav();
-		this.pos = other.getPos();
-		this.xvel = other.getXvel();
-		this.yvel = other.getYvel();
-		this.attributes = other.getAttributes();
-		this.width = other.getWidth();
-		this.height = other.getHeight();
-		this.solid = other.getSolid();
-		this.inUse = other.getInUse();
+		setGravity(other.getGravity());
+		setGrav(other.getGrav());
+		setPos(other.getPos());
+		setXvel(other.getXvel());
+		setYvel(other.getYvel());
+		setWidth(other.getWidth());
+		setHeight(other.getHeight());
+		setSolid(other.getSolid());
+		setInUse(other.getInUse());
 	}
 	
 	/**
@@ -51,7 +49,7 @@ public class PhysObject implements Serializable{
 		this.pos = pos;
 		this.xvel = 0;
 		this.yvel = 0;
-		this.attributes = new ArrayList<String>();
+		//this.attributes = new ArrayList<String>();
 		this.width = width;
 		this.height = height;
 		this.solid = solid;
@@ -88,10 +86,16 @@ public class PhysObject implements Serializable{
 		setYvel(getYvel()+getGrav());
 	}
 	
+	/**
+	 * @return whether or not this object is affected by gravity
+	 */
 	public boolean getGravity() {
 		return gravity;
 	}
 	
+	/**
+	 * @return The gravity acting on this object
+	 */
 	public double getGrav() {
 		if(getGravity()){
 			return grav;
@@ -99,50 +103,83 @@ public class PhysObject implements Serializable{
 		return 0;
 	}
 	
+	/**
+	 * @return The position of the object
+	 */
 	public Point2D.Double getPos() {
 		return pos;
 	}
 	
+	/**
+	 * @return The X velocity of the object (Positive if right, negative if left)
+	 */
 	public double getXvel() {
 		return xvel;
 	}
 	
+	/**
+	 * @return The Y velocity of the object (Positive if up, negative if down)
+	 */
 	public double getYvel() {
 		return yvel;
 	}
 	
-	public ArrayList<String> getAttributes() {
-		return attributes;
-	}
-	
+	/**
+	 * @return The height of this object
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * @return The width of this object
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * @return What type of object this is
+	 */
 	public String getName(){
 		return name;
 	}
 	
+	/**
+	 * @return Whether or not other objects can pass through this one
+	 */
 	public boolean getSolid() {
 		return solid;
 	}
 	
+	/**
+	 * Sets the object in use or not in use
+	 * @param inUse Whether this object should be in use
+	 */
 	public void setInUse(boolean inUse){
 		this.inUse = inUse;
 	}
 	
+	/**
+	 * Sets whether the object should be affected by gravity
+	 * @param gravity Whether gravity should affect this object
+	 */
 	public void setGravity(boolean gravity) {
 		this.gravity = gravity;
 	}
 	
+	/**
+	 * Sets the amount of gravity acting on this object
+	 * @param grav The amount of gravity acting on this object
+	 */
 	public void setGrav(double grav) {
 		this.grav = grav;
 	}
 	
+	/**
+	 * Sets the position of the object
+	 * @param pos The position of the object
+	 */
 	public void setPos(Point2D.Double pos) {
 		this.pos = pos;
 	}
@@ -175,23 +212,35 @@ public class PhysObject implements Serializable{
 		}
 	}
 	
-	public void addAttribute(String att) {
-		attributes.add(att);
-	}
-	
+	/**
+	 * Sets the height of the object
+	 * @param newHeight The new height of the object
+	 */
 	public void setHeight(int newHeight) {
 		this.height = newHeight;
 	}
 	
+	/**
+	 * Sets the width of the object
+	 * @param newWidth The new width of the object
+	 */
 	public void setWidth(int newWidth) {
 		this.width = newWidth;
 	}
 	
+	/**
+	 * Sets the name of the object
+	 * @param newname The new name of the object
+	 */
 	public void setName(String newname){
 		this.name = newname;
 		
 	}
 	
+	/**
+	 * Sets whether other objects can pass through this one
+	 * @param s Whether other objects should be able to pass through this one
+	 */
 	public void setSolid(boolean s) {
 		this.solid = s;
 	}
