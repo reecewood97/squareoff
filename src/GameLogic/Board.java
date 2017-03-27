@@ -337,10 +337,17 @@ public class Board {
 		activePlayer = (Square)objects.get(0);
 	}
 
+	/**
+	 * Change whether the board is in free state or not
+	 * @param free Whether the board is in free state
+	 */
 	public void setFreeState(boolean free) {
 		freeState = free;
 	}
 	
+	/**
+	 * @return Whther the board is in free state
+	 */
 	public boolean getFreeState(){
 		return freeState;
 	}
@@ -355,7 +362,11 @@ public class Board {
 		return winner;
 	}
 
-
+	/**
+	 * Sets the active player to the one with a certain player and ID
+	 * @param newPlayer The ID of the player who owns the square
+	 * @param newID The ID of the square
+	 */
 	public void setActivePlayer(int newPlayer, int newID) {
 
 		this.player = newPlayer;
@@ -372,6 +383,9 @@ public class Board {
 		objects.add(x, activePlayer);
 	}
 
+	/**
+	 * @return The player whose turn it is
+	 */
 	public PhysObject getActivePlayer() {
 
 		return activePlayer;

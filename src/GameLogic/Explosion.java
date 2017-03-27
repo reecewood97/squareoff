@@ -28,10 +28,17 @@ public class Explosion extends PhysObject{
 		this.setInUse(other.getInUse());
 	}
 	
+	/**
+	 * Sets the size of the explosion, disappears after >60
+	 * @param expsize The new size of the explosion
+	 */
 	public void setSize(int expsize){
 		this.size = expsize;
 	}
 	
+	/**
+	 * @return The current size of the explosion
+	 */
 	public double getSize(){
 		return this.size;
 	}
