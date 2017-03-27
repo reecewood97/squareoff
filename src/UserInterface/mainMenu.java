@@ -303,9 +303,6 @@ public class mainMenu extends Application {
         hbox2.setSpacing(50);
         hbox2.setPadding(new Insets(20, 10, 10, 20));
         
-        VBox vbox4 = new VBox();
-        vbox4.getChildren().addAll(hbox2);
-        
         HBox hbox = new HBox(12);
         hbox.getChildren().addAll(btn6, btn5);
         hbox.setAlignment(Pos.CENTER);
@@ -324,13 +321,11 @@ public class mainMenu extends Application {
         
         grid3.add(label3, 1, 0);
         grid3.add(vbox, 0, 0);
-        grid3.add(vbox4, 2, 0);
+        grid3.add(vbox2, 2, 0);
         grid3.setAlignment(Pos.CENTER);
         
-        ps.setOnCloseRequest( e -> net.closeServer() ); 
-        
-        Scene scene2 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
-        ps.setScene(scene2);
+        ps.setOnCloseRequest( e -> net.closeServer() );
+        ps.setScene( new Scene(grid3, 960, 540, Color.LIGHTBLUE) );
         ps.show();
     }
   
@@ -368,10 +363,9 @@ public class mainMenu extends Application {
         
         grid3.setStyle("-fx-background-color: transparent;");
         
-        ps.setOnCloseRequest( e -> net.Disconnect() ); 
+        ps.setOnCloseRequest( e -> net.Disconnect() );
         
-        Scene scene2 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
-        ps.setScene(scene2);
+        ps.setScene( new Scene(grid3, 960, 540, Color.LIGHTBLUE) );
         ps.show();
     } 
 
@@ -604,9 +598,8 @@ public class mainMenu extends Application {
         
         grid3.setAlignment(Pos.CENTER);
         grid3.setStyle("-fx-background-color: transparent;");
-        
-        Scene scene3 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
-        ps.setScene(scene3);
+
+        ps.setScene( new Scene(grid3, 960, 540, Color.LIGHTBLUE) );
         ps.show();
     }
     
@@ -617,7 +610,8 @@ public class mainMenu extends Application {
     	ps.setTitle("Square-Off: Help");
     	
     	Button btn6 = new Button("Back to Main Menu");
-        
+    	btn6.setOnAction( e -> { Audio.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+    	
     	Label label = new Label("Square-Off is an artillery strategy game.\nYou are a Square and are about to Square off with opposing Squares.\nYour aim is to knock off any other Squares in the map by targetting the blocks beneath them.\nWhoever is the last Square standing wins!\n\nYou move left when you press the 'a' key and right when you press the 'd' key.\nYou can also jump with the 'w' key.\nYou can select different weapons, mute the music and exit in game via the buttons at the top of the game.\n\nGood Luck and may the best Square win!");
     	label.setFont(new Font("Arial", 15));
     	
@@ -633,11 +627,7 @@ public class mainMenu extends Application {
         grid4.setAlignment(Pos.CENTER);
         grid4.setStyle("-fx-background-color: transparent;");
         
-        Scene scene4 = new Scene(grid4, 960, 540, Color.LIGHTBLUE);
-        
-        btn6.setOnAction( e -> { Audio.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
-        
-        ps.setScene(scene4);
+        ps.setScene( new Scene(grid4, 960, 540, Color.LIGHTBLUE) );
         ps.show();
     }
     
