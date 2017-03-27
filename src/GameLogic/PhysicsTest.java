@@ -59,6 +59,7 @@ public class PhysicsTest extends TestCase {
 		assertTrue(board.getWeapons().get(0).equals(board.getExplodeOnImpact().get(0)));
 		assertTrue(board.getMissile().isEmpty());
 		assertTrue(board.getTimedGrenade().isEmpty());
+		assertTrue(board.getParticles().size()==1 && !board.getParticles().get(0).getInUse());
 		board.input("Pressed,  ,1");
 		for(int i = 0;i<board.getObjects().size();i++){
 			PhysObject obj = board.getObjects().get(i);
