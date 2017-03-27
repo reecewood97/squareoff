@@ -22,12 +22,9 @@ public class DifficultAI extends AI {
 	private static final double gravity = 0.5;
 	private int mySquareID; // Square ID
 	private int myColour;
-	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
 	private String myName;
-	private double outAngle;
-	private double outVelocity;
 	private final int mistakeAngle = 2;
 	private final int mistakeVelocity = 3;
 
