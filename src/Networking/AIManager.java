@@ -101,4 +101,12 @@ public class AIManager extends Thread {
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
 	}
+	
+	/**
+	 * Gets the difficulty.
+	 * @return The current difficulty.
+	 */
+	public int getDifficulty() {
+		return this.difficulty;
+	}
 }

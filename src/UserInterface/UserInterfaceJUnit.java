@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import Networking.Server;
+
 public class UserInterfaceJUnit {
 
 	//mainMenu test
@@ -74,14 +76,6 @@ public class UserInterfaceJUnit {
 		net.connectToHost("localhost", "test");
 		net.startGame();
 		assertEquals(net.inGame(), true);
-		/*
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		*/
 		net.closeServer();
 	}
 	
@@ -92,14 +86,47 @@ public class UserInterfaceJUnit {
 		net.connectToHost("localhost", "test");
 		net.startGame();
 		assertEquals(net.inGame(), true);
-		/*
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		*/
+		net.closeServer();
+	}
+	
+	
+	@Test
+	public void testSetEasyAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(1);
+		assertEquals(net.getAIDifficulty(), Server.EASY_AI);
+		net.closeServer();
+	}
+	
+	
+	@Test
+	public void testSetNormalAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(2);
+		assertEquals(net.getAIDifficulty(), Server.NORMAL_AI);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testSetHardAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(3);
+		assertEquals(net.getAIDifficulty(), Server.HARD_AI);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testGetAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		assert( (net.getAIDifficulty()==Server.EASY_AI) | (net.getAIDifficulty()==Server.NORMAL_AI) | (net.getAIDifficulty()==Server.HARD_AI) );
 		net.closeServer();
 	}
 	
