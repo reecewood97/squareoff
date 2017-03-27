@@ -142,7 +142,8 @@ public class AIJUnit extends TestCase{
 		assertTrue(copy.getAIPos().getX() == easyai.getAIPos().getX());
 		
 		easyai.aiMoveCal(100.0, 140.0);
-		assertTrue(true);
+		copy = easyai;
+		assertTrue(easyai.getAIPos() == copy.getAIPos());
 
 		
 	}
