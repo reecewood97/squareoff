@@ -1,9 +1,12 @@
 package ai;
 
+import static org.junit.Assert.assertNotEquals;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import GameLogic.Board;
+import GameLogic.Square;
 import junit.framework.TestCase;
 
 /**
@@ -116,5 +119,9 @@ public class AIJUnit extends TestCase{
 		assertTrue(normalt != normalai.getAIPos());
 		assertTrue(difft != diffai.getAIPos());
 		
+		assertFalse(easyai.determineNBL(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
+		assertFalse(easyai.determineNBR(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
+		assertFalse(easyai.determineObsL(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
+		assertFalse(easyai.determineObsR(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
 	}
 }
