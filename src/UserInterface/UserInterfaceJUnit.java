@@ -74,7 +74,14 @@ public class UserInterfaceJUnit {
 		net.connectToHost("localhost", "test");
 		net.startGame();
 		assertEquals(net.inGame(), true);
-		net.resetServer();
+		/*
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		*/
 		net.closeServer();
 	}
 	
@@ -85,7 +92,14 @@ public class UserInterfaceJUnit {
 		net.connectToHost("localhost", "test");
 		net.startGame();
 		assertEquals(net.inGame(), true);
-		net.resetServer();
+		/*
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		*/
 		net.closeServer();
 	}
 	
