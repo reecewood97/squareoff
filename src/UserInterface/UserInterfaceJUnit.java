@@ -9,7 +9,7 @@ import org.junit.Test;
 public class UserInterfaceJUnit {
 
 	//mainMenu test
-	/*
+	
 	@SuppressWarnings("static-access")
 	@Test
 	public void testShowUI() {
@@ -18,7 +18,6 @@ public class UserInterfaceJUnit {
 		m.showUI();
 		assertEquals(m.isHidden, false);
 	}
-	*/
 	
 	//mainMenuNetwork tests
 	@Test
@@ -65,6 +64,28 @@ public class UserInterfaceJUnit {
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testInGame() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.startGame();
+		assertEquals(net.inGame(), true);
+		net.resetServer();
+		net.closeServer();
+	}
+	
+	@Test
+	public void testStartGame() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.startGame();
+		assertEquals(net.inGame(), true);
+		net.resetServer();
 		net.closeServer();
 	}
 	
