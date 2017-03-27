@@ -1007,7 +1007,7 @@ public abstract class AI {
 	/**
 	 * Send move left command
 	 */
-	private void moveLeft() {
+	public void moveLeft() {
 		board.input("Pressed A  " + myName);
 		try {
 			Thread.sleep(70);
@@ -1019,7 +1019,7 @@ public abstract class AI {
 	/**
 	 * Send move right command
 	 */
-	private void moveRight() {
+	public void moveRight() {
 		board.input("Pressed D  " + myName);
 		try {
 			Thread.sleep(70);
@@ -1031,7 +1031,7 @@ public abstract class AI {
 	/**
 	 * Send jump command
 	 */
-	private void moveUp() {
+	public void moveUp() {
 		board.input("Pressed  W " + myName);
 		try {
 			Thread.sleep(70);
@@ -1043,7 +1043,7 @@ public abstract class AI {
 	/**
 	 * Send jump to the right command
 	 */
-	private void moveUpRight() {
+	public void moveUpRight() {
 		board.input("Pressed DW " + myName);
 		try {
 			Thread.sleep(70);
@@ -1055,7 +1055,7 @@ public abstract class AI {
 	/**
 	 * Send jump to the left command
 	 */
-	private void moveUpLeft() {
+	public void moveUpLeft() {
 		board.input("Pressed AW " + myName);
 		try {
 			Thread.sleep(70);
@@ -1069,7 +1069,7 @@ public abstract class AI {
 	 * @param angle angle to attack
 	 * @param velocity velocity to attack
 	 */
-	private void sendAttack(double angle, double velocity){
+	public void sendAttack(double angle, double velocity){
 		double xVel = velocity * Math.cos(Math.toRadians(angle));
 		double yVel = Math.abs(velocity * Math.sin(Math.toRadians(angle)));
 		String command = xVel  + ", " + yVel + "," + myName + ", AItakesashotx86";
