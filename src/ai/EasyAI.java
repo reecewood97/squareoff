@@ -89,7 +89,7 @@ public class EasyAI extends AI{
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-					if (displacement < distance && displacement > 40.0) {
+					if (displacement < distance && displacement > 20.0) {
 						distance = displacement;
 						targetX = sBlockX;
 						targetY = sBlockY;
