@@ -123,5 +123,22 @@ public class AIJUnit extends TestCase{
 		assertFalse(easyai.determineNBR(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
 		assertFalse(easyai.determineObsL(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
 		assertFalse(easyai.determineObsR(easyai.getAIPos().getX(), easyai.getAIPos().getY()));
+		
+		assertTrue(easyai.determineNBD(20, 50));
+		AI copy = easyai;
+		copy.moveLeft();
+		copy.moveRight();
+		assertTrue(copy.getAIPos().getX() == easyai.getAIPos().getX());
+		
+		copy.moveUp();
+		copy = easyai;
+		copy.moveUpLeft();
+		copy.moveRight();
+		assertTrue(copy.getAIPos().getX() == easyai.getAIPos().getX());
+		copy.moveUpRight();
+		copy.moveLeft();
+		assertTrue(copy.getAIPos().getX() == easyai.getAIPos().getX());
+		copy.sendAttack(45.0, 5);
+		assertTrue(copy.getAIPos().getX() == easyai.getAIPos().getX());
 	}
 }
