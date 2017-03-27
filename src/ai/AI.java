@@ -224,7 +224,7 @@ public abstract class AI {
 						try {
 							Thread.sleep(100);
 						} catch (InterruptedException e) {
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 						
 						changeAIPos();
@@ -232,7 +232,7 @@ public abstract class AI {
 						try {
 							Thread.sleep(50);
 						} catch (InterruptedException e) {
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 						
 						aiMove();
@@ -284,7 +284,7 @@ public abstract class AI {
 			try {
 				Thread.sleep(30);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 			
 
@@ -997,7 +997,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -1021,7 +1021,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -1033,7 +1033,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -1045,7 +1045,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(70);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -1063,7 +1063,7 @@ public abstract class AI {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
