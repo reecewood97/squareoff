@@ -22,7 +22,6 @@ import Networking.Queue;
  */
 public class Screen extends JFrame {
 	
-	private static final long serialVersionUID = 6929712903042802033L;
 	private Dimension screenSize;
 	private double screenheight;
 	private double screenwidth;
@@ -50,7 +49,7 @@ public class Screen extends JFrame {
 		Color lightblue = new Color(135,206,250);
 
 		//set design
-		setUndecorated(true);//CHANGE ME BEFORE FINAL RELEASE
+		setUndecorated(true);
 		setLayout(new BorderLayout());
 		
 		//set attributes

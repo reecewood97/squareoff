@@ -32,12 +32,9 @@ public class SplashSplash extends JWindow {
 		Container contents = getContentPane();
 		
 		//set splash screen dimensions
-		int width = 600;
-		int height =200;
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (screen.width-width)/2;
-		int y = (screen.height-height)/2;
-		setBounds(x,y,width,height);
+		setBounds(((int) ((screen.width-600)/2)),
+				((int) ((screen.height-200)/2)),600,200);
 		
 		//fill in splash screen with image
 		JLabel label = new JLabel(new ImageIcon("Files/Images/Picture1.png"));
@@ -52,8 +49,6 @@ public class SplashSplash extends JWindow {
 		} 
 		catch (Exception e) {
 	
-			
-			e.printStackTrace();
 		}
 		finally
 		{
