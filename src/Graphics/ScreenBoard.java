@@ -288,16 +288,13 @@ public class ScreenBoard extends JPanel{
 		if(targetline.get(0).getInUse()){
 			
 			Square square = (Square) board.getActiveBoard();
-			
-			int mousepos_x = (int) (this.getMousePosition().getX());
-			int mousepos_y = (int) (this.getMousePosition().getY());
-			
-			int pp_x = (int) ((square.getPos().getX()+15) * widthratio);
-			int pp_y = (int) ((450 - square.getPos().getY()-square.getHeight()+15) * heightratio); //TODO
-			
 			g2d.setStroke(new BasicStroke(2));
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine(pp_x, pp_y, mousepos_x, mousepos_y);
+			g2d.drawLine(((int) ((square.getPos().getX()+15) * widthratio)), 
+					((int) ((450 - square.getPos().getY()-square.getHeight()+15)
+							* heightratio)),
+					((int) (this.getMousePosition().getX())),
+					((int) (this.getMousePosition().getY())));
 			
 	
 		}
@@ -316,16 +313,10 @@ public class ScreenBoard extends JPanel{
 				
 				if (weapon.getInUse()){
 					
-					int x = (int) weapon.getPos().getX();
-
-
-					int y = (int) weapon.getPos().getY()+weapon.getHeight();//`TODO
-
+					int x = (int) (((int) weapon.getPos().getX())*widthratio);
 					
-					x = (int) (x*widthratio);
-					
-					y = 450 - y;
-					y = (int) (y*heightratio);
+					int y = (int) ((450 - ((int) weapon.getPos().getY()+weapon.getHeight()))
+							*heightratio);
 					
 					int weaponwidth = (int) (10*widthratio);
 					int weaponheight = (int) (10*heightratio);
@@ -364,14 +355,11 @@ public class ScreenBoard extends JPanel{
 		
 			if (((Explosion) exp).getInUse()){
 			
-				int x = (int) (exp.getPos().getX());
-				int y = (int) (exp.getPos().getY()+exp.getHeight());//TODO
-
 				double size = ((Explosion) exp).getSize();
 				
-				x = (int) (x*widthratio);
-				y = 450 - y;
-				y = (int) (y*heightratio);
+				int x = (int) (((int) (exp.getPos().getX()))*widthratio);
+				int y = (int) ((450 - ((int) (exp.getPos().getY()+exp.getHeight())))
+						*heightratio);
 				
 				int sizeint = (int) size;	
 				
@@ -385,7 +373,6 @@ public class ScreenBoard extends JPanel{
 				} 
 				catch (IOException e) {
 				
-					e.printStackTrace();
 				}
 				 
 				}
@@ -398,7 +385,6 @@ public class ScreenBoard extends JPanel{
 					} 
 					catch (IOException e) {
 						
-						e.printStackTrace();
 					}
 					
 					
@@ -412,7 +398,6 @@ public class ScreenBoard extends JPanel{
 					} 
 					catch (IOException e) {
 						
-						e.printStackTrace();
 					}
 					
 					
@@ -426,13 +411,11 @@ public class ScreenBoard extends JPanel{
 					} 
 					catch (IOException e) {
 						
-						e.printStackTrace();
 					}
 					
 					
 				}
 				else{
-					
 					
 					try {
 						image = ImageIO.read(new File("Files/Images/EXP3.png"));
@@ -440,15 +423,10 @@ public class ScreenBoard extends JPanel{
 								(int) (y - 60*heightratio), null);
 					} 
 					catch (IOException e) {
-						
-						e.printStackTrace();
+					
 					}
 					
-					
 				}
-				
-				
-			
 			}
 		}
 		
