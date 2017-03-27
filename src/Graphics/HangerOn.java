@@ -168,6 +168,7 @@ public class HangerOn extends Thread implements KeyListener, MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == 2)
+		{}
 		if (e.getButton() == 1) {
 			int x = (int) (e.getPoint().getX() / xr);
 			int y = (int) (((450 * yr) - (e.getPoint().getY()) + 70) / yr);

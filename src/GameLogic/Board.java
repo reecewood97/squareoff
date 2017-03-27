@@ -1185,6 +1185,7 @@ public class Board {
 
 			String[] inputArray = new String[3];
 			inputArray = input.split(" ");
+			
 
 			if (!(inputArray[3].equals(players[player]))) {
 				return;
