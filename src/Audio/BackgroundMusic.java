@@ -33,10 +33,7 @@ public class BackgroundMusic extends Thread implements Serializable{
 		
 		}	
 		catch(Exception ex) {
-		    
-			System.out.println("Error playing sound");
-			
-		
+
 		}
 	}	
 	

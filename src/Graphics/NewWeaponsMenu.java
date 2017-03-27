@@ -24,10 +24,6 @@ import GameLogic.Board;
  */
 public class NewWeaponsMenu extends JFrame {
 
-		private static final long serialVersionUID = 1L;
-		private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-	    private double screenheight = screenSize.getHeight(); 
-	    private double screenwidth = screenSize.getWidth();
 	    private Audio audio;
 	    private String[] weaponArray = {"ExplodeOnImpact","Missile","TimedGrenade"};
 	    private int currentWeapon = 0;
@@ -45,7 +41,7 @@ public class NewWeaponsMenu extends JFrame {
 	    public NewWeaponsMenu(HangerOn listeners, Board board,JButton wepbtn){
 	    	   	
 	    	//edit menu settings
-	    	setBounds(0,0,200,200); //TODO change this to match height/width ratios
+	    	setBounds(0,0,200,200);
 	    	setUndecorated(true);
 	    	setBackground(Color.white);
 	    

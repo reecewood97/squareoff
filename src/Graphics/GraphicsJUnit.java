@@ -197,11 +197,8 @@ public class GraphicsJUnit extends JFrame{
 		ScreenBoard sb = new ScreenBoard(newone, frameheight, frameheight, listeners);
 		assertTrue(newone.getWeapons().get(0).getInUse());
 		assertTrue(newone.getExplosion().get(0).getInUse());
-		BufferedImage image = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-		image.createGraphics();
 		sb.repaint();
-	
-
+		screen.updateSBoard();
 		//check manipulation
 		assertTrue(board.getObjects().contains(e));
 		assertTrue(board.getObjects().contains(t));

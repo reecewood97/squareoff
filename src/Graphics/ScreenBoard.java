@@ -23,13 +23,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * screen baord class draws the arena and paints all the phys objects to it
+ * screen board class draws the arena and paints all the phys objects to it
  * @author Fran
  *
  */
 public class ScreenBoard extends JPanel{
 	
-	private static final long serialVersionUID = 1L;
 	private Board board;
 	private double heightratio;
 	private double widthratio;
@@ -349,7 +348,6 @@ public class ScreenBoard extends JPanel{
 	 * @param g2d Graphics
 	 */
 	public void paintExplosions(ArrayList<PhysObject> explosion, Graphics2D g2d){
-		
 		
 		for(PhysObject exp : explosion){
 		
