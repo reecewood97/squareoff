@@ -45,9 +45,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class mainMenu extends Application {
-	private static int width = 960;
-	private static int height = 540;
-	private static Audio a = new Audio();
 	private static Stage ps;
 	private static Scene ogScene;
 	private static Stage temps;
@@ -57,11 +54,14 @@ public class mainMenu extends Application {
 	private static String map = "Battleground";
 	
 	/**
-	 * Main method for local testing of code, will be remove in final release
+	 * Shows the splashscreen before running the menu UI
+     * This method starts the actual menu of the game
 	 * @param args arguments passed when running main method (none of which are used)
 	 */
     public static void main(String[] args) {
-    	launchMenu();
+    	SplashSplash splashscreen = new SplashSplash(1000);
+		splashscreen.showSplash();
+    	launch();
     }
     
     /**
@@ -100,16 +100,6 @@ public class mainMenu extends Application {
         	temps.hide();
     		isHidden = false;
     	}
-    }
-    
-    /**
-     * Shows the splashscreen before running the menu UI
-     * This method starts the actual menu of the game - the first method called
-     */
-    private static void launchMenu() {
-    	SplashSplash splashscreen = new SplashSplash(1000);
-		splashscreen.showSplash();
-    	launch();
     }
     
     /**
@@ -157,12 +147,12 @@ public class mainMenu extends Application {
         
         grid.setStyle("-fx-background-color: transparent;");
         
-        ogScene = new Scene(grid, width, height, Color.LIGHTBLUE);
+        ogScene = new Scene(grid, 960, 540, Color.LIGHTBLUE);
         
-        btn.setOnAction( e -> { a.click(); hostLobby(); } );
-        btn2.setOnAction( e -> { a.click(); jgWindow(); } );
-        btn5.setOnAction( e -> { a.click(); helpWindow(); } );
-        btn4.setOnAction( e -> { a.click(); stop(); } );
+        btn.setOnAction( e -> { Audio.click(); hostLobby(); } );
+        btn2.setOnAction( e -> { Audio.click(); jgWindow(); } );
+        btn5.setOnAction( e -> { Audio.click(); helpWindow(); } );
+        btn4.setOnAction( e -> { Audio.click(); stop(); } );
         
         ps.setScene(ogScene);
         ps.show();
@@ -172,7 +162,7 @@ public class mainMenu extends Application {
      * This method is used to get the name of the host
      * @return a string of the host's name or null if nothing is entered/player presses the cancel button
      */
-    private static String hostUsername() {
+    public static String hostUsername() {
     	while (true) {
     		TextInputDialog dialog = new TextInputDialog();
     		dialog.setTitle("Square-Off: Hosting Game");
@@ -180,31 +170,24 @@ public class mainMenu extends Application {
     		dialog.setContentText("Please enter your name:");
 
     		Optional<String> result = dialog.showAndWait();
-    		a.click();
+    		Audio.click();
 
     		if (result.isPresent() && !(result.get().isEmpty())) {
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Square-Off: Hosting Game");
     			if ( result.get().matches("^([A-Za-z]|[0-9])+$") && (result.get().length() < 62) ) {
     				return result.get();
     			}
     			else if (result.get().length() > 61) {
-    	    		Alert alert;
-    				alert = new Alert(AlertType.WARNING);
     				alert.setHeaderText("Error: Name too long");
     				alert.setContentText("The maximum name length is 61 alphanumeric characters");
-    				alert.setTitle("Square-Off: Hosting Game");
-    				alert.showAndWait();
-    				a.click();
     			}
     			else {
-    	    		Alert alert;
-    				alert = new Alert(AlertType.WARNING);
     				alert.setHeaderText("Error: Invalid Characters");
     				alert.setContentText("Your name can only contain alphanumeric characters");
-    				alert.setTitle("Square-Off: Hosting Game");
-    				alert.showAndWait();
-    				a.click();
     			}
-    			
+    			alert.showAndWait();
+				Audio.click();
     		}
     		else {
     			return null;
@@ -233,6 +216,7 @@ public class mainMenu extends Application {
 
     	// Traditional way to get the response value.
     	Optional<String> result = dialog.showAndWait();
+    	Audio.click();
     	if (result.isPresent()) {
     		String mapChoice = null;
     		switch(result.get()){
@@ -264,11 +248,11 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); inLobby=false; net.closeServer(); showUI(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { Audio.click(); inLobby=false; net.closeServer(); showUI(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         Button btn6 = new Button("Start Game");
     	btn6.setMinWidth(120);
-        btn6.setOnAction( e -> { a.click(); net.startGame(); } );
+        btn6.setOnAction( e -> { Audio.click(); net.startGame(); } );
         
         TableView table = lobbyTable(net);
         
@@ -303,8 +287,6 @@ public class mainMenu extends Application {
                     }                
                 }
         });
-        
-        btn6.requestFocus();
         
         Label label1 = new Label("AI Difficulty:");
         
@@ -347,7 +329,7 @@ public class mainMenu extends Application {
         
         ps.setOnCloseRequest( e -> net.closeServer() ); 
         
-        Scene scene2 = new Scene(grid3, width, height, Color.LIGHTBLUE);
+        Scene scene2 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
         ps.setScene(scene2);
         ps.show();
     }
@@ -363,7 +345,7 @@ public class mainMenu extends Application {
     	
     	Button btn5 = new Button("Back to Main Menu");
     	btn5.setMinWidth(120);
-        btn5.setOnAction( e -> { a.click(); inLobby=false; net.Disconnect(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn5.setOnAction( e -> { Audio.click(); inLobby=false; net.Disconnect(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         TableView table = lobbyTable(net);
         
@@ -388,7 +370,7 @@ public class mainMenu extends Application {
         
         ps.setOnCloseRequest( e -> net.Disconnect() ); 
         
-        Scene scene2 = new Scene(grid3, width, height, Color.LIGHTBLUE);
+        Scene scene2 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
         ps.setScene(scene2);
         ps.show();
     } 
@@ -540,54 +522,41 @@ public class mainMenu extends Application {
      */
 	private static void tryToJoin(String hostAddress, String name) {
     	mainMenuNetwork net = new mainMenuNetwork(map);
+    	Alert alert = new Alert(AlertType.WARNING);
+    	alert.setTitle("Square-Off: Joining Game");
 
     	if (name.equals("")) {
-    		Alert alert;
-			alert = new Alert(AlertType.WARNING);
 			alert.setHeaderText("Error: Invalid Name");
 			alert.setContentText("You must enter a valid name.");
-			alert.setTitle("Square-Off: Joining Game");
 			alert.showAndWait();
-			a.click();
+			Audio.click();
     	}
 		else if (name.length() > 61) {
-    		Alert alert;
-			alert = new Alert(AlertType.WARNING);
 			alert.setHeaderText("Error: Name too long");
 			alert.setContentText("The maximum name length is 61 alphanumeric characters");
-			alert.setTitle("Square-Off: Joining Game");
 			alert.showAndWait();
-			a.click();
+			Audio.click();
 		}
 		else if ( !name.matches("^([A-Za-z]|[0-9])+$") ) {
-    		Alert alert;
-			alert = new Alert(AlertType.WARNING);
 			alert.setHeaderText("Error: Invalid Characters");
 			alert.setContentText("Your name can only contain alphanumeric characters");
-			alert.setTitle("Square-Off: Joining Game");
 			alert.showAndWait();
-			a.click();
+			Audio.click();
 		}
     	else {
     		if (net.connectToHost(hostAddress, name) == 0)
 				clientLobby(net);
     		else if (net.connectToHost(hostAddress, name) == 2) {
-				Alert alert;
-				alert = new Alert(AlertType.WARNING);
 				alert.setHeaderText("Error: Name in use");
 				alert.setContentText("There is already a client in the server with the name: " + name);
-				alert.setTitle("Square-Off: Joining Game");
 				alert.showAndWait();
-				a.click();
+				Audio.click();
     		}
 			else {
-				Alert alert;
-				alert = new Alert(AlertType.WARNING);
 				alert.setHeaderText("Error: Host doesn't exist");
 				alert.setContentText("There is no host with the address: " + hostAddress);
-				alert.setTitle("Square-Off: Joining Game");
 				alert.showAndWait();
-				a.click();
+				Audio.click();
 			}
     	}
     }
@@ -608,11 +577,11 @@ public class mainMenu extends Application {
         
     	Button btn5 = new Button("Click to Join");
     	btn5.setMinWidth(90);
-        btn5.setOnAction( e -> { a.click(); tryToJoin(textField.getText(), textField2.getText()); } );
+        btn5.setOnAction( e -> { Audio.click(); tryToJoin(textField.getText(), textField2.getText()); } );
     	
     	Button btn6 = new Button("Back to Main Menu");
     	btn6.setMinWidth(140);
-        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn6.setOnAction( e -> { Audio.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         hb.getChildren().addAll(label1, textField, btn5);
         hb.setAlignment(Pos.CENTER);
@@ -636,7 +605,7 @@ public class mainMenu extends Application {
         grid3.setAlignment(Pos.CENTER);
         grid3.setStyle("-fx-background-color: transparent;");
         
-        Scene scene3 = new Scene(grid3, width, height, Color.LIGHTBLUE);
+        Scene scene3 = new Scene(grid3, 960, 540, Color.LIGHTBLUE);
         ps.setScene(scene3);
         ps.show();
     }
@@ -664,9 +633,9 @@ public class mainMenu extends Application {
         grid4.setAlignment(Pos.CENTER);
         grid4.setStyle("-fx-background-color: transparent;");
         
-        Scene scene4 = new Scene(grid4, width, height, Color.LIGHTBLUE);
+        Scene scene4 = new Scene(grid4, 960, 540, Color.LIGHTBLUE);
         
-        btn6.setOnAction( e -> { a.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
+        btn6.setOnAction( e -> { Audio.click(); ps.setScene(ogScene); ps.setTitle("Square-Off: Start Menu"); } );
         
         ps.setScene(scene4);
         ps.show();
