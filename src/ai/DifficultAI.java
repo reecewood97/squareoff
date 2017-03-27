@@ -11,6 +11,8 @@ import GameLogic.TerrainBlock;
 import Networking.Queue;
 
 /**
+ * The class of an AI player with hard difficulty. 
+ * It does all the calculation that a hard AI needs.
  * @author JeffLeung
  *
  */
@@ -29,6 +31,14 @@ public class DifficultAI extends AI {
 	private final int mistakeAngle = 2;
 	private final int mistakeVelocity = 3;
 
+	/**
+	 * Constructor that sets up AI with hard difficulty
+	 * @param aiPlayer Player ID
+	 * @param aiSquareID Square ID
+	 * @param aiColour colour for this AI player
+	 * @param board Board of the current game
+	 * @param name name for this AI player
+	 */
 	public DifficultAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
 		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
@@ -41,18 +51,17 @@ public class DifficultAI extends AI {
 	
 	/**
 	 * Movement of the Square of the AI player
-	 * Current Stage: if the current block standing has less than 2 health, move to other position
+	 * Hard AI move when no shooting path is found, 
+	 * it will move to position which will be targeted by less enemies
+	 * If clear shooting path is found, 
+	 * stay and attack
 	 */
 	public void aiMove() {
-		
-//		if (getEndTurn()) {
-//			return ;
-//		}
 		
 		determineResult();
 		
 		if (thereAreObstacles()) {
-			System.out.println(myName + " no clear path");
+//			System.out.println(myName + " no clear path");
 			
 			defend();
 			// Stage 3:
@@ -62,8 +71,9 @@ public class DifficultAI extends AI {
 		else {
 			double aix = getAIPos().getX();
 			double aiy = getAIPos().getY();
-			System.out.println(myName + " at " + aix + ", " + aiy);
-			System.out.println(myName + " ATTACCCCCKKKKK!");
+//			System.out.println(myName + " at " + aix + ", " + aiy);
+//			System.out.println(myName + " ATTACCCCCKKKKK!");
+			aiMoveCal(aix, aiy);
 		}
 		
 	}
@@ -75,12 +85,6 @@ public class DifficultAI extends AI {
 	public void defend() {
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		ArrayList<PhysObject> squares = board.getSquares();
-//		ArrayList<Point2D.Double> enemyposs = new ArrayList<Point2D.Double>();
-		
-		double aiX = getAIPos().getX();
-		double aiY = getAIPos().getY();
-
-		PhysObject finalSquare = null;
 		
 		double finalX = 0;
 		double finalY = 0;
@@ -102,13 +106,6 @@ public class DifficultAI extends AI {
 					double yDis = blockY - enemyY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//						System.out.println(displacement);
-//					if (displacement < finalDis) {
-//						finalDis = displacement;
-//						finalX = blockX;
-//						finalY = blockY;
-//						finalBlock = block;
-//					}
 					totaldis += displacement;
 				}
 			}
@@ -118,16 +115,10 @@ public class DifficultAI extends AI {
 				finalDis = averagedis;
 			}
 		}
-		System.out.println(myName + " go to defend: " + finalBlock.getPos());
 		finalX = finalBlock.getPos().getX();
 		finalY = finalBlock.getPos().getY();
 		aiMoveCal(finalX, finalY);
 	}
-		
-		
-		
-
-		
 
 	/**
 	 * Determine a target to attack and calculate the position of the target
@@ -145,9 +136,8 @@ public class DifficultAI extends AI {
 		int finalX = 0;
 		int finalY = 0;
 		PhysObject finalSquare = null;
-		// Calculation for NormalAI & DifficultAI
+		// Calculation for DifficultAI
 		ArrayList<PhysObject> blocks = board.getBlocks();
-		int numOfBlocks = blocks.size();
 		TerrainBlock targetBlock = null;
 		int targetHealth = 999;
 		double finalDis = 99999999.0;
@@ -160,7 +150,6 @@ public class DifficultAI extends AI {
 			double targetY = targetSquare.getPos().getY();
 			for (PhysObject oneBlock:blocks) {
 				if ((oneBlock.getPos().getY() - 100.0 <= targetY) && (oneBlock.getPos().getX() >= targetX - 20.0) && (oneBlock.getPos().getX() <= targetX + 60.0)) {
-//							&& (block.getPos().getX() <= myX + 25.0) && (block.getPos().getX() > myX)
 					targetBlock = (TerrainBlock) oneBlock;
 					break;
 				}
@@ -180,12 +169,11 @@ public class DifficultAI extends AI {
 				finalDis = displacement;
 			}
 		}
-		if (finalSquare == null) {
+		if (finalSquare == null || finalSquare.getPos() == null) {
 			defend();
 		}
 		
 		// return the coordinates
-//		System.out.println("closest target with low hp: " + finalSquare.getPos());
 		return finalSquare.getPos();
 	}
 	

@@ -8,6 +8,8 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
+
 import Audio.Audio;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -55,10 +57,20 @@ public class Board {
 		this.q = new ArrayBlockingQueue<ArrayList<PhysObject>>(10); 
 		this.winner = -1;
 		this.turn = new TurnMaster(this);
-		//this.q = new ArrayBlockingQueue<String>(100); //This handles the moves that need to be sent to clients.
 	
+		//randomly selects map
+		if(map.equals("Pot luck")){
+			
+			String[] maps = {"Battleground","Pyramid","X","Smile","Sandwich","No Hiding"};
+			
+			int rand = ThreadLocalRandom.current().nextInt(0,5);
+			map = maps[rand];
+				
+		}
 		
-		if(map.equals("map1")){
+		//map creation
+		if(map.equals("Battleground")){
+			
 			//Initialise the placements of the 4 teams.
 			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
@@ -76,35 +88,38 @@ public class Board {
 			
 			//level1
 			for(int i = 100; i < 700; i+=40) {
-				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,120), true);
+				PhysObject block = new TerrainBlock(1, 1,new Point2D.Double(i,120), true);
 				objects.add(block);
 			}
+			
+			objects.add(new TerrainBlock(1, 1,new Point2D.Double(240,150), true));
+			
 			//level2
 			for(int i = 100; i < 700; i+=120){
-				PhysObject block = new TerrainBlock(1, 2,new Point2D.Double(i,195), true);
+				PhysObject block = new TerrainBlock(2, 2,new Point2D.Double(i,195), true);
 				objects.add(block);
 			}
 			//level3
 			for(int i = 150; i < 700; i+=160){
-				PhysObject block = new TerrainBlock(1,1,new Point2D.Double(i,270), true);
+				PhysObject block = new TerrainBlock(1,2,new Point2D.Double(i,270), true);
 				objects.add(block);
 			}
 	
 			for (int i = 50; i < 700; i += 200) {
-				PhysObject block = new TerrainBlock(2, 2, new Point2D.Double(i, 345), true);
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i, 345), true);
 				objects.add(block);
 			}
 		}
-		else if(map.equals("map2")){
+		else if(map.equals("Pyramid")){
 			
-			Point2D.Double redpos = new Point2D.Double(255, 390);
+			Point2D.Double redpos = new Point2D.Double(180, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
-			Point2D.Double blupos = new Point2D.Double(555, 390);
+			Point2D.Double blupos = new Point2D.Double(260, 150);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(415, 300);
+			Point2D.Double yelpos = new Point2D.Double(340, 150);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(415, 150);
+			Point2D.Double grnpos = new Point2D.Double(420, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
@@ -117,69 +132,189 @@ public class Board {
 				objects.add(block);
 			}
 			
-			//Bottom left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 210), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 180), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 210), true));
+			//level2
+			for(int i = 200; i < 600; i+=100) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,200), true);
+				objects.add(block);
+			}
 			
-			//Bottom right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 210), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 180), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 180), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 210), true));
+			//level3
+			for(int i = 280; i < 500; i+=80) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,280), true);
+				objects.add(block);
+			}
 			
-			//Middle left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(80, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(90, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(130, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(170, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(180, 300), true));
+			//level4
+			for(int i = 320; i < 460; i+=80) {
+				PhysObject block = new TerrainBlock(1, 1, new Point2D.Double(i,360), true);
+				objects.add(block);
+			}
 			
-			//Middle middle bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(360, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(370, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(410, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(450, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(460, 300), true));
 			
-			//Middle right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(610, 300), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(620, 270), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(660, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(700, 270), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(710, 300), true));
 			
-			//Top left bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200, 390), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(210, 360), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(250, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(300, 390), true));
 			
-			//Top right bucket
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(500, 390), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(590, 360), true));
-			objects.add(new TerrainBlock(2, 2, new Point2D.Double(550, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(510, 360), true));
-			objects.add(new TerrainBlock(1, 1, new Point2D.Double(600, 390), true));
-		}/* else {
-			Point2D.Double redpos = new Point2D.Double(255, 390);
+		}
+		else if(map.equals("Sandwich")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(100, 150);
 			PhysObject red = new Square(1 ,0, 0, redpos);
 			((Square)red).setActivePlayer(true);
-			Point2D.Double blupos = new Point2D.Double(555, 390);
+			Point2D.Double blupos = new Point2D.Double(250, 150);
 			PhysObject blu = new Square(2 ,0, 0, blupos);
-			Point2D.Double yelpos = new Point2D.Double(415, 300);
+			Point2D.Double yelpos = new Point2D.Double(400, 150);
 			PhysObject yel = new Square(3 ,0, 0, yelpos);
-			Point2D.Double grnpos = new Point2D.Double(415, 150);
+			Point2D.Double grnpos = new Point2D.Double(550, 150);
 			PhysObject grn = new Square(4 ,0, 0, grnpos);
 			objects.add(red);
 			objects.add(blu);
 			objects.add(yel);
 			objects.add(grn);
-		}*/
+			
+			for(int i = 80; i < 740; i+=40){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,120), true));
+			}
+			
+			for(int i = 80; i < 740; i+=40){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,360), true));
+			}
+			
+			
+			for(int i = 120; i < 700; i+=80){
+				
+				objects.add(new TerrainBlock(2, 2, new Point2D.Double(i,200), true));
+			}
+			
+			for(int i = 120; i < 700; i+=80){
+				
+				objects.add(new TerrainBlock(1, 2, new Point2D.Double(i,280), true));
+			}
+			
+		}
+		else if(map.equals("Smile")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(280, 140);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(380, 140);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(450, 140);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(500, 140);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//bottom
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(340,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(380,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(420,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(460,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(500,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(300,110), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(260,110), true));
+			
+			//sides
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(540,140), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(220,140), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(580,170), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(180,170), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(620,200), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(140,200), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(660,230), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(100,230), true));
+			
+			//nose
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(380,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(340,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(420,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(460,230), true));
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(300,230), true));
+			
+			//eyes
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(420,330), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(340,330), true));
+			
+			
+		}
+		else if (map.equals("No Hiding")){
+			
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(80, 170);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(320, 170);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(480, 170);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(720, 170);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			for(int i = 80; i < 740; i+=40){
+				
+				objects.add(new TerrainBlock(1, 1, new Point2D.Double(i,140), true));
+			}
+			
+		}
+		else if(map.equals("X")){
+		
+			//Initialise the placements of the 4 teams.
+			Point2D.Double redpos = new Point2D.Double(520, 150);
+			PhysObject red = new Square(1 ,0, 0, redpos);
+			((Square)red).setActivePlayer(true);
+			Point2D.Double blupos = new Point2D.Double(330, 210);
+			PhysObject blu = new Square(2 ,0, 0, blupos);
+			Point2D.Double yelpos = new Point2D.Double(380, 270);
+			PhysObject yel = new Square(3 ,0, 0, yelpos);
+			Point2D.Double grnpos = new Point2D.Double(300, 330);
+			PhysObject grn = new Square(4 ,0, 0, grnpos);
+			objects.add(red);
+			objects.add(blu);
+			objects.add(yel);
+			objects.add(grn);
+			
+			//centre
+			objects.add(new TerrainBlock(2, 2, new Point2D.Double(380,240), true));
+			
+			//downright
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(430,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(470,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(520,120), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(560,120), true));
+			
+			//downleft
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(330,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(290,180), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(240,120), true));
+			objects.add(new TerrainBlock(1, 2, new Point2D.Double(200,120), true));
+			
+			//upright
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(430,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(470,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(520,360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(560,360), true));
+			
+			//upleft
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(330,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(290,300), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(240,360), true));
+			objects.add(new TerrainBlock(1, 1, new Point2D.Double(200,360), true));
+			
+			
+		}
+		else{
+			
+		}
+		
 		
 		Point2D.Double weaponpos = new Point2D.Double(150, 200);
 		PhysObject weapon = new ExplodeOnImpact(weaponpos, 0, 0, false);
@@ -193,10 +328,12 @@ public class Board {
 		PhysObject targetline = new TargetLine();
 		objects.add(targetline);
 		
+		
 		Particle particle = new Particle(explosionpos, 0, 0);
 		particle.setInUse(false);
 		objects.add(particle);
-
+		
+		
 		this.player = 0;
 		this.squareID = 0;
 		
@@ -221,14 +358,8 @@ public class Board {
 		return winner;
 	}
 
-	public void notifyQuit() {
 
-	}
-
-	private void setActivePlayer(int newPlayer, int newID) {
-
-		// System.out.println("NEW PLAYER" + newPlayer +
-		// "************************");
+	public void setActivePlayer(int newPlayer, int newID) {
 
 		this.player = newPlayer;
 		this.squareID = newID;
@@ -242,18 +373,10 @@ public class Board {
 		
 		objects.remove(x);
 		objects.add(x, activePlayer);
-
-//		for (PhysObject square : getSquares()) {
-//
-//			System.out.println(((Square) square).getActivePlayer());
-//			
-//		}
-//		System.out.println();
 	}
 
 	public PhysObject getActivePlayer() {
 
-		// System.out.println("in getactive player");
 		return activePlayer;
 	}
 
@@ -268,10 +391,8 @@ public class Board {
 		PhysObject ret = null;
 		for (PhysObject square : getSquares()) {
 
-			//System.out.println(((Square) square).getActivePlayer());
 			if (((Square) square).getActivePlayer()) {
 
-				//System.out.println("player id " + ((Square) square).getPlayerID());
 
 				ret = square;
 
@@ -573,44 +694,22 @@ public class Board {
 			return false;
 		}
 		if (obj1.getName().equals("TerrainBlock")) {
-			if (obj2.getName().endsWith("ExplodeOnImpact")/*|| obj2.getName().endsWith(
-												 * "TimedGrenade")*/) { // All circular objects
+			if (obj2.getName().endsWith("ExplodeOnImpact")) { // All circular objects
 				Ellipse2D.Double circle = new Ellipse2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY() + obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				if (circle.intersects(obj1.getPos().getX(),
 						obj1.getPos().getY() +obj2.getHeight() , obj1.getWidth(), obj1.getHeight())) {
-					System.out.println("Circular object collision detected between wep at " + obj2.getPos()
-							+ "with height " + obj2.getHeight() + "and width " + obj2.getWidth() + " and block at "
-							+ obj1.getPos() + " with height " + obj1.getHeight() + " and width " + obj1.getWidth());
 					return true;
 				} else {
 					return false;
 				}
 			} else {
-				//return obj1.rectIntersect(obj2);
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj2.getPos().getX(),
 						obj2.getPos().getY()+ obj2.getHeight(), obj2.getWidth(), obj2.getHeight());
 				return rect.intersects(obj1.getPos().getX(),
 						obj1.getPos().getY() + 10, obj1.getWidth(), obj1.getHeight());
 			}
 		} else {
-			/*if (obj1.getName().endsWith("ExplodeOnImpact")/*
-												 * || obj1.getName().endsWith(
-												 * "TimedGrenade")
-												 ) { // All circular objects
-				Ellipse2D.Double circle = new Ellipse2D.Double(obj1.getPos().getX(),
-						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
-				if (circle.intersects(obj2.getPos().getX(),
-						obj2.getPos().getY()/* +obj2.getHeight() , obj2.getWidth(), obj2.getHeight())) {
-					System.out.println("Circular object collision detected between wep at " + obj1.getPos()
-							+ "with height " + obj1.getHeight() + "and width " + obj1.getWidth() + " and block at "
-							+ obj2.getPos() + " with height " + obj2.getHeight() + " and width " + obj2.getWidth());
-					return true;
-				} else {
-					return false;
-				}
-			} else {*/
-				//return obj1.rectIntersect(obj2);
 				Rectangle2D.Double rect = new Rectangle2D.Double(obj1.getPos().getX(),
 						obj1.getPos().getY() + obj1.getHeight(), obj1.getWidth(), obj1.getHeight());
 				return rect.intersects(obj2.getPos().getX(),
@@ -637,8 +736,6 @@ public class Board {
 	 */
 	private void createExplosion(ArrayList<PhysObject> things, double x, double y, double power, double size,
 			int damage) {
-
-		//System.err.println("Explosion at: ");
 		// for i from x to y, all squares push away, all blocks damage
 		double i = (1 * size / 2);
 		Ellipse2D.Double circle = new Ellipse2D.Double(x - (i / 2), y + (i / 2), 2 * i, 2 * i);
@@ -693,65 +790,20 @@ public class Board {
 	 */
 	private void resolveCollision(ArrayList<PhysObject> things, PhysObject thing, PhysObject block) {
 		if (thing.getName().endsWith("ExplodeOnImpact") || thing.getName().endsWith("Missile")) {
-			if (debug)
-				System.out.println("Resolving " + thing.getName() + "collision between thing at: " + thing.getPos()
-						+ ", and block at: " + block.getPos());
 			thing.setInUse(false);
 			createExplosion(things, thing.getPos().getX() + (thing.getWidth() / 2),
 					thing.getPos().getY() + (thing.getHeight() / 2), 150, 50, 1);
-		}/* else if (thing.getName().endsWith("TimedGrenadeDONT USE")) { // Collisions
-																		// for
-																		// circular
-																		// objects
-			thing.undoUpdate();
-			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on
-																						// the
-																						// left
-				thing.setXvel((-0.3) * thing.getXvel());
-				if (thing.getXvel() == 0) {
-					thing.update();
-				}
-			} else if (thing.getPos().getX() >= block.getPos().getX() + block.getWidth()) { // on
-																							// the
-																							// right
-				thing.setXvel((-0.3) * thing.getXvel());
-				if (thing.getXvel() == 0) {
-					thing.update();
-				}
-			} else if (thing.getPos().getY() >= block.getPos().getY() + block.getHeight()) { // on
-																								// top
-				if (Math.abs(thing.getXvel()) <= 2) {
-					thing.setXvel(0);
-				} else {
-					thing.setXvel(0.9 * thing.getXvel());
-				}
-				if (thing.getYvel() >= (-2)) {
-					thing.setYvel(0);
-					thing.setPos(new Point2D.Double(thing.getPos().getX(), block.getPos().getY() + block.getHeight()));
-				} else {
-					thing.setYvel((-0.3) * thing.getYvel());
-				}
-			} else if (thing.getPos().getY() + thing.getHeight() <= block.getPos().getY()) { // below
-				thing.setYvel((-0.3) * thing.getYvel());
-			} else {
-				thing.setYvel((-0.4) * thing.getYvel());
-				thing.setXvel((-0.4) * thing.getXvel());
-			}
-		}*/ else { // Collisions for squares
+		} else { // Collisions for squares
 			thing.undoUpdate();
 			if (thing.getPos().getX() + thing.getWidth() <= block.getPos().getX()) { // on the left
-				System.out.println("Collided on the left");
 				thing.setXvel((-0.3) * thing.getXvel());
 				if (thing.getXvel() == 0) {
-					System.out.println("xvel zero");
 					thing.update();
 				}
 			}
 			if (block.getPos().getX() + block.getWidth() <= thing.getPos().getX()) { // on the right
-				System.out.println("Collided on the right");
 				thing.setXvel((-0.3) * thing.getXvel());
 				if (thing.getXvel() == 0) {
-					System.out.println("xvel zero");
 					thing.update();
 				}
 			}
@@ -769,7 +821,6 @@ public class Board {
 				}
 			}
 			if (thing.getPos().getY() + thing.getHeight() <= block.getPos().getY()) { // below
-				System.out.println("Collided on the bottom");
 				thing.setYvel((-0.3) * thing.getYvel());
 			}
 		}
@@ -813,7 +864,6 @@ public class Board {
 				objs.add(new Particle((Particle) objects.get(i)));
 				break;
 			default:
-				System.out.println("error copying arraylists in freeSim: " + objects.get(i).getName());
 				break;
 			}
 		}
@@ -874,19 +924,11 @@ public class Board {
 
 						((Square) object).setDead();
 						 audio.splash();
-						 for (PhysObject one : objs) {
-							 	if(one.getName().equals("Square"))
-							 		System.out.println(one.getInUse());
-							}
 						 
 						
 						if (winner != 5) {
-							//System.out.println("checking for winner");
 							int won = checkForWinner(objs);
 							if (won != -1) {
-								if (debug)
-									System.out.println("winner?");
-								//int won = findPlayer();
 								setWinner(won);
 								turn.interrupt();
 							}
@@ -941,10 +983,7 @@ public class Board {
 		}
 
 		if (same) {
-			if (debug)
-				System.out.println("FreeState exited due to no movement");
 			freeState = false;
-			//incrementTurn();
 		}
 		turn.resetTimer();
 		objects = objs;
@@ -966,7 +1005,6 @@ public class Board {
 			freeSim();   // just simulate another frame.
 		} else if (move.getWeaponMove()) {
 			WeaponMove wepMove = (WeaponMove) move;
-			System.out.println("Weapon spawning at: " + wepMove.getPos());
 			PhysObject wep = null;
 			switch (weaponType) {
 			case "ExplodeOnImpact":
@@ -984,7 +1022,6 @@ public class Board {
 				activePlayer.setXvel(wepMove.getXvel());
 				break;
 			default:
-				System.out.println("Weapon move parsing error");
 				break;
 			}
 			freeState = true;
@@ -1060,19 +1097,14 @@ public class Board {
 						activePlayer.getPos().getY() + activePlayer.getYvel()));
 			}
 			
-			//activePlayer.setYvel(activePlayer.getYvel()-activePlayer.getGrav());
 			
 			if((activePlayer.getPos().getY() < 100) && activePlayer.getAlive()){
 				
 				activePlayer.setDead();
 				audio.splash();
 				if (winner != 5) {
-					//System.out.println("Checking for winner at 1");
 					int won = checkForWinner(getSquares());
 					if (won != -1) {
-						if (debug)
-							System.out.println("winner?");
-						//int won = findPlayer();
 						setWinner(won);
 						turn.interrupt();
 					}
@@ -1083,7 +1115,8 @@ public class Board {
 			objects.remove(x);
 			objects.add(x, activePlayer);
 		}
-	}
+		
+			}
 
 	/**
 	 * Used on the server-side, receiving an update string that is from the
@@ -1115,27 +1148,24 @@ public class Board {
 			String[] AIatk = input.split(",");
 			Double xVel = Double.parseDouble(AIatk[0]);
 			Double yVel = Double.parseDouble(AIatk[1]);
-			// if (AIatk[2].equals(players[player])) {
+			if(!AIatk[2].equals(players[player]))
+				return;
 			WeaponMove wmv = new WeaponMove(weaponType,
 					new Point2D.Double(active.getPos().getX(), active.getPos().getY() + 10), xVel, yVel);
 			updateFrame(wmv);
 			if (q.size() > 1)
 				q.remove();
 			q.add(objects);
-			// }
-			// else return;
 		}
 		
 		//Human players are not so well treated
 		if(input.length() >= 7 && input.substring(0, 7).equals(("Pressed"))) {
 			if(!(input.substring(11, input.length()).equals(players[player]))){
-				//System.out.println("oops");
 				return;
 			}
 			String input1 = input.substring(8, 9);
 			String input2 = input.substring(9, 10);
 
-			// System.out.println(inputKey);
 			if (input1.equals(" "))
 				input1 = "None";
 			else if (input1.equals("A"))
@@ -1168,24 +1198,14 @@ public class Board {
 						obj.setInUse(false);
 					}
 				}
-
-				// int xs = input.indexOf('x');
-				// int xe = input.indexOf(',');
-				// String xc = input.substring(xs+2, xe);
 				String xc = input.split(" ")[1];
-				// int ye = input.indexOf(']');
-				// String yc = input.substring(xe+3, ye);
 				String yc = input.split(" ")[2];
-				System.out.println("xc = " + xc + "and yc = " + yc);
 
 				Double x = Double.parseDouble(xc);
 				Double y = Double.parseDouble(yc);
 				Double x2 = active.getPos().getX() + (active.getWidth() / 2);
 				Double y2 = active.getPos().getY() + (active.getHeight() / 2);
-
-				//System.out.println("ActivePlayer is at: " + active.getPos());
-				//System.out.println("Mouse press is at: " + x + ", " + y);
-
+				
 				Double factor; // Need to check if the value is behind the
 								// player.
 				if (x < x2) {
@@ -1231,12 +1251,6 @@ public class Board {
 				wmv = new WeaponMove(weaponType,
 						new Point2D.Double(active.getPos().getX() + 10, active.getPos().getY() + 10), myx * factor,
 						myy * yfactor);
-				// wmv = new WeaponMove(weaponType,new
-				// Point2D.Double(active.getPos().getX(),
-				// active.getPos().getY()+25),5,10);
-				System.out.println("wep xvel is: " + xVel);
-				System.out.println("wep yvel is: " + yVel);
-				System.err.println("weapontype is: " + weaponType);
 				getTargetLine().get(0).setInUse(false);
 				updateFrame(wmv);
 				if (q.size() > 0)
@@ -1244,19 +1258,11 @@ public class Board {
 				q.add(objects);
 				weaponsopen = false;
 			}
-			// else{
-			// Create a weapon error check for the server
-			// }
 		} else if (input.contains("setWep")) {
 			String[] wepA = input.split(",");
-			// System.out.println(wepA[2] +"contents of array");
 			if (!(wepA[2].equals(players[player]))) {
 				return;
 			}
-			if (debugL) {
-				System.out.println("Now a weapon in use");
-			}
-			//System.err.println(wepA[1]);
 			this.weaponType = wepA[1];
 			weaponsopen = true;
 
@@ -1269,9 +1275,6 @@ public class Board {
 
 		} else if (input.contains("setUse")) {
 
-			System.out.println("hello*******");
-			System.out.println("size of this.getexp() " + this.getExplosion().size());
-
 			for (PhysObject exp : this.getExplosion()) {
 
 				exp.setInUse(Boolean.parseBoolean(input.substring(7)));
@@ -1280,17 +1283,12 @@ public class Board {
 
 		} else if (input.contains("setTar")) {
 
-			// System.out.println("SET TAR SET TAR!");
-
 			for (PhysObject obj : objects) {
 
 				if (obj.getName().contains("Target")) {
 
-					// System.out.println("HELLO: " + input.substring(7));
-
 					obj.setInUse(Boolean.parseBoolean(input.substring(7)));
 
-					// System.out.println("HELLO2: " + obj.getInUse());
 				}
 			}
 		} else {
@@ -1381,7 +1379,6 @@ public class Board {
 			player = player + 1;
 		} else {
 			player = 0;
-			// squareID = squareID+1;
 		}
 		setActivePlayer(player, squareID);
 		if (!(activePlayer.getAlive())) {
@@ -1390,7 +1387,6 @@ public class Board {
 
 		}
 		setTurnFlag(true);
-		// servant.interrupt();
 		turn.resetTimer();
 	}
 
@@ -1414,7 +1410,6 @@ public class Board {
 	 *         otherwise.
 	 */
 	public int checkForWinner(ArrayList<PhysObject> arrayList) {
-		// System.err.println("We are checking when someone dies");
 		ArrayList<PhysObject> chickenDinner = new ArrayList<PhysObject>();
 		for (PhysObject thing : arrayList){
 			if (thing.getName().equals("Square")){
@@ -1426,7 +1421,6 @@ public class Board {
 
 		for (int i = 0; i < chickenDinner.size(); i++) {
 			Square first = ((Square) chickenDinner.get(i));
-			// Square second = ((Square)chickenDinner.get(i+1));
 
 			if (first.getAlive()) {
 				if ((winner == -1) || winner == first.getPlayerID()) {
@@ -1437,7 +1431,6 @@ public class Board {
 			}
 		}
 
-		System.out.println("winner is " + winner);
 
 		if (winner == -1)
 			return 5;
@@ -1445,21 +1438,6 @@ public class Board {
 			return winner;
 
 	}
-
-//	/**
-//	 * Code to select a specific player
-//	 * 
-//	 * @return the ID of the player.
-//	 */
-//	private int findPlayer() {
-//		ArrayList<PhysObject> chickenDinner = getSquares();
-//		for (int i = 0; i < chickenDinner.size(); i++) {
-//			Square first = ((Square) chickenDinner.get(i));
-//			if (first.getAlive())
-//				return ((Square) chickenDinner.get(0)).getPlayerID();
-//		}
-//		return -1;
-//	}
 
 	/**
 	 * Removes a name from the array of players (way more difficult than

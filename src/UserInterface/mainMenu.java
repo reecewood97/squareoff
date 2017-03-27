@@ -43,19 +43,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import java.util.Random;
 
 public class mainMenu extends Application {
-	static int width = 960;
-	static int height = 540;
-	static Audio a = new Audio();
-	static Stage ps;
-	static Scene ogScene;
-	static Stage temps;
-	static boolean isHidden = false;
-	static boolean inLobby = false;
-	static int aiDifficulty = 1;
-	static String map = "map1";
+	private static int width = 960;
+	private static int height = 540;
+	private static Audio a = new Audio();
+	private static Stage ps;
+	private static Scene ogScene;
+	private static Stage temps;
+	private static boolean isHidden = false;
+	private static boolean inLobby = false;
+	private static int aiDifficulty = 1;
+	private static String map = "Battleground";
 	
 	/**
 	 * Main method for local testing of code, will be remove in final release
@@ -77,7 +76,7 @@ public class mainMenu extends Application {
     /**
      * Method to hide the UI at anytime
      */
-    public static void hideUI() {
+    private static void hideUI() {
     	if ( !isHidden ) {
         	ps.setOnHiding( e -> {  temps = new Stage();
 			temps.initStyle(StageStyle.UTILITY);
@@ -95,21 +94,19 @@ public class mainMenu extends Application {
     /**
      * Method to show the UI at anytime
      */
-    public static void showUI() {
+    private static void showUI() {
     	if ( isHidden ) {
         	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();
     		isHidden = false;
-    		////System.err.println("show ui ran");
     	}
-    	////System.err.println("show ui did nothing");
     }
     
     /**
      * Shows the splashscreen before running the menu UI
      * This method starts the actual menu of the game - the first method called
      */
-    public static void launchMenu() {
+    private static void launchMenu() {
     	SplashSplash splashscreen = new SplashSplash(1000);
 		splashscreen.showSplash();
     	launch();
@@ -121,8 +118,7 @@ public class mainMenu extends Application {
     public void start(Stage primaryStage) throws Exception {
     	ps = primaryStage;
     	ps.setTitle("Square-Off: Start Menu");
-    	
-    	//ps.initStyle(StageStyle.UNDECORATED);
+    	ps.initStyle(StageStyle.UNDECORATED);
         
         Button btn = new Button("Host Game");
         btn.setMinWidth(100);
@@ -163,21 +159,20 @@ public class mainMenu extends Application {
         
         ogScene = new Scene(grid, width, height, Color.LIGHTBLUE);
         
-        btn.setOnAction( e -> { a.click(); hostLobby(); } ); //lobbyWindow("Host", (new mainMenuNetwork()) ); } );
+        btn.setOnAction( e -> { a.click(); hostLobby(); } );
         btn2.setOnAction( e -> { a.click(); jgWindow(); } );
         btn5.setOnAction( e -> { a.click(); helpWindow(); } );
         btn4.setOnAction( e -> { a.click(); stop(); } );
         
         ps.setScene(ogScene);
         ps.show();
-                
     }
     
     /**
      * This method is used to get the name of the host
      * @return a string of the host's name or null if nothing is entered/player presses the cancel button
      */
-    public static String hostUsername() {
+    private static String hostUsername() {
     	while (true) {
     		TextInputDialog dialog = new TextInputDialog();
     		dialog.setTitle("Square-Off: Hosting Game");
@@ -217,11 +212,19 @@ public class mainMenu extends Application {
     	}
 	} 
     
-    public static String mapChoice() {
+    /**
+     * This method is used to determine the map to play on
+     * @return a string of the map to play on or null if they press cancel
+     */
+    private static String mapChoice() {
     	List<String> choices = new ArrayList<>();
     	choices.add("Battleground");
-    	choices.add("Derelict");
-    	choices.add("Random");
+    	choices.add("Pyramid");
+    	choices.add("X");
+    	choices.add("Smile");
+    	choices.add("Sandwich");
+    	choices.add("No Hiding");
+    	choices.add("Pot luck");
 
     	ChoiceDialog<String> dialog = new ChoiceDialog<>("Battleground", choices);
     	dialog.setTitle("Square-Off: Map Selection");
@@ -233,9 +236,14 @@ public class mainMenu extends Application {
     	if (result.isPresent()) {
     		String mapChoice = null;
     		switch(result.get()){
-    		case "Battleground": mapChoice = "map1"; break;
-    		case "Derelict": mapChoice = "map2"; break;
-    		case "Random": mapChoice = "Random"; break;
+    		case "Battleground": mapChoice = "Battleground"; break;
+    		case "Pyramid": mapChoice = "Pyramid"; break;
+    		case "X": mapChoice = "X"; break;
+    		case "Smile": mapChoice = "Smile"; break;
+    		case "Sandwich": mapChoice = "Sandwich"; break;
+    		case "No Hiding": mapChoice = "No Hiding"; break;
+    		case "Pot luck": mapChoice = "Pot luck"; break;
+    		
     		default: System.err.println("Error selecting maps in MainMenu"); break;
     		}
     		return mapChoice;
@@ -251,7 +259,7 @@ public class mainMenu extends Application {
      * @param net class which handles the networking of the player (both server and client sides)
      */
     @SuppressWarnings({ "rawtypes" })
-    public static void refreshHLobby(mainMenuNetwork net) {
+    private static void refreshHLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
     	
     	Button btn5 = new Button("Back to Main Menu");
@@ -315,8 +323,6 @@ public class mainMenu extends Application {
         
         VBox vbox4 = new VBox();
         vbox4.getChildren().addAll(hbox2);
-        //vbox4.setSpacing(50);
-        //vbox4.setPadding(new Insets(20, 10, 10, 20));
         
         HBox hbox = new HBox(12);
         hbox.getChildren().addAll(btn6, btn5);
@@ -326,7 +332,6 @@ public class mainMenu extends Application {
         vbox.getChildren().addAll(table, hbox);
         vbox.setMaxWidth(710);
         vbox.setAlignment(Pos.CENTER);
-        
         
         GridPane grid3 = new GridPane();
         
@@ -338,7 +343,6 @@ public class mainMenu extends Application {
         grid3.add(label3, 1, 0);
         grid3.add(vbox, 0, 0);
         grid3.add(vbox4, 2, 0);
-        //grid3.add(hbox3, 2, 0);
         grid3.setAlignment(Pos.CENTER);
         
         ps.setOnCloseRequest( e -> net.closeServer() ); 
@@ -354,7 +358,7 @@ public class mainMenu extends Application {
      * @param net class which handles the networking of the player (just the client side)
      */
     @SuppressWarnings({ "rawtypes" })
-    public static void refreshCLobby(mainMenuNetwork net) {
+    private static void refreshCLobby(mainMenuNetwork net) {
     	ps.setTitle("Square-Off: Lobby");
     	
     	Button btn5 = new Button("Back to Main Menu");
@@ -392,13 +396,12 @@ public class mainMenu extends Application {
     
     
     /**
-     * This method is run when entering a lobby
-     * It determines whether you're a host or client and sets up the lobby accordingly
+     * This method is run when entering the host lobby
+     * It sets up the lobby for a host
      */
-	public static void hostLobby() {
+    private static void hostLobby() {
 		String name = hostUsername();
-    		
-
+    	
     	if (name==null) {
     		ps.setScene(ogScene);
     		ps.setTitle("Square-Off: Start Menu");
@@ -413,13 +416,6 @@ public class mainMenu extends Application {
     		return;
     	}
     	
-    	if(map.equals("Random")){
-    		//Choose a random map
-    		Random random = new Random();
-    		int randMap = random.nextInt(2)+1; //Number in the brackets is how many maps we have
-    		map = "map"+randMap;
-    	}
-    	
     	mainMenuNetwork net = new mainMenuNetwork(map);
     	net.runServer();
     	net.connectToHost("localhost", name);
@@ -430,23 +426,15 @@ public class mainMenu extends Application {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					//System.err.println("host STILL IN WHILE LOOP");
-					//System.err.println("host isConnected: " + net.isConnected());
-					//System.err.println("host inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// //System.err.println("host if");
 								showUI();
 								refreshHLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								//System.err.println("host else if");
 								hideUI();
 							} else {
-								//System.err.println("host else");
-								//System.err.println("host isConnected: " + net.isConnected());
-								//System.err.println("host inGame: " + net.inGame());
 								net.resetServer();
 								net.connectToHost("localhost", name);
 								showUI();
@@ -461,47 +449,33 @@ public class mainMenu extends Application {
 		Thread th = new Thread(task);
 		th.setDaemon(true);
 		th.start();
-
 	}
     
-    
-    
-    
     /**
-     * This method is run when entering a lobby
-     * It determines whether you're a host or client and sets up the lobby accordingly
-     * @param type string used to determine whether the player is a host or client
+     * This method is run when entering a client lobby
+     * It sets up the lobby for a client
      * @param net class which handles the networking of the player
      */
-	public static void clientLobby(mainMenuNetwork net) {
+    private static void clientLobby(mainMenuNetwork net) {
 		inLobby = true;
 
 		Task<Void> task = new Task<Void>() {
 			@Override
 			public Void call() throws Exception {
 				while (inLobby) {
-					//System.err.println("client STILL IN WHILE LOOP");
-					//System.err.println("client isConnected: " + net.isConnected());
-					//System.err.println("client inGame: " + net.inGame());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							if (net.isConnected() && !net.inGame()) {
-								// //System.err.println("client if");
 								showUI();
 								refreshCLobby(net);
 							} else if (net.isConnected() && net.inGame()) {
-								//System.err.println("client else if");
 								hideUI();
 							} else {
-								//System.err.println("client else");
-								//System.err.println("client isConnected: " + net.isConnected());
-								//System.err.println("client inGame: " + net.inGame() + "should be irrelevent now");
 								inLobby = false;
 								showUI();
 								ps.setScene(ogScene);
 								ps.setTitle("Square-Off: Start Menu");
-
 							}
 						}
 					});
@@ -522,7 +496,7 @@ public class mainMenu extends Application {
      * @return a table with the current players in the lobby is returned
      */
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public static TableView<Players> lobbyTable(mainMenuNetwork net) {
+	private static TableView<Players> lobbyTable(mainMenuNetwork net) {
 		ArrayList<String> playerArrayList = net.getPlayers();
 		ObservableList<Players> playerList = FXCollections.observableArrayList();
 		
@@ -564,7 +538,7 @@ public class mainMenu extends Application {
      * @param hostAddress address the client is trying to join 
      * @param name name of the client
      */
-    public static void tryToJoin(String hostAddress, String name) {
+	private static void tryToJoin(String hostAddress, String name) {
     	mainMenuNetwork net = new mainMenuNetwork(map);
 
     	if (name.equals("")) {
@@ -621,7 +595,7 @@ public class mainMenu extends Application {
     /**
      * The method is run when trying to join a lobby
      */
-	public static void jgWindow() {
+	private static void jgWindow() {
 		ps.setTitle("Square-Off: Client");
     	
     	Label label1 = new Label("Address:");
@@ -670,7 +644,7 @@ public class mainMenu extends Application {
     /**
      * Help window - controls etc
      */
-    public static void helpWindow() {
+	private static void helpWindow() {
     	ps.setTitle("Square-Off: Help");
     	
     	Button btn6 = new Button("Back to Main Menu");

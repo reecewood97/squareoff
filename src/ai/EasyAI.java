@@ -10,6 +10,8 @@ import GameLogic.TerrainBlock;
 import Networking.Queue;
 
 /**
+ * The class of an AI player with easy difficulty. 
+ * It does all the calculation that an easy AI needs.
  * @author JeffLeung
  *
  */
@@ -28,6 +30,14 @@ public class EasyAI extends AI{
 	private final double mistakeAngle = 7;
 	private final double mistakeVelocity = 10;
 
+	/**
+	 * Constructor that sets up AI with easy difficulty
+	 * @param aiPlayer Player ID
+	 * @param aiSquareID Square ID
+	 * @param aiColour colour for this AI player
+	 * @param board Board of the current game
+	 * @param name name for this AI player
+	 */
 	public EasyAI(int aiPlayer, int aiSquareID, int aiColour, Board board, String name) {
 		super(aiPlayer, aiSquareID, aiColour, board, name);
 		setMistake(mistakeAngle, mistakeVelocity);
@@ -38,11 +48,13 @@ public class EasyAI extends AI{
 		this.myName = name;
 	}
 	
+	/**
+	 * Determine the destination of the Square of the AI player and move the AI player
+	 * Easy AI move if the blocks that it's standing on has low hp.
+	 * If the coordinate's block has low hp (e.g. cannot survive two hits), 
+	 * go to the blocks next to it which has higher hp.
+	 */
 	public void aiMove() {
-		
-//		if (getEndTurn()) {
-//			return ;
-//		}
 		
 		ArrayList<PhysObject> blocks = board.getBlocks();
 		double myX = getAIPos().getX();
@@ -50,23 +62,21 @@ public class EasyAI extends AI{
 		double targetX = myX;
 		double targetY = myY - 30.0;
 		TerrainBlock currentBlock = (TerrainBlock) blocks.get(0);
-//				System.out.println("block 0: " + currentBlock.getPos());
 		for (PhysObject block:blocks) {
 			if ((block.getPos().getY() == myY - 30.0) && (block.getPos().getX() > myX) && (block.getPos().getX() <= myX + 50.0)) {
 				currentBlock = (TerrainBlock) block;
 			}
 		}
-//				System.out.println("block standing: " + currentBlock.getPos());
 		int currentBlockHealth = currentBlock.getHealth();
 		double distance = 99999999999.0;
 		
 		
 		// Stage 1:
-		// Only move if the blocks that it's standing on has low hp.
+		// Only move if the blocks that it's standing on has low hp (1 health).
 		// If the coordinate's block has low hp (e.g. cannot survive two hits), 
 		// go to the blocks next to it which has higher hp.
 		
-		if (currentBlockHealth <= 2) {
+		if (currentBlockHealth <= 1) {
 			int largerHealth = currentBlockHealth;
 			double xPos = currentBlock.getPos().getX();
 			double yPos = currentBlock.getPos().getY();
@@ -79,7 +89,6 @@ public class EasyAI extends AI{
 					double yDis = yPos - sBlockY;
 					// calculate shortest displacement by pythagoras theorem
 					double displacement = Math.sqrt((yDis * yDis) + (xDis * xDis));
-//					System.out.println(searchBlock.getPos() + ", " + displacement);
 					if (displacement < distance && displacement > 40.0) {
 						distance = displacement;
 						targetX = sBlockX;
@@ -87,9 +96,8 @@ public class EasyAI extends AI{
 					}
 				}
 			}
-			System.out.println("x, y " + targetX +", " + targetY);
 		}
-		aiMoveCal((targetX + 10), targetY);
+		aiMoveCal(targetX, targetY);
 	}
 	
 	/**
@@ -131,8 +139,6 @@ public class EasyAI extends AI{
 		}
 		
 		// return the coordinates
-
-		System.out.println("Enemy at " + finalSquare.getPos());
 		setObstacles(false);
 		return finalSquare.getPos();
 	}

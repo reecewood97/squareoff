@@ -90,7 +90,7 @@ public class ScreenBoard extends JPanel{
 		
 		paintBlocks(board.getBlocks(), g2d);
 		paintSquares(board.getSquares(),g2d);
-		paintWeapons(board.getWeapons(),g2d); //paint other weps
+		paintWeapons(board.getWeapons(),g2d); 
 		paintExplosions(board.getExplosion(),g2d);
 		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
 		paintParticles(board.getParticles(),g2d);
@@ -134,9 +134,6 @@ public class ScreenBoard extends JPanel{
 			
 			int x = (int) block.getPos().getX();
 			int y = (int) block.getPos().getY()+block.getHeight();
-			//TODO these todos are to keep track of the changes I've made in case they need to be reverted
-			//From Reece :) You can remove them if it doesn't break anything
-			
 			y = 450 - y; 
 			
 			int newx = (int) (x*widthratio);
@@ -286,10 +283,6 @@ public class ScreenBoard extends JPanel{
 	
 		
 		if(targetline.get(0).getInUse()){
-			
-			
-			Point mousepos = MouseInfo.getPointerInfo().getLocation();
-			Point2D.Double playerpos = new Point2D.Double(0, 0);
 			
 			Square square = (Square) board.getActiveBoard();
 			

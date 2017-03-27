@@ -5,8 +5,6 @@ package GameLogic;
  *
  */
 public class Move {
-	//This class should represent a move.
-	//Direction should be one of: "Left", "Right", or "None"
 	
 	private int playerColour;
 	private int squareID;

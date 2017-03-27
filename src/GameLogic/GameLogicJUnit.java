@@ -23,8 +23,10 @@ public class GameLogicJUnit {
 
 	@Before
 	public void setUp() {
-		this.board = new Board("map1");
+		this.board = new Board("Battleground");
 		this.square = new Square(0, 0, 0, new Point2D.Double(0.0, 0.0));//
+		this.square = new Square("Square",0, 0, 0, new Point2D.Double(0.0, 0.0));//
+		this.square = new Square(square);
 		this.master = new TurnMaster(board);//
 		this.servant = new TurnServant(board);//
 	}
@@ -190,16 +192,17 @@ public class GameLogicJUnit {
 		board.input(inputString);
 		inputString  = "Clicked " + x + " " + y + " " + "Fran";
 		board.input(inputString);
-		assertNotEquals(OG, board.getObjects());
+		assertEquals(OG, board.getObjects());
 		
 		board.addName("David");
 		assertTrue(board.checkForWinner(board.getObjects()) == -1);
-		for (int i = 0; i<4; i++){
+		for (int i = 0; i<3; i++){
 			active = (Square) board.getActivePlayer();
 			active.setDead();
 			board.incrementTurn();
 		}
-		assertTrue(board.checkForWinner(board.getObjects())==3);
+		
+		assertTrue(board.checkForWinner(board.getObjects())==2);
 		
 		board.removeName("sam");
 		assertFalse(board.getPlayerArray().contains("sam"));
@@ -216,6 +219,20 @@ public class GameLogicJUnit {
 		}
 		assertTrue(board.getTime() > 0);
 		
-	
+		Board board2 = new Board("Pot luck");
+		board2.setWinner(2);
+		assertTrue(board2.getWinner()==2);
+
+		board.setActivePlayer(0, 0);
+		
+		//Get a block out of the list - wont be affected in an update
+		PhysObject obj = board.getObjects().get(0);
+		obj.setInUse(true);
+		PhysObject obj2 = obj;
+		obj.update();
+		assertTrue(obj.equals(obj2));
+		
+		obj.undoUpdate();
+		assertTrue(obj.equals(obj2));
 	}
 }
