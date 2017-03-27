@@ -9,13 +9,12 @@ public class AudioJUnit {
 	public void test(){
 		
 		Audio audio = new Audio();
-		assertTrue(audio.getSound());
 		audio.explosion();
 		audio.splash();
 		audio.click();
-		
 		audio.newMusic();
 		audio.endMusic();
+		assertTrue(audio.getSound());
 		
 	}
 }

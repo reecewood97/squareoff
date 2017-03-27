@@ -32,6 +32,7 @@ import GameLogic.TerrainBlock;
 import GameLogic.TimedGrenade;
 import Networking.Client;
 import Networking.Queue;
+import UserInterface.mainMenu;
 
 /**
  * class for testing graphics methods - most testing has been completed by user testing
@@ -42,11 +43,6 @@ public class GraphicsJUnit extends JFrame{
 
 	//SCREEN CLASS
 	private Dimension screenSize;
-	//SCREEN CLASS
-	//private Dimension screenSize;
-	private double screenheight;
-	private double screenwidth;
-	private double framewidth;
 	private double frameheight;
 	private double widthratio;
 	private double heightratio;
@@ -61,32 +57,18 @@ public class GraphicsJUnit extends JFrame{
 	private Board board;
 	//HANGERON
 	private Queue q;
-	private String name, input, keysPressed;
-	private boolean running,targetInUse;
+	private String name, input;
 	//WEAPONS MENU
     private Audio audio;
-    private String[] weaponArray = {"Bomb","Missile","Grenade"};
-    private int currentWeapon = 0;
-    private JButton image;
-    private boolean weaponselected;
     private NewWeaponsMenu wepMenu;
-	//BUTTON PANEL
-    private boolean music_on;
-	private boolean first;
-	private boolean run;
 	private BackgroundMusic music;
 	//SPLASHSPLASH
 	private SplashSplash splash;
-	//WINNERBOARD
-	private int playernum;
-
-
 	@Before
 	public void setUp() throws Exception {
 		
 		//screen
 		frameheight = 450;
-		framewidth = 800;
 		screenSize = new Dimension(1080,500);
 		board = new Board("Battleground");
 		widthratio = 1.35;
@@ -98,7 +80,6 @@ public class GraphicsJUnit extends JFrame{
 		screen = new Screen(board, q, name, client);
 		sboard = new ScreenBoard(board,heightratio,widthratio,listeners);
 		winboard = new WinnerBoard(-1);
-		
 		audio = new Audio();
 		music = audio.getBackgroundMusic();
 		controls = new ButtonPanel(screen,board,audio,name,client);
@@ -110,10 +91,6 @@ public class GraphicsJUnit extends JFrame{
 		board.addName("Sharon");
 		board.addName("Liz");
 		
-		first = true;
-		music_on = true;
-		run = false;
-		
 		splash = new SplashSplash(10);
 		
 		
@@ -122,10 +99,11 @@ public class GraphicsJUnit extends JFrame{
 	@Test
 	public void test() {
 		
-		//button panel
-		first = true;
-		music_on = true;
+		//toggle music
 		controls.ToggleBackgroundMusic(btn);
+		assertFalse(controls.musicOn());
+		controls.ToggleBackgroundMusic(btn);
+		assertTrue(controls.musicOn());
 		
 		//weapons menu tests
 		wepMenu.setInvisible();
@@ -134,10 +112,10 @@ public class GraphicsJUnit extends JFrame{
 		assertTrue(wepMenu.isVisible());
 		int current = wepMenu.getCurrentWeapon();
 		wepMenu.cycleRight();
-		assert(current+1==wepMenu.getCurrentWeapon());
+		assertTrue(current+1==wepMenu.getCurrentWeapon());
 		current = wepMenu.getCurrentWeapon();
 		wepMenu.cycleLeft();
-		assert(current-1==wepMenu.getCurrentWeapon());
+		assertTrue(current-1==wepMenu.getCurrentWeapon());
 		wepMenu.select();
 		assertFalse(wepMenu.isVisible());
 		wepMenu.open();
@@ -162,6 +140,10 @@ public class GraphicsJUnit extends JFrame{
 		splash.showSplash();
 		assertFalse(splash.isVisible());
 		
+		//buttonpanel
+		controls.openMainMenu(screen, board);
+		assertFalse(screen.isVisible());
+		
 		//check maps
 		Screen screen2 = new Screen(new Board("X"), q, input, client);
 		screen2.setVisible();
@@ -179,7 +161,7 @@ public class GraphicsJUnit extends JFrame{
 		screen5.setVisible();
 		assertTrue(screen5.isVisible());
 		
-		Screen screen6 = new Screen(new Board("Pyramid"), q, input, client);
+		new Screen(new Board("Pyramid"), q, input, client);
 		screen2.setVisible();
 		assertTrue(screen2.isVisible());
 		
@@ -189,7 +171,6 @@ public class GraphicsJUnit extends JFrame{
 		
 		
 		//painting 
-		
 		ArrayList<PhysObject> a = new ArrayList<PhysObject>();
 		ExplodeOnImpact e = new ExplodeOnImpact(new Point2D.Double(10, 10),5.0,5.0,true);
 		e.setInUse(true);
@@ -218,14 +199,18 @@ public class GraphicsJUnit extends JFrame{
 		ScreenBoard sb = new ScreenBoard(newone, frameheight, frameheight, listeners);
 		assertTrue(board.getWeapons().get(0).getInUse());
 		BufferedImage image = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = image.createGraphics();
+		image.createGraphics();
 		sb.repaint();
-		
+	
+		//check manipulation
 		assertTrue(board.getObjects().contains(e));
 		assertTrue(board.getObjects().contains(t));
 		assertTrue(board.getObjects().contains(p));
+		assertTrue(board.getObjects().contains(tl));
+		assertTrue(board.getObjects().contains(ep));
 		
-		this.repaint();
+		
+		
 		
 	}
 	

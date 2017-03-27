@@ -141,6 +141,8 @@ public class ButtonPanel extends JPanel {
 		
 
 	}
+	
+	
 
 	/**
 	 * turn background music on and off
@@ -173,17 +175,26 @@ public class ButtonPanel extends JPanel {
 		
 
 	}
+	
+	
 
+	/**
+	 * start background music
+	 */
 	public void startMusic() {
 
 		audio.newMusic();
 		audio.getBackgroundMusic().start();
 	}
 
+	/**
+	 * stop background music
+	 */
 	public void stopMusic() {
 
 		audio.endMusic();
 	}
+	
 
 	/**
 	 * change button colour when pressed initially
@@ -194,5 +205,13 @@ public class ButtonPanel extends JPanel {
 		button.setOpaque(true);
 		audio.endMusic();
 		first = false;
+	}
+	
+	/**
+	 * get method for music_on
+	 * @return music_on true/false if music is on/off
+	 */
+	public boolean musicOn(){
+		return music_on;
 	}
 }
