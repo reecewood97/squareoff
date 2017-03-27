@@ -23,7 +23,6 @@ import Audio.*;
  */
 public class ButtonPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	private boolean music_on = true;
 	private boolean first = true;
 	private Audio audio;
