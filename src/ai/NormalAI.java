@@ -22,12 +22,9 @@ public class NormalAI extends AI {
 	private static final double gravity = 1.0;
 	private int mySquareID; // Square ID
 	private int myColour;
-	private Point2D.Double myPos;
 	private Board board;
 	private int myPlayer; // AI Player ID
 	private String myName;
-	private double outAngle;
-	private double outVelocity;
 	private final double mistakeAngle = 4;
 	private final double mistakeVelocity = 6;
 	private boolean targetLocked = false;
