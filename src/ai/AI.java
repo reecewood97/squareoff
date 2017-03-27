@@ -34,8 +34,7 @@ public abstract class AI {
 	private double outVelocity;
 	private double mistakeAngle = 0;
 	private double mistakeVelocity = 0;
-	private boolean haveObstacles = false;
-	private boolean timesUp = false;	
+	private boolean haveObstacles = false;	
 	
 	
 	/**
@@ -96,13 +95,13 @@ public abstract class AI {
 		this.mySquareID = id;
 	}
 	
-	/**
-	 * Get the SquareID of the AI Player
-	 * @return SquareID
-	 */
-	public int getSquareID() {
-		return this.mySquareID;
-	}
+//	/**
+//	 * Get the SquareID of the AI Player
+//	 * @return SquareID
+//	 */
+//	public int getSquareID() {
+//		return this.mySquareID;
+//	}
 	
 	/**
 	 * Get the PlayerID of the AI Player
@@ -112,13 +111,13 @@ public abstract class AI {
 		return this.myPlayer;
 	}
 	
-	/**
-	 * Get the Colour of AI
-	 * @return colour
-	 */
-	public int getColour() {
-		return this.myColour;
-	}
+//	/**
+//	 * Get the Colour of AI
+//	 * @return colour
+//	 */
+//	public int getColour() {
+//		return this.myColour;
+//	}
 	
 	
 	
