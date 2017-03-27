@@ -346,7 +346,7 @@ public class Board {
 	}
 	
 	/**
-	 * @return Whther the board is in free state
+	 * @return Whether the board is in free state
 	 */
 	public boolean getFreeState(){
 		return freeState;
@@ -852,8 +852,6 @@ public class Board {
 	 */
 	private void freeSim() {
 		
-		// This is going to be relatively quite slow. Perhaps it can be improved
-		// later.
 		ArrayList<PhysObject> objs = new ArrayList<PhysObject>();
 		for (int i = 0; i < objects.size(); i++) {
 			switch (objects.get(i).getName()) {
@@ -939,10 +937,8 @@ public class Board {
 					object.setInUse(false);
 						
 					if ((object.getName().equals("Square"))) {
-
 						((Square) object).setDead();
 						 audio.splash();
-						 
 						
 						if (winner != 5) {
 							int won = checkForWinner(objs);
@@ -963,21 +959,16 @@ public class Board {
 			}
 		}
 		for (PhysObject exp : explos) {
-
 			Explosion explo = (Explosion) exp;
-
 			if (explo.getInUse()) {
-
+				
 				if (explo.getSize() > 20) {
-
 					audio.explosion();
 				}
-
+				
 				if (explo.getSize() > 60) {
-
 					explo.setInUse(false);
 				} else {
-
 					explo.setSize((int) explo.getSize() + 6);
 				}
 
