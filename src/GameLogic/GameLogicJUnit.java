@@ -15,7 +15,6 @@ import org.junit.Test;
  */
 public class GameLogicJUnit {
 	private Board board;
-	private Move move;
 	private Square square;
 	private TerrainBlock block;
 	private TurnMaster master;
