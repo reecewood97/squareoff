@@ -209,6 +209,16 @@ public class Server extends Thread {
 	public void setAIDifficulty(int difficulty) {
 		ais.setDifficulty(difficulty);
 	}
+	
+	/**
+	 * gets the AI difficulty.
+	 * 
+	 * @return aiDifficulty
+	 *            The current AI difficulty.
+	 */
+	public int getAIDifficulty() {
+		return ais.getDifficulty();
+	}
 
 	/**
 	 * Disconnects all clients from the server and then reconnects them, resetting everything to as it should be before the game..

@@ -51,7 +51,7 @@ public class mainMenu extends Application {
 	private static Stage ps;
 	private static Scene ogScene;
 	private static Stage temps;
-	private static boolean isHidden = false;
+	public static boolean isHidden = false;
 	private static boolean inLobby = false;
 	private static int aiDifficulty = 1;
 	private static String map = "Battleground";
@@ -94,7 +94,7 @@ public class mainMenu extends Application {
     /**
      * Method to show the UI at anytime
      */
-    private static void showUI() {
+    public static void showUI() {
     	if ( isHidden ) {
         	temps.setOnHiding( e -> {  ps.show(); ps.toFront(); }  );
         	temps.hide();

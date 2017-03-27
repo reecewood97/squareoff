@@ -72,13 +72,9 @@ public class PhysicsTest extends TestCase {
 		}
 		assertTrue(((Square)board.getActivePlayer()).getPlayerID()==2);
 		board.input("Pressed,  ,2");
-		boolean same = true;
-		for(int i = 0;i<board.getObjects().size()-2;i++){
-			if(!board.getObjects().get(i).equals(objects.get(i))){
-				same = false;
-			}
-		}
-		assertTrue(same); //Assert no objects change state from freeSim, 
+		for(int i = 0;i<board.getObjects().size();i++){
+			assertTrue(board.getObjects().get(i).equals(objects.get(i)));
+		} //Assert no objects change state from freeSim, 
 							//assuming they begin stationary on the floor
 		
 		board = new Board("Pyramid");
@@ -159,6 +155,12 @@ public class PhysicsTest extends TestCase {
 			board.input("Pressed,A ,3");
 		}
 		assertFalse(board.getSquares().get(2).getInUse());
+		
+		board = new Board("Pot luck");
+		board.setPlayers(players);
+		
+		assertTrue(board.getSquares().size()==4);
+		assertTrue(board.getObjects().size()>10);
 	}
 	
 	@After

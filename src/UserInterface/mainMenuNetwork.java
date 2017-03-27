@@ -69,6 +69,16 @@ public class mainMenuNetwork {
 			s.setAIDifficulty(Server.NORMAL_AI);
 		else
 			s.setAIDifficulty(Server.HARD_AI);
+	}	
+	
+	/**
+	 * This method runs the setAIDifficulty method in the Server
+	 * It sets how difficult the AI will be for the next game
+	 * @param i an int that represents the difficulty of ai selected
+	 * @return 
+	 */
+	public int getAIDifficulty() {
+		return s.getAIDifficulty();
 	}
 	
 	/**

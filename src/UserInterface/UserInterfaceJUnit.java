@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import Networking.Server;
+
 public class UserInterfaceJUnit {
 
 	//mainMenu test
-	/*
+	
 	@SuppressWarnings("static-access")
 	@Test
 	public void testShowUI() {
@@ -18,7 +20,6 @@ public class UserInterfaceJUnit {
 		m.showUI();
 		assertEquals(m.isHidden, false);
 	}
-	*/
 	
 	//mainMenuNetwork tests
 	@Test
@@ -65,6 +66,67 @@ public class UserInterfaceJUnit {
 		net.runServer();
 		net.connectToHost("localhost", "test");
 		assertEquals(net.isConnected(), true);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testInGame() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.startGame();
+		assertEquals(net.inGame(), true);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testStartGame() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.startGame();
+		assertEquals(net.inGame(), true);
+		net.closeServer();
+	}
+	
+	
+	@Test
+	public void testSetEasyAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(1);
+		assertEquals(net.getAIDifficulty(), Server.EASY_AI);
+		net.closeServer();
+	}
+	
+	
+	@Test
+	public void testSetNormalAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(2);
+		assertEquals(net.getAIDifficulty(), Server.NORMAL_AI);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testSetHardAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		net.setAIDifficulty(3);
+		assertEquals(net.getAIDifficulty(), Server.HARD_AI);
+		net.closeServer();
+	}
+	
+	@Test
+	public void testGetAIDifficulty() {
+		mainMenuNetwork net = new mainMenuNetwork("Battleground");
+		net.runServer();
+		net.connectToHost("localhost", "test");
+		assert( (net.getAIDifficulty()==Server.EASY_AI) | (net.getAIDifficulty()==Server.NORMAL_AI) | (net.getAIDifficulty()==Server.HARD_AI) );
 		net.closeServer();
 	}
 	
