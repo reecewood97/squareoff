@@ -40,9 +40,6 @@ public class Board {
 	private Audio audio = new Audio();
 	private double XtravelDist = 4;
 	private boolean turnChangedFlag = true;
-	// Debug
-	private final boolean debug = false;
-	private final boolean debugL = false;
 
 	/**
 	 * Constructor makes a default board with four players
