@@ -125,15 +125,21 @@ public class ButtonPanel extends JPanel {
 		// checks they are the active player
 		for (int i = 0; i < 4; i++) {
 
-			String name2 = a.get(i);
+			try{
+				String name2 = a.get(i);
+			
 
-			if ((name2.equals(name)) && ((i + 1) == id)) {
-				// open menu
-				NewWeaponsMenu menu = new NewWeaponsMenu(listeners, board, weapons);
-				menu.open();
-				weapons.setEnabled(false);
+				if ((name2.equals(name)) && ((i + 1) == id)) {
+					// open menu
+					NewWeaponsMenu menu = new NewWeaponsMenu(listeners, board, weapons);
+					menu.open();
+					weapons.setEnabled(false);
+					
+	
+				}
+			}
+			catch(Exception e){
 				
-
 			}
 
 		}

@@ -80,20 +80,23 @@ public class ScreenBoard extends JPanel{
 			g2d.fillOval(i, b-5, 40, 40);
 		}
 		
-		g2d.setFont(new Font("Arial", Font.PLAIN, 20)); 
-		g2d.setColor(Color.BLACK);
-		g2d.drawString("Player " + (((Square) (board.getActiveBoard())).getPlayerID()) +
-				"'s turn", (int) (80*widthratio), (int) (10*heightratio));
-		g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),
-				(int) (10*heightratio));
-		
-		
-		paintBlocks(board.getBlocks(), g2d);
-		paintSquares(board.getSquares(),g2d);
-		paintWeapons(board.getWeapons(),g2d); 
-		paintExplosions(board.getExplosion(),g2d);
-		paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
-		paintParticles(board.getParticles(),g2d);
+		try{
+			g2d.setFont(new Font("Arial", Font.PLAIN, 20)); 
+			g2d.setColor(Color.BLACK);
+			g2d.drawString("Player " + (((Square) (board.getActiveBoard())).getPlayerID()) +
+					"'s turn", (int) (80*widthratio), (int) (10*heightratio));
+			g.drawString("Timer: " + board.getTime(), (int) (700*widthratio),
+					(int) (10*heightratio));
+			
+			
+			paintBlocks(board.getBlocks(), g2d);
+			paintSquares(board.getSquares(),g2d);
+			paintWeapons(board.getWeapons(),g2d); 
+			paintExplosions(board.getExplosion(),g2d);
+			paintTargetLine(board.getWeapons(),board.getTargetLine(),g2d);
+			paintParticles(board.getParticles(),g2d);
+		}
+		catch(Exception e){}
 	}
 	
 	/**

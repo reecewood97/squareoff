@@ -389,15 +389,22 @@ public class Board {
 	public synchronized PhysObject getActiveBoard() {
 		
 		PhysObject ret = null;
-		for (PhysObject square : getSquares()) {
-
-			if (((Square) square).getActivePlayer()) {
-
-
-				ret = square;
-
+		
+		try{
+			for (PhysObject square : getSquares()) {
+	
+				if (((Square) square).getActivePlayer()) {
+	
+	
+					ret = square;
+	
+				}
 			}
 		}
+		catch(Exception e){
+			
+		}
+		
 		return ret;
 	}
 
