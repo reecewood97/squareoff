@@ -52,7 +52,6 @@ public class GraphicsJUnit extends JFrame{
 	private Client client;
 	private Screen screen;
 	private JButton btn;
-	private WinnerBoard winboard;
 	//SCREENBOARD CLASS
 	private Board board;
 	//HANGERON
@@ -79,7 +78,6 @@ public class GraphicsJUnit extends JFrame{
 		listeners = new HangerOn(q,name,widthratio,heightratio);
 		screen = new Screen(board, q, name, client);
 		sboard = new ScreenBoard(board,heightratio,widthratio,listeners);
-		winboard = new WinnerBoard(-1);
 		audio = new Audio();
 		music = audio.getBackgroundMusic();
 		controls = new ButtonPanel(screen,board,audio,name,client);

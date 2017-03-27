@@ -61,24 +61,11 @@ public class Screen extends JFrame {
 		this.controls = new ButtonPanel(this,newboard, new Audio(),name,client);
 		this.controls.setBackground(lightblue);
 		
-		//show screen board if no winner
-		if(newboard.checkForWinner(newboard.getObjects()) == -1){
-			
-			this.sboard = new ScreenBoard(newboard, heightratio, widthratio, listeners);
-			sboard.setBackground(lightblue);
-			add(sboard, BorderLayout.CENTER);
-			
-			sboard = listeners.hangOn2(sboard);
-		}
-		//show winner board if there is a winner
-		else{
-			
-			WinnerBoard wboard = new WinnerBoard(newboard.checkForWinner(newboard.getObjects()));
-			wboard.setBackground(Color.BLACK);
-			controls.setBackground(Color.BLACK);
-			add(wboard, BorderLayout.CENTER);
-			
-		}
+		//show screen board 
+		this.sboard = new ScreenBoard(newboard, heightratio, widthratio, listeners);
+		sboard.setBackground(lightblue);
+		add(sboard, BorderLayout.CENTER);
+		sboard = listeners.hangOn2(sboard);
 		
 		//add button panel to screen
 		add(controls, BorderLayout.NORTH);

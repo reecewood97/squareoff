@@ -210,23 +210,6 @@ public abstract class AI {
 		return this.myName;
 	}
 	
-	
-	/**
-	 * Set to end AI's turn
-	 * @param isTimesUp true if AI should end turn, false if it is still AI's turn
-	 */
-	public void setEndTurn(boolean isTimesUp) {
-		this.timesUp = isTimesUp;
-	}
-	
-	/**
-	 * Get whether AI needs to end its turn or not
-	 * @return
-	 */
-	public boolean getEndTurn() {
-		return this.timesUp;
-	}
-	
 	/**
 	 * Determines whether to move and attack or to pick up items
 	 * Should be called by the server to send movements and attacks
