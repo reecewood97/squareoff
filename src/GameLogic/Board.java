@@ -1016,11 +1016,6 @@ public class Board {
 			case "Missile":
 				wep = new Missile(wepMove.getPos(), wepMove.getXvel(), wepMove.getYvel(), true);
 				break;
-			case "LongJump":
-				wep = getWeapons().get(0);
-				activePlayer.setYvel(wepMove.getYvel());
-				activePlayer.setXvel(wepMove.getXvel());
-				break;
 			default:
 				break;
 			}
